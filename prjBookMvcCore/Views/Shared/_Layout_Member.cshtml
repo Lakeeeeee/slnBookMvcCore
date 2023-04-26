@@ -1,0 +1,99 @@
+﻿@{
+    Layout = "_Layout";  //@* 之後要加上首頁的上下layout *@
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - 讀本｜會員中心</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/prjBookMvcCore.styles.css" asp-append-version="true" />
+    <style>
+        div {
+/*            border: 1px dashed #000000
+*/        }
+        
+        a:link, a:visited{
+            text-decoration: none;
+            color:inherit;
+        }
+    </style>
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+</head>
+<body>
+    <div class="navbar navbar-default navbar-fixed-top" style="border:3px solid #e0e0e0">
+        <div class="container justify-content-center">
+            <div class="body-content" style=" width:1000px;">
+                <div class="row m-2 gx-5">
+                    @* 左邊功能欄 *@
+                    <div class="col-4 ">
+                        <div class=" accordion bg-light" style="margin-top:5px" href="~/Home/MemberCenter">
+                            <div class="accordion-item bg-light">
+                                <a class="accordion-header btn btn-light m-1 btn-sm" href="~/Home/MemberCenter">會員中心首頁</a>
+                            </div>
+                            <div class="accordion-item bg-light">
+                                <h4 class="accordion-header" id="heading1">
+                                    <a class="btn btn-light m-1 btn-sm" role="button" data-bs-toggle="collapse" data-bs-target="#資料管理" aria-expanded="false" aria-controls="資料管理">會員資料管理</a>
+                                </h4>
+                                <div id="資料管理" class="accordion-collapse collapse" aria-labelledby="heading1">
+                                    <div class="card card-body small" style="border:none">
+                                       <a class="" href="~/Member/alretPassword">密碼修改</a>
+                                           <a class="" href="~/Member/alretProflie">會員資料更新</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item bg-light" >
+                                <h4 class="accordion-header" id="heading2">
+                                    <a class="btn btn-light m-1 btn-sm" role="button" data-bs-toggle="collapse" data-bs-target="#訂單查詢" aria-expanded="false" aria-controls="訂單查詢">訂單查詢／取消</a>
+                                </h4>
+                                <div id="訂單查詢" class="accordion-collapse collapse" aria-labelledby="heading2">
+                                    <div class="card card-body small" style="border:none">
+                                        <a class="" href="~/Member/myOrders">訂單查詢</a>
+                                        <a class="" href="~/Member/editOrders">訂單修改/取消</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item bg-light" >
+                                <h4 class="accordion-header" id="heading3">
+                                    <a class="btn btn-light m-1 btn-sm" role="button" data-bs-toggle="collapse" data-bs-target="#清單管理" aria-expanded="false" aria-controls="清單管理">清單管理</a>
+                                </h4>
+                                <div id="清單管理" class="accordion-collapse collapse" aria-labelledby="heading3">
+                                    <div class="card card-body small" style="border:none">
+                                        <a class="" href="~/Member/myOrders">暫存清單</a>
+                                        <a class="" href="~/Member/editOrders">可購買時通知我</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item bg-light">
+                                <h4 class="accordion-header" id="heading4">
+                                    <a class="btn btn-light m-1 btn-sm" role="button" data-bs-toggle="collapse" data-bs-target="#訊息管理" aria-expanded="false" aria-controls="訊息管理">訊息管理</a>
+                                </h4>
+                                <div id="訊息管理" class="accordion-collapse collapse" aria-labelledby="heading4">
+                                    <div class="card card-body small" style="border:none">
+                                        <a class="" href="~/Member/myOrders">通知訊息</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @* Body *@
+                    <div class="col-8" style="border: 1px dashed #ff0000; height: stretch; border-radius: 5px">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
