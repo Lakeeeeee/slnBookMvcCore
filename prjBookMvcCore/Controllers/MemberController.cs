@@ -46,7 +46,7 @@ namespace prjBookMvcCore.Controllers
             {
                 return RedirectToAction("myOrders");
             }
-            Order order = db.Orders.FirstOrDefault(x => x.OrderID == id);
+            Order order = db.Orders.FirstOrDefault(x => x.OrderId == id);
             if (order == null)
             {
                 return RedirectToAction("myOrders");

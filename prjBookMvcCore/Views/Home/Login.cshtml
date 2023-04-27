@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    /*    div{border:1px solid #000000}
+    */ /**/
+
+    .linkaFormat {
+        text-decoration: none;
+        color: inherit
+    }
+</style>
+
+<div class="container" style="margin-top:15px">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Home">回首頁</a></li>
+            <li class="breadcrumb-item active" aria-current="page">登入</li>
+        </ol>
+    </nav>
+    <div class="row">
+        <div class="col-8">
+            <label>廣告圖</label>
+        </div>
+        <div class="col-4">
+            <div class="container justify-content-center bg-light" style="border-radius:10px;  padding-block:15px">
+                <p><label class="">會員登入</label></p>
+                <p><input type="text" placeholder="讀本Email" /></p>
+                <p><input type="text" placeholder="讀本密碼" /></p>
+                <p><input type="text" placeholder="驗證碼" /></p>
+                <p>
+                    <button class="btn btn-outline-success">讀本會員登入</button>
+                    <a class="linkaFormat small" href="~/Home/Signin">註冊</a>｜
+                    <a class="linkaFormat small" href="~/Home/regetLoginInfo">忘記帳密</a>
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
