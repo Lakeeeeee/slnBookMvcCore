@@ -31,9 +31,10 @@ namespace prjBookMvcCore.Controllers
             return View(datas);
         }
 
-        //public IActionResult 年齡()
-        //{
-        //    IEnumerable<SubCategory> datas = db.SubCategories.Where(x=>x.CategoryId==);
-        //}
+        public IActionResult 年齡()
+        {
+            IEnumerable<SubCategory> datas = db.SubCategories.Where(x => x.CategoryId ==1);
+            return View(datas);
+        }
     }
 }
