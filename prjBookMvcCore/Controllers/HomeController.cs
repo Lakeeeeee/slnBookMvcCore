@@ -6,6 +6,52 @@ namespace prjBookMvcCore.Controllers
 {
     public class HomeController : Controller
     {
+        public IActionResult MemberCenter()
+        {
+            return View();
+        }
+
+        public IActionResult Signin()
+        {
+            return View();
+        }
+
+        #region(登入--haven't finish)
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        //[HttpPost]
+        //public IActionResult Login(CLoginViewModel vm)
+        //{
+        //    CCustomer customer = (new CCustomerFactory()).queryByEmail(vm.txtAccount);
+        //    if (customer != null)
+        //    {
+        //        if (customer.fPassword == vm.txtPassword)
+        //        {
+        //            return RedirectToAction("Home");
+        //        }
+        //    }
+        //    return View();
+        //}
+        #endregion
+
+
+        public IActionResult Home()
+        {
+            return View();
+        }
+
+        public IActionResult commentList()
+        {
+            return View();
+        }
+
+
+
+        #region(系統預設的東西, 先留著, 之後不需要再刪掉)
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
@@ -28,11 +74,7 @@ namespace prjBookMvcCore.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-        public IActionResult MemberCenter()
-        {
-            return View();
-        }
+        #endregion
 
     }
 }
