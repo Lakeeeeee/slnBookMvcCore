@@ -1,0 +1,84 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - 讀本｜書評一覽</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/prjBookMvcCore.styles.css" asp-append-version="true" />
+    <style>
+        a:link, a:visited {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .font14px {
+            font-size: 14px
+        }
+
+        .fontClean {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .accordion-button {
+            background-color: #eeeeee;
+            min-height: 15px
+        }
+
+            .accordion-button:active, .accordion-button::backdrop, .accordion-button:is(:hover) {
+                background-color: #ffffff;
+            }
+
+            .accordion-button:not(.collapsed), {
+                background-color: #eeeeee;
+                color: inherit;
+            }
+    </style>
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+</head>
+<body>
+    <div class="container-fluid justify-content-center" style="margin-top: 20px ;border: 2px solid #ff6a00">
+        <div class="row">
+            @* 左邊功能欄 *@
+            <div class="col-2">
+                <ul class="list-group" style="list-style-type:none">
+                    <li><a class="list-group-item" href="#id">文學小說</a></li>
+                    <li><a class="list-group-item" href="#id">商業理財</a></li>
+                    <li><a class="list-group-item" href="#id">藝術設計</a></li>
+                    <li><a class="list-group-item" href="#id">人文社科</a></li>
+                    <li><a class="list-group-item" href="#id">心理勵志</a></li>
+                    <li><a class="list-group-item" href="#id">宗教命理</a></li>
+                    <li><a class="list-group-item" href="#id">自然科普</a></li>
+                    <li><a class="list-group-item" href="#id">醫療保健</a></li>
+                    <li><a class="list-group-item" href="#id">飲食</a></li>
+                    <li><a class="list-group-item" href="#id">生活風格</a></li>
+                    <li><a class="list-group-item" href="#id">旅遊</a></li>
+                    <li><a class="list-group-item" href="#id">童書/青少年文學</a></li>
+                    <li><a class="list-group-item" href="#id">國中小參考書</a></li>
+                </ul>
+            </div>
+
+
+            @* Body *@
+            <div class="col-10 bg-light" style="border: 1px dashed #ff0000; border-radius: 5px">
+                @RenderSection("test", required: false)
+                <section class="font14px">@RenderBody()</section>
+            </div>
+
+
+        </div>
+
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
