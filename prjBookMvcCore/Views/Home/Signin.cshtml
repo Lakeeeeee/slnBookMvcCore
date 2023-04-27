@@ -36,66 +36,82 @@
         </div>
         <div class="col-4">
             <div class="container justify-content-center bg-light" style="border-radius:10px;  padding-block:15px">
+                <div>
                 <p><label class="">會員註冊</label></p>
-                <p>
-                    <input type="text" placeholder="輸入您的Email" /><br />
-                    <label style="font-size:xx-small">密碼規則</label>
-                </p>
-                <p><input type="text" placeholder="設定密碼" /></p>
-                <p><input type="text" placeholder="再次輸入密碼" /></p>
-                <p><input type="text" placeholder="驗證碼" /></p>
+                <p><input type="text" placeholder="輸入您的Email" style="width: 100%; max-width:250px" /><br /></p>                    
+                    <p><label style="font-size:xx-small">密碼規則</label> </p>
+                    <p><input type="text" placeholder="設定密碼" style="width: 100%; max-width:250px" /></p>
+                    <p><input type="text" placeholder="再次輸入密碼" style="width: 100%; max-width:250px" /></p>
+                    <p><input type="text" placeholder="驗證碼" style="width: 100%; max-width:250px" /></p>
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
                     <label class="form-check-label" for="flexCheckDefault">
                         我想接收到電子報
                     </label>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="liveToastBtn">
-                    <label class="form-check-label" for="flexCheckChecked">
-                        我同意會員條款
-                    </label>
+                <div class="">
+                    <button class="btn btn-outline-success btn-sm" type="submit" value="" id="liveToastBtn">會員條款</button>
+                   <label class="form-check-label" for="flexCheckChecked" id="join_policy_check">閱讀條款</label>
                 </div>
                 <div class="" style="">
                     <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                         <div class="toast-header">
                             <strong class="me-auto">閱讀會員服務使用條款</strong>
-                            <small></small>
                             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                         </div>
-                        <div class="toast-body" sty>
-                            <iframe class="accordion-body" src="~/lib/text/join_policy.txt"></iframe>
+                        <div class="toast-body" >
+                            <div>
+                                <iframe class="" src="~/lib/text/join_policy.txt" style="width:100%"></iframe>
+                            </div>
+                            <div style="margin-top:10px">
+                                <button id="agree_policy" class="btn btn-outline-success " data-bs-dismiss="toast" aria-label="Close" type="submit" style="margin-left:35%" value="true">了解並同意</button>
+                                <button id="disagree_policy" class="btn btn-outline-success " data-bs-dismiss="toast" aria-label="Close" type="submit" style="margin-left:10px" value="false">不同意</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-
-
-                <p style="margin-top:10px">
-                    <button class="btn btn-outline-success btn-sm" type="submit">確認送出</button>
+                </div>
+                <p style="margin-top:10px" >
+                    <button class="btn btn-outline-success btn-sm" type="submit" style="display:none" id="checkbtn" >確認送出</button>
                 </p>
-
-
             </div>
         </div>
-
     </div>
-
-
 </div>
-<div id="policy_btn" style="cursor:pointer; float:left; margin-right:3px; margin-top: 2px;border: 1px solid #e3007F;padding: 0px; height: 16px; width:16px;">
-    <input disabled="" type="checkbox" class="regular-checkbox" id="join_policy" name="join_policy" value="false"><label class="active" for="join_policy"></label>
-</div>
-
-                            <script>
+<script>
     var toastTrigger = document.getElementById('liveToastBtn')
     var toastLiveExample = document.getElementById('liveToast')
     if (toastTrigger) {
         toastTrigger.addEventListener('click', function () {
             var toast = new bootstrap.Toast(toastLiveExample)
-
             toast.show()
         })
-    }
 
-                            </script>
+    const agreeBtn = document.getElementById('agree_policy');
+        const disagreeBtn = document.getElementById('disagree_policy');
+        const label = document.getElementById('join_policy_check');
+        var agreed_check =false;
+        // 當同意按鈕被點擊時，改變標籤文字
+        agreeBtn.addEventListener('click', function () {
+            label.textContent = '已同意';
+            agreed_check=true;
+
+            const btn = document.getElementById('checkbtn');
+            btn.style.display = 'block';
+
+        });
+
+        // 當不同意按鈕被點擊時，改變標籤文字
+        disagreeBtn.addEventListener('click', function () {
+            label.textContent = '未同意';
+            agreed_check = false;
+
+              const btn = document.getElementById('checkbtn');
+  btn.style.display = 'none';
+
+        });
+
+        const btn = document.getElementById('checkbtn');
+        btn.style.display = 'none';
+    }
+</script>
