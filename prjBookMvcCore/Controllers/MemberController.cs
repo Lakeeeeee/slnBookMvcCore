@@ -11,6 +11,61 @@ namespace prjBookMvcCore.Controllers
         
         int testMemID = 66; //預設會員ID
 
+        public IActionResult MemberCenter()
+        {
+            return View();
+        }
+        public IActionResult Find_password()
+        {
+            return View();
+        }
+
+        public IActionResult reset_Password()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult reset_Password(int? id)
+        {
+            return View();
+        }
+
+
+        public IActionResult Signin()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create()
+        {
+            return RedirectToAction("Login");
+        }
+
+
+        #region(登入--haven't finish)
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        //[HttpPost]
+        //public IActionResult Login(CLoginViewModel vm)
+        //{
+        //    CCustomer customer = (new CCustomerFactory()).queryByEmail(vm.txtAccount);
+        //    if (customer != null)
+        //    {
+        //        if (customer.fPassword == vm.txtPassword)
+        //        {
+        //            return RedirectToAction("Home");
+        //        }
+        //    }
+        //    return View();
+        //}
+        #endregion
+
+
+
         public IActionResult myMessage() //通知訊息
         {
             IEnumerable<CustomerService> q = db.CustomerServices.Where(x => x.MemberId == testMemID);
@@ -84,6 +139,11 @@ namespace prjBookMvcCore.Controllers
             return View();
         }
 
+        [HttpPost]
+        public IActionResult resetPassword() //todo
+        {
+            return RedirectToAction("Login");
+        }
 
         public IActionResult alretPassword()
         {

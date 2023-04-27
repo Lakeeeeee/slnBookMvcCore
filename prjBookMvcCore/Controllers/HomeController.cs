@@ -8,37 +8,6 @@ namespace prjBookMvcCore.Controllers
     {
         
         
-        public IActionResult MemberCenter()
-        {
-            return View();
-        }
-
-        public IActionResult Signin()
-        {
-            return View();
-        }
-
-        #region(登入--haven't finish)
-
-        public IActionResult Login()
-        {
-            return View();
-        }
-
-        //[HttpPost]
-        //public IActionResult Login(CLoginViewModel vm)
-        //{
-        //    CCustomer customer = (new CCustomerFactory()).queryByEmail(vm.txtAccount);
-        //    if (customer != null)
-        //    {
-        //        if (customer.fPassword == vm.txtPassword)
-        //        {
-        //            return RedirectToAction("Home");
-        //        }
-        //    }
-        //    return View();
-        //}
-        #endregion
 
 
         public IActionResult Home()

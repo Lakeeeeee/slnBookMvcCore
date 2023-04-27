@@ -71,9 +71,12 @@
                     </div>
                 </div>
                 </div>
+                <form asp-action="Create" id="signin_form">
                 <p style="margin-top:10px" >
                     <button class="btn btn-outline-success btn-sm" type="submit" style="display:none" id="checkbtn" >確認送出</button>
                 </p>
+                </form>
+
             </div>
         </div>
     </div>
@@ -114,4 +117,11 @@
         const btn = document.getElementById('checkbtn');
         btn.style.display = 'none';
     }
+</script>
+<script>
+    const signin = document.querySelector('#signin_form');
+    signin.addEventListener('submit', function(event){
+        alert('註冊成功，系統將自動轉向登入頁面');
+    });
+
 </script>
