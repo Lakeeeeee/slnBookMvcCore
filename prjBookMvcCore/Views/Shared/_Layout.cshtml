@@ -33,7 +33,7 @@
                     <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Home/Login">登入</a></li>
                     <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Home/Signin">註冊</a></li>
                     <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Home/MemberCenter">會員中心</a></li>
-                    <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="#id">購物車</a></li>
+                    <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="">購物車</a></li>
                 </ul>
             </div>
         </div>
@@ -43,31 +43,33 @@
             <div class="navbar navbar-light container-fluid" style="border:1px solid #000000; background-color:#ebf8bc">
                 @* 分類  *@
                 <form class="container-fluid justify-content-start">
-                    <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Category/中文書">中文書</a>
-                    <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Category/語言學習">語言學習</a>
-                    <a role="button" class="btn btn-sm btn-outline-success mx-1" href="#id">繪本</a>
-                    <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Category/漫畫圖文書">漫畫圖文書</a>
-                    <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Category/旅遊">旅遊</a>
+                    <div id="menu">
+                        <ul id="zero">
+                            <li><a role="button" class="btn btn-sm btn-outline-success mx-1" href="#id">中文書</a></li>
+                            <li><a role="button" class="btn btn-sm btn-outline-success mx-1" href="#id">親子</a></li>
+                            <li><a role="button" class="btn btn-sm btn-outline-success mx-1" href="#id">繪本</a></li>
+                            <li><a role="button" class="btn btn-sm btn-outline-success mx-1" href="#id">漫畫</a></li>
+                            <li><a role="button" class="btn btn-sm btn-outline-success mx-1" href="#id">旅遊</a></li>
+                        </ul>
+                    </div>
                 </form>
             </div>
-            <div class="navbar navbar-light bg-light container-fluid" style="margin-top:10px; border:1px solid #000">
+            <div class="navbar navbar-light bg-light container-fluid" style="margin-top:10px; border:1px solid #000" id="menu">
                 <form class="justify-content-start mx-2">
-                    <input style="border-right: #C4C4C4 2px solid;" placeholder="搜尋" type="search" class="is-valid" maxlength="40" autocomplete="off">
-                    <a role="button" class="btn btn-sm btn-secondary mx-1" href="#id">漫畫</a>
+                    <ul id="zero">
+                        <li>
+                            <input style="border-right: #C4C4C4 2px solid;" placeholder="搜尋" type="search" class="is-valid" maxlength="40" autocomplete="off">
+                        </li>
+                        <li>
+                            <a role="button" class="btn btn-sm btn-secondary mx-1" href="#id">搜尋</a>
+                        </li>
+                    </ul>
                 </form>
             </div>
 
             <div class="navbar navbar-light bg-light container-fluid" style="margin-top:10px; border:1px solid #000">
                 @* 活動 *@
                 <img src="~/Image/demo-pic.jpg" width="100%" height="30px" />
-            </div>
-
-            <div class="navbar-collapse collapse" id="section1">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("首頁", "Home", "Home")</li>
-                    <li>@Html.ActionLink("關於", "About", "Home")</li>
-                    <li>@Html.ActionLink("連絡人", "Contact", "Home")</li>
-                </ul>
             </div>
         </div>
     </div>
@@ -84,15 +86,15 @@
         <div class="container">
             <div class="row">
                 <div class="col" style="text-align:center">
-                    <img src="~/Image/demo-pic.jpg" width="100%" />
+                    <a href="#id"><img src="../Image/demo-pic.jpg" alt="活動or優惠or廣告" width="100%" /></a>
                     活動or優惠or廣告
                 </div>
                 <div class="col" style="text-align:center">
-                    <img src="~/Image/demo-pic.jpg" width="100%" />
+                    <a href="#id"><img src="../Image/demo-pic.jpg" alt="活動or優惠or廣告" width="100%" /></a>
                     活動or優惠or廣告
                 </div>
                 <div class="col" style="text-align:center">
-                    <img src="~/Image/demo-pic.jpg" width="100%" />
+                    <a href="#id"><img src="../Image/demo-pic.jpg" alt="活動or優惠or廣告" width="100%" /></a>
                     活動or優惠or廣告
                 </div>
             </div>
@@ -108,6 +110,7 @@
             <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
         </footer>
     </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

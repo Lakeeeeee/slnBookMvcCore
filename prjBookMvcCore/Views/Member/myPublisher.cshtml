@@ -1,0 +1,48 @@
+﻿@model IEnumerable<prjBookMvcCore.Models.CollectedPublisher>
+
+@{
+    ViewData["Title"] = "myPublisher";
+    Layout = "~/Views/Shared/_Layout_Member.cshtml";
+}
+
+
+<div class="container">
+    <div>
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="~/Home/MemberCenter">會員中心</a></li>
+                <li class="breadcrumb-item active" aria-current="page">暫存清單</li>
+            </ol>
+        </nav>
+    </div>
+    <p><h6>收藏的出版社</h6></p>
+    <table class="table">
+        <tr>
+            <th>序號</th>
+            <th>
+                出版社
+            </th>
+            <th></th>
+        </tr>
+
+        @{
+            int count = 0;
+            foreach (var item in Model)
+            {
+                count++;
+                <tr>
+                    <td>
+                        @count
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Publisher.PublisherName)
+                    </td>
+                    <td>
+                        @Html.ActionLink("最近的書目", "Details", new { id = item.CollectedPublisherId }) |
+                        @Html.ActionLink("刪除", "Delete", new { id = item.CollectedPublisherId })
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>

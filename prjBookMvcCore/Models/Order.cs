@@ -21,6 +21,12 @@ namespace prjBookMvcCore.Models
         public int? DiscountId { get; set; }
         public string ShipAddr { get; set; } = null!;
 
+        public virtual Discount? Discount { get; set; }
+        public virtual Member Member { get; set; } = null!;
+        public virtual PayStatus PayStatus { get; set; } = null!;
+        public virtual Payment Payment { get; set; } = null!;
+        public virtual Shipment Shipment { get; set; } = null!;
+        public virtual ShippingStatus ShippingStatus { get; set; } = null!;
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }

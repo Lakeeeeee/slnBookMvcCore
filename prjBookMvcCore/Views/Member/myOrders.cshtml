@@ -1,0 +1,78 @@
+﻿@model IEnumerable<prjBookMvcCore.Models.Order>
+
+@{
+    ViewData["Title"] = "myOrders";
+    Layout = "~/Views/Shared/_Layout_Member.cshtml";
+}
+
+<div class="container" style="margin-top:15px">
+    <div>
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="~/Home/MemberCenter">會員中心</a></li>
+                <li class="breadcrumb-item active" aria-current="page">訂單查詢</li>
+            </ol>
+        </nav>
+    </div>
+    <p> <h6>訂單</h6></p>
+    <table class="table table-hover">
+        <tr>
+            <th>序號</th>
+            <th>日期</th>
+            <th>優惠</th>
+            <th>支付方式</th>
+            <th>貨運方式</th>
+            <th>支付狀態</th>
+            <th>支付狀態</th>
+            <th>運費</th>
+        </tr>
+
+        @{
+            int count = 0;
+            foreach (var item in Model)
+            {
+                count++;
+
+                <tr>
+                    <td>
+                        @count
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrderDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Discount.DiscountName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Payment.PaymentName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Shipment.ShipmentName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PayStatus.PayStatusName)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ShippingStatus.ShippingStatusName)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Freight)
+                    </td>
+
+                    @*<td>
+            @Html.DisplayFor(modelItem => item.Freight)
+            </td>*@
+                    @*//小計 = (x.OrderDetails.Sum(y => y.UnitPrice * y.Quantity)) + (x.Freight ?? 0)*@
+
+                    <td>
+                        @Html.ActionLink("修改", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("刪除", "Delete", new { id = item.OrderId }, new { onclick = "return confirm('確定要刪除嗎?')" })
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+
+</div>
