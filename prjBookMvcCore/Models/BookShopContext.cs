@@ -60,7 +60,7 @@ namespace prjBookMvcCore.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=BookShop;Integrated Security=True;MultipleActiveResultSets=True;Application Name=EntityFramework");
+                optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=BookShop;Integrated Security=True");
             }
         }
 
@@ -343,7 +343,7 @@ namespace prjBookMvcCore.Models
                 entity.HasOne(d => d.Member)
                     .WithMany(p => p.Comments)
                     .HasForeignKey(d => d.MemberId)
-                    .HasConstraintName("FK_Comment_Member1");
+                    .HasConstraintName("FK_Comment_Member");
             });
 
             modelBuilder.Entity<CustomerService>(entity =>
@@ -372,14 +372,16 @@ namespace prjBookMvcCore.Models
                     .WithMany(p => p.CustomerServices)
                     .HasForeignKey(d => d.StatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_CustomerService_處理狀態(Status)");
+                    .HasConstraintName("FK_CustomerService_Status");
             });
 
             modelBuilder.Entity<Discount>(entity =>
             {
                 entity.ToTable("Discount");
 
-                entity.Property(e => e.DiscountId).HasColumnName("DiscountID");
+                entity.Property(e => e.DiscountId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("DiscountID");
 
                 entity.Property(e => e.DiscountAmount).HasColumnType("decimal(10, 2)");
 
@@ -479,9 +481,9 @@ namespace prjBookMvcCore.Models
 
                 entity.Property(e => e.LevelId).HasColumnName("LevelID");
 
-                entity.Property(e => e.DiscountAmount).HasColumnType("decimal(10, 2)");
-
                 entity.Property(e => e.LevelDescription).HasMaxLength(50);
+
+                entity.Property(e => e.LevelDiscount).HasColumnType("decimal(10, 2)");
 
                 entity.Property(e => e.LevelName).HasMaxLength(10);
             });
@@ -509,6 +511,41 @@ namespace prjBookMvcCore.Models
                 entity.Property(e => e.ShipmentId).HasColumnName("ShipmentID");
 
                 entity.Property(e => e.ShippingStatusId).HasColumnName("ShippingStatusID");
+
+                entity.HasOne(d => d.Discount)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.DiscountId)
+                    .HasConstraintName("FK_Order_Discount");
+
+                entity.HasOne(d => d.Member)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.MemberId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Order_Member");
+
+                entity.HasOne(d => d.PayStatus)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.PayStatusId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Order_PayStatus");
+
+                entity.HasOne(d => d.Payment)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.PaymentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Order_Payment");
+
+                entity.HasOne(d => d.Shipment)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.ShipmentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Order_Shipment");
+
+                entity.HasOne(d => d.ShippingStatus)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.ShippingStatusId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Order_ShippingStatus");
             });
 
             modelBuilder.Entity<OrderDetail>(entity =>
@@ -693,13 +730,13 @@ namespace prjBookMvcCore.Models
                     .WithMany(p => p.PurchaseDetails)
                     .HasForeignKey(d => d.PublisherId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_進貨單明細PurchaseDetail_Store");
+                    .HasConstraintName("FK_PurchaseDetail_Store");
 
                 entity.HasOne(d => d.Purchase)
                     .WithMany(p => p.PurchaseDetails)
                     .HasForeignKey(d => d.PurchaseId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_進貨單明細PurchaseDetail_進貨單資料Purchase");
+                    .HasConstraintName("FK_PurchaseDetail_Purchase");
             });
 
             modelBuilder.Entity<Shipment>(entity =>

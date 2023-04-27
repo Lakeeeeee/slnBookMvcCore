@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using prjBookMvcCore.Models;
 
 namespace prjBookMvcCore.Controllers
@@ -38,21 +39,21 @@ namespace prjBookMvcCore.Controllers
             return View(q);
         }
 
-        #region(訂單修改/取消)
+        #region(訂單修改/取消, todo)
 
-        public IActionResult editOrders(int? id)
-        {
-            if (id == null)
-            {
-                return RedirectToAction("myOrders");
-            }
-            Order order = db.Orders.FirstOrDefault(x => x.OrderId == id);
-            if (order == null)
-            {
-                return RedirectToAction("myOrders");
-            }
-            return View(order);
-        }
+        //public IActionResult editOrders(Order id)
+        //{
+        //    if (id != null)
+        //    {
+        //        Order order = db.Orders.FirstOrDefault(x=>x.OrderId==id);
+        //        if(order != null)
+        //        {
+
+
+        //        }
+        //    }
+        //    return RedirectToAction("myOrders");
+        //}
 
         //[HttpPost]
         //public ActionResult editOrders()
@@ -65,7 +66,12 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult myOrders()  //訂單查詢
         {
-            var q = db.Orders.Where(x => x.MemberId == testMemID).ToList();
+            var q = db.Orders.Where(x => x.MemberId == testMemID).
+                Include(x=>x.Discount).
+                Include(x=>x.Payment).
+                Include(x=>x.Shipment).
+                Include(x=>x.PayStatus).
+                Include(x=>x.ShippingStatus).ToList();
             return View(q);
         }
 

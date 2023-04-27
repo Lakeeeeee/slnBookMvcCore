@@ -13,7 +13,7 @@ namespace prjBookMvcCore.Models
         public int LevelId { get; set; }
         public string LevelName { get; set; } = null!;
         public int MinCost { get; set; }
-        public decimal DiscountAmount { get; set; }
+        public decimal LevelDiscount { get; set; }
         public string LevelDescription { get; set; } = null!;
 
         public virtual ICollection<Member> Members { get; set; }
