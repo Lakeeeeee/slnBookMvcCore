@@ -1,0 +1,58 @@
+﻿@model IEnumerable<prjBookMvcCore.Models.CustomerService>
+
+@{
+    ViewData["Title"] = "myMessage";
+    Layout = "~/Views/Shared/_Layout_Member.cshtml";
+}
+
+
+<div class="container" style="margin-top:15px">
+    <div>
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="~/Home/MemberCenter">會員中心</a></li>
+                <li class="breadcrumb-item active" aria-current="page">訊息通知</li>
+            </ol>
+        </nav>
+    </div>
+    <p> <h6>訊息通知</h6></p>
+    <table class="table table-hover">
+        <tr>
+            <th>序號</th>
+            <th>訊息</th>
+            <th>發送時間</th>
+            <th>處理狀態</th>
+        </tr>
+
+        @{
+            int count = 0;
+            foreach (var item in Model)
+            {
+                count++;
+
+                <tr>
+                    <td>
+                        @count
+                    </td>
+                    @*<td>
+            @Html.DisplayFor(modelItem => item.CContent)
+            </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReplyContent)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UpdateDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status.StatusName)
+                    </td>
+
+                    <td>
+                        @Html.ActionLink("修改", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("刪除", "Delete", new { id = item.Crmid }, new { onclick = "return confirm('確定要刪除嗎?')" })
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>

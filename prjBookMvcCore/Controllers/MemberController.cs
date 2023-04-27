@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using prjBookMvcCore.Models;
+using System.Collections.Generic;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -18,24 +19,27 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult myPublisher() //關注的出版社
         {
-            IEnumerable<CollectedPublisher> q = db.CollectedPublishers.Where(x => x.MemberId == testMemID);
+            IEnumerable<CollectedPublisher> q = db.CollectedPublishers.Where(x => x.MemberId == testMemID).Include(x=>x.Publisher);
             return View(q);
         }
 
 
         public IActionResult myAuthor() //關注的作者
         {
-            IEnumerable<CollectedAuthor> q = db.CollectedAuthors.Where(x => x.MemberId == testMemID);
+            IEnumerable<CollectedAuthor> q = db.CollectedAuthors.Where(x => x.MemberId == testMemID).Include(x=>x.Author);
             return View(q);
         }
 
-        public IActionResult myNotice() //可購買時通知我
+        public IActionResult myNotice() //可購買時通知我 空的
         {
             return View();
         }
         public IActionResult myCollect() //暫存清單
         {
-            IEnumerable<Book> q = db.ActionDetials.Where(x => x.MemberId == testMemID && x.ActionId == 2).Select(x => x.Book);
+
+            IEnumerable<Book> q = db.ActionDetials.Where(x => x.MemberId == testMemID && x.ActionId == 2).
+             Include(x => x.Book.Publisher).Select(x => x.Book);
+
             return View(q);
         }
 
