@@ -13,6 +13,14 @@
         text-decoration: none;
         color: inherit
     }
+
+    .toast {
+        position: fixed;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width:600px;
+    }
 </style>
 
 <div class="container" style="margin-top:15px">
@@ -36,9 +44,38 @@
                 <p><input type="text" placeholder="設定密碼" /></p>
                 <p><input type="text" placeholder="再次輸入密碼" /></p>
                 <p><input type="text" placeholder="驗證碼" /></p>
-                <p>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        我想接收到電子報
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="liveToastBtn">
+                    <label class="form-check-label" for="flexCheckChecked">
+                        我同意會員條款
+                    </label>
+                </div>
+                <div class="" style="">
+                    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong class="me-auto">閱讀會員服務使用條款</strong>
+                            <small></small>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body" sty>
+                            <iframe class="accordion-body" src="~/lib/text/join_policy.txt"></iframe>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <p style="margin-top:10px">
                     <button class="btn btn-outline-success btn-sm" type="submit">確認送出</button>
                 </p>
+
+
             </div>
         </div>
 
@@ -46,3 +83,19 @@
 
 
 </div>
+<div id="policy_btn" style="cursor:pointer; float:left; margin-right:3px; margin-top: 2px;border: 1px solid #e3007F;padding: 0px; height: 16px; width:16px;">
+    <input disabled="" type="checkbox" class="regular-checkbox" id="join_policy" name="join_policy" value="false"><label class="active" for="join_policy"></label>
+</div>
+
+                            <script>
+    var toastTrigger = document.getElementById('liveToastBtn')
+    var toastLiveExample = document.getElementById('liveToast')
+    if (toastTrigger) {
+        toastTrigger.addEventListener('click', function () {
+            var toast = new bootstrap.Toast(toastLiveExample)
+
+            toast.show()
+        })
+    }
+
+                            </script>

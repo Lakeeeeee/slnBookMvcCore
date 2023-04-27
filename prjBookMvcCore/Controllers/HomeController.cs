@@ -6,6 +6,8 @@ namespace prjBookMvcCore.Controllers
 {
     public class HomeController : Controller
     {
+        
+        
         public IActionResult MemberCenter()
         {
             return View();
@@ -75,6 +77,12 @@ namespace prjBookMvcCore.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
         #endregion
+
+        public IActionResult Category()
+        {
+            return View();
+        }
+    
 
     }
 }
