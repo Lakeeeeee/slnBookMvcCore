@@ -5,25 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - prjBookMvcCore</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/prjBookMvcCore.styles.css" asp-append-version="true" />
     <style>
         div {
             border: 1px solid #ff0000
         }
+
+        #zero {
+            margin: 0;
+            padding: 0;
+        }
+
+        #menu ul li { /*li水平顯示*/
+            display: inline;
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar fixed-top navbar-light bg-light">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container">
             <div class="align-items-start">
                 @Html.ActionLink("讀本", "Home", "Home", new { area = "" }, new { @class = "navbar-brand" })  @*須換圖*@
             </div>
-            <div class="justify-content-end">
-                <a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Home/Login">登入</a>
-                <a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Home/Signin">註冊</a>
-                <a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Home/MemberCenter">會員中心</a>
-                <a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="#id">購物車</a>
+            <div class="justify-content-end" id="menu">
+                <ul id="zero">
+                    <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Home/Login">登入</a></li>
+                    <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Home/Signin">註冊</a></li>
+                    <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Home/MemberCenter">會員中心</a></li>
+                    <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="#id">購物車</a></li>
+                </ul>
             </div>
         </div>
     </nav>
@@ -36,7 +47,7 @@
                     <a role="button" class="btn btn-sm btn-outline-success mx-1" href="#id">親子</a>
                     <a role="button" class="btn btn-sm btn-outline-success mx-1" href="#id">繪本</a>
                     <a role="button" class="btn btn-sm btn-outline-success mx-1" href="#id">漫畫</a>
-                    <button class="btn btn-sm btn-outline-success mx-1" type="button" href="">旅遊</button>
+                    <a role="button" class="btn btn-sm btn-outline-success mx-1" href="#id">旅遊</a>
                 </form>
             </div>
             <div class="navbar navbar-light bg-light container-fluid" style="margin-top:10px; border:1px solid #000">
@@ -48,12 +59,12 @@
 
             <div class="navbar navbar-light bg-light container-fluid" style="margin-top:10px; border:1px solid #000">
                 @* 活動 *@
-                <img src="~/Image/lars-kuczynski-MEcR55ol3jM-unsplash.jpg" width="100%" height="30px" />
+                <img src="~/Image/demo-pic.jpg" width="100%" height="30px" />
             </div>
 
             <div class="navbar-collapse collapse" id="section1">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("首頁", "Index", "Home")</li>
+                    <li>@Html.ActionLink("首頁", "Home", "Home")</li>
                     <li>@Html.ActionLink("關於", "About", "Home")</li>
                     <li>@Html.ActionLink("連絡人", "Contact", "Home")</li>
                 </ul>
@@ -73,15 +84,15 @@
         <div class="container">
             <div class="row">
                 <div class="col" style="text-align:center">
-                    <img src="~/Image/lars-kuczynski-MEcR55ol3jM-unsplash.jpg" width="100%" />
+                    <img src="~/Image/demo-pic.jpg" width="100%" />
                     活動or優惠or廣告
                 </div>
                 <div class="col" style="text-align:center">
-                    <img src="~/Image/lars-kuczynski-MEcR55ol3jM-unsplash.jpg" width="100%" />
+                    <img src="~/Image/demo-pic.jpg" width="100%" />
                     活動or優惠or廣告
                 </div>
                 <div class="col" style="text-align:center">
-                    <img src="~/Image/lars-kuczynski-MEcR55ol3jM-unsplash.jpg" width="100%" />
+                    <img src="~/Image/demo-pic.jpg" width="100%" />
                     活動or優惠or廣告
                 </div>
             </div>
