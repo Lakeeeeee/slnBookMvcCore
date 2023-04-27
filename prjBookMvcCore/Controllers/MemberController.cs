@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.EntityFrameworkCore;
 using prjBookMvcCore.Models;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -18,6 +21,13 @@ namespace prjBookMvcCore.Controllers
         public IActionResult Find_password()
         {
             return View();
+        }
+        [HttpPost]
+        public IActionResult Find_password(int? id)
+        {
+            
+            
+            return RedirectToAction("Login");
         }
 
         public IActionResult reset_Password()
