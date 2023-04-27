@@ -6,6 +6,8 @@ namespace prjBookMvcCore.Controllers
 {
     public class HomeController : Controller
     {
+        
+        
         public IActionResult MemberCenter()
         {
             return View();
