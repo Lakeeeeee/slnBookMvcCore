@@ -1,8 +1,22 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using prjBookMvcCore.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<BookShopContext>();
 
+//=======AspNetCore.Authentication用戶登入驗證操作機制使用
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<UserInforService>();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
+{
+    //未登入時自動移轉到此網址
+    option.LoginPath = new PathString("/Member/Login"); 
+});
+//=======AspNetCore.Authentication用戶登入驗證操作機制使用
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -17,6 +31,11 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+//=======AspNetCore.Authentication用戶登入驗證操作機制使用
+app.UseCookiePolicy();
+app.UseAuthentication();
+app.UseAuthorization();
+//=======AspNetCore.Authentication用戶登入驗證操作機制使用
 
 app.UseAuthorization();
 

@@ -1,113 +1,141 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.EntityFrameworkCore;
 using prjBookMvcCore.Models;
+using prjBookMvcCore.ViewModel;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 
 namespace prjBookMvcCore.Controllers
 {
     public class MemberController : Controller
     {
-        BookShopContext db = new BookShopContext();
-        
-        int testMemID = 66; //預設會員ID
+        private BookShopContext _bookShopContext ;
+        protected UserInforService _userInforService { get; set; }
 
-        public IActionResult MemberCenter()
+        public MemberController(BookShopContext _db, UserInforService userInforService)
         {
-            return View();
+            _bookShopContext =  _db ;
+            _userInforService =  userInforService ;
         }
-        public IActionResult Find_password()
-        {
-            return View();
-        }
-        [HttpPost]
-        public IActionResult Find_password(int? id)
-        {
-            
-            
-            return RedirectToAction("Login");
-        }
-
-        public IActionResult reset_Password()
-        {
-            return View();
-        }
-        [HttpPost]
-        public IActionResult reset_Password(int? id)
-        {
-            return View();
-        }
-
 
         public IActionResult Signin()
         {
             return View();
         }
         [HttpPost]
-        public IActionResult Create()
+        public IActionResult Create() //註冊方法
         {
             return RedirectToAction("Login");
         }
-
-
-        #region(登入--haven't finish)
 
         public IActionResult Login()
         {
             return View();
         }
+        #region(登入--haven't finish)
 
-        //[HttpPost]
-        //public IActionResult Login(CLoginViewModel vm)
-        //{
-        //    CCustomer customer = (new CCustomerFactory()).queryByEmail(vm.txtAccount);
-        //    if (customer != null)
-        //    {
-        //        if (customer.fPassword == vm.txtPassword)
-        //        {
-        //            return RedirectToAction("Home");
-        //        }
-        //    }
-        //    return View();
-        //}
+        [HttpPost]
+        public IActionResult Login(CLoginViewModel vm)
+        {
+            Member user = _bookShopContext.Members.FirstOrDefault(x=>x.MemberEmail==vm.Account_P);
+            if (user  != null)
+            {
+                if (user.MemberPassword == vm.Password_P)
+                {
+                    var useClain = new List<Claim>
+                    {
+                        new Claim("Id", user.MemberId.ToString()),
+                        new Claim(ClaimTypes.Name, user.MemberName),
+                    };
+
+                    //建構cookie用戶驗證物件的狀態存取
+                    var varClainsIdentity = new ClaimsIdentity(useClain, CookieAuthenticationDefaults.AuthenticationScheme);
+                    HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(varClainsIdentity));
+                    return Redirect("~/Home/Home");
+                }
+            }
+            return View();
+        }
         #endregion
 
+        public IActionResult Find_password() //忘記密碼
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Find_password(int? id) //填完表單後發post然後寄出email
+        {
+            return RedirectToAction("Login");
+        }
 
+        public IActionResult reset_Password() //忘記密碼的重設密碼頁面
+        {
+            return View();
+        }
 
+        [HttpPost]
+        public IActionResult reset_PasswordMethod(int? id) //忘記密碼的重設密碼方法
+        {
+            return RedirectToAction("Login");
+        }
+
+        //-------------------------------------------------以下會員才能訪問
+        int testMemID; 
+        [Authorize]
+        public IActionResult alretPassword()  //會員專區的重設密碼頁面
+        {
+            return View();
+        }
+        [Authorize]
+        [HttpPost]
+        public IActionResult alretPasswordMethod() //todo  //會員專區的重設密碼方法
+        {
+            return RedirectToAction("Login");
+        }
+        [Authorize]
+        public IActionResult MemberCenter()
+        {
+            return View();
+        }
+        [Authorize]
         public IActionResult myMessage() //通知訊息
         {
-            IEnumerable<CustomerService> q = db.CustomerServices.Where(x => x.MemberId == testMemID);
+            IEnumerable<CustomerService> q = _bookShopContext.CustomerServices.Where(x => x.MemberId == testMemID);
             return View(q);
         }
-
+        [Authorize]
         public IActionResult myPublisher() //關注的出版社
         {
-            IEnumerable<CollectedPublisher> q = db.CollectedPublishers.Where(x => x.MemberId == testMemID).Include(x=>x.Publisher);
+            IEnumerable<CollectedPublisher> q = _bookShopContext.CollectedPublishers.Where(x => x.MemberId == testMemID).Include(x=>x.Publisher);
             return View(q);
         }
-
-
+        [Authorize]
         public IActionResult myAuthor() //關注的作者
         {
-            IEnumerable<CollectedAuthor> q = db.CollectedAuthors.Where(x => x.MemberId == testMemID).Include(x=>x.Author);
+            IEnumerable<CollectedAuthor> q = _bookShopContext.CollectedAuthors.Where(x => x.MemberId == testMemID).Include(x=>x.Author);
             return View(q);
         }
-
+        [Authorize]
         public IActionResult myNotice() //可購買時通知我 空的
         {
             return View();
         }
+        [Authorize]
         public IActionResult myCollect() //暫存清單
         {
 
-            IEnumerable<Book> q = db.ActionDetials.Where(x => x.MemberId == testMemID && x.ActionId == 2).
+            IEnumerable<Book> q = _bookShopContext.ActionDetials.Where(x => x.MemberId == testMemID && x.ActionId == 2).
              Include(x => x.Book.Publisher).Select(x => x.Book);
 
             return View(q);
         }
-
+        [Authorize]
         #region(訂單修改/取消, todo)
 
         //public IActionResult editOrders(Order id)
@@ -132,10 +160,11 @@ namespace prjBookMvcCore.Controllers
         //}
 
         #endregion //to do
-
+        [Authorize]
         public IActionResult myOrders()  //訂單查詢
         {
-            var q = db.Orders.Where(x => x.MemberId == testMemID).
+            testMemID = _userInforService.getUserInfor(); //預設會員ID
+            var q = _bookShopContext.Orders.Where(x => x.MemberId == testMemID).
                 Include(x=>x.Discount).
                 Include(x=>x.Payment).
                 Include(x=>x.Shipment).
@@ -143,19 +172,8 @@ namespace prjBookMvcCore.Controllers
                 Include(x=>x.ShippingStatus).ToList();
             return View(q);
         }
-
+        [Authorize]
         public IActionResult alretProflie()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult resetPassword() //todo
-        {
-            return RedirectToAction("Login");
-        }
-
-        public IActionResult alretPassword()
         {
             return View();
         }
