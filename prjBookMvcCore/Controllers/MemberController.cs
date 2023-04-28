@@ -86,7 +86,15 @@ namespace prjBookMvcCore.Controllers
         }
 
         //-------------------------------------------------以下會員才能訪問
-        int testMemID; 
+        [Authorize]
+        [HttpGet]
+        public IActionResult LogOut()
+        {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return Redirect("~/Home/Home");
+        }
+
+
         [Authorize]
         public IActionResult alretPassword()  //會員專區的重設密碼頁面
         {
@@ -106,19 +114,19 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult myMessage() //通知訊息
         {
-            IEnumerable<CustomerService> q = _bookShopContext.CustomerServices.Where(x => x.MemberId == testMemID);
+            IEnumerable<CustomerService> q = _bookShopContext.CustomerServices.Where(x => x.MemberId == _userInforService.UserId);
             return View(q);
         }
         [Authorize]
         public IActionResult myPublisher() //關注的出版社
         {
-            IEnumerable<CollectedPublisher> q = _bookShopContext.CollectedPublishers.Where(x => x.MemberId == testMemID).Include(x=>x.Publisher);
+            IEnumerable<CollectedPublisher> q = _bookShopContext.CollectedPublishers.Where(x => x.MemberId == _userInforService.UserId).Include(x=>x.Publisher);
             return View(q);
         }
         [Authorize]
         public IActionResult myAuthor() //關注的作者
         {
-            IEnumerable<CollectedAuthor> q = _bookShopContext.CollectedAuthors.Where(x => x.MemberId == testMemID).Include(x=>x.Author);
+            IEnumerable<CollectedAuthor> q = _bookShopContext.CollectedAuthors.Where(x => x.MemberId == _userInforService.UserId).Include(x=>x.Author);
             return View(q);
         }
         [Authorize]
@@ -130,7 +138,7 @@ namespace prjBookMvcCore.Controllers
         public IActionResult myCollect() //暫存清單
         {
 
-            IEnumerable<Book> q = _bookShopContext.ActionDetials.Where(x => x.MemberId == testMemID && x.ActionId == 2).
+            IEnumerable<Book> q = _bookShopContext.ActionDetials.Where(x => x.MemberId == _userInforService.UserId && x.ActionId == 2).
              Include(x => x.Book.Publisher).Select(x => x.Book);
 
             return View(q);
@@ -163,8 +171,8 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult myOrders()  //訂單查詢
         {
-            testMemID = _userInforService.getUserInfor(); //預設會員ID
-            var q = _bookShopContext.Orders.Where(x => x.MemberId == testMemID).
+            //testMemID = _userInforService.getUserInfor(); //預設會員ID
+            var q = _bookShopContext.Orders.Where(x => x.MemberId == _userInforService.UserId).
                 Include(x=>x.Discount).
                 Include(x=>x.Payment).
                 Include(x=>x.Shipment).
