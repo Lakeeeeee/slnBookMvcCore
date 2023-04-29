@@ -1,35 +1,58 @@
-﻿
+﻿@model UserInforService
 @{
     ViewBag.Title = "會員中心首頁";
     Layout = "~/Views/Shared/_Layout_Member.cshtml";
 }
 
+<style>
+    .card:hover {
+        box-shadow: 0 0 5px #ddd;
+        transform: scale(1.05);
+    }
+    .card{
+        transition: all 0.5s ease-in-out; /* 增加過渡時間至 0.5 秒 */
+        /*width: 300px;*/
+            }
+    div{border:none}
+</style>
 
-<div class="container" style="margin-top:15px">
-    <div>
-        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="~/Member/MemberCenter">會員中心</a></li>
-            </ol>
-        </nav>
-    </div>
-    <p><h6 class="">讀本｜會員中心</h6></p>
-    <div>
-        <p><img src="../Image/pic_Lever.jpg" style="max-width:100%; height:auto;" /></p>
-        <p>
-            您的會員等級: 書妖 (等級期限 2023/08/31 止) ， 尚差 4058 元即可升等為 書魔 ,了解詳細<a href="~/Home/MemberCenter">會員分級</a>
-        </p>
-        <p>
-            <ul>
-                <li>您有 3 封訊息未讀</li>
-                <li>回饋金餘額 4 點</li>
-                <li>E-Coupon 1 張</li>
-            </ul>
-        </p>
-    </div>
-    <div>
-        <form asp-action="LogOut" method="get">
-        <button type="submit" class="btn btn-outline-success btn-sm">登出</button>
-        </form>
-    </div>
+<div class="container" >
+    <div id="inforCards" style="margin-top:15px">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="display-6">@Model.UserLevel</h5>
+                        <p class="card-text small">等級期限 2023/08/31 止<br />尚差 4058 元即可升等為 書魔 ,了解詳細<a href="~/Home/MemberCenter">會員分級</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <a class="card-body" style="display:block;width:100%;" href="~/Member/myMessage">
+                        <p class="card-text">
+                            您有 </p><span class="display-6">@Model.UserMessageCount  </span>封訊息未讀
+                    </a>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text">
+                            您的回饋金餘額：
+                        </p><span class="display-6">@Model.UserPoints  </span>點
+                    </div>
+                </div>
+            </div>        
+            <div class="col">
+                <div class="card">                    
+                    <div class="card-body">
+                        <p class="card-text">
+                            您的E-Coupon尚有：
+                        </p><span class="display-6">1  </span>張
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
 </div>

@@ -43,7 +43,7 @@ namespace prjBookMvcCore.Controllers
         [HttpPost]
         public IActionResult Login(CLoginViewModel vm)
         {
-            Member user = _bookShopContext.Members.FirstOrDefault(x=>x.MemberEmail==vm.Account_P);
+            Member user = _bookShopContext.Members.Include(x=>x.Level).FirstOrDefault(x=>x.MemberEmail==vm.Account_P);
             if (user  != null)
             {
                 if (user.MemberPassword == vm.Password_P)
@@ -52,6 +52,9 @@ namespace prjBookMvcCore.Controllers
                     {
                         new Claim("Id", user.MemberId.ToString()),
                         new Claim(ClaimTypes.Name, user.MemberName),
+                        new Claim("MessageCount", user.CustomerServices.Count().ToString()),
+                        new Claim("Points", user.Points.ToString()),
+                        new Claim("Level", user.Level.LevelName)
                     };
 
                     //建構cookie用戶驗證物件的狀態存取
@@ -85,7 +88,7 @@ namespace prjBookMvcCore.Controllers
             return RedirectToAction("Login");
         }
 
-        //-------------------------------------------------以下會員才能訪問
+        //==========================================以下會員才能訪問
         [Authorize]
         [HttpGet]
         public IActionResult LogOut()
@@ -109,7 +112,7 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult MemberCenter()
         {
-            return View();
+            return View(_userInforService);
         }
         [Authorize]
         public IActionResult myMessage() //通知訊息
