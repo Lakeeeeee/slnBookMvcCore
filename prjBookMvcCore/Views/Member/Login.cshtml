@@ -28,18 +28,31 @@
         <div class="col-4">
             <div class="container justify-content-center bg-light" style="border-radius:10px;  padding-block:15px">
                 <p><label class="">會員登入</label></p>
-                <p><input type="text" placeholder="讀本Email" /></p>
-                <p><input type="text" placeholder="讀本密碼" /></p>
+                <form asp-action="Login" method="post">
+                    <p><input type="text" placeholder="讀本Email" name="Account_P" id="account"/></p>
+                    <p><input type="password" placeholder="讀本密碼" name="Password_P" id="password" /></p>
                 <p><input type="text" placeholder="驗證碼" /></p>
                 <p>
-                    <button class="btn btn-outline-success">讀本會員登入</button>
+                    <button type="submit" class="btn btn-outline-success">讀本會員登入</button>
                     <a class="linkaFormat small" href="~/Member/Signin">註冊</a>｜
                     <a class="linkaFormat small" href="~/Member/Find_password">忘記帳密</a>
+                    </p>
+                </form>
+                <p>
+                    <button type="button" id="demo" class="btn btn-outline-success">Demo</button>
                 </p>
             </div>
         </div>
     </div>
 </div>
 
-
+<script>
+    const x = document.getElementById('demo');
+    const A = document.getElementById('account');
+    const P = document.getElementById('password');
+    x.addEventListener('click', function(){
+        A.value = "swift9428@gmail.com";
+        P.value  = "4u4yh5Ld";
+    })
+    </script>
 
