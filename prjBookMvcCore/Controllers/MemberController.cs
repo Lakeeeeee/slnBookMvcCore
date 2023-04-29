@@ -54,7 +54,8 @@ namespace prjBookMvcCore.Controllers
                         new Claim(ClaimTypes.Name, user.MemberName),
                         new Claim("MessageCount", user.CustomerServices.Count().ToString()),
                         new Claim("Points", user.Points.ToString()),
-                        new Claim("Level", user.Level.LevelName)
+                        new Claim("Level", user.Level.LevelName),
+                        new Claim("Orders", user.Orders.Count().ToString())
                     };
 
                     //建構cookie用戶驗證物件的狀態存取

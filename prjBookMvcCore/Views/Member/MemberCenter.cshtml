@@ -16,17 +16,24 @@
     div{border:none}
 </style>
 
-<div class="container" >
+<div class="container-fluid" >
     <div id="inforCards" style="margin-top:15px">
         <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
+        <div class="col-4">
+                <div class="card" style="height:100%">
+                    <a class="card-header small" style="display:block;width:100%;" href="~/Member/alretProflie">
                         <h5 class="display-6">@Model.UserLevel</h5>
-                        <p class="card-text small">等級期限 2023/08/31 止<br />尚差 4058 元即可升等為 書魔 ,了解詳細<a href="~/Home/MemberCenter">會員分級</a></p>
-                    </div>
+                        <p>等級期限 2023/08/31 止<br />尚差 4058 元即可升等為 <br />金皮 </p>
+                    </a>
+                    <ul class="list-group list-group-flush" >
+                        <li class="list-group-item small">了解詳細<a href="~/Home/MemberCenter" style="color:GrayText"> 會員分級 </a></li>
+                        <li class="list-group-item small"><a href="~/Member/alretPassword" style="color:GrayText"> 修改密碼 </a></li>
+                        <li class="list-group-item small"><a href="~/Member/myCollect" style="color:GrayText"> 收藏清單 </a></li>
+                    </ul>
                 </div>
-            </div>
+        </div>
+        <div class="col-8">
+        <div class="row">
             <div class="col">
                 <div class="card">
                     <a class="card-body" style="display:block;width:100%;" href="~/Member/myMessage">
@@ -35,24 +42,62 @@
                     </a>
                 </div>
             </div>
-            <div class="col">
+             <div class="col">
                 <div class="card">
-                    <div class="card-body">
+                    <a class="card-body" style="display:block;width:100%;" href="~/Member/myOrders">
                         <p class="card-text">
-                            您的回饋金餘額：
-                        </p><span class="display-6">@Model.UserPoints  </span>點
+                            您已購買過 </p><span class="display-6">@Model.UserOrders  </span>次書籍
+                    </a>
+                </div>
                     </div>
                 </div>
-            </div>        
-            <div class="col">
-                <div class="card">                    
-                    <div class="card-body">
-                        <p class="card-text">
-                            您的E-Coupon尚有：
-                        </p><span class="display-6">1  </span>張
+            <div class="row" style="margin-top:15px">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-text">
+                                您的回饋金餘額：
+                            </p><span class="display-6">@Model.UserPoints  </span>點
+                        </div>
                     </div>
                 </div>
-            </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-text">
+                                您的E-Coupon尚有：
+                            </p><span class="display-6">1  </span>張
+                        </div>
+                    </div>
+                </div>
+                </div>
+                </div>
         </div>
 </div>
 </div>
+
+                            @*    <div class="row" style="margin-top:15px">
+                  <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <a style="display:block;width:100%; text-align:center" href="~/Member/myAuthor">收藏的作者</a> 
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <a style="display:block;width:100%; text-align:center" href="~/Member/myPublisher">收藏的出版社</a> 
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <a style="display:block;width:100%; text-align:center" href="~/Member/myNotice">可購買時通知我</a> 
+                    </div>
+                </div>
+            </div>
+        </div> *@

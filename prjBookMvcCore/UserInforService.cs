@@ -15,8 +15,7 @@ public class UserInforService
         get
         {
             var varCliams = _contextAccessor.HttpContext.User.Claims.ToList();
-            var varId = varCliams.Where(x => x.Type == "Id").First().Value;
-            return Convert.ToInt32(varId);
+            return Convert.ToInt32(varCliams.Where(x => x.Type == "Id").First().Value);
         }
     }
     public int UserMessageCount
@@ -24,17 +23,24 @@ public class UserInforService
         get
         {
             var varCliams = _contextAccessor.HttpContext.User.Claims.ToList();
-            var varUserMessageCount = varCliams.Where(x => x.Type == "MessageCount").First().Value;
-            return Convert.ToInt32(varUserMessageCount);
+            return Convert.ToInt32(varCliams.Where(x => x.Type == "MessageCount").First().Value);
         }
     }
+    public int UserOrders
+    {
+        get
+        {
+            var varCliams = _contextAccessor.HttpContext.User.Claims.ToList();
+            return Convert.ToInt32(varCliams.Where(x => x.Type == "MessageCount").First().Value);
+        }
+    }
+
     public int UserPoints
     {
         get
         {
             var varCliams = _contextAccessor.HttpContext.User.Claims.ToList();
-            var varUserPoints  = varCliams.Where(x => x.Type == "Points").First().Value;
-            return Convert.ToInt32(varUserPoints);
+            return Convert.ToInt32(varCliams.Where(x => x.Type == "Points").First().Value);
         }
     }
     public string UserLevel
