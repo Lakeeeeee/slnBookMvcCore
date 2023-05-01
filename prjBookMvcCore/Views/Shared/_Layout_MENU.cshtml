@@ -44,7 +44,7 @@
     <script src="~/Scripts/modernizr-2.8.3.js"></script>
 </head>
 <body>
-    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+        <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
         @* 活動輪播圖 *@
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -83,7 +83,13 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
-
+   <br />
+    <div style="float:left;display: flex;padding:2px">
+        <h3>暢銷排行榜</h3>
+    </div>
+    <div style="display: flex;justify-content: flex-end;padding:10px">
+        <button type="button" style="border:1px solid black;border-radius:20px" name="暢銷排行榜看更多" id="暢銷排行榜看更多">看更多</button>
+    </div>
     <div id="carouselExampleTopSell" class="carousel slide">
         <div class="carousel-inner">
         @* 暢銷排行榜輪播圖 *@
@@ -290,11 +296,34 @@
         </div>
     </div>
 
-    <div class="container-fluid justify-content-center" style="margin-top: 20px">
+
+ 
+
+    <div class="container-fluid justify-content-center2" style="margin-top: 20px">
         <div class="row">
             @* 左邊功能欄 *@
             <div class="col-2">
-                <div cclass="card">
+                <div class="card">
+                    @* 注目專區 *@
+                    <div class="card-header">
+                        閱讀注目專區
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><span><a href="~/Discount/">有效溝通技巧</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Discount/">重新思考生命與死亡</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Discount/">心理學與情感療癒</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Discount/">大腦科學書籍熱門人氣排行推薦</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Discount/">大自然與生物多樣性</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Discount/">健康飲食與減重</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Discount/">自然探索與科普</a></span></li>
+                        <li class="list-group-item">
+                            <span><a href="~/Discount/"> 李崇義《冰山對話》新書分享</a></span>
+                        </li>
+                    </ul>
+                 </div>  
+                    <br />
+                <div class="card">
+                    @* 中文書分類 *@
                     <div class="card-header">
                         中文書
                     </div>
@@ -325,7 +354,6 @@
                 <section class="font14px">@RenderBody()</section>
             </div>
         </div>
-
     </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
