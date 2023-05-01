@@ -19,10 +19,10 @@
         <h3 >注目新品</h3>
     </div>
 <div style="display: flex;justify-content: flex-end;padding:10px">
-        @Html.ActionLink("看更多","中文書","Category")
+        <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Category/中文書">看更多</a>
 </div>
 <div class="container body-content">
-    <div id="carouselExampleBooks" class="carousel slide">
+    <div id="carouselExampleNew" class="carousel slide">
         <div class="carousel-inner">
             @*輪播書本第一頁*@ <div class="carousel-item active">
                 <div class="row">
@@ -527,7 +527,6 @@
                             <a>
                                 <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
                             </a>
-
                         </div>
                         <div class="caption bookCaption">
                             <ul style="list-style:none; margin:0; padding:0;">
@@ -547,7 +546,6 @@
                             <a>
                                 <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
                             </a>
-
                         </div>
                         <div class="caption bookCaption">
                             <ul style="list-style:none; margin:0; padding:0;">
@@ -616,7 +614,6 @@
                                 <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
                                 <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
                             </ul>
-
                         </div>
                     </div>
                     @*第八組*@  <div class="col-3">
@@ -640,11 +637,11 @@
                     </div>
                 </div>
             </div>
-            @*輪播圖切換按鈕*@ <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleBooks" data-bs-slide="prev" border=5>
+            @*輪播圖切換按鈕*@ <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleNew" data-bs-slide="prev" border=5>
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
             </button>
-            @*輪播圖切換按鈕*@<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleBooks" data-bs-slide="next" border=5>
+            @*輪播圖切換按鈕*@<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleNew" data-bs-slide="next" border=5>
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
@@ -660,11 +657,10 @@
             <h3>編輯推薦</h3>
         </div>
     <div style="display: flex;float:right">
-        <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Home/Menu" href="~/Category/中文書">看更多</a>
+        <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Category/中文書">看更多</a>
         </div>
-
         <div class="container body-content">
-            <div id="carouselExampleBooks" class="carousel slide">
+            <div id="carouselExampleEdit" class="carousel slide">
                 <div class="carousel-inner">
                     @*輪播書本第一頁*@ <div class="carousel-item active">
                         <div class="row">
@@ -1282,11 +1278,11 @@
                             </div>
                         </div>
                     </div>
-                    @*輪播圖切換按鈕*@ <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleBooks" data-bs-slide="prev" border=5>
+                @*輪播圖切換按鈕*@ <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleEdit" data-bs-slide="prev" border=5>
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Previous</span>
                     </button>
-                    @*輪播圖切換按鈕*@<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleBooks" data-bs-slide="next" border=5>
+                @*輪播圖切換按鈕*@<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleEdit" data-bs-slide="next" border=5>
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Next</span>
                     </button>
