@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <!-- import CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <style>
+    .el-header, .el-footer {
+      background-color: #B3C0D1;
+      color: #333;
+    }
+    
+    .el-aside {
+      background-color: #FFFFFF;
+      color: #333;
+      text-align: left;
+      /* line-height: 200px; */
+    }
+    
+    .el-main {
+      background-color: #E9EEF3;
+      color: #333;
+      padding: 0px;
+    }
+    
+    body > .el-container {
+      margin-bottom: 40px;
+    }
+    
+    .el-container:nth-child(5) .el-aside,
+    .el-container:nth-child(6) .el-aside {
+      line-height: 260px;
+    }
+    
+    .el-container:nth-child(7) .el-aside {
+      line-height: 320px;
+    }
+    .aside-wrapper{
+        display: flex;
+        flex-direction: column;
+    }
+    .downCover-wrapper{
+        display: flex;
+        padding: 15px;
+    }
+    .downCover-slot{
+        margin: 5px;
+    }
+    .rightButton{
+        width: 215px;
+        height: 50px;
+        background: linear-gradient(to right,#E3007F,#eb858c);
+        color: #FFFFFF;
+        font-size: 18px;
+    }
+    .rightButton:hover{
+        background: linear-gradient(to right,#bd2275,#c27079);
+        color: #ccadba;
+    }
+    .buttonRight{
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 5px;
+    }
+    .share{
+        padding: 5px;
+        background:none;
+    }
+    .share:hover{
+        filter: hue-rotate(30deg);
+    }
+    .icon_wrapper{
+        display: flex;
+        flex-direction: row;
+        margin: 20px;
+    }
+    .ad1{
+        width: 215px;
+        height: 35px;
+        background-color: #FFF0F5;
+        font-weight: bold;
+        justify-content: center;
+        margin-right: 10px;
+        margin-left: 10px;
+        color: #E3007F;
+        text-decoration: none;
+        font-size: 14px;
+    }
+    .el-button--pinkBorder {
+         /* // background-color: #2D6EFB; */
+        /* border-color: #2D6EFB; */
+        text-align: center;
+    }
+    /* .el-button--pinkBorderRadius:focus, */
+    .el-button--pinkBorder:hover {
+        /* background: #2D6EFB;
+        border-color: #2D6EFB; */
+        /* color: #fff; */
+        color: #E3007F;
+        border-color: #E3007F;
+    }
+    .el-breadcrumb-item--pinkColor:hover{
+        color: #E3007F;
+        text-decoration: underline;
+    }
+    /* .el-button--whiteBackground.is-active,
+    .el-button--whiteBackground:active {
+        background: #FFFFFF;
+        border-color: #2D6EFB;
+        color: #2D6EFB;
+    } */
+    .price{
+        background-color: rgba(227,0,127,0.11);
+        height: 85px;
+        line-height: 10px;
+        margin: 5px 0;
+        padding: 10px;
+        font-size: 14px;
+    }
+    .deliver{
+        margin: 5px 0px;
+        line-height: 10px;
+        padding-left: 10px;
+        font-size: 14px
+    }
+    .el-carousel__item h3 {
+        color: #475669;
+        font-size: 14px;
+        opacity: 0.75;
+        line-height: 150px;
+        margin: 0;
+    }
+
+    .el-carousel__item:nth-child(2n) {
+        background-color: #99a9bf;
+    }
+    
+    .el-carousel__item:nth-child(2n+1) {
+        background-color: #d3dce6;
+    }
+  </style>
+</head>
+<body>
+    <div id="app">
+        <!-- <el-container>
+            <el-header>Header</el-header>
+            <el-main>Main</el-main>
+          </el-container>
+          
+          <el-container>
+            <el-header>Header</el-header>
+            <el-main>Main</el-main>
+            <el-footer>Footer</el-footer>
+          </el-container> -->
+          <!-- 450 -->
+          <div style="margin-left: 150px; margin-right: 150px; margin-top: 200px;"> 
+            <el-container>
+                <el-breadcrumb separator-class="el-icon-arrow-right">
+                    <el-breadcrumb-item><a href="./home.html" @mouseover="hoverStyle($event)" @mouseout="restoreStyle($event)">首頁</a></el-breadcrumb-item>
+                    <el-breadcrumb-item><a href="./home.html" @mouseover="hoverStyle($event)" @mouseout="restoreStyle($event)">中文書</a></el-breadcrumb-item>
+                    <el-breadcrumb-item><a href="./home.html" @mouseover="hoverStyle($event)" @mouseout="restoreStyle($event)">商業</a></el-breadcrumb-item>
+                    <el-breadcrumb-item><a href="./home.html" @mouseover="hoverStyle($event)" @mouseout="restoreStyle($event)">投資理財</a></el-breadcrumb-item>
+                    <el-breadcrumb-item><div style="color: #E3007F;">塔木德：猶太人的致富聖經［修訂版］：1000多年來帶領猶太人快速累積財富的神祕經典</div></el-breadcrumb-item>
+                </el-breadcrumb>
+            </el-container>
+            <el-container>
+                <div class="aside-wrapper">
+                    <el-aside width="310px" height="400px">
+                        <div class="demo-image__placeholder">
+                            <div class="block">
+                            <el-image :src="bookCover">
+                                <div slot="placeholder" class="image-slot">
+                                加载中<span class="dot">...</span>
+                                </div>
+                            </el-image>
+                            </div>
+                        </div>
+                    </el-aside>
+                    <el-aside>
+                        <div class="demo-image__placeholder">
+                            <div class="block">
+                                <div class="downCover-wrapper">
+                                    <div class="downCover-slot">
+                                        <el-image :src="video" style="width: 140px;">
+                                        <div slot="placeholder" class="image-slot">
+                                            加载中<span class="dot">...</span>
+                                        </div>
+                                        </el-image>
+                                    </div>
+                                    <div class="downCover-slot">
+                                        <el-image :src="bookCover" style="width: 70px;">
+                                        <div slot="placeholder" class="image-slot">
+                                            加载中<span class="dot">...</span>
+                                        </div>
+                                        </el-image>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </el-aside>
+                </div>
+                <el-main>
+                    <div style="padding-left: 5px;">
+                        <h1 style="line-height: normal;letter-spacing: 0.5px;font-size:20px;font-weight:bold;">塔木德：猶太人的致富聖經［修訂版］：1000多年來帶領猶太人快速累積財富的神祕經典</h1>
+                        <div class="authorBoard">
+                            <p style="text-align: left;"><span>作者：<a href="#" @mouseover="hoverStyle($event)" @mouseout="restoreStyle($event)">佛蘭克．赫爾</a></span></p>
+                        </div>
+                        <el-row>
+                            <el-button round size="small" type="pinkBorder" style="margin-left: 0px; padding: 9px;"><i class="el-icon-edit"></i></i><span style="color:#E3007F;">11</span>評價</el-button>
+                            <el-button round size="small" type="pinkBorder" style="margin-left: 0px; padding: 9px;" ><i class="el-icon-star-off"></i></i><span style="color:#E3007F;">285</span>收藏</el-button>
+                            <el-button round size="small" type="pinkBorder" style="margin-left: 0px; padding: 9px;"><i class="el-icon-s-help"></i></i><span style="color:#E3007F;">278</span>二手徵求</el-button>
+                            <el-button round size="small" type="pinkBorder" style="margin-left: 0px; padding: 9px;"><i class="el-icon-reading"></i></i><span style="color:#E3007F;">568</span>人次試讀</el-button>
+                        </el-row>
+                        <div class="icon_wrapper">
+                            <div id="fb_shared" class="share" @click="windowOpen('https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.taaze.tw%2Fproducts%2F11100697818.html')">
+                                <a href=""><img src="./fb.png"alt="" width="30px" height="26px"></a>
+                            </div>
+                            <div id="gmail_shared" class="share" @click="windowOpen('https://mail.google.com/mail/?ui=1&amp;view=cm&amp;fs=1&amp;tf=1&amp;su=%E3%80%90TAAZE%20%7C%20%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB%E7%B6%B2%E8%B7%AF%E6%9B%B8%E5%BA%97%E3%80%91%E5%A1%94%E6%9C%A8%E5%BE%B7%EF%BC%9A%E7%8C%B6%E5%A4%AA%E4%BA%BA%E7%9A%84%E8%87%B4%E5%AF%8C%E8%81%96%E7%B6%93%EF%BC%BB%E4%BF%AE%E8%A8%82%E7%89%88%EF%BC%BD%EF%BC%9A1000%E5%A4%9A%E5%B9%B4%E4%BE%86%E5%B8%B6%E9%A0%98%E7%8C%B6%E5%A4%AA%E4%BA%BA%E5%BF%AB%E9%80%9F%E7%B4%AF%E7%A9%8D%E8%B2%A1%E5%AF%8C%E7%9A%84%E7%A5%9E%E7%A5%95%E7%B6%93%E5%85%B8-%20TAAZE%20%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB&amp;body=%E3%80%90TAAZE%20%7C%20%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB%E7%B6%B2%E8%B7%AF%E6%9B%B8%E5%BA%97%E3%80%91%E5%A1%94%E6%9C%A8%E5%BE%B7%EF%BC%9A%E7%8C%B6%E5%A4%AA%E4%BA%BA%E7%9A%84%E8%87%B4%E5%AF%8C%E8%81%96%E7%B6%93%EF%BC%BB%E4%BF%AE%E8%A8%82%E7%89%88%EF%BC%BD%EF%BC%9A1000%E5%A4%9A%E5%B9%B4%E4%BE%86%E5%B8%B6%E9%A0%98%E7%8C%B6%E5%A4%AA%E4%BA%BA%E5%BF%AB%E9%80%9F%E7%B4%AF%E7%A9%8D%E8%B2%A1%E5%AF%8C%E7%9A%84%E7%A5%9E%E7%A5%95%E7%B6%93%E5%85%B8-%20TAAZE%20%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB%2F%E5%A1%94%E6%9C%A8%E5%BE%B7%EF%BC%9A%E7%8C%B6%E5%A4%AA%E4%BA%BA%E7%9A%84%E8%87%B4%E5%AF%8C%E8%81%96%E7%B6%93%EF%BC%BB%E4%BF%AE%E8%A8%82%E7%89%88%EF%BC%BD%EF%BC%9A1000%E5%A4%9A%E5%B9%B4%E4%BE%86%E5%B8%B6%E9%A0%98%E7%8C%B6%E5%A4%AA%E4%BA%BA%E5%BF%AB%E9%80%9F%E7%B4%AF%E7%A9%8D%E8%B2%A1%E5%AF%8C%E7%9A%84%E7%A5%9E%E7%A5%95%E7%B6%93%E5%85%B8.%20%E4%BD%9B%E8%98%AD%E5%85%8B%EF%BC%8E%E8%B5%AB%E7%88%BE.%20%E5%BE%90%E4%B8%96%E6%98%8E.%20%E6%99%BA%E8%A8%80%E9%A4%A8.%209789865899332.%20%E3%80%8A%E8%81%96%E7%B6%93%E3%80%8B%E8%AE%93%E6%AF%8F%E4%B8%80%E5%80%8B%E4%BA%BA%E6%9C%8D%E5%BE%9E%E4%B8%8A%E5%B8%9D%E7%9A%84%E5%AE%89%E6%8E%92%EF%BC%8C%E4%BD%86%E3%80%8A%E5%A1%94%E6%9C%A8%E5%BE%B7%E3%80%8B%E8%AE%93%E3%80%8C%E8%B2%A1%E5%AF%8C%E3%80%8D%E6%9C%8D%E5%BE%9E%E4%BA%86%E6%88%91%E5%80%91%E7%9A%84%E9%81%B8%E6%93%87%E3%80%82%E2%94%80%E2%94%80%E5%93%88%E9%BB%98%E4%B8%96%E7%95%8C%E5%AF%8C%E7%BF%81%E6%91%A9....%20https%3A%2F%2Fwww.taaze.tw%2Fproducts%2F11100697818.html&amp;shva=1&amp;ov=0')">
+                                <a href=""><img src="./gmail.png"alt="" width="30px" height="26px"></a>
+                            </div>
+                            <div id="plurk_shared" class="share" @click="windowOpen('http://www.plurk.com/?qualifier=shares&amp;status=%E5%A1%94%E6%9C%A8%E5%BE%B7%EF%BC%9A%E7%8C%B6%E5%A4%AA%E4%BA%BA%E7%9A%84%E8%87%B4%E5%AF%8C%E8%81%96%E7%B6%93%EF%BC%BB%E4%BF%AE%E8%A8%82%E7%89%88%EF%BC%BD%EF%BC%9A1000%E5%A4%9A%E5%B9%B4%E4%BE%86%E5%B8%B6%E9%A0%98%E7%8C%B6%E5%A4%AA%E4%BA%BA%E5%BF%AB%E9%80%9F%E7%B4%AF%E7%A9%8D%E8%B2%A1%E5%AF%8C%E7%9A%84%E7%A5%9E%E7%A5%95%E7%B6%93%E5%85%B8-%20TAAZE%20%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB%20https%3A%2F%2Fwww.taaze.tw%2Fproducts%2F11100697818.html%20TAAZE%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB%E7%B6%B2%E8%B7%AF%E6%9B%B8%E5%BA%97')">
+                                <a href=""><img src="./plurk.png"alt="" width="30px" height="26px"></a>
+                            </div>
+                            <div id="twitter_shared" class="share" @click="windowOpen('https://twitter.com/home?status=%E5%A1%94%E6%9C%A8%E5%BE%B7%EF%BC%9A%E7%8C%B6%E5%A4%AA%E4%BA%BA%E7%9A%84%E8%87%B4%E5%AF%8C%E8%81%96%E7%B6%93%EF%BC%BB%E4%BF%AE%E8%A8%82%E7%89%88%EF%BC%BD%EF%BC%9A1000%E5%A4%9A%E5%B9%B4%E4%BE%86%E5%B8%B6%E9%A0%98%E7%8C%B6%E5%A4%AA%E4%BA%BA%E5%BF%AB%E9%80%9F%E7%B4%AF%E7%A9%8D%E8%B2%A1%E5%AF%8C%E7%9A%84%E7%A5%9E%E7%A5%95%E7%B6%93%E5%85%B8-%20TAAZE%20%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB%20https%3A%2F%2Fwww.taaze.tw%2Fproducts%2F11100697818.html%20TAAZE%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB%E7%B6%B2%E8%B7%AF%E6%9B%B8%E5%BA%97')">
+                                <a href=""><img src="./twitter.png"alt="" width="30px" height="26px"></a>
+                            </div>
+                            <!--<div class='gplus_frame'></div>-->
+                            <div class="share"><iframe frameborder="0" border="0" cellspacing="0" width="70" height="25" id="fb_like" style="border: none;overflow:hidden;" src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.taaze.tw%2Fproducts%2F11100697818.html&amp;layout=button_count&amp;action=like&amp;show_faces=false&amp;share=false&amp;height=70&amp;width=100&amp;size=small&amp;appId=626893700667334"></iframe></div>
+                            </div>
+                        </div>
+                        <div class="price">
+                            <p>定價：NT$ <span style="text-decoration:line-through;">250</span></p>
+                            <p>優惠價：<span style="color:#e2007e;"><strong> 75 </strong></span>折， NT$ <span style="color:#e2007e;"><strong>188</strong></span></p>
+                            <p style="color:#e2007e;">優惠截止日：至<span>2023年04月30日</span></p>
+                        </div>
+                        <div class="deliver">
+                            <p>運送方式：超商取貨、宅配取貨</p>
+                            <p>銷售地區：全球</p>
+                            <p>限量商品，即時庫存>5</p>
+                        </div>
+                        <p class="DeliverAndKpst">
+                            <a class="18h" href="#" target="_blank">
+                                <img style="width: 50px;height: 50px;" src="pic_single_ex@2x.png" alt="">
+                            </a>
+                            <a class="cartreserved" href="#" target="_blank">
+                                <img style="width: 50px;height: 50px;" src="pic_single_keep@2x.png" alt="">
+                            </a>
+                        </p>
+                </el-main>
+                <el-aside width="250px">
+                    <el-row>
+                        <div>
+                            <p class="ad1">
+                                <a href="#" class="ad1" @mouseover="hoverStyle($event)" @mouseout="restoreStyle($event)">【哲學宗教】參展書籍5折起</a>
+                            </p>
+                        </div>
+                        <div class="buttonRight">
+                            <el-button round class="rightButton">放入購物車</el-button>
+                        </div>
+                        <div class="buttonRight">
+                            <el-button round class="rightButton">直接購買</el-button>
+                        </div>
+                        <div class="buttonRight">
+                            <el-button round class="rightButton">放入暫存清單</el-button>
+                        </div>
+                    </el-row>
+                </el-aside>
+            </el-container>
+            
+            <el-container>
+                <el-header>
+                    <span>買了這本書的人也買了</span>
+                </el-header>
+                <el-main>
+                    <div class="block">
+                        <span class="demonstration">Click 指示器触发</span>
+                        <el-carousel trigger="click" height="500px" interval="0">
+                          <el-carousel-item v-for="item in 2" :key="item">
+                            <div>
+                                <el-image :src="bookCover" style="width: 180px;">
+                                <div slot="placeholder" class="image-slot">
+                                    加载中<span class="dot">...</span>
+                                </div>
+                                </el-image>
+                            </div>
+                          </el-carousel-item>
+                        </el-carousel>
+                      </div>
+                </el-main>
+            </el-container>
+            
+            <el-container>
+                <el-header>Header</el-header>
+                <el-container>
+                <el-aside width="200px">Aside</el-aside>
+                <el-container>
+                    <el-main>Main</el-main>
+                    <el-footer>Footer</el-footer>
+                </el-container>
+                </el-container>
+            </el-container>
+            
+            <el-container>
+                <el-aside width="200px">Aside</el-aside>
+                <el-container>
+                <el-header>Header</el-header>
+                <el-main>Main</el-main>
+                </el-container>
+            </el-container>
+            
+            <el-container>
+                <el-aside width="200px">Aside</el-aside>
+                <el-container>
+                <el-header>Header</el-header>
+                <el-main>Main</el-main>
+                <el-footer>Footer</el-footer>
+                </el-container>
+            </el-container>
+        </div>
+    </div>
+</body>
+  <!-- import Vue before Element -->
+  <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
+  <!-- import JavaScript -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data:{
+        bookCover:'./bookCover.jpg',
+        recommendCover:['./cover/1.jpg','./cover/2.jpg','./cover/3.jpg','./cover/4.jpg','./cover/5.jpg'],
+        video:'./video1.jpg',
+        originalColor: '',
+      },
+      methods: {
+        hoverStyle: function(event){
+            this.originalColor = event.target.style.color;
+            event.target.style.color = "#E3007F";
+            event.target.style.textDecoration = 'underline';
+        },
+        restoreStyle: function(event){
+            event.target.style.color = this.originalColor;
+            event.target.style.textDecoration = 'none';
+        },
+        windowOpen: function(url){
+            window.open(url)
+        }
+      },
+    })
+  </script>
+</html>
