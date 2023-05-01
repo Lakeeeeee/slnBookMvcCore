@@ -47,7 +47,7 @@ namespace prjBookMvcCore.Controllers
         }
         #endregion
 
-        public IActionResult Category()
+        public IActionResult Menu()
         {
             return View();
         }

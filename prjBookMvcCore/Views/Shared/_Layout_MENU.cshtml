@@ -44,6 +44,12 @@
     <script src="~/Scripts/modernizr-2.8.3.js"></script>
 </head>
 <body>
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Home">回首頁</a></li>
+            <li class="breadcrumb-item active" aria-current="page">中文書</li>
+        </ol>
+    </nav>
         <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
         @* 活動輪播圖 *@
         <div class="carousel-indicators">
@@ -88,7 +94,7 @@
         <h3>暢銷排行榜</h3>
     </div>
     <div style="display: flex;justify-content: flex-end;padding:10px">
-        <button type="button" style="border:1px solid black;border-radius:20px" name="暢銷排行榜看更多" id="暢銷排行榜看更多">看更多</button>
+        <button type="button" style="border:1px solid black;border-radius:20px" href="#id">看更多</button>
     </div>
     <div id="carouselExampleTopSell" class="carousel slide">
         <div class="carousel-inner">
@@ -296,9 +302,6 @@
         </div>
     </div>
 
-
- 
-
     <div class="container-fluid justify-content-center2" style="margin-top: 20px">
         <div class="row">
             @* 左邊功能欄 *@
@@ -349,7 +352,7 @@
                 </div>
             </div>
             @* Body *@
-            <div class="col-9 bg-light">
+            <div class="col-10 bg-light">
                 @RenderSection("test", required: false)
                 <section class="font14px">@RenderBody()</section>
             </div>

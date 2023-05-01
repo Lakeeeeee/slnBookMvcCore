@@ -8,6 +8,10 @@
 /*    div {
         border: 1px solid #ff0000;
     }*/
+    button
+    {
+       border:1px solid black;border-radius:20px;
+    }
 
 </style>
 <div>
@@ -15,7 +19,7 @@
         <h3 >注目新品</h3>
     </div>
 <div style="display: flex;justify-content: flex-end;padding:10px">
-        <button type="button" style="border:1px solid black;border-radius:20px" name="注目新品看更多" id="注目新品看更多" onclick="">看更多</button>
+        @Html.ActionLink("看更多","中文書","Category")
 </div>
 <div class="container body-content">
     <div id="carouselExampleBooks" class="carousel slide">
@@ -652,11 +656,11 @@
 <hr />
 <br />
   <div>
-        <div style="float:left;display: flex;padding:2px">
+        <div style="float:left;display: flex">
             <h3>編輯推薦</h3>
         </div>
-        <div style="display: flex;justify-content: flex-end;padding:10px">
-            <button type="button" style="border:1px solid black;border-radius:20px" name="編輯推薦看更多" id="編輯推薦看更多">看更多</button>
+    <div style="display: flex;float:right">
+        <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Home/Menu" href="~/Category/中文書">看更多</a>
         </div>
 
         <div class="container body-content">
