@@ -38,8 +38,6 @@ namespace prjBookMvcCore.Controllers
         {
             return View();
         }
-        #region(登入--haven't finish)
-
         [HttpPost]
         public IActionResult Login(CLoginViewModel vm)
         {
@@ -66,7 +64,6 @@ namespace prjBookMvcCore.Controllers
             }
             return View();
         }
-        #endregion
 
         public IActionResult Find_password() //忘記密碼
         {
@@ -175,7 +172,6 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult myOrders()  //訂單查詢
         {
-            //testMemID = _userInforService.getUserInfor(); //預設會員ID
             var q = _bookShopContext.Orders.Where(x => x.MemberId == _userInforService.UserId).
                 Include(x=>x.Discount).
                 Include(x=>x.Payment).
@@ -187,8 +183,26 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult alretProflie()
         {
-            return View();
+            Member member = _bookShopContext.Members.Where(x => x.MemberId == _userInforService.UserId).
+                Include(x=>x.Level).
+                Include(x=>x.Payment).
+                FirstOrDefault();
+            return View(member);
         }
-
+        [HttpPost]
+        public IActionResult alretProflie(Member member)
+        {
+            Member memberupdate = _bookShopContext.Members.FirstOrDefault(x => x.MemberId == member.MemberId);
+            if (memberupdate != null)
+            {
+                memberupdate.MemberName = member.MemberName;
+                memberupdate.MemberEmail = member.MemberEmail;
+                memberupdate.MemberBrithDate = member.MemberBrithDate;
+                memberupdate.MemberAddress = member.MemberAddress;
+                memberupdate.PaymentId = member.PaymentId;
+                _bookShopContext.SaveChanges();
+            };
+            return RedirectToAction("alretProflie");
+        }
     }
 }
