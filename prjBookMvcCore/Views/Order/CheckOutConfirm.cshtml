@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "訂單確認";
+    Layout = "~/Views/Shared/_Layout_order.cshtml";
+}
+
+<head>
+<style>
+	.container {
+		margin-top: 15px;
+		margin-bottom: 15px;
+	}
+
+	.table {
+		margin-bottom: 15px;
+	}
+
+	.order-info {
+		margin-bottom: 15px;
+	}
+
+	.payment-shipping {
+		margin-bottom: 15px;
+	}
+</style>
+</head>
+
+<body>
+	<div class="container">
+		<h2>確認結帳</h2>
+
+		<div class="table">
+			<h4>書籍清單</h4>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>書籍名稱</th>
+						<th>訂購數量</th>
+						<th>金額</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>商品 1</td>
+						<td>1</td>
+						<td>100</td>
+					</tr>
+					<tr>
+						<td>商品 2</td>
+						<td>2</td>
+						<td>200</td>
+					</tr>
+					<tr>
+						<td>商品 3</td>
+						<td>3</td>
+						<td>300</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<h2>訂購資訊確認</h2>
+			<div class="row">
+				<div class="col-md-6">
+					<p>姓名：</p>
+					<p>電話：</p>
+					<p>Email：</p>
+					<p>地址：</p>
+				</div>
+				<div class="col-md-6">
+					<p>付款方式：</p>
+					<p>配送方式：</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<h2>結帳金額</h2>
+			<div class="row">
+				<div class="col-md-6">
+					<p>總共_____ 件</p>
+					<p>總金額：</p>
+					<p>優惠折扣：</p>
+					<p>運費：</p>
+				</div>
+				<div class="col-md-6">
+					<p>結帳金額：</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="d-grid gap-2 c d-md-flex justify-content-md-end">
+		<a href="~/Order/CheckOutInfo" class=" btn btn-primary col-4 me-md-2" type="button">上一步</a>
+	</div>
+	
+	@*這邊送出後先返回首頁/需要再更新*@
+	<div class="d-grid gap-2 c d-md-flex justify-content-md-end">
+		<a href="~/Home/Home" class=" btn btn-primary col-4 me-md-2" type="button">確定送出</a>
+	</div>
+</body>

@@ -1,0 +1,92 @@
+﻿@{
+    ViewBag.Title = "收藏清單";
+    Layout = "~/Views/Shared/_Layout_order.cshtml";
+}
+<style>
+    .div {
+        margin-bottom: 15px;
+        margin-top: 15px
+    }
+
+    .container-sp {
+        width: 100%;
+        margin-top: 50px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 0;
+        padding-right: 0;
+    }
+</style>
+<div class="container-sp">
+    <div>
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="~/Home/Home">首頁</a></li>
+                <li class="breadcrumb-item active" aria-current="page">暫存清單</li>
+            </ol>
+        </nav>
+    </div>
+    <div>
+        <div>
+            <ul class="nav nav-tabs sp-tabs">
+                <li>
+                    <a href ="~/Order/ShoppingCart" class="btn btn-primary"> 購物車清單</a>
+                </li>
+                <li>
+                    <a class="btn btn-secondary" disabled">暫存清單</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div>
+    <table class="table table-striped">
+        <tr>
+            <th>序號</th>
+            <th>書名</th>
+            <th>優惠</th>
+            <th>優惠價</th>
+            <th>出版社</th>
+            <th>庫存</th>
+        </tr>
+        <tr>
+            <th>10</th>
+            <th>測試暫存</th>
+            <th>每日88折</th>
+            <th>168</th>
+            <th>HIHI</th>
+            <th>10</th>
+        </tr>
+    </table>
+</div>
+
+<div class="container">
+    為你推薦
+    <div class="row">
+        <div class="col">
+            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
+            productshow productshow productshow productshow productshow productshow productshow productshow
+        </div>
+        <div class="col">
+            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
+            productshow productshow productshow productshow productshow productshow productshow productshow
+        </div>
+        <div class="col">
+            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
+            productshow productshow productshow productshow productshow productshow productshow productshow
+        </div>
+        <div class="col">
+            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
+            productshow productshow productshow productshow productshow productshow productshow productshow
+        </div>
+        <div class="col">
+            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
+            productshow productshow productshow productshow productshow productshow productshow productshow
+        </div>
+    </div>
+</div>
+
+<div class="d-grid gap-2 c d-md-flex justify-content-md-end">
+    <button class="btn btn-primary  col-4 me-md-2" type="button">加入購物車</button>
+</div>

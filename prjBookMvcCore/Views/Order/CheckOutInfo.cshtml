@@ -1,0 +1,113 @@
+﻿@{
+    ViewBag.Title = "訂單資訊";
+    Layout = "~/Views/Shared/_Layout_order.cshtml";
+}
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>結帳頁面</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        .container-sp {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container-sp">
+        <div class="row">
+            <div class="col-md-12">
+                <h4>訂購人資訊</h4>
+                <form>
+                    <div class="form-group">
+                        <label for="inputName">姓名</label>
+                        <input type="text" class="form-control" id="inputName" placeholder="請輸入收件人姓名">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPhone">電話</label>
+                        <input type="text" class="form-control" id="inputPhone" placeholder="請輸入電話">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail">電子郵件</label>
+                        <input type="email" class="form-control" id="inputEmail" placeholder="請輸入電子郵件">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputAddress">地址</label>
+                        <input type="text" class="form-control" id="inputAddress" placeholder="請輸入配送地址">
+                    </div>
+                </form>
+            </div>
+        </div>
+     </div>
+
+    <div class="row container-sp">
+            <div class="col-md-6">
+                <h2>選擇付款方式</h2>
+                <form>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="paymentMethod1" value="creditCard" checked>
+                        <label class="form-check-label" for="paymentMethod1">
+                            信用卡
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="paymentMethod2" value="ATM">
+                        <label class="form-check-label" for="paymentMethod2">
+                            貨到付款
+                        </label>
+                    </div>
+                </form>
+            </div>
+        </div>
+    <div class="row container-sp">
+            <div class="col-md-6">
+                <h2>選擇配送方式</h2>
+                <form>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="shippingMethod" id="shippingMethod1" value="homeDelivery" checked>
+                        <label class="form-check-label" for="shippingMethod1">
+                            宅配到府
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="shippingMethod" id="shippingMethod2" value="storePickup">
+                        <label class="form-check-label" for="shippingMethod2">
+                            超商取貨
+                        </label>
+                    </div>
+                </form>
+            </div>
+        </div>
+    <div class="row container-sp">
+        <div class="col-md-6">
+            <h2>選擇優惠項目</h2>
+            <form>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="shippingMethod" id="shippingMethod1" value="homeDelivery" checked>
+                    <label class="form-check-label" for="shippingMethod1">
+                        會員優惠
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="shippingMethod" id="shippingMethod2" value="storePickup">
+                    <label class="form-check-label" for="shippingMethod2">
+                        活動優惠
+                    </label>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
+        <a href="~/Order/ShoppingCart" class=" btn btn-primary col-4 me-md-2" type="button">返回購物車</a>
+    </div>
+    <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
+        <a href="~/Order/CheckOutConfirm" class=" btn btn-primary col-4 me-md-2" type="button">下一步</a>
+    </div>
+</body>
+   
+    
+ 
+
