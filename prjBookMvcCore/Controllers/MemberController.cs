@@ -16,7 +16,7 @@ namespace prjBookMvcCore.Controllers
     public class MemberController : Controller
     {
         private BookShopContext _bookShopContext ;
-        protected UserInforService _userInforService { get; set; }
+        public UserInforService _userInforService { get; set; }
 
         public MemberController(BookShopContext _db, UserInforService userInforService)
         {
@@ -56,6 +56,7 @@ namespace prjBookMvcCore.Controllers
                         new Claim("Orders", user.Orders.Count().ToString())
                     };
 
+                    ViewBag.isLogin="true";
                     //建構cookie用戶驗證物件的狀態存取
                     var varClainsIdentity = new ClaimsIdentity(useClain, CookieAuthenticationDefaults.AuthenticationScheme);
                     HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(varClainsIdentity));
@@ -93,6 +94,7 @@ namespace prjBookMvcCore.Controllers
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Redirect("~/Home/Home");
+            ViewBag.isLogin = "false";
         }
 
 
