@@ -236,7 +236,7 @@
                             <div class="block">
                                 <el-image :src="bookCover">
                                     <div slot="placeholder" class="image-slot">
-                                        加载中<span class="dot">...</span>
+                                        加載中<span class="dot">...</span>
                                     </div>
                                 </el-image>
                             </div>
@@ -249,14 +249,14 @@
                                     <div class="downCover-slot">
                                         <el-image :src="video" style="width: 140px;">
                                             <div slot="placeholder" class="image-slot">
-                                                加载中<span class="dot">...</span>
+                                                加載中<span class="dot">...</span>
                                             </div>
                                         </el-image>
                                     </div>
                                     <div class="downCover-slot">
                                         <el-image :src="bookCover" style="width: 70px;">
                                             <div slot="placeholder" class="image-slot">
-                                                加载中<span class="dot">...</span>
+                                                加載中<span class="dot">...</span>
                                             </div>
                                         </el-image>
                                     </div>
@@ -331,7 +331,33 @@
                     </el-row>
                 </el-aside>
             </el-container>
-
+            <el-main>
+                <span style="font-size: 20px; font-weight: bold;">買了這本書的也買了</span>
+                <el-carousel arrow="always">
+                    <el-carousel-item>
+                        <el-image :src="recommendCover[0]" style="width: 200px;">
+                            <div slot="placeholder" class="image-slot">
+                                加載中<span class="dot">...</span>
+                            </div>
+                        </el-image>
+                    </el-carousel-item>
+                    <el-carousel-item>
+                        <el-image :src="recommendCover[1]" style="width: 200px;">
+                            <div slot="placeholder" class="image-slot">
+                                加載中<span class="dot">...</span>
+                            </div>
+                        </el-image>
+                    </el-carousel-item>
+                    <el-carousel-item>
+                        <el-image :src="recommendCover[2]" style="width: 200px;">
+                            <div slot="placeholder" class="image-slot">
+                                加載中<span class="dot">...</span>
+                            </div>
+                        </el-image>
+                    </el-carousel-item>
+                </el-carousel>
+            </el-main>
+            <el-divider></el-divider>
             <el-container>
                 <el-main>
                     <div class="information">
@@ -583,8 +609,6 @@
             </el-container>
             <el-divider></el-divider>
             <el-container>
-            </el-container>
-            <el-container>
                 <el-aside width="200px">Aside</el-aside>
                 <el-container>
                     <el-header>Header</el-header>
@@ -612,6 +636,7 @@
         el: '#app',
         data: {
             bookCover: '../image/Book/bookIcon/bookCover.jpg',
+            testCover: ['bookCover/1.jpg', 'bookCover/2.jpg', 'bookCover/3.jpg', 'bookCover/4.jpg', 'bookCover/5.jpg'],
             recommendCover: ['../Image/Book/bookCover/1.jpg', '../image/Book/bookCover/2.jpg', '../image/Book/bookCover/3.jpg', '../image/Book/bookCover/4.jpg', '../image/Book/bookCover/5.jpg'],
             video: '../image/Book/bookIcon/video1.jpg',
             originalColor: '',
