@@ -1,8 +1,6 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "BookInformation";
 }
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,8 +15,9 @@
             text-align: left;
             /* line-height: 200px; */
         }
-        div{
-            border:none;
+
+        div {
+            border: none;
         }
 
         .el-main {
@@ -27,15 +26,6 @@
 
         body > .el-container {
             margin-bottom: 40px;
-        }
-
-        .el-container:nth-child(5) .el-aside,
-        .el-container:nth-child(6) .el-aside {
-            line-height: 260px;
-        }
-
-        .el-container:nth-child(7) .el-aside {
-            line-height: 320px;
         }
 
         .aside-wrapper {
@@ -50,6 +40,12 @@
 
         .downCover-slot {
             margin: 5px;
+        }
+
+        .profile-slot {
+            width: 50px;
+            height: 50px;
+            border-radius: 30px;
         }
 
         .rightButton {
@@ -99,6 +95,20 @@
             font-size: 14px;
         }
 
+        .el-button--comment {
+            color: #E3007F;
+            border-color: #E3007F;
+            text-align: center;
+        }
+
+            .el-button--comment:hover {
+                /* background: #2D6EFB;
+                                border-color: #2D6EFB; */
+                /* color: #fff; */
+                color: #E3007F;
+                border-color: #E3007F;
+            }
+
         .el-button--pinkBorder {
             /* // background-color: #2D6EFB; */
             /* border-color: #2D6EFB; */
@@ -107,7 +117,7 @@
             /* .el-button--pinkBorderRadius:focus, */
             .el-button--pinkBorder:hover {
                 /* background: #2D6EFB;
-                        border-color: #2D6EFB; */
+                            border-color: #2D6EFB; */
                 /* color: #fff; */
                 color: #E3007F;
                 border-color: #E3007F;
@@ -118,11 +128,11 @@
             text-decoration: underline;
         }
         /* .el-button--whiteBackground.is-active,
-                    .el-button--whiteBackground:active {
-                        background: #FFFFFF;
-                        border-color: #2D6EFB;
-                        color: #2D6EFB;
-                    } */
+                            .el-button--whiteBackground:active {
+                                background: #FFFFFF;
+                                border-color: #2D6EFB;
+                                color: #2D6EFB;
+                            } */
         .price {
             background-color: rgba(227,0,127,0.11);
             height: 85px;
@@ -130,6 +140,25 @@
             margin: 5px 0;
             padding: 10px;
             font-size: 14px;
+        }
+
+        .commentItem {
+            margin-bottom: 20px;
+        }
+
+        .commentImage {
+            margin-right: 20px;
+        }
+
+        .commentRate {
+            margin-left: 100px;
+        }
+
+        .commentRate,
+        .commentAuthor {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .deliver {
@@ -157,6 +186,22 @@
 
         .information p {
             margin: 2px 0;
+        }
+
+        .font-control {
+            text-align: right;
+        }
+
+        .container.small {
+            font-size: 14px;
+        }
+
+        .container.medium {
+            font-size: 18px;
+        }
+
+        .container.large {
+            font-size: 24px;
         }
 
     </style>
@@ -319,175 +364,226 @@
                     <el-tab-pane label="目錄" name="tableContainer"></el-tab-pane>
                     <el-tab-pane label="購物須知" name="beforeBuy"></el-tab-pane>
                 </el-tabs>
-                <div id="content">
-                    <div id="contentIntro">
-                        <p></p>
-                        <center>
-                            <font color="#FF0000">
-                                聖經》讓每一個人服從上帝的安排，
-                                <br>
-                                但《塔木德》讓「財富」服從了我們的選擇。
-                                <br>
-                                ──哈默
-                            </font>
-                        </center>
-                        <br>
-                        <br>
-                        世界富翁摩根、羅斯柴爾德、哈默、索羅斯等
-                        <br>
-                        猶太裔商業巨擘每日必讀的致富經典
-                        <br>
-                        <br>
-                        <font color="#0040FF">
-                            本書特色
-                            <br>
-                            世界富翁摩根、羅斯柴爾德、哈默、索羅斯等
-                            <br>
-                            猶太裔商業巨擘，每日必讀的致富經典──《塔木德》
-                            <br>
-                            本書將為你打開快速致富的神祕大門！
-                        </font>
-                        <br>
-                        <br>
-                        【特色一】
-                        <br>
-                        本書於2005年發行，直到2013年（最新年度）博客來網路書店結算年度百大暢銷書，本書仍為「商業理財類」前50大之暢銷書。暢銷熱賣的程度，歷經8年，不曾減退！
-                        <br>
-                        <br>
-                        【特色二】
-                        <br>
-                        全書貫徹「我們需要什麼樣的觀念和態度，才能讓自己長久致富？」的中心思想，不僅告訴讀者，如何擁有財富，更重要的是，它告訴我們，如何才能讓財富緊緊相隨，不分離！
-                        <br>
-                        <br>
-                        內容簡介
-                        <br>
-                        <br>
-                        對於猶太人的財富，有一個非常經典的說法：「全世界的錢都在美國人的口袋裡，而美國人的錢卻在猶太人的口袋裡。」猶太人如此的優秀，讓世界為之震驚，尤其最讓世人折服的，是他們驚人的財富和超凡的賺錢能力。
-                        <br>
-                        <br>
-                        1000多年以來，這個謎一般的民族，是世界上的「少數人」，但是卻掌握了世界上龐大的資產。他們如何擁有巨大的財富，始終是眾人非常關注的話題，相信，只要是想成為富人的人，任誰都會為此產生濃厚的興趣！
-                        <br>
-                        <br>
-                        到底他們是如何致富的？而且是整個民族歷久不衰的富有，到底他們是怎麼辦到的？
-                        <br>
-                        <br>
-                        《塔木德》提供了最好的答案！
-                        <br>
-                        <br>
-                        《塔木德》是猶太人的致富聖經寶典，就是它，讓猶太人成為世界上最富有的民族，沒有它，猶太人在歷經了數千年的流亡迫害之下，一定早就被滅種或被其他民族同化了。
-                        <br>
-                        <br>
-                        然而，到底《塔木德》中記載了什麼樣的大智慧，能讓這個經過數度迫害屠殺，又流離四散的民族，不但擁有了頑強的生存意志，更擁有了其他民族所沒有的賺錢和處世智慧？
-                        <br>
-                        <br>
-                        千百年來，猶太人的致富祕笈一直無法被外人所破解，如今《塔木德》被世人發現，等於猶太人經商致富的神祕方程式和祕笈，終於公諸於世。
-                        <br>
-                        <br>
-                        猶太人也是人，既然他們能因為這些祕笈而致富，相信只要你有心成為億萬富翁，這本《塔木德》也將是開啟你經商任督二脈的絕世祕笈。
-                        <br>
-                        <p></p>
+                <div>
+                    <div class="font-control">
+                        <span>文字字級</span>
+                        <el-button v-on:click="fontSize = 'small'" size="mini">小</el-button>
+                        <el-button v-on:click="fontSize = 'medium'" size="mini">中</el-button>
+                        <el-button v-on:click="fontSize = 'large'" size="mini">大</el-button>
                     </div>
-                    <el-divider></el-divider>
-                    <div id="tryContent">
-                        <span style="font-size: 20px; font-weight: bold;">章節試閱</span>
+                    <el-container class="container" :class="fontSize">
+                        <el-main>
+                            <div id="content">
+                                <div id="contentIntro">
+                                    <p></p>
+                                    <center>
+                                        <font color="#FF0000">
+                                            聖經》讓每一個人服從上帝的安排，
+                                            <br>
+                                            但《塔木德》讓「財富」服從了我們的選擇。
+                                            <br>
+                                            ──哈默
+                                        </font>
+                                    </center>
+                                    <br>
+                                    <br>
+                                    世界富翁摩根、羅斯柴爾德、哈默、索羅斯等
+                                    <br>
+                                    猶太裔商業巨擘每日必讀的致富經典
+                                    <br>
+                                    <br>
+                                    <font color="#0040FF">
+                                        本書特色
+                                        <br>
+                                        世界富翁摩根、羅斯柴爾德、哈默、索羅斯等
+                                        <br>
+                                        猶太裔商業巨擘，每日必讀的致富經典──《塔木德》
+                                        <br>
+                                        本書將為你打開快速致富的神祕大門！
+                                    </font>
+                                    <br>
+                                    <br>
+                                    【特色一】
+                                    <br>
+                                    本書於2005年發行，直到2013年（最新年度）博客來網路書店結算年度百大暢銷書，本書仍為「商業理財類」前50大之暢銷書。暢銷熱賣的程度，歷經8年，不曾減退！
+                                    <br>
+                                    <br>
+                                    【特色二】
+                                    <br>
+                                    全書貫徹「我們需要什麼樣的觀念和態度，才能讓自己長久致富？」的中心思想，不僅告訴讀者，如何擁有財富，更重要的是，它告訴我們，如何才能讓財富緊緊相隨，不分離！
+                                    <br>
+                                    <br>
+                                    內容簡介
+                                    <br>
+                                    <br>
+                                    對於猶太人的財富，有一個非常經典的說法：「全世界的錢都在美國人的口袋裡，而美國人的錢卻在猶太人的口袋裡。」猶太人如此的優秀，讓世界為之震驚，尤其最讓世人折服的，是他們驚人的財富和超凡的賺錢能力。
+                                    <br>
+                                    <br>
+                                    1000多年以來，這個謎一般的民族，是世界上的「少數人」，但是卻掌握了世界上龐大的資產。他們如何擁有巨大的財富，始終是眾人非常關注的話題，相信，只要是想成為富人的人，任誰都會為此產生濃厚的興趣！
+                                    <br>
+                                    <br>
+                                    到底他們是如何致富的？而且是整個民族歷久不衰的富有，到底他們是怎麼辦到的？
+                                    <br>
+                                    <br>
+                                    《塔木德》提供了最好的答案！
+                                    <br>
+                                    <br>
+                                    《塔木德》是猶太人的致富聖經寶典，就是它，讓猶太人成為世界上最富有的民族，沒有它，猶太人在歷經了數千年的流亡迫害之下，一定早就被滅種或被其他民族同化了。
+                                    <br>
+                                    <br>
+                                    然而，到底《塔木德》中記載了什麼樣的大智慧，能讓這個經過數度迫害屠殺，又流離四散的民族，不但擁有了頑強的生存意志，更擁有了其他民族所沒有的賺錢和處世智慧？
+                                    <br>
+                                    <br>
+                                    千百年來，猶太人的致富祕笈一直無法被外人所破解，如今《塔木德》被世人發現，等於猶太人經商致富的神祕方程式和祕笈，終於公諸於世。
+                                    <br>
+                                    <br>
+                                    猶太人也是人，既然他們能因為這些祕笈而致富，相信只要你有心成為億萬富翁，這本《塔木德》也將是開啟你經商任督二脈的絕世祕笈。
+                                    <br>
+                                    <p></p>
+                                </div>
+                                <el-divider></el-divider>
+                                <div id="tryContent">
+                                    <span style="font-size: 20px; font-weight: bold;">章節試閱</span>
+                                    <br>
+                                    <br>
+                                    【緒論】天生會賺錢的民族
+                                    <br>
+                                    有一天，猶太教士胡里奧在河邊遇見了憂鬱的年輕人費列姆。費列姆唉聲嘆氣，愁眉苦臉。
+                                    <br>
+                                    「孩子你為何如此鬱鬱不樂呢？」胡里奧關心地問。
+                                    <br>
+                                    費列姆看了一眼胡里奧，嘆了口氣：「我是一個名副其實的窮光蛋。我沒有房子，沒有工作，沒有收入，整天饑一頓飽一頓度日。像我這樣一無所有的人，怎麼能高興得起來呢？」
+                                    <br>
+                                    「傻孩子！」胡里奧笑道：其實，你應該開懷大笑才對！」
+                                    <br>
+                                    「開懷大笑？為什麼？」費列姆不解地問。
+                                    <br>
+                                    「因為，你其實是一個百萬富翁呢！」胡里奧詭異地說。
+                                    <br>
+                                    「百萬富翁？您別拿我這窮光蛋尋開心了。...
+                                    <div class="moreButton" style="margin-top: 10px;">
+                                        <div viewall="0" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;">顯示全部內容</div>
+                                    </div>
+                                </div>
+                                <el-divider></el-divider>
+                                <div id="tableContainer">
+                                    <span style="font-size: 20px; font-weight: bold;">目錄</span>
+                                    <br>
+                                    【緒論】天生會賺錢的民族
+                                    <br>
+                                    世界上最偉大的商人
+                                    <br>
+                                    賺錢，是一種高貴的美德
+                                    <br>
+                                    可以傳授的致富祕訣
+                                    <br>
+                                    最會賺錢的民族
+                                    <br>
+                                    <br>
+                                    【第一章】錢是給上帝的禮物
+                                    <br>
+                                    沒有錢，就沒有上帝
+                                    <br>
+                                    錢是回饋神的禮物
+                                    <br>
+                                    貧窮，比任何苦難還恐怖
+                                    <br>
+                                    錢的「準神聖性」
+                                    <br>
+                                    錢，絕不分高低貴賤
+                                    <br>
+                                    賺錢是一種遊戲
+                                    <br>
+                                    吝嗇的有錢人
+                                    <br>
+                                    摳錢一生窮，花錢發大財
+                                    <br>
+                                    借別人的錢來賺大錢
+                                    <br>
+                                    借錢給別人，等於是花錢買敵人
+                                    <br>
+                                    <br>
+                                    【第二章】用創意和思考致富
+                                    <br>
+                                    逆向思考：厚利才能賺大錢
+                                    <br>
+                                    用利益讓對方為自己著想
+                                    <br>
+                                    女人和嘴巴
+                                    <br>
+                                    善用人者為之下
+                                    <br>
+                                    做生意不能用感情
+                                    <br>
+                                    活用數字替你賺錢
+                                    <br>
+                                    幽默是人生的良藥...
+                                    <div class="moreButton" style="margin-top: 10px;">
+                                        <div viewall="0" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;">顯示全部內容</div>
+                                    </div>
+                                </div>
+                                <el-divider></el-divider>
+                                <div id="beforeBuy">
+                                    <span style="font-size: 20px; font-weight: bold;">購物須知</span>
+                                    <p style="font-weight: bold;">退換貨說明：</p>
+                                    <p>會員均享有10天的商品猶豫期（含例假日）。若您欲辦理退換貨，請於取得該商品10日內寄回。</p>
+                                    <p>
+                                        辦理退換貨時，請保持商品全新狀態與完整包裝（商品本身、贈品、贈票、附件、內外包裝、保證書、隨貨文件等）一併寄回。若退回商品無法回復原狀者，可能影響退換貨權利之行使或須負擔部分費用。
+                                    </p>
+                                    <strong>訂購本商品前請務必詳閱</strong>
+                                    <a class="linkStyleTextArea" href="https://www.taaze.tw/member_serviceCenter.html?qa_type=g#a1" target="_blank">退換貨原則</a>。
+                                </div>
+                            </div>
+                        </el-main>
+                    </el-container>
+                </div>
+                <el-divider></el-divider>
+                <div id="comment">
+                    <span style="font-size: 20px; font-weight: bold;">發表評論</span>
+                    <p></p>
+                    <div>
+                        <strong>歡迎你給予星評或評論</strong>
                         <br>
-                        <br>
-                        【緒論】天生會賺錢的民族
-                        <br>
-                        有一天，猶太教士胡里奧在河邊遇見了憂鬱的年輕人費列姆。費列姆唉聲嘆氣，愁眉苦臉。
-                        <br>
-                        「孩子你為何如此鬱鬱不樂呢？」胡里奧關心地問。
-                        <br>
-                        費列姆看了一眼胡里奧，嘆了口氣：「我是一個名副其實的窮光蛋。我沒有房子，沒有工作，沒有收入，整天饑一頓飽一頓度日。像我這樣一無所有的人，怎麼能高興得起來呢？」
-                        <br>
-                        「傻孩子！」胡里奧笑道：其實，你應該開懷大笑才對！」
-                        <br>
-                        「開懷大笑？為什麼？」費列姆不解地問。
-                        <br>
-                        「因為，你其實是一個百萬富翁呢！」胡里奧詭異地說。
-                        <br>
-                        「百萬富翁？您別拿我這窮光蛋尋開心了。...
-                        <div class="moreButton" style="margin-top: 10px;">
-                            <div viewall="0" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;">顯示全部內容</div>
-                        </div>
-                    </div>
-                    <el-divider></el-divider>
-                    <div id="tableContainer">
-                        <span style="font-size: 20px; font-weight: bold;">目錄</span>
-                        <br>
-                        【緒論】天生會賺錢的民族
-                        <br>
-                        世界上最偉大的商人
-                        <br>
-                        賺錢，是一種高貴的美德
-                        <br>
-                        可以傳授的致富祕訣
-                        <br>
-                        最會賺錢的民族
-                        <br>
-                        <br>
-                        【第一章】錢是給上帝的禮物
-                        <br>
-                        沒有錢，就沒有上帝
-                        <br>
-                        錢是回饋神的禮物
-                        <br>
-                        貧窮，比任何苦難還恐怖
-                        <br>
-                        錢的「準神聖性」
-                        <br>
-                        錢，絕不分高低貴賤
-                        <br>
-                        賺錢是一種遊戲
-                        <br>
-                        吝嗇的有錢人
-                        <br>
-                        摳錢一生窮，花錢發大財
-                        <br>
-                        借別人的錢來賺大錢
-                        <br>
-                        借錢給別人，等於是花錢買敵人
-                        <br>
-                        <br>
-                        【第二章】用創意和思考致富
-                        <br>
-                        逆向思考：厚利才能賺大錢
-                        <br>
-                        用利益讓對方為自己著想
-                        <br>
-                        女人和嘴巴
-                        <br>
-                        善用人者為之下
-                        <br>
-                        做生意不能用感情
-                        <br>
-                        活用數字替你賺錢
-                        <br>
-                        幽默是人生的良藥...
-                        <div class="moreButton" style="margin-top: 10px;">
-                            <div viewall="0" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;">顯示全部內容</div>
-                        </div>
-                    </div>
-                    <el-divider></el-divider>
-                    <div id="beforeBuy">
-                        <span style="font-size: 20px; font-weight: bold;">購物須知</span>
-                        <p style="font-weight: bold;">退換貨說明：</p>
-                        <p>會員均享有10天的商品猶豫期（含例假日）。若您欲辦理退換貨，請於取得該商品10日內寄回。</p>
-                        <p>
-                            辦理退換貨時，請保持商品全新狀態與完整包裝（商品本身、贈品、贈票、附件、內外包裝、保證書、隨貨文件等）一併寄回。若退回商品無法回復原狀者，可能影響退換貨權利之行使或須負擔部分費用。
-                        </p>
-                        <strong>訂購本商品前請務必詳閱</strong>
-                        <a class="linkStyleTextArea" href="https://www.taaze.tw/member_serviceCenter.html?qa_type=g#a1" target="_blank">退換貨原則</a>。
-                    </div>
-                    <el-divider></el-divider>
-                    <div id="comment">
-                        <div>
-                            <strong>歡迎你給予星評或評論</strong>
+                        <a href="#">
+                            <el-button round size="small" type="comment" style="margin-left: 0px; padding: 9px;">我來寫評論</el-button>
+                        </a>
+                        <div class="block">
+                            <span class="demonstration"></span>
+                            <el-rate v-model="commentValueMyself"></el-rate>
                         </div>
                     </div>
                 </div>
+                <el-divider></el-divider>
+                <el-container>
+                    <div class="commentContent">
+                        <div v-for="(item, index) in comment" :key="index" class="commentItem">
+                            <el-aside width="100px">
+                                <div class="commentImage">
+                                    <el-image :src="item.profile" class="profile-slot">
+                                        <div slot="placeholder">
+                                            加载中<span class="dot">...</span>
+                                        </div>
+                                    </el-image>
+                                </div>
+                            </el-aside>
+                            <el-main>
+                                <el-rate v-model="item.value"
+                                         disabled
+                                         text-color="#ff9900"
+                                         score-template="{value}"></el-rate>
+                                <p><strong>{{item.author}}</strong><span style="margin-left: 10px;">{{item.date}}</span></p>
+                                <p>{{item.content}}</p>
+                            </el-main>
+                        </div>
+                        <div class="buttonRight">
+                            <el-button round class="rightButton">看更多評論</el-button>
+                        </div>
+                    </div>
+                </el-container>
             </el-container>
             <el-divider></el-divider>
+            <el-container>
+            </el-container>
             <el-container>
                 <el-aside width="200px">Aside</el-aside>
                 <el-container>
@@ -519,7 +615,34 @@
             recommendCover: ['../Image/Book/bookCover/1.jpg', '../image/Book/bookCover/2.jpg', '../image/Book/bookCover/3.jpg', '../image/Book/bookCover/4.jpg', '../image/Book/bookCover/5.jpg'],
             video: '../image/Book/bookIcon/video1.jpg',
             originalColor: '',
-            activeName: 'first'
+            activeName: 'first',
+            fontSize: 'medium',
+            commentValueMyself: null,
+            comment: [
+                {
+                    value: 4.0,
+                    author: 'Arthur Huang',
+                    date: '2022-07-15',
+                    content:
+                        '原子習慣：細微改變帶來巨大成就的實證法則\r\n不錯好看的一本書',
+                    profile: '../image/Book/bookComment/anonymous.jpg'
+                },
+                {
+                    value: 5.0,
+                    author: '俐君',
+                    date: '2021-10-08',
+                    content:
+                        '很實用的一本書，有明確且直白的舉例，完全能理解且能夠拿來應用在生活之中！',
+                    profile: '../image/Book/bookComment/p2.jpg'
+                },
+                {
+                    value: 5.0,
+                    author: 'Gary Kang',
+                    date: '2021-06-09',
+                    content: '大推！一本看完會令你想動起來做些改變的書！',
+                    profile: '../image/Book/bookComment/p3.jpg'
+                }
+            ],
         },
         methods: {
             hoverStyle: function (event) {
