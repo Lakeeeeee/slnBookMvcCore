@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Image\ART\" />
     <Folder Include="wwwroot\lib\text\" />
   </ItemGroup>
 
