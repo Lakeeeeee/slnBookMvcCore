@@ -17,10 +17,9 @@ namespace prjBookMvcCore.Controllers
     {
         private BookShopContext _bookShopContext ;
         public UserInforService _userInforService { get; set; }
-
         public MemberController(BookShopContext _db, UserInforService userInforService)
         {
-            _bookShopContext =  _db ;
+            _bookShopContext =  _db;
             _userInforService =  userInforService ;
         }
 
