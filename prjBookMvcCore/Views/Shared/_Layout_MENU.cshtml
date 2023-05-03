@@ -46,8 +46,8 @@
 <body>
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Home">回首頁</a></li>
-            <li class="breadcrumb-item active" aria-current="page">中文書</li>
+            <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Home">首頁</a></li>
+            <li class="breadcrumb-item active" aria-current="page">焦點</li>
         </ol>
     </nav>
         <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
@@ -90,11 +90,11 @@
         </button>
     </div>
    <br />
-    <div style="float:left;display: flex;padding:2px">
+    <div style="float:left;display: flex;padding:5px">
         <h3>暢銷排行榜</h3>
     </div>
     <div style="display: flex;justify-content: flex-end;padding:10px">
-        <button type="button" style="border:1px solid black;border-radius:20px" href="#id">看更多</button>
+        <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Home/Home">看更多</a>
     </div>
     <div id="carouselExampleTopSell" class="carousel slide">
         <div class="carousel-inner">
@@ -309,7 +309,7 @@
                 <div class="card">
                     @* 注目專區 *@
                     <div class="card-header">
-                        閱讀注目專區
+                        推薦文章
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item"><span><a href="~/Discount/">有效溝通技巧</a></span></li>
