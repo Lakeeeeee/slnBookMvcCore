@@ -116,7 +116,9 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult myMessage() //通知訊息
         {
-            IEnumerable<CustomerService> q = _bookShopContext.CustomerServices.Where(x => x.MemberId == _userInforService.UserId);
+            IEnumerable<CustomerService> q = _bookShopContext.CustomerServices.Where(x => x.MemberId == _userInforService.UserId).Include(x=>x.Status);
+            
+            
             return View(q);
         }
         [Authorize]
@@ -179,7 +181,7 @@ namespace prjBookMvcCore.Controllers
                 Include(x => x.Shipment).
                 Include(x => x.PayStatus).
                 Include(x => x.ShippingStatus).ToList();
-            return View();
+            return View(q);
         }
         [Authorize]
         public IActionResult alretProflie()
