@@ -8,7 +8,6 @@ namespace prjBookMvcCore.Models
         public Discount()
         {
             DiscountDetails = new HashSet<DiscountDetail>();
-            Orders = new HashSet<Order>();
         }
 
         public int DiscountId { get; set; }
@@ -23,6 +22,5 @@ namespace prjBookMvcCore.Models
         public int IsActive { get; set; }
 
         public virtual ICollection<DiscountDetail> DiscountDetails { get; set; }
-        public virtual ICollection<Order> Orders { get; set; }
     }
 }
