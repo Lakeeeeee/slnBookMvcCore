@@ -90,218 +90,225 @@
         </button>
     </div>
    <br />
-    <div style="float:left;display: flex;padding:5px">
+@*暢銷排行榜*@
+   <div class="container">
+       <div class="row">
+       <div  class="col align-content-start" style="display: flex">
         <h3>暢銷排行榜</h3>
-    </div>
-    <div style="display: flex;justify-content: flex-end;padding:10px">
+       </div>
+        <div class="col justify-content-end" style="display: flex; padding:5px">
         <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Home/Home">看更多</a>
-    </div>
-    <div id="carouselExampleTopSell" class="carousel slide">
-        <div class="carousel-inner">
-        @* 暢銷排行榜輪播圖 *@
-        @*輪播書本第一頁*@ <div class="carousel-item active">
-            <div class="row">
-                @*第一組*@<div class="col">
-                    @*圖片*@<div style="position:relative">
-                        <a><img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." /></a>
+        </div>
+        </div>
+        <div class="row">
+            <div id="carouselExampleTopSell" class="carousel slide">
+                <div class="carousel-inner">
+                    @* 暢銷排行榜輪播圖 *@
+                    @*輪播書本第一頁*@ <div class="carousel-item active">
+                        <div class="row">
+                            @*第一組*@<div class="col">
+                                @*圖片*@<div style="position:relative">
+                                    <a><img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." /></a>
+                                </div>
+                                <div class="caption bookCaption">
+                                    <ul style="list-style:none; margin:0; padding:0;">
+                                        <li class='prod_TitleMain'>
+                                            <a>
+                                                戰勝會考 國中必備英語2000字（編修版）
+                                            </a>
+                                        </li>
+                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
+                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            @*第二組*@  <div class="col">
+                                <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
+                                @*圖片*@<div style="position:relative">
+                                    <a>
+                                        <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
+                                    </a>
+                                </div>
+                                <div class="caption bookCaption">
+                                    <ul style="list-style:none; margin:0; padding:0;">
+                                        <li class='prod_TitleMain'>
+                                            <a>
+                                                戰勝會考 國中必備英語2000字（編修版）
+                                            </a>
+                                        </li>
+                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
+                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            @*第三組*@  <div class="col">
+                                <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
+                                @*圖片*@<div style="position:relative">
+                                    <a>
+                                        <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
+                                    </a>
+                                </div>
+                                <div class="caption bookCaption">
+                                    <ul style="list-style:none; margin:0; padding:0;">
+                                        <li class='prod_TitleMain'>
+                                            <a>
+                                                戰勝會考 國中必備英語2000字（編修版）
+                                            </a>
+                                        </li>
+                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
+                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            @*第四組*@  <div class="col">
+                                <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
+                                @*圖片*@<div style="position:relative">
+                                    <a>
+                                        <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
+                                    </a>
+                                </div>
+                                <div class="caption bookCaption">
+                                    <ul style="list-style:none; margin:0; padding:0;">
+                                        <li class='prod_TitleMain'>
+                                            <a>
+                                                戰勝會考 國中必備英語2000字（編修版）
+                                            </a>
+                                        </li>
+                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
+                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            @*第五組*@  <div class="col">
+                                <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
+                                @*圖片*@<div style="position:relative">
+                                    <a>
+                                        <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
+                                    </a>
+                                </div>
+                                <div class="caption bookCaption">
+                                    <ul style="list-style:none; margin:0; padding:0;">
+                                        <li class='prod_TitleMain'>
+                                            <a>
+                                                戰勝會考 國中必備英語2000字（編修版）
+                                            </a>
+                                        </li>
+                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
+                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="caption bookCaption">
-                        <ul style="list-style:none; margin:0; padding:0;">
-                            <li class='prod_TitleMain'>
-                                <a>
-                                    戰勝會考 國中必備英語2000字（編修版）
-                                </a>
-                            </li>
-                            <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
-                            <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
-                        </ul>
+                    @*輪播書本第二頁*@<div class="carousel-item">
+                        <div class="row">
+                            @*第一組*@<div class="col">
+                                @*圖片*@<div style="position:relative">
+                                    <a><img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." /></a>
+                                </div>
+                                <div class="caption bookCaption">
+                                    <ul style="list-style:none; margin:0; padding:0;">
+                                        <li class='prod_TitleMain'>
+                                            <a>
+                                                戰勝會考 國中必備英語2000字（編修版）
+                                            </a>
+                                        </li>
+                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
+                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            @*第二組*@  <div class="col">
+                                <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
+                                @*圖片*@<div style="position:relative">
+                                    <a>
+                                        <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
+                                    </a>
+                                </div>
+                                <div class="caption bookCaption">
+                                    <ul style="list-style:none; margin:0; padding:0;">
+                                        <li class='prod_TitleMain'>
+                                            <a>
+                                                戰勝會考 國中必備英語2000字（編修版）
+                                            </a>
+                                        </li>
+                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
+                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            @*第三組*@  <div class="col">
+                                <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
+                                @*圖片*@<div style="position:relative">
+                                    <a>
+                                        <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
+                                    </a>
+                                </div>
+                                <div class="caption bookCaption">
+                                    <ul style="list-style:none; margin:0; padding:0;">
+                                        <li class='prod_TitleMain'>
+                                            <a>
+                                                戰勝會考 國中必備英語2000字（編修版）
+                                            </a>
+                                        </li>
+                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
+                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            @*第四組*@  <div class="col">
+                                <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
+                                @*圖片*@<div style="position:relative">
+                                    <a>
+                                        <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
+                                    </a>
+                                </div>
+                                <div class="caption bookCaption">
+                                    <ul style="list-style:none; margin:0; padding:0;">
+                                        <li class='prod_TitleMain'>
+                                            <a>
+                                                戰勝會考 國中必備英語2000字（編修版）
+                                            </a>
+                                        </li>
+                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
+                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            @*第五組*@  <div class="col">
+                                <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
+                                @*圖片*@<div style="position:relative">
+                                    <a>
+                                        <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
+                                    </a>
+                                </div>
+                                <div class="caption bookCaption">
+                                    <ul style="list-style:none; margin:0; padding:0;">
+                                        <li class='prod_TitleMain'>
+                                            <a>
+                                                戰勝會考 國中必備英語2000字（編修版）
+                                            </a>
+                                        </li>
+                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
+                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                @*第二組*@  <div class="col">
-                    <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
-                    @*圖片*@<div style="position:relative">
-                        <a>
-                            <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
-                        </a>
-                    </div>
-                    <div class="caption bookCaption">
-                        <ul style="list-style:none; margin:0; padding:0;">
-                            <li class='prod_TitleMain'>
-                                <a>
-                                    戰勝會考 國中必備英語2000字（編修版）
-                                </a>
-                            </li>
-                            <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
-                            <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
-                        </ul>
-                    </div>
-                </div>
-                @*第三組*@  <div class="col">
-                    <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
-                    @*圖片*@<div style="position:relative">
-                        <a>
-                            <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
-                        </a>
-                    </div>
-                    <div class="caption bookCaption">
-                        <ul style="list-style:none; margin:0; padding:0;">
-                            <li class='prod_TitleMain'>
-                                <a>
-                                    戰勝會考 國中必備英語2000字（編修版）
-                                </a>
-                            </li>
-                            <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
-                            <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
-                        </ul>
-                    </div>
-                </div>
-                @*第四組*@  <div class="col">
-                    <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
-                    @*圖片*@<div style="position:relative">
-                        <a>
-                            <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
-                        </a>
-                    </div>
-                    <div class="caption bookCaption">
-                        <ul style="list-style:none; margin:0; padding:0;">
-                            <li class='prod_TitleMain'>
-                                <a>
-                                    戰勝會考 國中必備英語2000字（編修版）
-                                </a>
-                            </li>
-                            <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
-                            <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
-                        </ul>
-                    </div>
-                </div>
-                @*第五組*@  <div class="col">
-                    <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
-                    @*圖片*@<div style="position:relative">
-                        <a>
-                            <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
-                        </a>
-                    </div>
-                    <div class="caption bookCaption">
-                        <ul style="list-style:none; margin:0; padding:0;">
-                            <li class='prod_TitleMain'>
-                                <a>
-                                    戰勝會考 國中必備英語2000字（編修版）
-                                </a>
-                            </li>
-                            <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
-                            <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
-                        </ul>
-                    </div>
+                    @*輪播圖切換按鈕*@ <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleTopSell" data-bs-slide="prev" border=5>
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    @*輪播圖切換按鈕*@<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleTopSell" data-bs-slide="next" border=5>
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
                 </div>
             </div>
         </div>
-        @*輪播書本第二頁*@<div class="carousel-item">
-            <div class="row">
-                @*第一組*@<div class="col">
-                    @*圖片*@<div style="position:relative">
-                        <a><img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." /></a>
-                    </div>
-                    <div class="caption bookCaption">
-                        <ul style="list-style:none; margin:0; padding:0;">
-                            <li class='prod_TitleMain'>
-                                <a>
-                                    戰勝會考 國中必備英語2000字（編修版）
-                                </a>
-                            </li>
-                            <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
-                            <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
-                        </ul>
-                    </div>
-                </div>
-                @*第二組*@  <div class="col">
-                    <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
-                    @*圖片*@<div style="position:relative">
-                        <a>
-                            <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
-                        </a>
-                    </div>
-                    <div class="caption bookCaption">
-                        <ul style="list-style:none; margin:0; padding:0;">
-                            <li class='prod_TitleMain'>
-                                <a>
-                                    戰勝會考 國中必備英語2000字（編修版）
-                                </a>
-                            </li>
-                            <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
-                            <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
-                        </ul>
-                    </div>
-                </div>
-                @*第三組*@  <div class="col">
-                    <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
-                    @*圖片*@<div style="position:relative">
-                        <a>
-                            <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
-                        </a>
-                    </div>
-                    <div class="caption bookCaption">
-                        <ul style="list-style:none; margin:0; padding:0;">
-                            <li class='prod_TitleMain'>
-                                <a>
-                                    戰勝會考 國中必備英語2000字（編修版）
-                                </a>
-                            </li>
-                            <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
-                            <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
-                        </ul>
-                    </div>
-                </div>
-                @*第四組*@  <div class="col">
-                    <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
-                    @*圖片*@<div style="position:relative">
-                        <a>
-                            <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
-                        </a>
-                    </div>
-                    <div class="caption bookCaption">
-                        <ul style="list-style:none; margin:0; padding:0;">
-                            <li class='prod_TitleMain'>
-                                <a>
-                                    戰勝會考 國中必備英語2000字（編修版）
-                                </a>
-                            </li>
-                            <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
-                            <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
-                        </ul>
-                    </div>
-                </div>
-                @*第五組*@  <div class="col">
-                    <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
-                    @*圖片*@<div style="position:relative">
-                        <a>
-                            <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
-                        </a>
-                    </div>
-                    <div class="caption bookCaption">
-                        <ul style="list-style:none; margin:0; padding:0;">
-                            <li class='prod_TitleMain'>
-                                <a>
-                                    戰勝會考 國中必備英語2000字（編修版）
-                                </a>
-                            </li>
-                            <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
-                            <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-            @*輪播圖切換按鈕*@ <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleTopSell" data-bs-slide="prev" border=5>
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-            @*輪播圖切換按鈕*@<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleTopSell" data-bs-slide="next" border=5>
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-        </div>
     </div>
-
+    
     <div class="container-fluid justify-content-center2" style="margin-top: 20px">
         <div class="row">
             @* 左邊功能欄 *@
