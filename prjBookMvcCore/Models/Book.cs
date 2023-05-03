@@ -14,7 +14,6 @@ namespace prjBookMvcCore.Models
             CategoryDetails = new HashSet<CategoryDetail>();
             Comments = new HashSet<Comment>();
             DiscountDetails = new HashSet<DiscountDetail>();
-            OrderDetails = new HashSet<OrderDetail>();
             PainterDetails = new HashSet<PainterDetail>();
             Previews = new HashSet<Preview>();
             PurchaseDetails = new HashSet<PurchaseDetail>();
@@ -45,7 +44,6 @@ namespace prjBookMvcCore.Models
         public virtual ICollection<CategoryDetail> CategoryDetails { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<DiscountDetail> DiscountDetails { get; set; }
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
         public virtual ICollection<PainterDetail> PainterDetails { get; set; }
         public virtual ICollection<Preview> Previews { get; set; }
         public virtual ICollection<PurchaseDetail> PurchaseDetails { get; set; }
