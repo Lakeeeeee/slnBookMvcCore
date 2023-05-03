@@ -36,6 +36,10 @@ namespace prjBookMvcCore.Models
         public virtual DbSet<Language> Languages { get; set; } = null!;
         public virtual DbSet<Member> Members { get; set; } = null!;
         public virtual DbSet<MemberLevel> MemberLevels { get; set; } = null!;
+        public virtual DbSet<Message> Messages { get; set; } = null!;
+        public virtual DbSet<MessageMemberDetail> MessageMemberDetails { get; set; } = null!;
+        public virtual DbSet<MessageSubscribe> MessageSubscribes { get; set; } = null!;
+        public virtual DbSet<MessageType> MessageTypes { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<OrderDetail> OrderDetails { get; set; } = null!;
         public virtual DbSet<OrderDiscount> OrderDiscounts { get; set; } = null!;
@@ -492,6 +496,81 @@ namespace prjBookMvcCore.Models
                 entity.Property(e => e.LevelName).HasMaxLength(10);
             });
 
+            modelBuilder.Entity<Message>(entity =>
+            {
+                entity.ToTable("Message");
+
+                entity.Property(e => e.MessageId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("MessageID");
+
+                entity.Property(e => e.MessageTitle).HasMaxLength(50);
+
+                entity.Property(e => e.MessageTypeId).HasColumnName("MessageTypeID");
+
+                entity.HasOne(d => d.MessageType)
+                    .WithMany(p => p.Messages)
+                    .HasForeignKey(d => d.MessageTypeId)
+                    .HasConstraintName("FK_Message_MessageType");
+            });
+
+            modelBuilder.Entity<MessageMemberDetail>(entity =>
+            {
+                entity.ToTable("MessageMemberDetail");
+
+                entity.Property(e => e.MessageMemberDetailId).HasColumnName("MessageMemberDetailID");
+
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+
+                entity.Property(e => e.MessageId).HasColumnName("MessageID");
+
+                entity.Property(e => e.UpdateTime).HasColumnType("date");
+
+                entity.HasOne(d => d.Member)
+                    .WithMany(p => p.MessageMemberDetails)
+                    .HasForeignKey(d => d.MemberId)
+                    .HasConstraintName("FK_MessageMemberDetail_Member");
+
+                entity.HasOne(d => d.Message)
+                    .WithMany(p => p.MessageMemberDetails)
+                    .HasForeignKey(d => d.MessageId)
+                    .HasConstraintName("FK_MessageMemberDetail_Message");
+            });
+
+            modelBuilder.Entity<MessageSubscribe>(entity =>
+            {
+                entity.ToTable("MessageSubscribe");
+
+                entity.Property(e => e.MessageSubscribeId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("MessageSubscribeID");
+
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+
+                entity.Property(e => e.MessageTypeId).HasColumnName("MessageTypeID");
+
+                entity.HasOne(d => d.Member)
+                    .WithMany(p => p.MessageSubscribes)
+                    .HasForeignKey(d => d.MemberId)
+                    .HasConstraintName("FK_MessageSubscribe_Member");
+
+                entity.HasOne(d => d.MessageType)
+                    .WithMany(p => p.MessageSubscribes)
+                    .HasForeignKey(d => d.MessageTypeId)
+                    .HasConstraintName("FK_MessageSubscribe_MessageType");
+            });
+
+            modelBuilder.Entity<MessageType>(entity =>
+            {
+                entity.ToTable("MessageType");
+
+                entity.Property(e => e.MessageTypeId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("MessageTypeID");
+
+                entity.Property(e => e.MessageTypeName).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<Order>(entity =>
             {
                 entity.ToTable("Order");
@@ -778,7 +857,7 @@ namespace prjBookMvcCore.Models
 
                 entity.Property(e => e.StatusId).HasColumnName("StatusID");
 
-                entity.Property(e => e.StatusName).HasMaxLength(10);
+                entity.Property(e => e.StatusName).HasMaxLength(50);
             });
 
             modelBuilder.Entity<SubCategory>(entity =>

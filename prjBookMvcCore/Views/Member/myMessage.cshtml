@@ -1,4 +1,5 @@
-﻿@model IEnumerable<prjBookMvcCore.Models.CustomerService>
+﻿@using prjBookMvcCore.Models
+@model IEnumerable<prjBookMvcCore.Models.MessageMemberDetail>
 
 @{
     ViewData["Title"] = "myMessage";
@@ -27,16 +28,21 @@
                         @count
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Status.StatusName)
+                        @{
+                            BookShopContext bookShop = new BookShopContext();
+                            string x = bookShop.MessageTypes.Where(x => x.MessageTypeId == item.Message.MessageTypeId).Select(x => x.MessageTypeName).FirstOrDefault().ToString();
+                        }
+
+                        @Html.DisplayFor(modelItem =>x)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.UpdateDate)
+                        @Html.DisplayFor(modelItem => item.UpdateTime)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Status.StatusDescription)
+                        @Html.DisplayFor(modelItem => item.Message.MessageTitle)
                     </td>
                     <td>
-                        @Html.ActionLink("刪除", "Delete", new { id = item.Crmid }, new { onclick = "return confirm('確定要刪除嗎?')" })
+                        @Html.ActionLink("刪除", "Delete", new { id = item.MessageMemberDetailId }, new { onclick = "return confirm('確定要刪除嗎?')" })
                     </td>
                 </tr>
             }

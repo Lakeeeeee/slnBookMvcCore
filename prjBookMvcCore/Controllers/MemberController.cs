@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.EntityFrameworkCore;
 using prjBookMvcCore.Models;
 using prjBookMvcCore.ViewModel;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
@@ -116,9 +117,7 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult myMessage() //通知訊息
         {
-            IEnumerable<CustomerService> q = _bookShopContext.CustomerServices.Where(x => x.MemberId == _userInforService.UserId).Include(x=>x.Status);
-            
-            
+            IEnumerable<MessageMemberDetail> q =  _bookShopContext.MessageMemberDetails.Where(x=>x.MemberId== _userInforService.UserId).Include(x=>x.Message);
             return View(q);
         }
         [Authorize]
