@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace prjBookMvcCore.Models
 {
@@ -14,15 +12,14 @@ namespace prjBookMvcCore.Models
             CollectedPublishers = new HashSet<CollectedPublisher>();
             Comments = new HashSet<Comment>();
             CustomerServices = new HashSet<CustomerService>();
-            Orders = new HashSet<Order>();
+            OrderDiscountDetails = new HashSet<OrderDiscountDetail>();
         }
 
         public int MemberId { get; set; }
         public string MemberEmail { get; set; } = null!;
         public string MemberPassword { get; set; } = null!;
         public string MemberName { get; set; } = null!;
-        public DateTime? MemberBrithDate { get; set; } 
-        
+        public DateTime? MemberBrithDate { get; set; }
         public string Memberphone { get; set; } = null!;
         public string MemberAddress { get; set; } = null!;
         public int PaymentId { get; set; }
@@ -37,6 +34,6 @@ namespace prjBookMvcCore.Models
         public virtual ICollection<CollectedPublisher> CollectedPublishers { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<CustomerService> CustomerServices { get; set; }
-        public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<OrderDiscountDetail> OrderDiscountDetails { get; set; }
     }
 }

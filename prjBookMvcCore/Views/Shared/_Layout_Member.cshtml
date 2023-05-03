@@ -31,18 +31,17 @@
 </head>
 <body>
     <div class="container-fluid" style="width:70%">
+        <div>
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="~/Member/MemberCenter">會員中心</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+                </ol>
+            </nav>
+        </div>
+
         <div class="row">
             @RenderBody()
-        </div>
-            <div class="row" style="margin-top:15px">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body">
-                            <a style="display:block;width:100%; text-align:center" href="~/Member/MemberCenter">會員中心首頁</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
