@@ -524,23 +524,60 @@ namespace prjBookMvcCore.Models
                 entity.Property(e => e.ShippingStatusId).HasColumnName("ShippingStatusID");
 
                 entity.Property(e => e.TotalPay).HasColumnType("money");
+
+                entity.HasOne(d => d.Discount)
+                    .WithMany()
+                    .HasForeignKey(d => d.DiscountId)
+                    .HasConstraintName("FK_Order_Discount");
+
+                entity.HasOne(d => d.Member)
+                    .WithMany()
+                    .HasForeignKey(d => d.MemberId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Order_Member");
+
+                entity.HasOne(d => d.PayStatus)
+                    .WithMany()
+                    .HasForeignKey(d => d.PayStatusId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Order_PayStatus");
+
+                entity.HasOne(d => d.Payment)
+                    .WithMany()
+                    .HasForeignKey(d => d.PaymentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Order_Payment");
+
+                entity.HasOne(d => d.Shipment)
+                    .WithMany()
+                    .HasForeignKey(d => d.ShipmentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Order_Shipment");
+
+                entity.HasOne(d => d.ShippingStatus)
+                    .WithMany()
+                    .HasForeignKey(d => d.ShippingStatusId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Order_ShippingStatus");
             });
 
             modelBuilder.Entity<OrderDetail>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("OrderDetail");
 
-                entity.Property(e => e.BookId).HasColumnName("BookID");
+                entity.Property(e => e.OrderDetailId).HasColumnName("OrderDetailID");
 
-                entity.Property(e => e.OrderDetailId)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("OrderDetailID");
+                entity.Property(e => e.BookId).HasColumnName("BookID");
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
                 entity.Property(e => e.UnitPrice).HasColumnType("decimal(10, 2)");
+
+                entity.HasOne(d => d.Book)
+                    .WithMany(p => p.OrderDetails)
+                    .HasForeignKey(d => d.BookId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrderDetail_Books");
             });
 
             modelBuilder.Entity<OrderDiscount>(entity =>
@@ -713,17 +750,9 @@ namespace prjBookMvcCore.Models
 
             modelBuilder.Entity<Shipment>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("Shipment");
 
-                entity.Property(e => e.Freight)
-                    .HasColumnType("money")
-                    .HasColumnName("freight");
-
-                entity.Property(e => e.ShipmentId)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("ShipmentID");
+                entity.Property(e => e.ShipmentId).HasColumnName("ShipmentID");
 
                 entity.Property(e => e.Freight)
                     .HasColumnType("money")
