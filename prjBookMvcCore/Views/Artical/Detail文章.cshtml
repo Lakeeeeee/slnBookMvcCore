@@ -1,0 +1,94 @@
+﻿@model prjBookMvcCore.Models.ArticalToBookDetail
+
+@{
+    ViewData["Title"] = "Detail文章";
+
+}
+<style>
+.imgT{
+    width:80%;
+    padding-left:50px;
+    max-width:100%
+    }
+
+    .imgB {
+        width: 100%;
+    }
+
+    .fig1 {
+        width: 10%;
+       /* float: left;*/
+        font-size: 80%;
+        margin-right: 10px;
+        padding: 10px;
+        border: 2px dotted #F2E6E6;
+        border-radius: 0 25px 0 25px;
+    }
+
+
+
+    .date {
+        color: gray;
+        font-style: oblique;
+        font-size: 60%;
+        text-align: right;
+    }
+
+    p {
+        font-family: 標楷體;
+        margin: 20px 0;
+        text-align: justify;
+        text-indent: 2em;
+    }
+
+</style>
+@{
+    int ArticalId = ViewBag.ArticalId;
+    BookShopContext db = new BookShopContext();
+    var Artical = db.Articals.Where(a => a.ArticalId == ArticalId).Select(a => a);
+    foreach( var g in Artical)
+    {
+    <h1>@g.ArticalTitle</h1>
+        <p class="date">更新日期：@g.ArticalDate</p>
+        string path =g.ArticalId+".jpg";
+    <img src="~/Image/ArticalPicture/@path" class="imgT" />
+
+        <p>@g.ArticalDescription</p>
+    }
+
+    var detail = db.ArticalToBookDetails.Where(d => d.ArticalId == ArticalId).Select(d => new
+    {
+        d.Book.BookTitle,
+        d.Book.Isbn,
+        d.Book.UnitPrice,
+        d.Book.Introduction,
+        d.Book.CoverPath,
+        d.Book.BookId,
+        d.Book.PublicationDate,
+    });
+    foreach(var g in detail)
+    {
+        //TODO：作者、優惠價
+    var q3 = db.AuthorDetails.Where(a => a.BookId == g.BookId).Select(a => new { a.Author.AuthorName });
+    string s = "";
+    //foreach (var item in q3){s += item.AuthorName +"<br>";}
+        
+    <div>
+        <figure class="fig1">
+            <img class="imgB" src="@g.CoverPath" title="@g.BookTitle" />
+            <figcaption>@g.BookTitle</figcaption>
+        </figure>
+        <p>作者：@s</p>
+        <p>出版日期：@g.PublicationDate.ToShortDateString()</p>
+        <p>ISBN：@g.Isbn</p>
+        <p>原價：@g.UnitPrice</p>
+        <p>簡介：
+        @g.Introduction</p>
+          
+    </div>
+            
+    }
+    
+
+
+}
