@@ -22,6 +22,9 @@ namespace prjBookMvcCore.Models
         public decimal? Freight { get; set; }
         public int? DiscountId { get; set; }
         public string ShipAddr { get; set; } = null!;
+        public string? CouponId { get; set; }
+        public decimal? DiscountAmount { get; set; }
+        public decimal? TotalPay { get; set; }
 
         public virtual Discount? Discount { get; set; }
         public virtual Member Member { get; set; } = null!;
@@ -29,6 +32,5 @@ namespace prjBookMvcCore.Models
         public virtual Payment Payment { get; set; } = null!;
         public virtual Shipment Shipment { get; set; } = null!;
         public virtual ShippingStatus ShippingStatus { get; set; } = null!;
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }

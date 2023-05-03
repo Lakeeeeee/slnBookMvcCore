@@ -14,7 +14,7 @@ namespace prjBookMvcCore.Models
             CollectedPublishers = new HashSet<CollectedPublisher>();
             Comments = new HashSet<Comment>();
             CustomerServices = new HashSet<CustomerService>();
-            Orders = new HashSet<Order>();
+            OrderDiscountDetails = new HashSet<OrderDiscountDetail>();
         }
 
         public int MemberId { get; set; }
@@ -37,6 +37,6 @@ namespace prjBookMvcCore.Models
         public virtual ICollection<CollectedPublisher> CollectedPublishers { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<CustomerService> CustomerServices { get; set; }
-        public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<OrderDiscountDetail> OrderDiscountDetails { get; set; }
     }
 }

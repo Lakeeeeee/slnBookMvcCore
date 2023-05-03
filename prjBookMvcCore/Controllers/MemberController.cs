@@ -52,7 +52,7 @@ namespace prjBookMvcCore.Controllers
                         new Claim("MessageCount", user.CustomerServices.Count().ToString()),
                         new Claim("Points", user.Points.ToString()),
                         new Claim("Level", user.Level.LevelName),
-                        new Claim("Orders", user.Orders.Count().ToString())
+                        //new Claim("Orders", user.Orders.Count().ToString())
                     };
 
                     ViewBag.isLogin="true";
@@ -174,12 +174,12 @@ namespace prjBookMvcCore.Controllers
         public IActionResult myOrders()  //訂單查詢
         {
             var q = _bookShopContext.Orders.Where(x => x.MemberId == _userInforService.UserId).
-                Include(x=>x.Discount).
-                Include(x=>x.Payment).
-                Include(x=>x.Shipment).
-                Include(x=>x.PayStatus).
-                Include(x=>x.ShippingStatus).ToList();
-            return View(q);
+                Include(x => x.Discount).
+                Include(x => x.Payment).
+                Include(x => x.Shipment).
+                Include(x => x.PayStatus).
+                Include(x => x.ShippingStatus).ToList();
+            return View();
         }
         [Authorize]
         public IActionResult alretProflie()

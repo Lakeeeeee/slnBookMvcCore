@@ -41,7 +41,7 @@
                         @Html.DisplayFor(modelItem => item.OrderDate)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Discount.DiscountName)
+                           @Html.DisplayFor(modelItem => item.Discount.DiscountName)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Payment.PaymentName)
@@ -56,12 +56,12 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.ShippingStatus.ShippingStatusName)
                     </td>
-
+                    @*
                     <td>
                         @Html.DisplayFor(modelItem => item.Freight)
                     </td>
-
-                    @*<td>
+ 
+                    <td>
             @Html.DisplayFor(modelItem => item.Freight)
             </td>*@
                     @*//小計 = (x.OrderDetails.Sum(y => y.UnitPrice * y.Quantity)) + (x.Freight ?? 0)*@
