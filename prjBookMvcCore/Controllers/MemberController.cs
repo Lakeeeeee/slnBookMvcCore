@@ -52,7 +52,7 @@ namespace prjBookMvcCore.Controllers
                         new Claim("MessageCount", user.CustomerServices.Count().ToString()),
                         new Claim("Points", user.Points.ToString()),
                         new Claim("Level", user.Level.LevelName),
-                        //new Claim("Orders", user.Orders.Count().ToString())
+                        new Claim("Orders", user.Orders.Count().ToString())
                     };
 
                     ViewBag.isLogin="true";

@@ -494,9 +494,11 @@ namespace prjBookMvcCore.Models
 
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("Order");
+
+                entity.Property(e => e.OrderId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("OrderID");
 
                 entity.Property(e => e.CouponId)
                     .HasMaxLength(10)
@@ -511,8 +513,6 @@ namespace prjBookMvcCore.Models
 
                 entity.Property(e => e.OrderDate).HasColumnType("date");
 
-                entity.Property(e => e.OrderId).HasColumnName("OrderID");
-
                 entity.Property(e => e.PayStatusId).HasColumnName("PayStatusID");
 
                 entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
@@ -526,36 +526,36 @@ namespace prjBookMvcCore.Models
                 entity.Property(e => e.TotalPay).HasColumnType("money");
 
                 entity.HasOne(d => d.Discount)
-                    .WithMany()
+                    .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.DiscountId)
                     .HasConstraintName("FK_Order_Discount");
 
                 entity.HasOne(d => d.Member)
-                    .WithMany()
+                    .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.MemberId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Order_Member");
+                    .HasConstraintName("FK_Order_Member1");
 
                 entity.HasOne(d => d.PayStatus)
-                    .WithMany()
+                    .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.PayStatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_PayStatus");
 
                 entity.HasOne(d => d.Payment)
-                    .WithMany()
+                    .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.PaymentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_Payment");
 
                 entity.HasOne(d => d.Shipment)
-                    .WithMany()
+                    .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.ShipmentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_Shipment");
 
                 entity.HasOne(d => d.ShippingStatus)
-                    .WithMany()
+                    .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.ShippingStatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_ShippingStatus");
