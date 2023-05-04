@@ -1,35 +1,247 @@
-﻿@model IEnumerable<prjBookMvcCore.Models.Category>
-
+﻿
 @{
     ViewData["Title"] = "年齡";
 }
+<!DOCTYPE html>
 
-<h1>年齡</h1>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/prjBookMvcCore.styles.css" asp-append-version="true" />
+    <style>
+        a:link, a:visited {
+            text-decoration: none;
+            color: inherit;
+        }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CategoryName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CategoryName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CategoryId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CategoryId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CategoryId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        .font14px {
+                    font-size: 14px
+        }
+
+        .fontClean {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .accordion-button {
+            background-color: #eeeeee;
+            min-height: 15px
+                }
+
+            .accordion-button:active, .accordion-button::backdrop, .accordion-button:is(:hover) {
+                background-color: #ffffff;
+            }
+
+            .accordion-button:not(.collapsed) {
+                background-color: #eeeeee;
+                color: inherit;
+            }
+
+        .layoutList, .layoutGrid {
+            width: 6%;
+            height: 6%;
+        }
+    </style>
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+</head>
+<body>
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Home">首頁</a></li>
+            <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Menu">書籍</a></li>
+            <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Menu">中文書</a></li>
+            <li class="breadcrumb-item active" aria-current="page">年齡</li>
+        </ol>
+    </nav>
+
+    <div class="container" style="margin-top: 20px">
+        <div class="row">
+            @* 左邊功能欄 *@
+            <div class="col-2">
+                <div class="card">
+                    @* 中文書分類 *@
+                    <div class="card-header">
+                        中文書
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><span><a href="~/Category/年齡">年齡</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Category/人文社科">人文社科</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Category/心理勵志">心理勵志</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Category/文學小說">文學小說</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Category/日中對照">日中對照</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Category/生活風格">生活風格</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Category/考試用書">考試用書</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Category/自然科普">自然科普</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Category/宗教命理">宗教命理</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Category/旅遊">旅遊</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Category/商業理財">商業理財</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Category/童書青少年文學">童書/青少年文學</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Category/飲食">飲食</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Category/電腦資訊">電腦資訊</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Category/漫畫圖文書">漫畫/圖文書</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Category/語言學習">語言學習</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Category/親子教養">親子教養</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Category/醫療保健">醫療保健</a></span></li>
+                        <li class="list-group-item"><span><a href="~/Category/藝術設計">藝術設計</a></span></li>
+                    </ul>
+                </div>
+            </div>
+            @* 右邊書籍欄 *@
+            <div class="col-10">
+                @*排序欄*@
+                <div class="row">
+                    <div class="col">
+                        <div style="float:right">
+                            <span>排序方式</span>
+                            <div class="btn-group">
+                                <select class="form-select" aria-label="Default select example">
+                                    <option selected>暢銷度排序</option>
+                                    <option value="1">出版日期排序</option>
+                                    <option value="2">價格排序</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col" id="listView" style='padding:0'>
+                        <div class="row">
+                            @*第一組*@<div class="col">
+                                @*圖片*@<div style="position:relative">
+                                    <a><img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." /></a>
+                                </div>
+                                <div class="caption bookCaption">
+                                    <ul style="list-style:none; margin:0; padding:0;">
+                                        <li class='prod_TitleMain'>
+                                            <a>
+                                                戰勝會考 國中必備英語2000字（編修版）
+                                            </a>
+                                        </li>
+                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
+                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            @*第二組*@  <div class="col">
+                                <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
+                                @*圖片*@<div style="position:relative">
+                                    <a>
+                                        <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
+                                    </a>
+                                </div>
+                                <div class="caption bookCaption">
+                                    <ul style="list-style:none; margin:0; padding:0;">
+                                        <li class='prod_TitleMain'>
+                                            <a>
+                                                戰勝會考 國中必備英語2000字（編修版）
+                                            </a>
+                                        </li>
+                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
+                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            @*第三組*@  <div class="col">
+                                <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
+                                @*圖片*@<div style="position:relative">
+                                    <a>
+                                        <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
+                                    </a>
+                                </div>
+                                <div class="caption bookCaption">
+                                    <ul style="list-style:none; margin:0; padding:0;">
+                                        <li class='prod_TitleMain'>
+                                            <a>
+                                                戰勝會考 國中必備英語2000字（編修版）
+                                            </a>
+                                        </li>
+                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
+                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            @*第四組*@  <div class="col">
+                                <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
+                                @*圖片*@<div style="position:relative">
+                                    <a>
+                                        <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
+                                    </a>
+                                </div>
+                                <div class="caption bookCaption">
+                                    <ul style="list-style:none; margin:0; padding:0;">
+                                        <li class='prod_TitleMain'>
+                                            <a>
+                                                戰勝會考 國中必備英語2000字（編修版）
+                                            </a>
+                                        </li>
+                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
+                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            @*第五組*@  <div class="col">
+                                <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
+                                @*圖片*@<div style="position:relative">
+                                    <a>
+                                        <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
+                                    </a>
+                                </div>
+                                <div class="caption bookCaption">
+                                    <ul style="list-style:none; margin:0; padding:0;">
+                                        <li class='prod_TitleMain'>
+                                            <a>
+                                                戰勝會考 國中必備英語2000字（編修版）
+                                            </a>
+                                        </li>
+                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
+                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @* <nav aria-label="Page navigation example">
+        <div class="row">
+        <!-- Display books -->
+        </div>
+        <ul class="pagination">
+        @if (Model.TotalPages > 1)
+        {
+        <!-- Display previous page link -->
+        <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+        <a class="page-link" href="@Url.Action("Index", new { page = Model.CurrentPage - 1 })">Previous</a>
+        </li>
+
+        <!-- Generate page links -->
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+        <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+        <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+        </li>
+        }
+
+        <!-- Display next page link -->
+        <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+        <a class="page-link" href="@Url.Action("Index", new { page = Model.CurrentPage + 1 })">Next</a>
+        </li>
+        }
+        </ul>
+        </nav>*@
+    </div>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>
+
+
+
+

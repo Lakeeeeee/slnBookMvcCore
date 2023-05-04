@@ -683,7 +683,7 @@
                 window.open(url)
             },
             handleClick(tab, event) {
-                const element = document.getElementById(this.activeName)
+                const element = document.querySelector("#" + this.activeName)
                 element.scrollIntoView({ behavior: 'smooth' });
             }
         },
