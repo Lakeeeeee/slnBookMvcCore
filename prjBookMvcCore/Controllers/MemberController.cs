@@ -123,8 +123,20 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult getMessage(int Inputid) //訊息細節
         {
-            var q = _bookShopContext.Messages.Where(x => x.MessageId == Inputid).FirstOrDefault();
-            return Json(q);
+            //var q = _bookShopContext.Messages.Where(x => x.MessageId == Inputid).FirstOrDefault();
+
+            var q = from x in _bookShopContext.MessageMemberDetails
+                    join y in _bookShopContext.Messages on x.MessageId equals y.MessageId
+                    join z in _bookShopContext.MessageTypes on y.MessageTypeId equals z.MessageTypeId
+                    where x.MessageMemberDetailId == Inputid
+                    select new
+                    {
+                        time = x.UpdateTime,
+                         content_a = y.MessageContent,
+                         type_a = z.MessageTypeName
+                    };
+
+            return Json(q.FirstOrDefault());
         }
 
         [Authorize]
