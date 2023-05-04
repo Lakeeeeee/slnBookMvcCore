@@ -118,25 +118,13 @@
     <div class="row">
         <p>注目新品</p>
         <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
+            @foreach(var item in Model)
+            {
+                @Html.Partial("_ProductPartialView", item)
+            }
+            
         </div>
-        <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
-        </div>
-        <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
-        </div>
-        <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
-        </div>
-        <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
-        </div>
+        
     </div>
     <br />
     <div class="row">
