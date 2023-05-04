@@ -1,6 +1,6 @@
-﻿@{
+﻿<!-- @{
     ViewData["Title"] = "BookInformation";
-}
+} -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -103,7 +103,7 @@
 
             .el-button--comment:hover {
                 /* background: #2D6EFB;
-                                border-color: #2D6EFB; */
+                                        border-color: #2D6EFB; */
                 /* color: #fff; */
                 color: #E3007F;
                 border-color: #E3007F;
@@ -117,7 +117,7 @@
             /* .el-button--pinkBorderRadius:focus, */
             .el-button--pinkBorder:hover {
                 /* background: #2D6EFB;
-                            border-color: #2D6EFB; */
+                                    border-color: #2D6EFB; */
                 /* color: #fff; */
                 color: #E3007F;
                 border-color: #E3007F;
@@ -128,11 +128,11 @@
             text-decoration: underline;
         }
         /* .el-button--whiteBackground.is-active,
-                            .el-button--whiteBackground:active {
-                                background: #FFFFFF;
-                                border-color: #2D6EFB;
-                                color: #2D6EFB;
-                            } */
+                                    .el-button--whiteBackground:active {
+                                        background: #FFFFFF;
+                                        border-color: #2D6EFB;
+                                        color: #2D6EFB;
+                                    } */
         .price {
             background-color: rgba(227,0,127,0.11);
             height: 85px;
@@ -334,7 +334,7 @@
                             <el-button round class="rightButton">直接購買</el-button>
                         </div>
                         <div class="buttonRight">
-                            <el-button round class="rightButton">放入暫存清單</el-button>
+                            <el-button round class="rightButton" v-on:click="storeTempList">放入暫存清單</el-button>
                         </div>
                     </el-row>
                 </el-aside>
@@ -347,11 +347,13 @@
                             <el-carousel-item :key="index">
                                 <div class="recommendTable">
                                     <div v-for="(item, i) in recommend.slice(index * 5, (index + 1) * 5)" style="margin-right: 50px;">
-                                        <el-image :src="item.coverPath" style="width: 180px;">
-                                            <div slot="placeholder" class="image-slot">
-                                                加载中<span class="dot">...</span>
-                                            </div>
-                                        </el-image>
+                                        <a href="#">
+                                            <el-image :src="item.coverPath" style="width: 180px;">
+                                                <div slot="placeholder" class="image-slot">
+                                                    加载中<span class="dot">...</span>
+                                                </div>
+                                            </el-image>
+                                        </a>
                                         <div class="recommendContent">
                                             <div class="recommendBookTitle">
                                                 <p class="ellipsis">{{item.bookTitle}}</p>
@@ -761,7 +763,14 @@
             },
             getDiscountPrice(item) {
                 return Math.floor(item.unitPrice * item.discount / 100);
-            }
+            },
+            storeTempList() {
+                this.$notify({
+                    title: '放入暫存清單成功',
+                    message: '本書已加入暫存清單',
+                    type: 'success'
+                });
+            },
         },
     })
 </script>
