@@ -11,12 +11,5 @@ namespace prjBookMvcCore.Controllers
         {
             return View();
         }
-
-        public IActionResult productPartialView()
-        {
-            var datas = from c in db.Books
-                        select c;
-            return View(datas);
-        }
     }
 }
