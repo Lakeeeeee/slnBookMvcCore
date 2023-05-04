@@ -7,7 +7,6 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - 讀本｜中文書</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/prjBookMvcCore.styles.css" asp-append-version="true" />
@@ -95,17 +94,12 @@
                     <div class="col">
                         <div style="float:right">
                             <span>排序方式</span>
-                            <img class="layoutList" onclick="" src="~/Image/layoutList.png" />
-                            <img class="layoutGrid" class="disabled" onclick="" src="~/Image/layoutGrid.png" />
                             <div class="btn-group">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="selectSort">
-                                    暢銷度排序 <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a class="dropdown-item" href="#" rel="2">暢銷度排序</a></li>
-                                    <li><a class="dropdown-item" href="#" rel="1">出版日期排序</a></li>
-                                    <li><a  class="dropdown-item" href="#" rel="3">價格排序</a></li>
-                                </ul>
+                                <select class="form-select" aria-label="Default select example">
+                                    <option selected>暢銷度排序</option>
+                                    <option value="1">出版日期排序</option>
+                                    <option value="2">價格排序</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -209,7 +203,6 @@
                     </div>
                 </div>
             </div>
-            
         </div>
         @* <nav aria-label="Page navigation example">
         <div class="row">
