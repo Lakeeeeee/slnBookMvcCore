@@ -31,7 +31,7 @@ public class UserInforService
         get
         {
             var varCliams = _contextAccessor.HttpContext.User.Claims.ToList();
-            return Convert.ToInt32(varCliams.Where(x => x.Type == "MessageCount").First().Value);
+            return Convert.ToInt32(varCliams.Where(x => x.Type == "Orders").First().Value);
         }
     }
 

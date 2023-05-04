@@ -41,7 +41,7 @@ namespace prjBookMvcCore.Controllers
         [HttpPost]
         public IActionResult Login(CLoginViewModel vm)
         {
-            Member user = _bookShopContext.Members.Include(x=>x.Level).FirstOrDefault(x=>x.MemberEmail==vm.Account_P);
+            Member user = _bookShopContext.Members.Include(x=>x.Level).Include(x=>x.Orders).Include(x=>x.MessageMemberDetails).FirstOrDefault(x=>x.MemberEmail==vm.Account_P);
             if (user  != null)
             {
                 if (user.MemberPassword == vm.Password_P)
@@ -50,7 +50,7 @@ namespace prjBookMvcCore.Controllers
                     {
                         new Claim("Id", user.MemberId.ToString()),
                         new Claim(ClaimTypes.Name, user.MemberName),
-                        new Claim("MessageCount", user.CustomerServices.Count().ToString()),
+                        new Claim("MessageCount", user.MessageMemberDetails.Count().ToString()),
                         new Claim("Points", user.Points.ToString()),
                         new Claim("Level", user.Level.LevelName),
                         new Claim("Orders", user.Orders.Count().ToString())
@@ -94,7 +94,6 @@ namespace prjBookMvcCore.Controllers
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Redirect("~/Home/Home");
-            ViewBag.isLogin = "false";
         }
 
 
@@ -120,6 +119,14 @@ namespace prjBookMvcCore.Controllers
             IEnumerable<MessageMemberDetail> q =  _bookShopContext.MessageMemberDetails.Where(x=>x.MemberId== _userInforService.UserId).Include(x=>x.Message);
             return View(q);
         }
+
+        [Authorize]
+        public IActionResult getMessage(int Inputid) //訊息細節
+        {
+            var q = _bookShopContext.Messages.Where(x => x.MessageId == Inputid).FirstOrDefault();
+            return Json(q);
+        }
+
         [Authorize]
         public IActionResult myPublisher() //關注的出版社
         {
