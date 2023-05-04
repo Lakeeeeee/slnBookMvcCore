@@ -21,7 +21,7 @@
     <script src="~/Scripts/modernizr-2.8.3.js"></script>
 </head>
 <body>
-    <div class="container-fluid justify-content-center" style="margin-top: 20px ;border: 2px solid #ff6a00">
+    <div class="container-fluid justify-content-center"@* style="margin-top: 20px ;border: 2px solid #ff6a00"*@>
         <div class="row">
             @* 左邊功能欄 *@
             <div class="col-2">
@@ -44,7 +44,7 @@
 
 
             @* Body *@
-            <div class="col-10 bg-light" style="border: 1px dashed #ff0000; border-radius: 5px">
+            <div class="col-10 bg-light" @*style="border: 1px dashed #ff0000; border-radius: 5px"*@>
                 @RenderSection("test", required: false)
                 <section class="font14px">@RenderBody()</section>
             </div>
