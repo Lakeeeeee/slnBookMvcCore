@@ -21,7 +21,7 @@ namespace prjBookMvcCore.Controllers
             //var datas=db.ArticalToBookDetails.Where(d=>d.ArticalId==id).Select(d=>d);
             //return View(datas);
         }
-
+        
         //public IActionResult Index() { return View(); }
     }
 }
