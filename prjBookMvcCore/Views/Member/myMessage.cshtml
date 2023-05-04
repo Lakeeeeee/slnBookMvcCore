@@ -39,7 +39,9 @@
                         @Html.DisplayFor(modelItem => item.UpdateTime)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Message.MessageTitle)
+                        @Html.ActionLink("刪除", "Delete", new { id = item.MessageId}, new { onclick = "return confirm('確定要刪除嗎?')" })
+
+                        <a asp-action=""> @Html.DisplayFor(modelItem => item.Message.MessageTitle)</a>
                     </td>
                     <td>
                         @Html.ActionLink("刪除", "Delete", new { id = item.MessageMemberDetailId }, new { onclick = "return confirm('確定要刪除嗎?')" })
