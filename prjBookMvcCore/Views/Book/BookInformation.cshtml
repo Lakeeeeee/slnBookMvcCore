@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "BookInformation";
 }
+@inject UserInforService _userInforService
 <!DOCTYPE html>
 <html>
 <head>
@@ -336,8 +337,6 @@
                         <div class="buttonRight">
                             <el-button round class="rightButton" v-on:click="storeTempList">放入暫存清單</el-button>
                         </div>
-                        <br>
-                        <el-button v-on:click="loginTest" :plain="true" style="width: 200px; color: blueviolet; border-color: blueviolet;">一鍵登入/登出</el-button>
                     </el-row>
                 </el-aside>
             </el-container>
@@ -595,7 +594,7 @@
                                       maxlength="30"
                                       show-word-limit style="width: 400px;"
                                       show-word-limit></el-input>
-                            <el-button type="primary" icon="el-icon-edit" style="margin-left: 20px;" v-on:click="loginCheck" v-loading.fullscreen.lock="fullscreenLoading">確定</el-button>
+                            <el-button type="primary" icon="el-icon-edit" style="margin-left: 20px;" v-on:click="writeComment" v-loading.fullscreen.lock="fullscreenLoading">確定</el-button>
                         </div>
                     </div>
                 </div>
@@ -651,10 +650,8 @@
 <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
 <!-- import JavaScript -->
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-<!-- import Vue router -->
-<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
 <script>
-    new Vue({
+    let app = new Vue({
         el: '#app',
         data: {
             bookCover: '../image/Book/bookIcon/bookCover.jpg',
@@ -780,11 +777,13 @@
                 return Math.floor(item.unitPrice * item.discount / 100);
             },
             storeTempList() {
-                this.$notify({
-                    title: '放入暫存清單成功',
-                    message: '本書已加入暫存清單',
-                    type: 'success'
-                });
+                if (this.loginCheck()) {
+                    this.$notify({
+                        title: '放入暫存清單成功',
+                        message: '本書已加入暫存清單',
+                        type: 'success'
+                    });
+                }
             },
             redirectToCart() {
                 window.location.href = "../Order/ShoppingCart";
@@ -801,25 +800,21 @@
                             }, 1000);
                         }
                     });
+                    return false;
                 }
-                else {
+                return true;
+            },
+            writeComment(){
+                if(this.loginCheck()){
                     this.$message({
                         message: '評論成功',
                         type: 'success'
                     });
-                    //TODO
                 }
-            },
-            loginTest() {
-                this.isLogin = !this.isLogin
-                let msg = this.isLogin ? '登入成功' : '登出成功'
-                let typ = this.isLogin ? 'success' : 'warning'
-                this.$message({
-                    message: msg,
-                    type: typ,
-                });
             }
         },
     })
+    let testLogin = @_userInforService.UserId !== 0
+    app.isLogin = testLogin
 </script>
 </html>
