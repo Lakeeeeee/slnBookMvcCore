@@ -23,16 +23,18 @@ namespace prjBookMvcCore.Controllers
             _bookShopContext =  _db;
             _userInforService =  userInforService ;
         }
+        MemberManeger cm = new MemberManeger();
 
         public IActionResult Signin()
         {
             return View();
         }
         [HttpPost]
-        public IActionResult Create() //註冊方法
+        public IActionResult Create(Member member) //註冊方法
         {
-            
-            
+            _bookShopContext.Add(member);
+            _bookShopContext.SaveChanges();
+            cm.writeWelcomeLetter(member, _bookShopContext);
             return RedirectToAction("Login");
         }
 
@@ -125,8 +127,6 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult getMessage(int Inputid) //訊息細節
         {
-            //var q = _bookShopContext.Messages.Where(x => x.MessageId == Inputid).FirstOrDefault();
-
             var q = from x in _bookShopContext.MessageMemberDetails
                     join y in _bookShopContext.Messages on x.MessageId equals y.MessageId
                     join z in _bookShopContext.MessageTypes on y.MessageTypeId equals z.MessageTypeId
