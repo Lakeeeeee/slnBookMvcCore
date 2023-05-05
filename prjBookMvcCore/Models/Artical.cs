@@ -14,7 +14,7 @@ namespace prjBookMvcCore.Models
         public DateTime ArticalDate { get; set; }
         public string ArticalTitle { get; set; } = null!;
         public string ArticalDescription { get; set; } = null!;
-        public byte[] ArticalPicture { get; set; } = null!;
+        public byte[]? ArticalPicture { get; set; }
 
         public virtual ICollection<ArticalToBookDetail> ArticalToBookDetails { get; set; }
     }

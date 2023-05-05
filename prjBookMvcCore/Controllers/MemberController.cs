@@ -17,10 +17,9 @@ namespace prjBookMvcCore.Controllers
     {
         private BookShopContext _bookShopContext ;
         public UserInforService _userInforService { get; set; }
-
         public MemberController(BookShopContext _db, UserInforService userInforService)
         {
-            _bookShopContext =  _db ;
+            _bookShopContext =  _db;
             _userInforService =  userInforService ;
         }
 
@@ -117,7 +116,9 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult myMessage() //通知訊息
         {
-            IEnumerable<CustomerService> q = _bookShopContext.CustomerServices.Where(x => x.MemberId == _userInforService.UserId);
+            IEnumerable<CustomerService> q = _bookShopContext.CustomerServices.Where(x => x.MemberId == _userInforService.UserId).Include(x=>x.Status);
+            
+            
             return View(q);
         }
         [Authorize]
@@ -175,11 +176,11 @@ namespace prjBookMvcCore.Controllers
         public IActionResult myOrders()  //訂單查詢
         {
             var q = _bookShopContext.Orders.Where(x => x.MemberId == _userInforService.UserId).
-                Include(x=>x.Discount).
-                Include(x=>x.Payment).
-                Include(x=>x.Shipment).
-                Include(x=>x.PayStatus).
-                Include(x=>x.ShippingStatus).ToList();
+                Include(x => x.Discount).
+                Include(x => x.Payment).
+                Include(x => x.Shipment).
+                Include(x => x.PayStatus).
+                Include(x => x.ShippingStatus).ToList();
             return View(q);
         }
         [Authorize]
