@@ -103,7 +103,7 @@
 
             .el-button--comment:hover {
                 /* background: #2D6EFB;
-                                        border-color: #2D6EFB; */
+                                                        border-color: #2D6EFB; */
                 /* color: #fff; */
                 color: #E3007F;
                 border-color: #E3007F;
@@ -117,7 +117,7 @@
             /* .el-button--pinkBorderRadius:focus, */
             .el-button--pinkBorder:hover {
                 /* background: #2D6EFB;
-                                    border-color: #2D6EFB; */
+                                                    border-color: #2D6EFB; */
                 /* color: #fff; */
                 color: #E3007F;
                 border-color: #E3007F;
@@ -128,11 +128,11 @@
             text-decoration: underline;
         }
         /* .el-button--whiteBackground.is-active,
-                                    .el-button--whiteBackground:active {
-                                        background: #FFFFFF;
-                                        border-color: #2D6EFB;
-                                        color: #2D6EFB;
-                                    } */
+                                                    .el-button--whiteBackground:active {
+                                                        background: #FFFFFF;
+                                                        border-color: #2D6EFB;
+                                                        color: #2D6EFB;
+                                                    } */
         .price {
             background-color: rgba(227,0,127,0.11);
             height: 85px;
@@ -336,6 +336,8 @@
                         <div class="buttonRight">
                             <el-button round class="rightButton" v-on:click="storeTempList">放入暫存清單</el-button>
                         </div>
+                        <br>
+                        <el-button v-on:click="loginTest" :plain="true" style="width: 200px; color: blueviolet; border-color: blueviolet;">一鍵登入/登出</el-button>
                     </el-row>
                 </el-aside>
             </el-container>
@@ -579,14 +581,21 @@
                     <span style="font-size: 20px; font-weight: bold;">發表評論</span>
                     <p></p>
                     <div>
-                        <strong>歡迎你給予星評或評論</strong>
+                        <strong>歡迎您給予星評與評論</strong>
                         <br>
-                        <a href="#">
-                            <el-button round size="small" type="comment" style="margin-left: 0px; padding: 9px;">我來寫評論</el-button>
-                        </a>
-                        <div class="block">
+                        <div style="margin-top: 20px; margin-bottom: 20px;">
                             <span class="demonstration"></span>
                             <el-rate v-model="commentValueMyself"></el-rate>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <el-avatar :size="50" :src="circleUrl" style="margin-right: 20px;"></el-avatar>
+                            <el-input type="textarea"
+                                      placeholder="請輸入評論"
+                                      v-model="commentArea"
+                                      maxlength="30"
+                                      show-word-limit style="width: 400px;"
+                                      show-word-limit></el-input>
+                            <el-button type="primary" icon="el-icon-edit" style="margin-left: 20px;" v-on:click="loginCheck" v-loading.fullscreen.lock="fullscreenLoading">確定</el-button>
                         </div>
                     </div>
                 </div>
@@ -618,8 +627,8 @@
                     </div>
                 </el-container>
             </el-container>
-            <el-divider></el-divider>
-            <el-container>
+            <!-- <el-divider></el-divider> -->
+            <!-- <el-container>
                 <el-aside width="200px">Aside</el-aside>
                 <el-container>
                     <el-header>Header</el-header>
@@ -634,7 +643,7 @@
                     <el-main>Main</el-main>
                     <el-footer>Footer</el-footer>
                 </el-container>
-            </el-container>
+            </el-container> -->
         </div>
     </div>
 </body>
@@ -653,7 +662,11 @@
             originalColor: '',
             activeName: 'first',
             fontSize: 'medium',
+            isLogin: false,
+            fullscreenLoading: false,
             commentValueMyself: null,
+            commentArea: '',
+            circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
             recommend: [
                 {
                     bookTitle: '投資最重要的事：一本股神巴菲特讀了兩遍的書',
@@ -775,11 +788,38 @@
             },
             redirectToCart() {
                 window.location.href = "../Order/ShoppingCart";
+            },
+            loginCheck() {
+                if (!this.isLogin) {
+                    this.$alert('尚未登入', '', {
+                        confirmButtonText: '前往登入',
+                        callback: action => {
+                            this.fullscreenLoading = true;
+                            setTimeout(() => {
+                                this.fullscreenLoading = false;
+                                window.location.href = "../Member/Login";
+                            }, 1000);
+                        }
+                    });
+                }
+                else {
+                    this.$message({
+                        message: '評論成功',
+                        type: 'success'
+                    });
+                    //TODO
+                }
+            },
+            loginTest() {
+                this.isLogin = !this.isLogin
+                let msg = this.isLogin ? '登入成功' : '登出成功'
+                let typ = this.isLogin ? 'success' : 'warning'
+                this.$message({
+                    message: msg,
+                    type: typ,
+                });
             }
         },
     })
 </script>
 </html>
-
-
-
