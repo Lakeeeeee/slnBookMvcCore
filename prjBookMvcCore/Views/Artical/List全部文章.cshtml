@@ -1,0 +1,51 @@
+﻿@model IEnumerable<prjBookMvcCore.Models.Artical>
+
+@{
+    ViewData["Title"] = "List全部文章";
+}
+<script>
+    $(document).ready
+        (
+
+        );
+</script>
+
+
+<h1>List全部文章</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+              @*  @Html.DisplayNameFor(model => model.ArticalId)*@
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ArticalDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ArticalTitle)
+            </th>
+    
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var item in Model) {
+
+                <tr  >
+                <td>
+                 @*   @Html.DisplayFor(modelItem => item.ArticalId)*@
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ArticalDate)
+                </td>
+                 <td>
+                        @Html.ActionLink(item.ArticalTitle, "Detail文章" , "Artical" ,new{id=item.ArticalId},new{})
+                      @*@html.displayfor(modelitem => item.articaltitle)*@        
+                </td>
+            </tr>
+}
+}
+    </tbody>
+</table>

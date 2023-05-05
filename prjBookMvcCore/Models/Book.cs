@@ -10,6 +10,7 @@ namespace prjBookMvcCore.Models
             ActionDetials = new HashSet<ActionDetial>();
             ArticalToBookDetails = new HashSet<ArticalToBookDetail>();
             AuthorDetails = new HashSet<AuthorDetail>();
+            BookDiscountDetails = new HashSet<BookDiscountDetail>();
             CategoryDetails = new HashSet<CategoryDetail>();
             Comments = new HashSet<Comment>();
             DiscountDetails = new HashSet<DiscountDetail>();
@@ -40,6 +41,7 @@ namespace prjBookMvcCore.Models
         public virtual ICollection<ActionDetial> ActionDetials { get; set; }
         public virtual ICollection<ArticalToBookDetail> ArticalToBookDetails { get; set; }
         public virtual ICollection<AuthorDetail> AuthorDetails { get; set; }
+        public virtual ICollection<BookDiscountDetail> BookDiscountDetails { get; set; }
         public virtual ICollection<CategoryDetail> CategoryDetails { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<DiscountDetail> DiscountDetails { get; set; }

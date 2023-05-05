@@ -34,21 +34,23 @@
                 <ul id="zero">
                     @{
                         if (_userInforService.UserId != 0)
-                        {<li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/LogOut">登出</a></li>
+                        {
+                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/LogOut">登出</a></li>
                         }
-                        else{
-                             <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/Login">登入</a></li>
-                             <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/Signin">註冊</a></li>
-                         }
+                        else
+                        {
+                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/Login">登入</a></li>
+                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/Signin">註冊</a></li>
                         }
+                    }
                     <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/MemberCenter">會員中心</a></li>
-                    <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Order/ShoppingCart">購物車</a></li>
+                    <li><a role="button"  class="btn btn-sm btn-outline-secondary mx-1" href="~/Order/ShoppingCart"><img src="~/Image/shoppingCartIcon20px.png" style="width:20" /></a></li>
                 </ul>
             </div>
         </div>
     </nav>
-    <div class="navbar navbar-default navbar-fixed-top" @*style="border:1px solid #000000"*@>
-        <div class="container" @*style="border:1px solid #000000"*@>
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
             <div class="navbar navbar-light container-fluid" style="border:1px solid #000000; background-color:#ebf8bc">
                 @* 分類  *@
                 <form class="container-fluid justify-content-start">
@@ -56,7 +58,7 @@
                         <ul id="zero">
                             <li><a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Home/Menu">書籍</a></li>
                             <li><a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Discount/">優惠活動</a></li>
-                            <li><a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Artical/">推薦文章</a></li>
+                            <li><a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Artical/List全部文章">推薦文章</a></li>
                         </ul>
                     </div>
                 </form>
@@ -89,20 +91,20 @@
 
     <div class="container body-content">
         @* buttom *@
-        <hr />
+        <br /><hr />
         <div class="container">
             <div class="row">
                 <div class="col" style="text-align:center">
-                    <a href="#id"><img src="../Image/demo-pic.jpg" alt="活動or優惠or廣告" width="100%" /></a>
-                    活動or優惠or廣告
+                    <img src="~/Image/AD.png" alt="活動or優惠or廣告" width="100%" />
+                    廣告招商中
                 </div>
                 <div class="col" style="text-align:center">
-                    <a href="#id"><img src="../Image/demo-pic.jpg" alt="活動or優惠or廣告" width="100%" /></a>
-                    活動or優惠or廣告
+                    <img src="~/Image/AD.png" alt="活動or優惠or廣告" width="100%" />
+                    廣告招商中
                 </div>
                 <div class="col" style="text-align:center">
-                    <a href="#id"><img src="../Image/demo-pic.jpg" alt="活動or優惠or廣告" width="100%" /></a>
-                    活動or優惠or廣告
+                    <img src="~/Image/AD.png" alt="活動or優惠or廣告" width="100%" />
+                    廣告招商中
                 </div>
             </div>
         </div>

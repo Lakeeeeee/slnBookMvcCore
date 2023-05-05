@@ -11,5 +11,8 @@ namespace prjBookMvcCore.Models
         public DateTime? OrderDiscountStartDate { get; set; }
         public DateTime? OrderDiscountEndDate { get; set; }
         public string? IsOrderDiscountUse { get; set; }
+
+        public virtual Member? Member { get; set; }
+        public virtual OrderDiscount? OrderDiscount { get; set; }
     }
 }

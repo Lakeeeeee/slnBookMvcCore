@@ -7,9 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Image\ART\**" />
     <Compile Remove="Views\NewFolder1\**" />
+    <Content Remove="Image\ART\**" />
     <Content Remove="Views\NewFolder1\**" />
+    <EmbeddedResource Remove="Image\ART\**" />
     <EmbeddedResource Remove="Views\NewFolder1\**" />
+    <None Remove="Image\ART\**" />
     <None Remove="Views\NewFolder1\**" />
   </ItemGroup>
 
@@ -32,6 +36,40 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\lib\text\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Image\ArticalPicture\1.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\2.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\2022 年精選書單.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\Reset，結束與開始，全新的世界正在生成.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\中國傳統武術.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\伽利略書展.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\健康飲食與減重.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\多益英語考試學習.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\大腦科學書籍熱門人氣排行推薦.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\大自然與生物多樣性.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\張作錦《今文觀止》新書茶會.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\心理學與情感療癒.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\探索世界的不同面向.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\探索自然世界，了解生命奧秘.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\探索面對告別的良方.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\推薦人工智慧書單，讓你迅速學會與AI溝通.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\提升個人能力和思維方法.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\李崇義《冰山對話》新書分享會.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\橫空出世 ChatGPT 現象級AI新世代.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\登山露營技巧與料理指南.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\看懂晶片戰局勢 掌握新賽局關鍵.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\禪修與心靈成長.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\科技解密：深入探索各種機器運作原理.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\科普叢書書籍熱門人氣排行推薦.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\編織教學書籍推薦.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\自然探索與科普.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\變化中的世界  你不可不知的經濟大勢.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\財務自由與理財教育.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\透過圖解享受科學的樂趣.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\透過圖解，享受科學的樂趣.jpg" />
+    <None Include="wwwroot\Image\ArticalPicture\陳月卿《時時刻刻微養生》新書分享會（台北場）.jpg" />
   </ItemGroup>
 
 </Project>
