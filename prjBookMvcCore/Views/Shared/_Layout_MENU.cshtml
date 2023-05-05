@@ -317,15 +317,14 @@
                         推薦文章
                     </div>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><span><a href="~/Discount/">有效溝通技巧</a></span></li>
-                        <li class="list-group-item"><span><a href="~/Discount/">重新思考生命與死亡</a></span></li>
-                        <li class="list-group-item"><span><a href="~/Discount/">心理學與情感療癒</a></span></li>
-                        <li class="list-group-item"><span><a href="~/Discount/">大腦科學書籍熱門人氣排行推薦</a></span></li>
-                        <li class="list-group-item"><span><a href="~/Discount/">大自然與生物多樣性</a></span></li>
-                        <li class="list-group-item"><span><a href="~/Discount/">健康飲食與減重</a></span></li>
-                        <li class="list-group-item"><span><a href="~/Discount/">自然探索與科普</a></span></li>
-                        <li class="list-group-item"><span><a href="~/Discount/"> 李崇義《冰山對話》新書分享</a></span>
-                        </li>
+                        @{
+                            BookShopContext db = new BookShopContext();
+                            var q = db.Articals.Select(a => new { a.ArticalId, a.ArticalTitle }).Take(8);
+                            foreach (var g in q)
+                            {
+                                <li class="list-group-item"><span><a href="~/Artical/Detail文章/@g.ArticalId">@g.ArticalTitle</a></span></li>
+                            }
+                        }
                     </ul>
                 </div>  
                 <br />
