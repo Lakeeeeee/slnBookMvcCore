@@ -500,9 +500,7 @@ namespace prjBookMvcCore.Models
             {
                 entity.ToTable("Message");
 
-                entity.Property(e => e.MessageId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("MessageID");
+                entity.Property(e => e.MessageId).HasColumnName("MessageID");
 
                 entity.Property(e => e.MessageTitle).HasMaxLength(50);
 

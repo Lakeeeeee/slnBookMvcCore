@@ -9,6 +9,7 @@ namespace prjBookMvcCore.Models
         public int? MessageId { get; set; }
         public int? MemberId { get; set; }
         public DateTime? UpdateTime { get; set; }
+        public int ReadStatu { get; set; }
 
         public virtual Member? Member { get; set; }
         public virtual Message? Message { get; set; }

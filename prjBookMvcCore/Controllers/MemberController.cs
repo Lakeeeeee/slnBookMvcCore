@@ -115,8 +115,26 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult MemberCenter()
         {
-            return View(_userInforService);
+            return View();
         }
+        [Authorize]
+        public IActionResult gerMemberInfor(int id)
+        {
+            //Member user = _bookShopContext.Members.FirstOrDefault(x=>x.MemberId ==id);
+            var q = from user in _bookShopContext.Members
+                    where user.MemberId == id
+                    select new
+                    {
+                        user_leverl = user.Level.LevelName,
+                        user_msCount = user.MessageMemberDetails.Count(x=>x.ReadStatu==0),
+                        user_odCount = user.Orders.Count,
+                        user_points = user.Points,
+                        user_coupons = user.OrderDiscountDetails.Count,
+                    };
+            return Json(q.FirstOrDefault());
+        }
+
+
         [Authorize]
         public IActionResult myMessage() //通知訊息
         {
@@ -127,18 +145,27 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult getMessage(int Inputid) //訊息細節
         {
+            MessageMemberDetail target = _bookShopContext.MessageMemberDetails.Find(Inputid);
+            target.ReadStatu = 1; _bookShopContext.SaveChanges();
             var q = from x in _bookShopContext.MessageMemberDetails
                     join y in _bookShopContext.Messages on x.MessageId equals y.MessageId
                     join z in _bookShopContext.MessageTypes on y.MessageTypeId equals z.MessageTypeId
                     where x.MessageMemberDetailId == Inputid
                     select new
                     {
-                        time = x.UpdateTime,
+                         time = x.UpdateTime,
+                         read_a = (x.ReadStatu==1)?"已讀":"未讀",
                          content_a = y.MessageContent,
                          type_a = z.MessageTypeName
                     };
 
             return Json(q.FirstOrDefault());
+        }
+        [Authorize]
+        public IActionResult myCoupons() //coupons
+        {
+            IEnumerable<OrderDiscountDetail> q = _bookShopContext.OrderDiscountDetails.Where(x => x.MemberId == _userInforService.UserId).Include(x=>x.OrderDiscount);
+            return View(q);
         }
 
         [Authorize]
@@ -211,7 +238,7 @@ namespace prjBookMvcCore.Controllers
                 Include(x=>x.Payment).
                 FirstOrDefault();
             return View(member);
-        }
+        } //
         [HttpPost]
         public IActionResult alretProflie(Member member)
         {
