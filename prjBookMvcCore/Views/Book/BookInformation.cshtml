@@ -792,12 +792,16 @@
                 if (!this.isLogin) {
                     this.$alert('尚未登入', '', {
                         confirmButtonText: '前往登入',
+                        showCancelButton: true,
+                        cancelButtonText: '取消',
                         callback: action => {
-                            this.fullscreenLoading = true;
-                            setTimeout(() => {
-                                this.fullscreenLoading = false;
-                                window.location.href = "../Member/Login";
-                            }, 1000);
+                            if (action === 'confirm') {
+                                this.fullscreenLoading = true;
+                                setTimeout(() => {
+                                    this.fullscreenLoading = false;
+                                    window.location.href = "../Member/Login";
+                                }, 1000);
+                            }
                         }
                     });
                     return false;
