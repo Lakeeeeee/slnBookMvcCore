@@ -12,6 +12,7 @@ namespace prjBookMvcCore.Models
 
         public int ShipmentId { get; set; }
         public string ShipmentName { get; set; } = null!;
+        public decimal Freight { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
     }

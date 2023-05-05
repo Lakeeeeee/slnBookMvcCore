@@ -1,5 +1,6 @@
-﻿@{
-    ViewData["Title"] = "中文書";
+﻿
+@{
+    ViewData["Title"] = "年齡";
 }
 <!DOCTYPE html>
 
@@ -17,7 +18,7 @@
         }
 
         .font14px {
-            font-size: 14px
+                    font-size: 14px
         }
 
         .fontClean {
@@ -28,7 +29,7 @@
         .accordion-button {
             background-color: #eeeeee;
             min-height: 15px
-        }
+                }
 
             .accordion-button:active, .accordion-button::backdrop, .accordion-button:is(:hover) {
                 background-color: #ffffff;
@@ -51,7 +52,8 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Home">首頁</a></li>
             <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Menu">書籍</a></li>
-            <li class="breadcrumb-item active" aria-current="page">中文書</li>
+            <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Menu">中文書</a></li>
+            <li class="breadcrumb-item active" aria-current="page">年齡</li>
         </ol>
     </nav>
 
@@ -232,11 +234,14 @@
         </ul>
         </nav>*@
     </div>
- 
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 </body>
 </html>
+
+
+
 

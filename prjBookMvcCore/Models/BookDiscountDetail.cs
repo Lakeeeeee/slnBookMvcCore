@@ -10,5 +10,8 @@ namespace prjBookMvcCore.Models
         public int BookId { get; set; }
         public DateTime BookDiscountStartDate { get; set; }
         public DateTime BookDiscountEndDate { get; set; }
+
+        public virtual Book Book { get; set; } = null!;
+        public virtual BookDiscount BookDiscount { get; set; } = null!;
     }
 }
