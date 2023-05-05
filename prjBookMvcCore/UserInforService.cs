@@ -15,7 +15,7 @@ public class UserInforService
         get
         {
             var varCliams = _contextAccessor.HttpContext.User.Claims.ToList();
-            return Convert.ToInt32(varCliams.Where(x => x.Type == "Id").First().Value);
+            return Convert.ToInt32(varCliams.Where(x => x.Type == "Id").FirstOrDefault()?.Value);
         }
     }
     public int UserMessageCount

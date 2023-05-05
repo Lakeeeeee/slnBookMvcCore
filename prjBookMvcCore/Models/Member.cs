@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Cors;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace prjBookMvcCore.Models
 {
@@ -19,7 +21,8 @@ namespace prjBookMvcCore.Models
         public string MemberEmail { get; set; } = null!;
         public string MemberPassword { get; set; } = null!;
         public string MemberName { get; set; } = null!;
-        public DateTime? MemberBrithDate { get; set; }
+        public DateTime? MemberBrithDate { get; set; } 
+        
         public string Memberphone { get; set; } = null!;
         public string MemberAddress { get; set; } = null!;
         public int PaymentId { get; set; }

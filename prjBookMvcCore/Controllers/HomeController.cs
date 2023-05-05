@@ -6,10 +6,6 @@ namespace prjBookMvcCore.Controllers
 {
     public class HomeController : Controller
     {
-        
-        
-
-
         public IActionResult Home()
         {
             return View();
@@ -20,6 +16,10 @@ namespace prjBookMvcCore.Controllers
             return View();
         }
 
+        public IActionResult QA()
+        {
+            return View();
+        }
 
 
         #region(系統預設的東西, 先留著, 之後不需要再刪掉)

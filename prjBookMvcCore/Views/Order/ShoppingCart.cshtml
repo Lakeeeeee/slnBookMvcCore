@@ -1,0 +1,140 @@
+﻿@{
+    ViewBag.Title = "購物車";
+    Layout = "~/Views/Shared/_Layout_order.cshtml";
+}
+<style>
+    .container-sp {
+        width: 100%;
+        margin-top: 50px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .div {
+        margin-bottom: 15px;
+        margin-top: 15px
+    }
+
+    tbody {
+        display: table-row-group;
+        vertical-align: middle;
+        border-color: inherit;
+    }
+
+    .form_01 {
+        width: 98%;
+        background: #fff;
+        box-shadow: 0px 1px 2px #a4a4a4;
+        border-radius: 4px;
+        border: 1px solid #e6e6e6;
+    }
+</style>
+
+<div class="container-sp">
+    <div >
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="~/Home/Home">首頁</a></li>
+                <li class="breadcrumb-item active" aria-current="page">購物車</li>
+            </ol>
+        </nav>
+    </div>
+    <div>
+        <div>
+        <ul class="nav nav-tabs sp-tabs">
+            <li>
+                    <a class="btn btn-secondary" disabled> 購物車清單</a>
+            </li>
+            <li>
+                    <a href="~/Order/ListCart" class="btn btn-primary">暫存清單</a>
+            </li>
+        </ul>
+        </div>
+    </div>
+</div>
+   
+<div>
+    <table class="table table-striped">
+        <tr>
+            <th>序號</th>
+            <th>書名</th>
+            <th>優惠</th>
+            <th>優惠價</th>
+            <th>出版社</th>
+            <th>庫存</th>
+        </tr>
+        <tr>
+            <th>1</th>
+            <th>測試</th>
+            <th>每日精選66折</th>
+            <th>88</th>
+            <th>哩賀</th>
+            <th>10</th>
+        </tr>
+        <tr>
+            <th>2</th>
+            <th>測試2</th>
+            <th>每日精選66折</th>
+            <th>199</th>
+            <th>遠見</th>
+            <th>10</th>
+        </tr>
+    </table>
+</div>
+
+<div class="container">
+    為你推薦
+    <div class="row">
+        <div class="col">
+            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
+            productshow productshow productshow productshow productshow productshow productshow productshow
+        </div>
+        <div class="col">
+            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
+            productshow productshow productshow productshow productshow productshow productshow productshow
+        </div>
+        <div class="col">
+            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
+            productshow productshow productshow productshow productshow productshow productshow productshow
+        </div>
+        <div class="col">
+            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
+            productshow productshow productshow productshow productshow productshow productshow productshow
+        </div>
+        <div class="col">
+            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
+            productshow productshow productshow productshow productshow productshow productshow productshow
+        </div>
+    </div>
+</div>
+         
+
+<div>
+    @*結帳資訊區*@
+    <ul class ="form_01 prodetail">
+        <li>
+            <div class ="d-grid gap-2 c d-md-flex justify-content-md-end">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                共
+                                __項
+                                __元
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+        </li>
+        
+    </ul>
+    
+</div>
+
+<div class="d-grid gap-2 c d-md-flex justify-content-md-end">
+    <a href="~/Order/CheckOutInfo" class=" btn btn-primary col-4 me-md-2" type="button">來去結帳</a>
+    </div>

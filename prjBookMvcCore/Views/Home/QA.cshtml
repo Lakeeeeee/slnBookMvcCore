@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewData["Title"] = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .card:hover {
+        box-shadow: 0 0 5px #ddd;
+        transform: scale(1.05);
+    }
+
+    .card {
+        transition: all 0.5s ease-in-out; /* 增加過渡時間至 0.5 秒 */
+    }
+
+    div {
+        border: none
+    }
+
+
+
+</style>
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="card" style="height:100%">
+            <a class="card-body" style="display:block;width:100%;" data-bs-toggle="collapse" href="#card1" role="button" aria-expanded="false" aria-controls="card1">
+                <p class="card-text">加入會員 </p> </a>
+        </div>
+        <div class="collapse" id="card1">
+        <div class="card card-body">
+            Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+        </div>
+        </div>
+        <div class="card" style="height:100%">
+            <a class="card-body" style="display:block;width:100%;" data-bs-toggle="collapse" href="#card2" role="button" aria-expanded="false" aria-controls="card2">
+                <p class="card-text">會員分級制度 </p>
+            </a>
+        </div>
+    <div class="collapse" id="card2">
+        <div class="card card-body">
+            Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+        </div>
+        </div>
+    <p>
+        <div class="card" style="height:100%">
+            <a class="card-body" style="display:block;width:100%;" data-bs-toggle="collapse" href="#card3" role="button" aria-expanded="false" aria-controls="card3">
+                <p class="card-text">聯絡客服 </p>
+            </a>
+        </div>
+    </p>
+
+
+
+    </div>
+</div>
+

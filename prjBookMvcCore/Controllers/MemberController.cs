@@ -16,7 +16,7 @@ namespace prjBookMvcCore.Controllers
     public class MemberController : Controller
     {
         private BookShopContext _bookShopContext ;
-        protected UserInforService _userInforService { get; set; }
+        public UserInforService _userInforService { get; set; }
 
         public MemberController(BookShopContext _db, UserInforService userInforService)
         {
@@ -38,8 +38,6 @@ namespace prjBookMvcCore.Controllers
         {
             return View();
         }
-        #region(登入--haven't finish)
-
         [HttpPost]
         public IActionResult Login(CLoginViewModel vm)
         {
@@ -58,6 +56,7 @@ namespace prjBookMvcCore.Controllers
                         new Claim("Orders", user.Orders.Count().ToString())
                     };
 
+                    ViewBag.isLogin="true";
                     //建構cookie用戶驗證物件的狀態存取
                     var varClainsIdentity = new ClaimsIdentity(useClain, CookieAuthenticationDefaults.AuthenticationScheme);
                     HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(varClainsIdentity));
@@ -66,7 +65,6 @@ namespace prjBookMvcCore.Controllers
             }
             return View();
         }
-        #endregion
 
         public IActionResult Find_password() //忘記密碼
         {
@@ -96,6 +94,7 @@ namespace prjBookMvcCore.Controllers
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Redirect("~/Home/Home");
+            ViewBag.isLogin = "false";
         }
 
 
@@ -175,7 +174,6 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult myOrders()  //訂單查詢
         {
-            //testMemID = _userInforService.getUserInfor(); //預設會員ID
             var q = _bookShopContext.Orders.Where(x => x.MemberId == _userInforService.UserId).
                 Include(x=>x.Discount).
                 Include(x=>x.Payment).
@@ -187,8 +185,26 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult alretProflie()
         {
-            return View();
+            Member member = _bookShopContext.Members.Where(x => x.MemberId == _userInforService.UserId).
+                Include(x=>x.Level).
+                Include(x=>x.Payment).
+                FirstOrDefault();
+            return View(member);
         }
-
+        [HttpPost]
+        public IActionResult alretProflie(Member member)
+        {
+            Member memberupdate = _bookShopContext.Members.FirstOrDefault(x => x.MemberId == member.MemberId);
+            if (memberupdate != null)
+            {
+                memberupdate.MemberName = member.MemberName;
+                memberupdate.MemberEmail = member.MemberEmail;
+                memberupdate.MemberBrithDate = member.MemberBrithDate;
+                memberupdate.MemberAddress = member.MemberAddress;
+                memberupdate.PaymentId = member.PaymentId;
+                _bookShopContext.SaveChanges();
+            };
+            return RedirectToAction("alretProflie");
+        }
     }
 }

@@ -1,76 +1,128 @@
-﻿@model Member
+﻿@using prjBookMvcCore.Models
+@model prjBookMvcCore.Models.Member
+
 @{
-    ViewData["Title"] = "修改個人檔案";
+    ViewData["Title"] = "alretProflie";
     Layout = "~/Views/Shared/_Layout_Member.cshtml";
 }
 
-<div class="container" style="margin-top:15px">
-    <div>
-        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a class="link" href="~/Home/MemberCenter">會員中心</a></li>
-                <li class="breadcrumb-item active" aria-current="page">會員資料更新</li>
-            </ol>
-        </nav>
-    </div>
-    <p><h6>會員資料更新</h6></p>
-
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-
-        <div class="form-horizontal">
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.HiddenFor(model => model.MemberId)
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.MemberEmail, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.MemberEmail, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.MemberEmail, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.MemberName, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.MemberName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.MemberName, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Memberphone, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Memberphone, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Memberphone, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.MemberAddress, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.MemberAddress, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.MemberAddress, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.PaymentId, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.PaymentId, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.PaymentId, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <p>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Save" class="btn btn-outline-info sm" />
-                    </div>
-                </div>
-            </p>
-
-        </div>
+<style>
+    td{
+        border-top:5px solid transparent;
+        line-height:2;
+        vertical-align:top;
     }
+
+tbody td:nth-child(1){text-align:right}
+
+    tbody td:nth-child(2) {
+        padding-left: 15px;
+        text-align: left;
+ }
+.ips01{
+    border:none;
+    transition: all 0.5s ease-in-out; /* 增加過渡時間至 0.5 秒 */
+        display: block;
+        width: 100%
+    }
+
+    .ips01:hover {
+        box-shadow: 0 0 5px grey;
+        transform : scale(1. 05);
+        border-radius:5px
+        }
+
+    .card:hover {
+        box-shadow: 0 0 2px #ddd;
+        transform: scale(1.01);
+    }
+
+    .card {
+        transition: all 0.5s ease-in-out; /* 增加過渡時間至 0.5 秒 */
+    }
+
+</style>
+<h1>會員資料</h1>
+
+<hr />
+@*
+<div class="row">
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            Dropdown button
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+        </ul>
+    </div></div>
+*@
+
+
+<div class="row">
+    <div class="col">
+        <p >
+            今年累積消費金額: @Model.CostAmount 元
+        </p>
+        <form asp-action="alretProflie">
+            <table style="width:max-content">
+            <tbody>
+            <tr>
+                    <td><input type="hidden" name="MemberId" value="@Model.MemberId" /></td>
+                </tr>  
+                <tr>
+             <td> 會員姓名：</td>
+                        <td><input asp-for="MemberName" class="ips01" /></td>
+            <td><span asp-validation-for="MemberName" class="text-danger"></span></td>
+            </tr>
+            <tr>
+                        <td>會員帳號(Email)：</td>
+                        <td><input asp-for="MemberEmail" class="ips01" /></td>
+                <td><span asp-validation-for="MemberEmail" class="text-danger"></span></td>
+            </tr>
+                    <tr>
+                        <td>手機號碼：</td>
+                        <td><input asp-for="Memberphone" class="ips01" /></td>
+                        <td><span asp-validation-for="Memberphone" class="text-danger"></span></td>
+                    </tr>
+
+            <tr>
+                        <td>生日：</td>
+                        <td><input asp-for="MemberBrithDate" class="ips01" type="date"/></td>
+                <td><span asp-validation-for="MemberBrithDate" class="text-danger"></span></td>
+            </tr>
+            <tr>
+                        <td>預設運送地址：</td>
+                        <td><input asp-for="MemberAddress" class="ips01" />
+                        </td>
+                <td><span asp-validation-for="MemberAddress" class="text-danger"></span></td>
+                    </tr>
+                    <tr>
+                        <td>預設支付方式：</td>
+                        <td>
+                            <select class="btn btn-light" name="PaymentId">
+                                @{
+                                    BookShopContext db = new BookShopContext();
+                                    foreach (var item in db.Payments.Select(x => x))
+                                    {
+                                        <option class="btn btn-light" value="@item.PaymentId">
+                                            @item.PaymentName
+                                        </option>
+                                    } }
+                            </select>
+                        </td>
+                     <td><span asp-validation-for="PaymentId" class="text-danger"></span></td>
+            </tr>
+            </tbody>
+            </table>
+            <div>
+                <p>
+                    <div class="card" style=""> 
+                        <input class="card-body" value="確認修改" type="submit" style="display:block;width:100%;border:none; background-color:transparent">
+                </div>
+                </p>
+            </div>
+        </form>
+    </div>
 </div>
