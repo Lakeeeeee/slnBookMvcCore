@@ -36,7 +36,7 @@
         </div>
         <div class="col-4">
             <div class="container justify-content-center bg-light" style="border-radius:10px;  padding-block:15px">
-                <div>
+                <form asp-action="Create" id="signin_form">
                 <p><label class="">會員註冊</label></p>
                 <p><input type="text" placeholder="輸入您的Email" style="width: 100%; max-width:250px" /><br /></p>                    
                     <p><label style="font-size:xx-small">密碼規則</label> </p>
@@ -70,8 +70,6 @@
                         </div>
                     </div>
                 </div>
-                </div>
-                <form asp-action="Create" id="signin_form">
                 <p style="margin-top:10px" >
                     <button class="btn btn-outline-success btn-sm" type="submit" style="display:none" id="checkbtn" >確認送出</button>
                 </p>

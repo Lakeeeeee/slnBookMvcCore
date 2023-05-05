@@ -31,6 +31,8 @@ namespace prjBookMvcCore.Controllers
         [HttpPost]
         public IActionResult Create() //註冊方法
         {
+            
+            
             return RedirectToAction("Login");
         }
 
@@ -159,7 +161,7 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult myCollect() //暫存清單
         {
-
+            
             IEnumerable<Book> q = _bookShopContext.ActionDetials.Where(x => x.MemberId == _userInforService.UserId && x.ActionId == 2).
              Include(x => x.Book.Publisher).Select(x => x.Book);
 
