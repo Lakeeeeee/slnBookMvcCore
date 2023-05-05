@@ -4,11 +4,13 @@
     ViewData["Title"] = "Detail文章";
 
 }
+<!DOCTYPE html>
+<html>
+    <head>
 <style>
 .imgT{
     width:80%;
-    padding-left:50px;
-    max-width:100%
+    max-width:100%;
     }
 
     .imgB {
@@ -41,17 +43,19 @@
         text-indent: 2em;
     }
 
-</style>
+    </style>
+</head>
+<body>
 @{
     int ArticalId = ViewBag.ArticalId;
     BookShopContext db = new BookShopContext();
     var Artical = db.Articals.Where(a => a.ArticalId == ArticalId).Select(a => a);
     foreach( var g in Artical)
     {
-    <h1>@g.ArticalTitle</h1>
+        <h1>@g.ArticalTitle</h1>
         <p class="date">更新日期：@g.ArticalDate</p>
-        string path =g.ArticalId+".jpg";
-    <img src="~/Image/ArticalPicture/@path" class="imgT" />
+        string path =g.ArticalTitle+".jpg";
+        <div style="text-align:center"><img src="~/Image/ArticalPicture/@path" class="imgT" title="@g.ArticalTitle" /></div>    
 
         <p>@g.ArticalDescription</p>
     }
@@ -73,22 +77,30 @@
     string s = "";
     //foreach (var item in q3){s += item.AuthorName +"<br>";}
         
-    <div>
-        <figure class="fig1">
-            <img class="imgB" src="@g.CoverPath" title="@g.BookTitle" />
-            <figcaption>@g.BookTitle</figcaption>
-        </figure>
-        <p>作者：@s</p>
-        <p>出版日期：@g.PublicationDate.ToShortDateString()</p>
-        <p>ISBN：@g.Isbn</p>
-        <p>原價：@g.UnitPrice</p>
-        <p>簡介：
-        @g.Introduction</p>
-          
-    </div>
+        <div>
+            <table>
+            <tr>
+                <td>
+                    <figure class="fig1">
+                        <img class="imgB" src="@g.CoverPath" title="@g.BookTitle" />
+                        <figcaption>@g.BookTitle</figcaption>
+                    </figure>
+                </td>
+                <td>
+                    <p>作者：@s</p>
+                    <p>出版日期：@g.PublicationDate.ToShortDateString()</p>
+                    <p>ISBN：@g.Isbn</p>
+                    <p>原價：@g.UnitPrice</p>
+                </td>
+            </tr>
+            <tr><td colspan="2"><p> 簡介：@g.Introduction </p></td> </tr>
+            </table>
+        </div>
             
     }
     
 
 
 }
+</body>
+</html>

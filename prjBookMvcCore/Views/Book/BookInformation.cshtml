@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "BookInformation";
 }
+@inject UserInforService _userInforService
 <!DOCTYPE html>
 <html>
 <head>
@@ -103,7 +104,7 @@
 
             .el-button--comment:hover {
                 /* background: #2D6EFB;
-                                border-color: #2D6EFB; */
+                                                        border-color: #2D6EFB; */
                 /* color: #fff; */
                 color: #E3007F;
                 border-color: #E3007F;
@@ -117,7 +118,7 @@
             /* .el-button--pinkBorderRadius:focus, */
             .el-button--pinkBorder:hover {
                 /* background: #2D6EFB;
-                            border-color: #2D6EFB; */
+                                                    border-color: #2D6EFB; */
                 /* color: #fff; */
                 color: #E3007F;
                 border-color: #E3007F;
@@ -128,11 +129,11 @@
             text-decoration: underline;
         }
         /* .el-button--whiteBackground.is-active,
-                            .el-button--whiteBackground:active {
-                                background: #FFFFFF;
-                                border-color: #2D6EFB;
-                                color: #2D6EFB;
-                            } */
+                                                    .el-button--whiteBackground:active {
+                                                        background: #FFFFFF;
+                                                        border-color: #2D6EFB;
+                                                        color: #2D6EFB;
+                                                    } */
         .price {
             background-color: rgba(227,0,127,0.11);
             height: 85px;
@@ -168,22 +169,6 @@
             font-size: 14px
         }
 
-        .el-carousel__item h3 {
-            color: #475669;
-            font-size: 14px;
-            opacity: 0.75;
-            line-height: 150px;
-            margin: 0;
-        }
-
-        .el-carousel__item:nth-child(2n) {
-            background-color: #99a9bf;
-        }
-
-        .el-carousel__item:nth-child(2n+1) {
-            background-color: #d3dce6;
-        }
-
         .information p {
             margin: 2px 0;
         }
@@ -204,21 +189,45 @@
             font-size: 24px;
         }
 
+        .recommendTable {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .recommendContent p {
+            font-size: 14px;
+            width: 180px;
+            margin: 2px 0;
+        }
+
+        /* 应用到 Carousel 的箭头元素 */
+        .el-carousel__arrow {
+            top: 130px;
+            border: 1px solid rgba(255,255,255,0.2);
+            ;
+            border-radius: 15%;
+            height: 100px;
+            width: 50px;
+        }
+
+        .recommendBookTitle {
+            font-weight: bold;
+        }
+
+            .recommendBookTitle p {
+                font-size: 14px;
+                line-height: 1.5em; /* 設置行高為字體大小的1.5倍 */
+                height: 3em; /* 設置高度為字體大小的3倍 */
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2; /* 設置行數為2行 */
+            }
     </style>
 </head>
 <body>
     <div id="app">
-        <!-- <el-container>
-            <el-header>Header</el-header>
-            <el-main>Main</el-main>
-          </el-container>
-
-          <el-container>
-            <el-header>Header</el-header>
-            <el-main>Main</el-main>
-            <el-footer>Footer</el-footer>
-          </el-container> -->
-        <!-- 450 -->
         <div>
             <el-container>
                 <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -323,40 +332,43 @@
                             <el-button round class="rightButton">放入購物車</el-button>
                         </div>
                         <div class="buttonRight">
-                            <el-button round class="rightButton">直接購買</el-button>
+                            <el-button round class="rightButton" v-on:click="redirectToCart">直接購買</el-button>
                         </div>
                         <div class="buttonRight">
-                            <el-button round class="rightButton">放入暫存清單</el-button>
+                            <el-button round class="rightButton" v-on:click="storeTempList">放入暫存清單</el-button>
                         </div>
                     </el-row>
                 </el-aside>
             </el-container>
-            <el-main>
-                <span style="font-size: 20px; font-weight: bold;">買了這本書的也買了</span>
-                <el-carousel arrow="always">
-                    <el-carousel-item>
-                        <el-image :src="recommendCover[0]" style="width: 200px;">
-                            <div slot="placeholder" class="image-slot">
-                                加載中<span class="dot">...</span>
-                            </div>
-                        </el-image>
-                    </el-carousel-item>
-                    <el-carousel-item>
-                        <el-image :src="recommendCover[1]" style="width: 200px;">
-                            <div slot="placeholder" class="image-slot">
-                                加載中<span class="dot">...</span>
-                            </div>
-                        </el-image>
-                    </el-carousel-item>
-                    <el-carousel-item>
-                        <el-image :src="recommendCover[2]" style="width: 200px;">
-                            <div slot="placeholder" class="image-slot">
-                                加載中<span class="dot">...</span>
-                            </div>
-                        </el-image>
-                    </el-carousel-item>
-                </el-carousel>
-            </el-main>
+            <el-divider></el-divider>
+            <el-container>
+                <el-main>
+                    <el-carousel arrow="always" :interval="0" height="350px" indicator-style="{ transform: 'translateY(80%)' }">
+                        <div v-for="(group, index) in Math.ceil(recommend.length / 5)">
+                            <el-carousel-item :key="index">
+                                <div class="recommendTable">
+                                    <div v-for="(item, i) in recommend.slice(index * 5, (index + 1) * 5)" style="margin-right: 50px;">
+                                        <a href="#">
+                                            <el-image :src="item.coverPath" style="width: 180px;">
+                                                <div slot="placeholder" class="image-slot">
+                                                    加載中<span class="dot">...</span>
+                                                </div>
+                                            </el-image>
+                                        </a>
+                                        <div class="recommendContent">
+                                            <div class="recommendBookTitle">
+                                                <p class="ellipsis">{{item.bookTitle}}</p>
+                                            </div>
+                                            <p>定價：{{item.unitPrice}} 元</p>
+                                            <p>優惠價： <span style="color: #E3007F;">{{item.discount}}</span> 折 <span style="color: #E3007F;">{{getDiscountPrice(item)}}</span> 元</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </el-carousel-item>
+                        </div>
+                    </el-carousel>
+                </el-main>
+            </el-container>
             <el-divider></el-divider>
             <el-container>
                 <el-main>
@@ -568,14 +580,21 @@
                     <span style="font-size: 20px; font-weight: bold;">發表評論</span>
                     <p></p>
                     <div>
-                        <strong>歡迎你給予星評或評論</strong>
+                        <strong>歡迎您給予星評與評論</strong>
                         <br>
-                        <a href="#">
-                            <el-button round size="small" type="comment" style="margin-left: 0px; padding: 9px;">我來寫評論</el-button>
-                        </a>
-                        <div class="block">
+                        <div style="margin-top: 20px; margin-bottom: 20px;">
                             <span class="demonstration"></span>
                             <el-rate v-model="commentValueMyself"></el-rate>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <el-avatar :size="50" :src="circleUrl" style="margin-right: 20px;"></el-avatar>
+                            <el-input type="textarea"
+                                      placeholder="請輸入評論"
+                                      v-model="commentArea"
+                                      maxlength="30"
+                                      show-word-limit style="width: 400px;"
+                                      show-word-limit></el-input>
+                            <el-button type="primary" icon="el-icon-edit" style="margin-left: 20px;" v-on:click="writeComment" v-loading.fullscreen.lock="fullscreenLoading">確定</el-button>
                         </div>
                     </div>
                 </div>
@@ -587,7 +606,7 @@
                                 <div class="commentImage">
                                     <el-image :src="item.profile" class="profile-slot">
                                         <div slot="placeholder">
-                                            加载中<span class="dot">...</span>
+                                            加載中<span class="dot">...</span>
                                         </div>
                                     </el-image>
                                 </div>
@@ -607,8 +626,8 @@
                     </div>
                 </el-container>
             </el-container>
-            <el-divider></el-divider>
-            <el-container>
+            <!-- <el-divider></el-divider> -->
+            <!-- <el-container>
                 <el-aside width="200px">Aside</el-aside>
                 <el-container>
                     <el-header>Header</el-header>
@@ -623,7 +642,7 @@
                     <el-main>Main</el-main>
                     <el-footer>Footer</el-footer>
                 </el-container>
-            </el-container>
+            </el-container> -->
         </div>
     </div>
 </body>
@@ -632,17 +651,83 @@
 <!-- import JavaScript -->
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <script>
-    new Vue({
+    let app = new Vue({
         el: '#app',
         data: {
             bookCover: '../image/Book/bookIcon/bookCover.jpg',
-            testCover: ['bookCover/1.jpg', 'bookCover/2.jpg', 'bookCover/3.jpg', 'bookCover/4.jpg', 'bookCover/5.jpg'],
-            recommendCover: ['../Image/Book/bookCover/1.jpg', '../image/Book/bookCover/2.jpg', '../image/Book/bookCover/3.jpg', '../image/Book/bookCover/4.jpg', '../image/Book/bookCover/5.jpg'],
             video: '../image/Book/bookIcon/video1.jpg',
             originalColor: '',
             activeName: 'first',
             fontSize: 'medium',
+            isLogin: false,
+            fullscreenLoading: false,
             commentValueMyself: null,
+            commentArea: '',
+            circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+            recommend: [
+                {
+                    bookTitle: '投資最重要的事：一本股神巴菲特讀了兩遍的書',
+                    coverPath: '../Image/Book/bookCover/1.jpg',
+                    unitPrice: 380,
+                    // 79折
+                    discount: 79,
+                },
+                {
+                    bookTitle: '有錢人想的和你不一樣',
+                    coverPath: '../Image/Book/bookCover/2.jpg',
+                    unitPrice: 250,
+                    discount: 79,
+                },
+                {
+                    bookTitle: '窮查理的普通常識（增修版）：巴菲特50年智慧合夥人查理．蒙格的人生哲學',
+                    coverPath: '../Image/Book/bookCover/3.jpg',
+                    unitPrice: 450,
+                    discount: 79,
+                },
+                {
+                    bookTitle: '灰階思考',
+                    coverPath: '../Image/Book/bookCover/4.jpg',
+                    unitPrice: 400,
+                    discount: 79,
+                },
+                {
+                    bookTitle: '股息Cover我每一天：600張存股達人絕活全公開',
+                    coverPath: '../Image/Book/bookCover/5.jpg',
+                    unitPrice: 320,
+                    discount: 79,
+                },
+                {
+                    bookTitle: '我畢業五年，用ETF賺到400萬：每月1,000元就能開始！不用兼差斜槓，兩檔ETF投資組合，年賺20％以上',
+                    coverPath: '../Image/Book/bookCover/6.jpg',
+                    unitPrice: 380,
+                    discount: 79,
+                },
+                {
+                    bookTitle: '投資金律：建立獲利投資組合的四大關鍵和十四個關卡（全新增訂版）',
+                    coverPath: '../Image/Book/bookCover/7.jpg',
+                    unitPrice: 460,
+                    discount: 79,
+                },
+                {
+                    bookTitle: '下班後賺更多：記帳、存錢、再投資，富朋友的「破窮理財法」提早20年退休不是夢！',
+                    coverPath: '../Image/Book/bookCover/8.jpg',
+                    unitPrice: 300,
+                    discount: 79,
+                },
+                {
+                    bookTitle: '你也可以成為股市天才',
+                    coverPath: '../Image/Book/bookCover/9.jpg',
+                    unitPrice: 350,
+                    discount: 79,
+                },
+                {
+                    bookTitle: '巴菲特寫給股東的信（全新增修版） The Essays of Warren Buffett: Lessons for Corporate America, Fourth Edition',
+                    coverPath: '../Image/Book/bookCover/10.jpg',
+                    unitPrice: 420,
+                    discount: 79,
+                },
+
+            ],
             comment: [
                 {
                     value: 4.0,
@@ -650,7 +735,7 @@
                     date: '2022-07-15',
                     content:
                         '原子習慣：細微改變帶來巨大成就的實證法則\r\n不錯好看的一本書',
-                    profile: '../image/Book/bookComment/anonymous.jpg'
+                    profile: '../Image/Book/bookComment/anonymous.jpg'
                 },
                 {
                     value: 5.0,
@@ -658,14 +743,14 @@
                     date: '2021-10-08',
                     content:
                         '很實用的一本書，有明確且直白的舉例，完全能理解且能夠拿來應用在生活之中！',
-                    profile: '../image/Book/bookComment/p2.jpg'
+                    profile: '../Image/Book/bookComment/p2.jpg'
                 },
                 {
                     value: 5.0,
                     author: 'Gary Kang',
                     date: '2021-06-09',
                     content: '大推！一本看完會令你想動起來做些改變的書！',
-                    profile: '../image/Book/bookComment/p3.jpg'
+                    profile: '../Image/Book/bookComment/p3.jpg'
                 }
             ],
         },
@@ -683,13 +768,53 @@
                 window.open(url)
             },
             handleClick(tab, event) {
-                const element = document.getElementById(this.activeName)
-                element.scrollIntoView({ behavior: 'smooth' });
+                const element = document.querySelector("#" + this.activeName)
+                if (element != null) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                }
+            },
+            getDiscountPrice(item) {
+                return Math.floor(item.unitPrice * item.discount / 100);
+            },
+            storeTempList() {
+                if (this.loginCheck()) {
+                    this.$notify({
+                        title: '放入暫存清單成功',
+                        message: '本書已加入暫存清單',
+                        type: 'success'
+                    });
+                }
+            },
+            redirectToCart() {
+                window.location.href = "../Order/ShoppingCart";
+            },
+            loginCheck() {
+                if (!this.isLogin) {
+                    this.$alert('尚未登入', '', {
+                        confirmButtonText: '前往登入',
+                        callback: action => {
+                            this.fullscreenLoading = true;
+                            setTimeout(() => {
+                                this.fullscreenLoading = false;
+                                window.location.href = "../Member/Login";
+                            }, 1000);
+                        }
+                    });
+                    return false;
+                }
+                return true;
+            },
+            writeComment(){
+                if(this.loginCheck()){
+                    this.$message({
+                        message: '評論成功',
+                        type: 'success'
+                    });
+                }
             }
         },
     })
+    let testLogin = @_userInforService.UserId !== 0
+    app.isLogin = testLogin
 </script>
 </html>
-
-
-
