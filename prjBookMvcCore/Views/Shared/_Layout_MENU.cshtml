@@ -49,7 +49,7 @@
             <li class="breadcrumb-item active" aria-current="page">書籍</li>
         </ol>
     </nav>
-        <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
         @* 活動輪播圖 *@
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -88,16 +88,16 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
-   <br />
-@*暢銷排行榜*@
-   <div class="container">
-       <div class="row">
-       <div  class="col align-content-start" style="display: flex">
-        <h3>暢銷排行榜</h3>
-       </div>
-        <div class="col justify-content-end" style="display: flex; padding:5px">
-        <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Home/Home">看更多</a>
-        </div>
+    <br />
+    @*暢銷排行榜*@
+    <div class="container">
+        <div class="row">
+            <div class="col align-content-start" style="display: flex">
+                <h3>暢銷排行榜</h3>
+            </div>
+            <div class="col justify-content-end" style="display: flex; padding:5px">
+                <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Home/Home">看更多</a>
+            </div>
         </div>
         <div class="row">
             <div id="carouselExampleTopSell" class="carousel slide">
@@ -320,13 +320,13 @@
                         @{
                             BookShopContext db = new BookShopContext();
                             var q = db.Articals.Select(a => new { a.ArticalId, a.ArticalTitle }).Take(8);
-                            foreach(var g in q)
+                            foreach (var g in q)
                             {
                                 <li class="list-group-item"><span><a href="~/Artical/Detail文章/@g.ArticalId">@g.ArticalTitle</a></span></li>
                             }
-                        } 
+                        }
                     </ul>
-                </div>  
+                </div>
                 <br />
                 <div class="card">
                     @* 中文書分類 *@
