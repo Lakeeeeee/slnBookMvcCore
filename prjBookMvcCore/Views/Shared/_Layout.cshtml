@@ -34,7 +34,9 @@
                 <ul id="zero">
                     @{
                         if (_userInforService.UserId != 0)
-                        {<li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/LogOut">登出</a></li>
+                        {
+                            <li> Hi! @_userInforService.UserName </li>
+                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/LogOut">登出</a></li>
                         }
                         else{
                              <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/Login">登入</a></li>

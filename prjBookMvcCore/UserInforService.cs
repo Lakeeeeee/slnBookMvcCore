@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using prjBookMvcCore.Models;
+using System.Security.Claims;
 
 public class UserInforService
 {
@@ -51,4 +52,14 @@ public class UserInforService
             return varCliams.Where(x => x.Type == "Level").First().Value;
         }
     }
+
+    public string UserName
+    {
+        get
+        {
+            var varCliams = _contextAccessor.HttpContext.User.Claims.ToList();
+            return varCliams.Where(x => x.Type == ClaimTypes.Name).FirstOrDefault().Value;
+        }
+    }
+
 }
