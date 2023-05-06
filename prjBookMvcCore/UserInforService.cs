@@ -14,7 +14,7 @@ public class UserInforService
     {
         get
         {
-            var varCliams = _contextAccessor.HttpContext.User.Claims.ToList();
+            var varCliams = _contextAccessor.HttpContext!.User.Claims.ToList();
             return Convert.ToInt32(varCliams.Where(x => x.Type == "Id").FirstOrDefault()?.Value);
         }
     }
@@ -22,7 +22,7 @@ public class UserInforService
     {
         get
         {
-            var varCliams = _contextAccessor.HttpContext.User.Claims.ToList();
+            var varCliams = _contextAccessor.HttpContext!.User.Claims.ToList();
             return Convert.ToInt32(varCliams.Where(x => x.Type == "MessageCount").First().Value);
         }
     }
@@ -30,7 +30,7 @@ public class UserInforService
     {
         get
         {
-            var varCliams = _contextAccessor.HttpContext.User.Claims.ToList();
+            var varCliams = _contextAccessor.HttpContext!.User.Claims.ToList();
             return Convert.ToInt32(varCliams.Where(x => x.Type == "MessageCount").First().Value);
         }
     }
@@ -39,7 +39,7 @@ public class UserInforService
     {
         get
         {
-            var varCliams = _contextAccessor.HttpContext.User.Claims.ToList();
+            var varCliams = _contextAccessor.HttpContext!.User.Claims.ToList();
             return Convert.ToInt32(varCliams.Where(x => x.Type == "Points").First().Value);
         }
     }
@@ -47,7 +47,7 @@ public class UserInforService
     {
         get
         {
-            var varCliams = _contextAccessor.HttpContext.User.Claims.ToList();
+            var varCliams = _contextAccessor.HttpContext!.User.Claims.ToList();
             return varCliams.Where(x => x.Type == "Level").First().Value;
         }
     }
