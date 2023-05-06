@@ -123,7 +123,7 @@
             text-decoration: underline;
         }
         .price {
-            background-color: rgba(227,0,127,0.11);
+            background-color: #F0F0F0;
             height: 85px;
             line-height: 10px;
             margin: 5px 0;
@@ -1106,7 +1106,9 @@
                 }
             },
             redirectToCart() {
-                window.location.href = "../Order/ShoppingCart";
+                if (this.loginCheck()) {
+                    window.location.href = "../Order/ShoppingCart";
+                }
             },
             loginCheck() {
                 if (!this.isLogin) {
