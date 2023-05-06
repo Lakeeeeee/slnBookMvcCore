@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -40,10 +40,10 @@ namespace prjBookMvcCore.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-
+        
         public IActionResult Login(CLoginViewModel vm)
         {
-            Member user = _bookShopContext.Members.Include(x=>x.Level).FirstOrDefault(x=>x.MemberEmail==vm.Account_P);
+            Member user = _bookShopContext.Members.Include(x=>x.Level).FirstOrDefault(x=>x.MemberEmail==vm.Account_P)!;
             if (user  != null)
             {
                 if (user.MemberPassword == vm.Password_P)
@@ -98,7 +98,6 @@ namespace prjBookMvcCore.Controllers
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Redirect("~/Home/Home");
-            ViewBag.isLogin = "false";
         }
 
 
@@ -195,14 +194,14 @@ namespace prjBookMvcCore.Controllers
             Member member = _bookShopContext.Members.Where(x => x.MemberId == _userInforService.UserId).
                 Include(x=>x.Level).
                 Include(x=>x.Payment).
-                FirstOrDefault();
+                FirstOrDefault()!;
             return View(member);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult alretProflie(Member member)
         {
-            Member memberupdate = _bookShopContext.Members.FirstOrDefault(x => x.MemberId == member.MemberId);
+            Member memberupdate = _bookShopContext.Members.FirstOrDefault(x => x.MemberId == member.MemberId)!;
             if (memberupdate != null)
             {
                 memberupdate.MemberName = member.MemberName;
