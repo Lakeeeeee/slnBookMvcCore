@@ -227,7 +227,6 @@ namespace prjBookMvcCore.Controllers
         public IActionResult myOrders()  //訂單查詢
         {
             var q = _bookShopContext.Orders.Where(x => x.MemberId == _userInforService.UserId).
-                Include(x => x.Discount).
                 Include(x => x.Payment).
                 Include(x => x.Shipment).
                 Include(x => x.PayStatus).

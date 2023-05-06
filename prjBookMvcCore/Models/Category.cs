@@ -7,14 +7,12 @@ namespace prjBookMvcCore.Models
     {
         public Category()
         {
-            DiscountDetails = new HashSet<DiscountDetail>();
             SubCategories = new HashSet<SubCategory>();
         }
 
         public int CategoryId { get; set; }
         public string CategoryName { get; set; } = null!;
 
-        public virtual ICollection<DiscountDetail> DiscountDetails { get; set; }
         public virtual ICollection<SubCategory> SubCategories { get; set; }
     }
 }

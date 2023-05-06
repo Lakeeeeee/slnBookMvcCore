@@ -413,24 +413,6 @@ namespace prjBookMvcCore.Models
                 entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
 
                 entity.Property(e => e.DiscountId).HasColumnName("DiscountID");
-
-                entity.HasOne(d => d.Book)
-                    .WithMany(p => p.DiscountDetails)
-                    .HasForeignKey(d => d.BookId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Discount_Detail_Books");
-
-                entity.HasOne(d => d.Category)
-                    .WithMany(p => p.DiscountDetails)
-                    .HasForeignKey(d => d.CategoryId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Discount_Detail_Category");
-
-                entity.HasOne(d => d.Discount)
-                    .WithMany(p => p.DiscountDetails)
-                    .HasForeignKey(d => d.DiscountId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Discount_Detail_Discount");
             });
 
             modelBuilder.Entity<Language>(entity =>
@@ -500,7 +482,9 @@ namespace prjBookMvcCore.Models
             {
                 entity.ToTable("Message");
 
-                entity.Property(e => e.MessageId).HasColumnName("MessageID");
+                entity.Property(e => e.MessageId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("MessageID");
 
                 entity.Property(e => e.MessageTitle).HasMaxLength(50);
 
@@ -577,14 +561,7 @@ namespace prjBookMvcCore.Models
                     .ValueGeneratedNever()
                     .HasColumnName("OrderID");
 
-                entity.Property(e => e.CouponId)
-                    .HasMaxLength(10)
-                    .HasColumnName("CouponID")
-                    .IsFixedLength();
-
                 entity.Property(e => e.DiscountAmount).HasColumnType("money");
-
-                entity.Property(e => e.DiscountId).HasColumnName("DiscountID");
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
@@ -601,11 +578,6 @@ namespace prjBookMvcCore.Models
                 entity.Property(e => e.ShippingStatusId).HasColumnName("ShippingStatusID");
 
                 entity.Property(e => e.TotalPay).HasColumnType("money");
-
-                entity.HasOne(d => d.Discount)
-                    .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.DiscountId)
-                    .HasConstraintName("FK_Order_Discount");
 
                 entity.HasOne(d => d.Member)
                     .WithMany(p => p.Orders)
@@ -655,6 +627,12 @@ namespace prjBookMvcCore.Models
                     .HasForeignKey(d => d.BookId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderDetail_Books");
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.OrderDetails)
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrderDetail_Order");
             });
 
             modelBuilder.Entity<OrderDiscount>(entity =>
@@ -668,6 +646,8 @@ namespace prjBookMvcCore.Models
                 entity.Property(e => e.OrderDiscountCode).HasMaxLength(15);
 
                 entity.Property(e => e.OrderDiscountDescprtion).HasMaxLength(50);
+
+                entity.Property(e => e.OrderDiscountnName).HasMaxLength(50);
             });
 
             modelBuilder.Entity<OrderDiscountDetail>(entity =>
@@ -676,7 +656,9 @@ namespace prjBookMvcCore.Models
 
                 entity.Property(e => e.OrderDiscountDetailId).HasColumnName("OrderDiscountDetailID");
 
-                entity.Property(e => e.IsOrderDiscountUse).HasMaxLength(1);
+                entity.Property(e => e.IsOrderDiscountUse)
+                    .HasMaxLength(1)
+                    .HasDefaultValueSql("(N'N')");
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
@@ -689,11 +671,13 @@ namespace prjBookMvcCore.Models
                 entity.HasOne(d => d.Member)
                     .WithMany(p => p.OrderDiscountDetails)
                     .HasForeignKey(d => d.MemberId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderDiscountDetail_Member");
 
                 entity.HasOne(d => d.OrderDiscount)
                     .WithMany(p => p.OrderDiscountDetails)
                     .HasForeignKey(d => d.OrderDiscountId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderDiscountDetail_OrderDiscount");
             });
 
