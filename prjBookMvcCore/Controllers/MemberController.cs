@@ -45,7 +45,7 @@ namespace prjBookMvcCore.Controllers
         [HttpPost]
         public IActionResult Login(CLoginViewModel vm)
         {
-            Member user = _bookShopContext.Members.Include(x=>x.Level).Include(x=>x.Orders).Include(x=>x.MessageMemberDetails).FirstOrDefault(x=>x.MemberEmail==vm.Account_P);
+            Member user = _bookShopContext.Members.Include(x=>x.Level).Include(x=>x.Orders).Include(x=>x.MessageMemberDetails).FirstOrDefault(x=>x.MemberEmail==vm.Account_P)!;
             if (user  != null)
             {
                 if (user.MemberPassword == vm.Password_P)
@@ -145,7 +145,7 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult getMessage(int Inputid) //訊息細節
         {
-            MessageMemberDetail target = _bookShopContext.MessageMemberDetails.Find(Inputid);
+            MessageMemberDetail target = _bookShopContext.MessageMemberDetails.Find(Inputid)!;
             target.ReadStatu = 1; _bookShopContext.SaveChanges();
             var q = from x in _bookShopContext.MessageMemberDetails
                     join y in _bookShopContext.Messages on x.MessageId equals y.MessageId
@@ -236,13 +236,13 @@ namespace prjBookMvcCore.Controllers
             Member member = _bookShopContext.Members.Where(x => x.MemberId == _userInforService.UserId).
                 Include(x=>x.Level).
                 Include(x=>x.Payment).
-                FirstOrDefault();
+                FirstOrDefault()!;
             return View(member);
         } //
         [HttpPost]
         public IActionResult alretProflie(Member member)
         {
-            Member memberupdate = _bookShopContext.Members.FirstOrDefault(x => x.MemberId == member.MemberId);
+            Member memberupdate = _bookShopContext.Members.FirstOrDefault(x => x.MemberId == member.MemberId)!;
             if (memberupdate != null)
             {
                 memberupdate.MemberName = member.MemberName;
