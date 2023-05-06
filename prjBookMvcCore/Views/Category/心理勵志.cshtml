@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "中文書";
+    ViewData["Title"] = "心理勵志";
 }
 <!DOCTYPE html>
 
@@ -51,7 +51,8 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Home">首頁</a></li>
             <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Menu">書籍</a></li>
-            <li class="breadcrumb-item active" aria-current="page">中文書</li>
+            <li class="breadcrumb-item"><a class="linkaFormat" href="~/Category/中文書">中文書</a></li>
+            <li class="breadcrumb-item active" aria-current="page">心理勵志</li>
         </ol>
     </nav>
 
@@ -63,22 +64,22 @@
                     @* 中文書分類 *@
                     <div class="card-header">
                         中文書
-                        <ul class="list-group list-group-flush">
-                            @{
-                                BookShopContext db = new BookShopContext();
-                                var categories = db.Categories.Where(c => c.CategoryId == 16).Select(c => new { c.CategoryName }).ToList();
-                                foreach (var category in categories)
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        @{
+                            BookShopContext db = new BookShopContext();
+                            var categories = db.Categories.Where(c => c.CategoryId == 16).Select(c => new { c.CategoryName }).ToList();
+                            foreach (var category in categories)
+                            {
+                                var subcategories = db.SubCategories.Where(s => s.CategoryId ==16).Select(s => new { s.SubCategoryName }).ToList();
+                                foreach (var subcategory in subcategories)
                                 {
-                                    var subcategories = db.SubCategories.Where(s => s.CategoryId == 16).Select(s => new { s.SubCategoryName }).ToList();
-                                    foreach (var subcategory in subcategories)
-                                    {
-                                        <li class="list-group-item"><span><a href="~/Category/@category.CategoryName/@subcategory.SubCategoryName">@subcategory.SubCategoryName</a></span></li>
-                                    }
+                                    <li class="list-group-item"><span><a href="~/Category/@category.CategoryName/@subcategory.SubCategoryName">@subcategory.SubCategoryName</a></span></li>
                                 }
                             }
-                        </ul>
-                     </div>
-                 </div>
+                        }
+                    </ul>
+                </div>
             </div>
             @* 右邊書籍欄 *@
             <div class="col-10">
@@ -225,11 +226,14 @@
         </ul>
         </nav>*@
     </div>
- 
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 </body>
 </html>
+
+
+
 
