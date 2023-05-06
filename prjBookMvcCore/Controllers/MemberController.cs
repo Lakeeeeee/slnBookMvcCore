@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -40,6 +40,7 @@ namespace prjBookMvcCore.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        
         public IActionResult Login(CLoginViewModel vm)
         {
             Member user = _bookShopContext.Members.Include(x=>x.Level).FirstOrDefault(x=>x.MemberEmail==vm.Account_P)!;
