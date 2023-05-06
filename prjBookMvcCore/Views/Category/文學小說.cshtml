@@ -43,6 +43,14 @@
             width: 6%;
             height: 6%;
         }
+
+        .bookCaption {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     </style>
     <script src="~/Scripts/modernizr-2.8.3.js"></script>
 </head>
@@ -71,7 +79,7 @@
                             var categories = db.Categories.Where(c => c.CategoryId == 17).Select(c => new { c.CategoryName }).ToList();
                             foreach (var category in categories)
                             {
-                                var subcategories = db.SubCategories.Where(s => s.CategoryId ==17).Select(s => new { s.SubCategoryName }).ToList();
+                                var subcategories = db.SubCategories.Where(s => s.CategoryId == 17).Select(s => new { s.SubCategoryName }).ToList();
                                 foreach (var subcategory in subcategories)
                                 {
                                     <li class="list-group-item"><span><a href="~/Category/@category.CategoryName/@subcategory.SubCategoryName">@subcategory.SubCategoryName</a></span></li>
@@ -92,7 +100,7 @@
                                 <select class="form-select" aria-label="Default select example">
                                     <option selected>出版日期排序</option>
                                     <option value="1">價格排序</option>
-@*                                    <option value="2">暢銷排行榜</option>*@
+                                    @*<option value="2">暢銷排行榜</option>*@
                                 </select>
                             </div>
                         </div>
@@ -102,71 +110,47 @@
                     <div class="col" id="listView" style='padding:0'>
                         <div class="row">
                             @{
-                                //var pageSize = 30; // 每頁顯示30筆資料
-                                //var categorydetail = db.CategoryDetails.Where(c => c.SubCategoryId == 17).Select(c => new { c.BookId }).ToList();
-                                //int pageIndex = 0;
-                                //do
-                                //{
-                                //    var pageBooks = categorydetail.Skip(pageIndex * pageSize).Take(pageSize);
-                                //    if (pageBooks.Any())
-                                //    {
-                                //        foreach (var categoryBook in pageBooks)
-                                //        {
-                                //            // ... 程式碼沒變 ...
-                                //        }
-                                //        pageIndex++;
-                                //    }
-                                //    else
-                                //    {
-                                //        break; // 沒有更多資料了，結束迴圈
-                                //    }
-                                //} while (true);
+                                var pageSize = 30; // 每頁顯示30筆資料
                                 var categorydetail = db.CategoryDetails.Where(c => c.SubCategoryId == 17).Select(c => new { c.BookId }).ToList();
-                                foreach (var categoryBook in categorydetail)
+                                int pageIndex = 0;
+                                do
                                 {
-                                    //var discounnt = db.DiscountDetails.Where(d => d.BookId == categoryBook.BookId).Select(d => new { d.DiscountId }).ToList();
-                                    //foreach (var discountId in discounnt)
-                                    //{
-                                    //    var discountName = db.Discounts.Where(d => d.DiscountId == discountId.DiscountId).Select(d => new { d.DiscountId, d.DiscountName, d.DiscounDescription, d.DiscountAmount }).ToList();
-                                    //    foreach (var book in discountName)
-                                    //    {
-                                    var author = db.AuthorDetails.Where(a => a.BookId == categoryBook.BookId).Select(a => new { a.AuthorId }).ToList();
-                                    foreach (var authorId in author)
+                                    var pageBooks = categorydetail.Skip(pageIndex * pageSize).Take(pageSize);
+                                    if (pageBooks.Any())
                                     {
-                                        var authorName = db.Authors.Where(a => a.AuthorId == authorId.AuthorId).Select(a => new { a.AuthorId, a.AuthorName }).ToList();
-                                        foreach (var book in authorName)
+                                        foreach (var categoryBook in pageBooks)
                                         {
-                                            var bookViewlis = db.Books.Where(b => b.BookId == categoryBook.BookId).Select(b => new { b.BookId, b.BookTitle, b.PublicationDate, b.UnitPrice, b.CoverPath }).ToList();
-                                            if (bookViewlis != null)
-                                            {
-                                                foreach (var bookview in bookViewlis)
-                                                {
-                                                    @*第一組*@
-                                                    <div class="col" srl="">
-                                                        @*圖片*@<div style="position:relative">
-                                                            <a>@bookview.CoverPath</a>
-                                                        </div>
-                                                        <div class="caption bookCaption">
-                                                            <ul style="list-style:none; margin:0; padding:0;">
-                                                                <li class='prod_TitleMain'>
-                                                                    <a>
-                                                                        @bookview.BookTitle
-                                                                    </a>
-                                                                </li>
-                                                                <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>@book.AuthorName</a></li>
-                                                                <li class="Price">原    價：<span>@((int)Math.Round(bookview.UnitPrice))</span>元</li>
-                                                                <li class="discPrice">優惠價：<span>     </span><span>@((int)Math.Round(bookview.UnitPrice))</span>元</li>
-                                                                <li class="publicationDate">出版日期：<span>@bookview.PublicationDate.ToString("yyyy/MM/dd")</span></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                }
-                                            }
+                                            var book = db.Books.Where(b => b.BookId == categoryBook.BookId).FirstOrDefault();
+                                            var author = db.AuthorDetails.Where(a => a.BookId == categoryBook.BookId).Select(a => new { a.AuthorId }).FirstOrDefault();
+                                            var authorName = db.Authors.Where(a => a.AuthorId == author.AuthorId).Select(a => new { a.AuthorName }).FirstOrDefault();
+                                            var discount = db.BookDiscountDetails.Where(d => d.BookId == categoryBook.BookId).Select(d => new { d.BookDiscountId }).FirstOrDefault();
+                                            var discountAmount = db.BookDiscounts.Where(d => d.BookDiscountId == discount.BookDiscountId).Select(d => new { d.BookDiscountId, d.BookDiscountAmount, d.BookDiscountName }).FirstOrDefault();
+                                            var discountedPrice = book.UnitPrice * (1 - discountAmount.BookDiscountAmount / 100);
+
+                                            <div class="col">
+                                                <div style="position:relative">
+                                                    <a><img src="@book.CoverPath"></a>
+                                                </div>
+                                                <div class="caption">
+                                                    <ul style="list-style:none; margin:0; padding:0;">
+                                                        <li >
+                                                            <a class="bookCaption">@book.BookTitle</a>
+                                                        </li>
+                                                        <li class='prod_author'>作者：<a href="/rwd_searchResult.html?keyword%5B%5D=@authorName&keyType%5B%5D=2">@authorName.AuthorName</a></li>
+                                                        <li class="Price">原    價：<span>@((int)Math.Round(book.UnitPrice))</span>元</li>
+                                                        <li class="discPrice">優惠價：<span>@discountAmount.BookDiscountName</span><span>@((int)Math.Round(discountedPrice))</span>元</li>
+                                                        <li class="publicationDate">出版日期：<span>@book.PublicationDate.ToString("yyyy/MM/dd")</span></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         }
+                                        pageIndex++;
                                     }
-                                    //    }
-                                    //}
-                                }
+                                    else
+                                    {
+                                        break; // 沒有更多資料了，結束迴圈
+                                    }
+                                } while (true);
                             }
                         </div>
                     </div>
