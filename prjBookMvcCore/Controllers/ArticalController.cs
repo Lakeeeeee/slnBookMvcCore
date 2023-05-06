@@ -8,7 +8,7 @@ namespace prjBookMvcCore.Controllers
         public IActionResult List全部文章() 
         {
             BookShopContext db=new BookShopContext();
-            var datas = from a in db.Articals select a;
+            var datas = db.Articals.OrderByDescending(a=>a.ArticalId).Select(a=>a);
             return View(datas); 
         }
 
