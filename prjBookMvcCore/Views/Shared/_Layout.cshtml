@@ -14,12 +14,12 @@
             border: 1px solid #ff0000
         }
 
-        #zero {
+        .zero {
             margin: 0;
             padding: 0;
         }
 
-        #menu ul li { /*li水平顯示*/
+        .menu ul li { /*li水平顯示*/
             display: inline;
         }
     </style>
@@ -30,11 +30,12 @@
             <div class="align-items-start">
                 @Html.ActionLink("讀本", "Home", "Home", new { area = "" }, new { @class = "navbar-brand" })  @*須換圖*@
             </div>
-            <div class="justify-content-end" id="menu">
-                <ul id="zero">
+            <div class="justify-content-end menu">
+                <ul class="zero">
                     @{
                         if (_userInforService.UserId != 0)
                         {
+                            <li> Hi! @_userInforService.UserName </li>
                             <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/LogOut">登出</a></li>
                         }
                         else
@@ -44,18 +45,18 @@
                         }
                     }
                     <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/MemberCenter">會員中心</a></li>
-                    <li><a role="button"  class="btn btn-sm btn-outline-secondary mx-1" href="~/Order/ShoppingCart"><img src="~/Image/shoppingCartIcon20px.png" style="width:20" /></a></li>
+                    <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Order/ShoppingCart"><img src="~/Image/shoppingCartIcon20px.png" style="width:20" /></a></li>
                 </ul>
             </div>
         </div>
     </nav>
     <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
-            <div class="navbar navbar-light container-fluid" style="border:1px solid #000000; background-color:#ebf8bc">
+            <div class="navbar navbar-light bg-light container-fluid" style="border:1px solid #000000; background-color:#ebf8bc">
                 @* 分類  *@
-                <form class="container-fluid justify-content-start">
-                    <div id="menu">
-                        <ul id="zero">
+                <form class="justify-content-start">
+                    <div class="menu">
+                        <ul class="zero">
                             <li><a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Home/Menu">書籍</a></li>
                             <li>
                                 <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Promotions/Index">優惠活動</a>
@@ -64,20 +65,13 @@
                         </ul>
                     </div>
                 </form>
-            </div>
-            <div class="navbar navbar-light bg-light container-fluid" style="margin-top:10px; border:1px solid #000" id="menu">
-                <form class="justify-content-start mx-2">
-                    <ul id="zero">
-                        <li>
-                            <input style="border-right: #C4C4C4 2px solid;" placeholder="搜尋" type="search" class="is-valid" maxlength="40" autocomplete="off">
-                        </li>
-                        <li>
-                            <a role="button" class="btn btn-sm btn-secondary mx-1" href="#id">搜尋</a>
-                        </li>
-                    </ul>
+                <form class="justify-content-end">
+                    <div class="input-group navbar navbar-light bg-light menu" style="margin-top:10px; border:1px solid #000">
+                        <input id="search_input" style="border-right: #C4C4C4 2px solid;" placeholder="搜尋" type="search" class="form-control inputForSearch ui-autocomplete-input" maxlength="40" value="" autocomplete="off">
+                        <a role="button" class="btn btn-sm btn-secondary mx-1" href="#id">搜尋</a></li>
+                    </div>
                 </form>
             </div>
-
             <div class="navbar navbar-light bg-light container-fluid" style="margin-top:10px; border:1px solid #000">
                 @* 活動 *@
                 <img src="~/Image/demo-pic.jpg" width="100%" height="30px" />

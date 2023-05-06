@@ -12,5 +12,6 @@ namespace prjBookMvcCore.Models
         public decimal UnitPrice { get; set; }
 
         public virtual Book Book { get; set; } = null!;
+        public virtual Order Order { get; set; } = null!;
     }
 }

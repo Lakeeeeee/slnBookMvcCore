@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "中文書";
+    ViewData["Title"] = "文學小說";
 }
 <!DOCTYPE html>
 
@@ -51,7 +51,8 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Home">首頁</a></li>
             <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Menu">書籍</a></li>
-            <li class="breadcrumb-item active" aria-current="page">中文書</li>
+            <li class="breadcrumb-item"><a class="linkaFormat" href="~/Category/中文書">中文書</a></li>
+            <li class="breadcrumb-item active" aria-current="page">文學小說</li>
         </ol>
     </nav>
 
@@ -64,18 +65,20 @@
                     <div class="card-header">
                         中文書
                     </div>
-                    <div>
-                        <ul class="list-group list-group-flush">
-                            @{
-                                BookShopContext db = new BookShopContext();
-                                var c = db.Categories.Select(a => new { a.CategoryId, a.CategoryName });
-                                foreach (var g in c)
+                    <ul class="list-group list-group-flush">
+                        @{
+                            BookShopContext db = new BookShopContext();
+                            var categories = db.Categories.Where(c => c.CategoryId == 17).Select(c => new { c.CategoryName }).ToList();
+                            foreach (var category in categories)
+                            {
+                                var subcategories = db.SubCategories.Where(s => s.CategoryId ==17).Select(s => new { s.SubCategoryName }).ToList();
+                                foreach (var subcategory in subcategories)
                                 {
-                                    <li class="list-group-item"><span><a href="~/Category/@g.CategoryName">@g.CategoryName</a></span></li>
+                                    <li class="list-group-item"><span><a href="~/Category/@category.CategoryName/@subcategory.SubCategoryName">@subcategory.SubCategoryName</a></span></li>
                                 }
                             }
-                        </ul>
-                    </div>
+                        }
+                    </ul>
                 </div>
             </div>
             @* 右邊書籍欄 *@
@@ -87,9 +90,9 @@
                             <span>排序方式</span>
                             <div class="btn-group">
                                 <select class="form-select" aria-label="Default select example">
-                                    <option selected>暢銷度排序</option>
-                                    <option value="1">出版日期排序</option>
-                                    <option value="2">價格排序</option>
+                                    <option selected>出版日期排序</option>
+                                    <option value="1">價格排序</option>
+@*                                    <option value="2">暢銷排行榜</option>*@
                                 </select>
                             </div>
                         </div>
@@ -118,7 +121,7 @@
                                 //        break; // 沒有更多資料了，結束迴圈
                                 //    }
                                 //} while (true);
-                                var categorydetail = db.CategoryDetails.Where(c => c.SubCategoryId == c.SubCategoryId).Select(c => new { c.BookId }).ToList();
+                                var categorydetail = db.CategoryDetails.Where(c => c.SubCategoryId == 17).Select(c => new { c.BookId }).ToList();
                                 foreach (var categoryBook in categorydetail)
                                 {
                                     //var discounnt = db.DiscountDetails.Where(d => d.BookId == categoryBook.BookId).Select(d => new { d.DiscountId }).ToList();
@@ -205,4 +208,7 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 </body>
 </html>
+
+
+
 

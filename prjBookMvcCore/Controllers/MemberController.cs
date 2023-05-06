@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.EntityFrameworkCore;
 using prjBookMvcCore.Models;
 using prjBookMvcCore.ViewModel;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
@@ -22,14 +23,18 @@ namespace prjBookMvcCore.Controllers
             _bookShopContext =  _db;
             _userInforService =  userInforService ;
         }
+        MemberManeger cm = new MemberManeger();
 
         public IActionResult Signin()
         {
             return View();
         }
         [HttpPost]
-        public IActionResult Create() //註冊方法
+        public IActionResult Create(Member member) //註冊方法
         {
+            _bookShopContext.Add(member);
+            _bookShopContext.SaveChanges();
+            cm.writeWelcomeLetter(member, _bookShopContext);
             return RedirectToAction("Login");
         }
 
@@ -38,9 +43,11 @@ namespace prjBookMvcCore.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        
         public IActionResult Login(CLoginViewModel vm)
         {
-            Member user = _bookShopContext.Members.Include(x=>x.Level).FirstOrDefault(x=>x.MemberEmail==vm.Account_P);
+            Member user = _bookShopContext.Members.Include(x=>x.Level).Include(x=>x.Orders).Include(x=>x.MessageMemberDetails).FirstOrDefault(x=>x.MemberEmail==vm.Account_P)!;
             if (user  != null)
             {
                 if (user.MemberPassword == vm.Password_P)
@@ -49,7 +56,7 @@ namespace prjBookMvcCore.Controllers
                     {
                         new Claim("Id", user.MemberId.ToString()),
                         new Claim(ClaimTypes.Name, user.MemberName),
-                        new Claim("MessageCount", user.CustomerServices.Count().ToString()),
+                        new Claim("MessageCount", user.MessageMemberDetails.Count().ToString()),
                         new Claim("Points", user.Points.ToString()),
                         new Claim("Level", user.Level.LevelName),
                         new Claim("Orders", user.Orders.Count().ToString())
@@ -70,6 +77,7 @@ namespace prjBookMvcCore.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Find_password(int? id) //填完表單後發post然後寄出email
         {
             return RedirectToAction("Login");
@@ -81,6 +89,7 @@ namespace prjBookMvcCore.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult reset_PasswordMethod(int? id) //忘記密碼的重設密碼方法
         {
             return RedirectToAction("Login");
@@ -93,7 +102,6 @@ namespace prjBookMvcCore.Controllers
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Redirect("~/Home/Home");
-            ViewBag.isLogin = "false";
         }
 
 
@@ -104,6 +112,7 @@ namespace prjBookMvcCore.Controllers
         }
         [Authorize]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult alretPasswordMethod() //todo  //會員專區的重設密碼方法
         {
             return RedirectToAction("Login");
@@ -111,16 +120,59 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult MemberCenter()
         {
-            return View(_userInforService);
+            return View();
         }
+        [Authorize]
+        public IActionResult gerMemberInfor(int id)
+        {
+            //Member user = _bookShopContext.Members.FirstOrDefault(x=>x.MemberId ==id);
+            var q = from user in _bookShopContext.Members
+                    where user.MemberId == id
+                    select new
+                    {
+                        user_leverl = user.Level.LevelName,
+                        user_msCount = user.MessageMemberDetails.Count(x=>x.ReadStatu==0),
+                        user_odCount = user.Orders.Count,
+                        user_points = user.Points,
+                        user_coupons = user.OrderDiscountDetails.Count,
+                    };
+            return Json(q.FirstOrDefault());
+        }
+
+
         [Authorize]
         public IActionResult myMessage() //通知訊息
         {
-            IEnumerable<CustomerService> q = _bookShopContext.CustomerServices.Where(x => x.MemberId == _userInforService.UserId).Include(x=>x.Status);
-            
-            
+            IEnumerable<MessageMemberDetail> q =  _bookShopContext.MessageMemberDetails.Where(x=>x.MemberId== _userInforService.UserId).Include(x=>x.Message);
             return View(q);
         }
+
+        [Authorize]
+        public IActionResult getMessage(int Inputid) //訊息細節
+        {
+            MessageMemberDetail target = _bookShopContext.MessageMemberDetails.Find(Inputid)!;
+            target.ReadStatu = 1; _bookShopContext.SaveChanges();
+            var q = from x in _bookShopContext.MessageMemberDetails
+                    join y in _bookShopContext.Messages on x.MessageId equals y.MessageId
+                    join z in _bookShopContext.MessageTypes on y.MessageTypeId equals z.MessageTypeId
+                    where x.MessageMemberDetailId == Inputid
+                    select new
+                    {
+                         time = x.UpdateTime,
+                         read_a = (x.ReadStatu==1)?"已讀":"未讀",
+                         content_a = y.MessageContent,
+                         type_a = z.MessageTypeName
+                    };
+
+            return Json(q.FirstOrDefault());
+        }
+        [Authorize]
+        public IActionResult myCoupons() //coupons
+        {
+            IEnumerable<OrderDiscountDetail> q = _bookShopContext.OrderDiscountDetails.Where(x => x.MemberId == _userInforService.UserId).Include(x=>x.OrderDiscount);
+            return View(q);
+        }
+
         [Authorize]
         public IActionResult myPublisher() //關注的出版社
         {
@@ -141,7 +193,7 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult myCollect() //暫存清單
         {
-
+            
             IEnumerable<Book> q = _bookShopContext.ActionDetials.Where(x => x.MemberId == _userInforService.UserId && x.ActionId == 2).
              Include(x => x.Book.Publisher).Select(x => x.Book);
 
@@ -176,7 +228,6 @@ namespace prjBookMvcCore.Controllers
         public IActionResult myOrders()  //訂單查詢
         {
             var q = _bookShopContext.Orders.Where(x => x.MemberId == _userInforService.UserId).
-                Include(x => x.Discount).
                 Include(x => x.Payment).
                 Include(x => x.Shipment).
                 Include(x => x.PayStatus).
@@ -189,13 +240,14 @@ namespace prjBookMvcCore.Controllers
             Member member = _bookShopContext.Members.Where(x => x.MemberId == _userInforService.UserId).
                 Include(x=>x.Level).
                 Include(x=>x.Payment).
-                FirstOrDefault();
+                FirstOrDefault()!;
             return View(member);
-        }
+        } //
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult alretProflie(Member member)
         {
-            Member memberupdate = _bookShopContext.Members.FirstOrDefault(x => x.MemberId == member.MemberId);
+            Member memberupdate = _bookShopContext.Members.FirstOrDefault(x => x.MemberId == member.MemberId)!;
             if (memberupdate != null)
             {
                 memberupdate.MemberName = member.MemberName;
