@@ -1,4 +1,4 @@
-﻿@Html.AntiForgeryToken()
+﻿@model prjBookMvcCore.Models.Member
 @{
     ViewData["Title"] = "Signin";
     Layout = "~/Views/Shared/_Layout_Login.cshtml";
@@ -31,30 +31,31 @@
         </ol>
     </nav>
     <div class="row">
-        <div class="col-8">
+        <div class="col-4">
             <label>廣告圖</label>
         </div>
         <div class="col-4">
+            <form asp-action="Create" id="signin_form">
             <div class="container justify-content-center bg-light" style="border-radius:10px;  padding-block:15px">
-                <div>
                 <p><label class="">會員註冊</label></p>
-                <p><input type="text" placeholder="輸入您的Email" style="width: 100%; max-width:250px" /><br /></p>                    
+                    <p><input asp-for="MemberEmail" placeholder="輸入您的Email" style="width: 100%; max-width:250px" /><br /></p>
+                    <p><input asp-for="MemberPassword" placeholder="設定密碼" style="width: 100%; max-width:250px" /></p>
+                    <p><input placeholder="再次輸入密碼" style="width: 100%; max-width:250px" /></p>
                     <p><label style="font-size:xx-small">密碼規則</label> </p>
-                    <p><input type="text" placeholder="設定密碼" style="width: 100%; max-width:250px" /></p>
-                    <p><input type="text" placeholder="再次輸入密碼" style="width: 100%; max-width:250px" /></p>
+                    <p><input asp-for="MemberName" placeholder="姓名" style="width: 100%; max-width:250px" /></p>
+                    <p><input asp-for="MemberBrithDate" value="1995-01-01" type="date" style="width: 100%; max-width:250px" /></p>
+                    <p><input asp-for="Memberphone" placeholder="電話" style="width: 100%; max-width:250px" /></p>
+                    <p><input asp-for="MemberAddress" placeholder="地址" style="width: 100%; max-width:250px" /></p>
                     <p><input type="text" placeholder="驗證碼" style="width: 100%; max-width:250px" /></p>
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        我想接收到電子報
-                    </label>
+                    <label class="form-check-label" for="flexCheckDefault">我想接收到電子報</label>
                 </div>
                 <div class="">
-                    <button class="btn btn-outline-success btn-sm" type="submit" value="" id="liveToastBtn">會員條款</button>
+                    <button class="btn btn-outline-success btn-sm" id="liveToastBtn" type="button">會員條款</button>
                    <label class="form-check-label" for="flexCheckChecked" id="join_policy_check">閱讀條款</label>
                 </div>
-                <div class="" style="">
-                    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                         <div class="toast-header">
                             <strong class="me-auto">閱讀會員服務使用條款</strong>
                             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -64,21 +65,18 @@
                                 <iframe class="" src="~/lib/text/join_policy.txt" style="width:100%"></iframe>
                             </div>
                             <div style="margin-top:10px">
-                                <button id="agree_policy" class="btn btn-outline-success " data-bs-dismiss="toast" aria-label="Close" type="submit" style="margin-left:35%" value="true">了解並同意</button>
-                                <button id="disagree_policy" class="btn btn-outline-success " data-bs-dismiss="toast" aria-label="Close" type="submit" style="margin-left:10px" value="false">不同意</button>
+                                <button id="agree_policy" class="btn btn-outline-success " data-bs-dismiss="toast" aria-label="Close" style="margin-left:35%" value="true" type="button">了解並同意</button>
+                            <button id="disagree_policy" class="btn btn-outline-success " data-bs-dismiss="toast" aria-label="Close" style="margin-left:10px" value="false" type="button">不同意</button>
                             </div>
                         </div>
-                    </div>
-                </div>
-                </div>
-                <form asp-action="Create" id="signin_form">
+                    </div> @*吐司*@
                 <p style="margin-top:10px" >
                     <button class="btn btn-outline-success btn-sm" type="submit" style="display:none" id="checkbtn" >確認送出</button>
                 </p>
-                </form>
-
-            </div>
+                </div>
+            </form>
         </div>
+        <div class="col-4"></div>
     </div>
 </div>
 <script>
@@ -111,17 +109,15 @@
 
               const btn = document.getElementById('checkbtn');
   btn.style.display = 'none';
-
         });
 
         const btn = document.getElementById('checkbtn');
         btn.style.display = 'none';
-    }
-</script>
-<script>
-    const signin = document.querySelector('#signin_form');
-    signin.addEventListener('submit', function(event){
-        alert('註冊成功，系統將自動轉向登入頁面');
-    });
 
+
+        const signin = document.querySelector('#signin_form');
+        signin.addEventListener('submit', function (event) {
+            alert('註冊成功，系統將自動轉向登入頁面');
+        });
+    }
 </script>

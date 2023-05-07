@@ -11,6 +11,7 @@ namespace prjBookMvcCore.Models
         }
 
         public int OrderDiscountId { get; set; }
+        public string OrderDiscountnName { get; set; } = null!;
         public string OrderDiscountDescprtion { get; set; } = null!;
         public int OrderDiscountCondition { get; set; }
         public decimal OrderDiscountAmount { get; set; }

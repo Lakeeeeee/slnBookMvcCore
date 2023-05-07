@@ -18,34 +18,30 @@
     <thead>
         <tr>
             <th>
-              @*  @Html.DisplayNameFor(model => model.ArticalId)*@
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ArticalDate)
+              序號
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ArticalTitle)
             </th>
-    
+            <th>
+                @Html.DisplayNameFor(model => model.ArticalDate)
+            </th>
         </tr>
     </thead>
     <tbody>
         @{
+            int count = 0;
             foreach (var item in Model) {
-
-                <tr  >
+                string path = item.ArticalTitle + ".jpg";
+                count++;
+                <tr href="~/Artical/Detail文章/@item.ArticalId">
+                <td>@count</td>
                 <td>
-                 @*   @Html.DisplayFor(modelItem => item.ArticalId)*@
+                    <div>@Html.ActionLink(item.ArticalTitle, "Detail文章" , "Artical" ,new{id=item.ArticalId},new{}) <a href="~/Artical/Detail文章/@item.ArticalId"> <img src="~/Image/ArticalPicture/@path" height="30" title="@item.ArticalTitle" /> </a></div>
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ArticalDate)
-                </td>
-                 <td>
-                        @Html.ActionLink(item.ArticalTitle, "Detail文章" , "Artical" ,new{id=item.ArticalId},new{})
-                      @*@html.displayfor(modelitem => item.articaltitle)*@        
-                </td>
-            </tr>
-}
-}
+                <td>@Html.DisplayFor(modelItem => item.ArticalDate)  </td>
+                </tr>
+            }
+        }
     </tbody>
 </table>

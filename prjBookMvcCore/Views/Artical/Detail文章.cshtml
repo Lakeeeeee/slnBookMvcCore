@@ -44,12 +44,13 @@
             foreach (var item in q作者) { s += item.AuthorName + "    "; }
             int price原價 = (int)g.UnitPrice;
             string title中 = g.BookTitle.Split("$")[0];
+
                     <div>
                         <table>
                         <tr>
                             <td>
                                 <figure class="fig1">
-                                <img class="imgB" src="@g.CoverPath" title="@title中" />
+                                <img class="imgB" src="../../@g.CoverPath" title="@title中" />
                                 <figcaption>@title中</figcaption>
                                 </figure>
                             </td>
