@@ -30,7 +30,7 @@
             <div id="carouselExampleNew" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     @*輪播推薦文章*@
-                    @*輪播書本第一頁*@ <div class="carousel-item active">
+                    <div class="carousel-item active"> @*輪播書本第一頁*@
                         <div class="row">
                             @{
                                 BookShopContext db = new BookShopContext();
@@ -161,10 +161,9 @@
                                     </div>
 
                                 </div>
-                            </div>
                         }
-
                     }
+
                     @*輪播圖切換按鈕*@ <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleNew" data-bs-slide="prev" border=5>
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Previous</span>
