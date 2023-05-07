@@ -5,7 +5,7 @@ namespace prjBookMvcCore.Controllers
 {
     public class CategoryController : Controller
     {
-        BookShopContext db = new BookShopContext();
+        BookShopContext db = new();
 
         public IActionResult 中文書()
         {
@@ -13,11 +13,7 @@ namespace prjBookMvcCore.Controllers
                         select c;
             return View(datas);
         }
-        public IActionResult 年齡()
-        {
-            IEnumerable<SubCategory> datas =db.SubCategories.Where(x=>x.CategoryId==29) ;
-            return View(datas);
-        }
+
         public IActionResult 人文社科()
         {
             IEnumerable<SubCategory> datas = db.SubCategories.Where(x => x.CategoryId == 29);

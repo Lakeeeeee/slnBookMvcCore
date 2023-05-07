@@ -5,7 +5,7 @@ namespace prjBookMvcCore.Controllers
 {
     public class BookController : Controller
     {
-        BookShopContext db = new BookShopContext();
+        BookShopContext db = new();
 
         public IActionResult BookInformation()
         {
