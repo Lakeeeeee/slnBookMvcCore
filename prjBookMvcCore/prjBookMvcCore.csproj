@@ -18,6 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\css\CBookView.cs" />
+    <Content Remove="wwwroot\css\site - 複製.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Image\demo-pic.jpg" />
     <Content Include="Image\pic_Lever.jpg" />
   </ItemGroup>
