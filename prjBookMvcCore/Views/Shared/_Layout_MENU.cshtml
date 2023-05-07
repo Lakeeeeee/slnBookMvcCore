@@ -335,10 +335,10 @@
                     </div>
                     <ul class="list-group list-group-flush">
                         @{
-                            var c = db.Categories.Select(a => new { a.CategoryId, a.CategoryName });
-                            foreach (var g in c)
+                            var c = db.Categories.Select(a => new { a.CategoryId, a.CategoryName }).ToList();
+                            for (int i = 14; i < c.Count(); i++)
                             {
-                                <li class="list-group-item"><span><a href="~/Category/@g.CategoryName">@g.CategoryName</a></span></li>
+                                <li class="list-group-item"><span><a href="~/Category/@c[i].CategoryName">@c[i].CategoryName</a></span></li>
                             }
                         }
                     </ul>
