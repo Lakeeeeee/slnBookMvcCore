@@ -56,10 +56,6 @@ namespace prjBookMvcCore.Controllers
                     {
                         new Claim("Id", user.MemberId.ToString()),
                         new Claim(ClaimTypes.Name, user.MemberName),
-                        new Claim("MessageCount", user.MessageMemberDetails.Count().ToString()),
-                        new Claim("Points", user.Points.ToString()),
-                        new Claim("Level", user.Level.LevelName),
-                        new Claim("Orders", user.Orders.Count().ToString())
                     };
 
                     ViewBag.isLogin="true";
