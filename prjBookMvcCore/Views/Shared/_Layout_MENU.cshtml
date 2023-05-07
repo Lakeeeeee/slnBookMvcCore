@@ -1,9 +1,7 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta charset="utf-8" />
@@ -334,7 +332,18 @@
                             var c = db.Categories.Select(a => new { a.CategoryId, a.CategoryName }).ToList();
                             for (int i = 14; i < c.Count(); i++)
                             {
-                                <li class="list-group-item"><span><a href="~/Category/@c[i].CategoryName">@c[i].CategoryName</a></span></li>
+                                if (i == 25)
+                                {
+                                    <li class="list-group-item"><span><a href="~/Category/@c[i].CategoryName.Replace("/", "").">@c[i].CategoryName.Replace("/", "")</a></span></li>
+                                }
+                                else if (i == 28)
+                                {
+                                    <li class="list-group-item"><span><a href="~/Category/@c[i].CategoryName.Replace("/", "")">@c[i].CategoryName.Replace("/", "")</a></span></li>
+                                }
+                                else
+                                {
+                                    <li class="list-group-item"><span><a href="~/Category/@c[i].CategoryName">@c[i].CategoryName</a></span></li>
+                                }
                             }
                         }
                     </ul>

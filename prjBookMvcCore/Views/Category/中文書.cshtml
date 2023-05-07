@@ -76,11 +76,22 @@
                         <ul class="list-group list-group-flush">
                                 @{
                                     BookShopContext db = new BookShopContext();
-                                    var c = db.Categories.Select(a => new { a.CategoryId, a.CategoryName }).ToList();
-                                    for (int i = 14; i < c.Count(); i++)
+                                var c = db.Categories.Select(a => new { a.CategoryId, a.CategoryName }).ToList();
+                                for (int i = 14; i < c.Count(); i++)
+                                {
+                                    if (i == 25)
                                     {
-                                            <li class="list-group-item"><span><a href="~/Category/@c[i].CategoryName">@c[i].CategoryName</a></span></li>
+                                        <li class="list-group-item"><span><a href="~/Category/@c[i].CategoryName.Replace("/", "")">@c[i].CategoryName</a></span></li>
                                     }
+                                    else if (i == 28)
+                                    {
+                                        <li class="list-group-item"><span><a href="~/Category/@c[i].CategoryName.Replace("/", "")">@c[i].CategoryName</a></span></li>
+                                    }
+                                    else
+                                    {
+                                        <li class="list-group-item"><span><a href="~/Category/@c[i].CategoryName">@c[i].CategoryName</a></span></li>
+                                    }
+                                }
                                 }
                         </ul>
                     </div>
