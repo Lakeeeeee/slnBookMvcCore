@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -46,6 +46,7 @@ namespace prjBookMvcCore.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        
         public IActionResult Login(CLoginViewModel vm)
         {
             Member user = _bookShopContext.Members.Include(x=>x.Level).Include(x=>x.Orders).Include(x=>x.MessageMemberDetails).FirstOrDefault(x=>x.MemberEmail==vm.Account_P)!;
@@ -57,10 +58,6 @@ namespace prjBookMvcCore.Controllers
                     {
                         new Claim("Id", user.MemberId.ToString()),
                         new Claim(ClaimTypes.Name, user.MemberName),
-                        new Claim("MessageCount", user.MessageMemberDetails.Count().ToString()),
-                        new Claim("Points", user.Points.ToString()),
-                        new Claim("Level", user.Level.LevelName),
-                        new Claim("Orders", user.Orders.Count().ToString())
                     };
 
                     ViewBag.isLogin="true";
