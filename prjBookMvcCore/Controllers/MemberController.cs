@@ -42,7 +42,7 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult Login()
         {
-            return View(new RECaptcha());
+            return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
