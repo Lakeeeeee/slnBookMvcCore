@@ -76,8 +76,8 @@ namespace prjBookMvcCore.Controllers
                     return Redirect("~/Home/Home");
                 }
             }
-            //string script = "<script>alert('登入失敗');window.loction.href='@Url.Content("~/Member/Login")';</script>";
-            //return Content(script, "text/html", System.Text.Encoding.UTF8);
+            string script = "<script>alert('登入失敗');window.history.back();</script>";
+            return Content(script, "text/html", System.Text.Encoding.UTF8);
         }
 
         public IActionResult Find_password() //忘記密碼
