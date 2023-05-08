@@ -15,8 +15,15 @@
         margin-right: auto;
         padding-left: 0;
         padding-right: 0;
-    }
+    }    
 </style>
+<script>
+    function addToCart() {
+        /*待補，加入購物車的程式碼 */
+        alert("書籍已加入購物車!");
+    }
+
+</script>
 <div class="container-sp">
     <div>
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -43,6 +50,7 @@
 <div>
     <table class="table table-striped">
         <tr>
+            <td></td>
             <th>序號</th>
             <th>書名</th>
             <th>優惠</th>
@@ -51,6 +59,7 @@
             <th>庫存</th>
         </tr>
         <tr>
+            <td><input type="checkbox"></td>
             <th>10</th>
             <th>測試暫存</th>
             <th>每日88折</th>
@@ -88,5 +97,5 @@
 </div>
 
 <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
-    <button class="btn btn-primary  col-4 me-md-2" type="button">加入購物車</button>
+    <button class="btn btn-primary col-4 me-md-2" type="button" onclick="addToCart()">加入購物車</button>
 </div>

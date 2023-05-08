@@ -22,6 +22,12 @@
 		margin-bottom: 15px;
 	}
 </style>
+<script>
+
+
+
+</script>
+
 </head>
 
 <body>
@@ -81,7 +87,7 @@
 			<h2>結帳金額</h2>
 			<div class="row">
 				<div class="col-md-6">
-					<p>總共_____ 件</p>
+					<p>總共_____件</p>
 					<p>總金額：</p>
 					<p>優惠折扣：</p>
 					<p>運費：</p>
@@ -93,11 +99,29 @@
 		</div>
 	</div>
 	<div class="d-grid gap-2 c d-md-flex justify-content-md-end">
-		<a href="~/Order/CheckOutInfo" class=" btn btn-primary col-4 me-md-2" type="button">上一步</a>
+		<a href="~/Order/CheckOutInfo" class=" btn btn-primary col-4 me-md-2" type="button">返回修改</a>
 	</div>
-	
-	@*這邊送出後先返回首頁/需要再更新*@
-	<div class="d-grid gap-2 c d-md-flex justify-content-md-end">
-		<a href="~/Order/checkOutFinal" class=" btn btn-primary col-4 me-md-2" type="button">確定送出</a>
-	</div>
+
+<div class="d-grid gap-2 c d-md-flex justify-content-md-end">
+  <button class="btn btn-primary col-4 me-md-2" type="button" data-bs-toggle="modal" data-bs-target="#successModal">
+    確定送出
+  </button>
+</div>
+
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="successModalLabel">訂單完成</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        您的訂單已完成！
+      </div>
+      <div class="modal-footer">
+       <a href="~/Order/CheckOutFinal" class=" btn btn-primary col-4 me-md-2" type="button">確定</a>
+      </div>
+    </div>
+  </div>
+</div>
 </body>

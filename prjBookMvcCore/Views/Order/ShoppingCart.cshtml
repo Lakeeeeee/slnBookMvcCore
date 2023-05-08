@@ -31,6 +31,13 @@
         border: 1px solid #e6e6e6;
     }
 </style>
+<script>
+    function addToList() {
+        /*待補，加入暫存的程式碼 */
+        alert("已放入暫存清單!");
+    }
+
+</script>
 
 <div class="container-sp">
     <div >
@@ -58,6 +65,7 @@
 <div>
     <table class="table table-striped">
         <tr>
+            <td></td>
             <th>序號</th>
             <th>書名</th>
             <th>優惠</th>
@@ -66,6 +74,7 @@
             <th>庫存</th>
         </tr>
         <tr>
+            <td><input type="checkbox"></td>
             <th>1</th>
             <th>測試</th>
             <th>每日精選66折</th>
@@ -74,6 +83,7 @@
             <th>10</th>
         </tr>
         <tr>
+            <td><input type="checkbox"></td>
             <th>2</th>
             <th>測試2</th>
             <th>每日精選66折</th>
@@ -136,5 +146,6 @@
 </div>
 
 <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
+    <button class="btn btn-primary col-4 me-md-2" type="button" onclick="addToList()">加入暫存</button>
     <a href="~/Order/CheckOutInfo" class=" btn btn-primary col-4 me-md-2" type="button">來去結帳</a>
     </div>
