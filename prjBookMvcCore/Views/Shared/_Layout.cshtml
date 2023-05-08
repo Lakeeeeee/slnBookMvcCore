@@ -66,9 +66,63 @@
                     </div>
                 </form>
                 <form class="justify-content-end">
-                    <div class="input-group navbar navbar-light bg-light menu" style="margin-top:10px; border:1px solid #000">
-                        <input id="search_input" style="border-right: #C4C4C4 2px solid;" placeholder="搜尋" type="search" class="form-control inputForSearch ui-autocomplete-input" maxlength="40" value="" autocomplete="off">
-                        <a role="button" class="btn btn-sm btn-secondary mx-1" href="#id">搜尋</a>
+                    <div class="input-group navbar navbar-light bg-light menu">
+                        <input id="search_input" style="border-right: #C4C4C4 2px solid;" placeholder="搜尋" type="search" class="mx-1 form-control inputForSearch ui-autocomplete-input" maxlength="40" value="" autocomplete="off">
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-success mx-1 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                進階搜尋
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="width:500px">
+                                <li>
+                                    <div class="m-1 p-1">
+                                        <span class="mx-2">搜尋欄位</span>
+                                        <button class="btn btn-sm btn-outline-success mx-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            全文
+                                        </button>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="m-1 p-1">
+                                        <span class="mx-2">商品類型</span>
+                                        <button class="btn btn-sm btn-outline-success mx-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            選擇類型
+                                        </button>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="m-1 p-1">
+                                        <span class="mx-2">售價</span>
+                                        <input style="border-right: #C4C4C4 2px solid;width:100px" placeholder="金額" type="search" maxlength="20" value="" autocomplete="off" />
+                                        <span class="mx-2">至</span>
+                                        <input style="border-right: #C4C4C4 2px solid;width:100px" placeholder="金額" type="search" maxlength="20" value="" autocomplete="off" />
+                                        <span class="mx-2">之間</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="m-1 p-1">
+                                        <span class="mx-2">折扣</span>
+                                        <button class="btn btn-sm btn-outline-success mx-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            請選擇
+                                        </button>
+                                        <span class="mx-2">至</span>
+                                        <button class="btn btn-sm btn-outline-success mx-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            請選擇
+                                        </button>
+                                        <span class="mx-2">之間</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="m-1 p-1">
+                                        <span class="mx-2">出版日期</span>
+                                        <input style="border-right: #C4C4C4 2px solid;width:100px" placeholder="日期" type="search" maxlength="20" value="" autocomplete="off" />
+                                        <span class="mx-2">至</span>
+                                        <input style="border-right: #C4C4C4 2px solid;width:100px" placeholder="日期" type="search" maxlength="20" value="" autocomplete="off" />
+                                        <span class="mx-2">之間</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-sm btn-outline-success mx-1">搜尋</button>
                     </div>
                 </form>
             </div>
