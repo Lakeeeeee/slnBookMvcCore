@@ -4,59 +4,66 @@
     Layout = "~/Views/Shared/_Layout_Login.cshtml";
 }
 @section Scripts{
-    <partial name="_CaptchaScript"/>
+    <script type="text/javascript">
+        var onloadCallback = function () {
+            grecaptcha.render('html_element', {
+                'sitekey': '6Lf0vO4lAAAAADrJVEDlc3YI0LtPnTKXUZkjtcv5'
+            });
+        };
+    </script>
 }
-<style>
-    /*    div{border:1px solid #000000}
-    */ /**/
+    <style>
+        /*    div{border:1px solid #000000}
+            */ /**/
 
-    .linkaFormat {
-        text-decoration: none;
-        color: inherit
-    }
-</style>
+        .linkaFormat {
+            text-decoration: none;
+            color: inherit
+        }
+    </style>
 
-<div class="container" style="margin-top:15px">
-    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Home">回首頁</a></li>
-            <li class="breadcrumb-item active" aria-current="page">登入</li>
-        </ol>
-    </nav>
-    <div class="row">
-        <div class="col-8">
-            <label>廣告圖</label>
-        </div>
-        <div class="col-4">
-            <div class="container justify-content-center bg-light" style="border-radius:10px;  padding-block:15px">
-                <p><label class="">會員登入</label></p>
-                <form asp-controller="Member" asp-action="Login" method="post">
-                    <p><input type="text" placeholder="讀本Email" name="Account_P" id="account"/></p>
-                    <p><input type="password" placeholder="讀本密碼" name="Password_P" id="password" /></p>
-
-                    <partial name="_CaptchaInput" id=""/>
-
-                <p>
-                    <button id="btnSubmit" type="submit" class="btn btn-outline-success">讀本會員登入</button>
-                    <a class="linkaFormat small" href="~/Member/Signin">註冊</a>｜
-                    <a class="linkaFormat small" href="~/Member/Find_password">忘記帳密</a>
+    <div class="container" style="margin-top:15px">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Home">回首頁</a></li>
+                <li class="breadcrumb-item active" aria-current="page">登入</li>
+            </ol>
+        </nav>
+        <div class="row">
+            <div class="col-8">
+                <label>廣告圖</label>
+            </div>
+            <div class="col-4">
+                <div class="container justify-content-center bg-light" style="border-radius:10px;  padding-block:15px">
+                    <p><label class="">會員登入</label></p>
+                    <form asp-controller="Member" asp-action="Login" method="post" id="demo-form">
+                        <p><input type="text" placeholder="讀本Email" name="Account_P" id="account" /></p>
+                        <p><input type="password" placeholder="讀本密碼" name="Password_P" id="password" /></p>
+                        <p>
+                            <div style="block-size:inherit" id="html_element"></div>
+                            <br>
+                            <button type="submit" class="btn btn-outline-success">讀本會員登入</button>
+                            <a class="linkaFormat small" href="~/Member/Signin">註冊</a>｜
+                            <a class="linkaFormat small" href="~/Member/Find_password">忘記帳密</a>
+                        </p>
+                    </form>
+                    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+                        async defer>
+                    </script>
+                    <p>
+                        <button type="button" id="demo" class="btn btn-outline-success">Demo</button>
                     </p>
-                </form>
-                <p>
-                    <button type="button" id="demo" class="btn btn-outline-success">Demo</button>
-                </p>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-<script>
-    const x = document.getElementById('demo');
-    const A = document.getElementById('account');
-    const P = document.getElementById('password');
-    x.addEventListener('click', function(){
-        A.value = "swift9428@gmail.com";
-        P.value  = "4u4yh5Ld";
-    })
+    <script>
+        const x = document.getElementById('demo');
+        const A = document.getElementById('account');
+        const P = document.getElementById('password');
+        x.addEventListener('click', function () {
+            A.value = "swift9428@gmail.com";
+            P.value = "4u4yh5Ld";
+        })
     </script>
 

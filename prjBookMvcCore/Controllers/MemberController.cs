@@ -38,6 +38,7 @@ namespace prjBookMvcCore.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Member member) //註冊方法
         {
+            
             _bookShopContext.Add(member);
             _bookShopContext.SaveChanges();
             _cm.writeWelcomeLetter(member, _bookShopContext);
@@ -53,12 +54,6 @@ namespace prjBookMvcCore.Controllers
         
         public IActionResult Login(CLoginViewModel vm)
         {
-            #region(unfinished)
-            //if (!await _captchaValidator.IsCaptchaPassedAsync(vm.Captcha_P.Captcha))
-            //{
-            //    return View("Login");
-            //}
-            #endregion
             Member user = _bookShopContext.Members.Include(x=>x.Level).Include(x=>x.Orders).Include(x=>x.MessageMemberDetails).FirstOrDefault(x=>x.MemberEmail==vm.Account_P)!;
             if (user != null)
             {
