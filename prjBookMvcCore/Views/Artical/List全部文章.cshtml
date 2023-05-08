@@ -11,10 +11,10 @@
 </script>
 
 
-<h1>List全部文章</h1>
+<h1>全部文章</h1>
 
 
-<table class="table">
+<table class="table table-hover align-middle">
     <thead>
         <tr>
             <th>
@@ -36,8 +36,9 @@
                 count++;
                 <tr href="~/Artical/Detail文章/@item.ArticalId">
                 <td>@count</td>
-                <td>
-                    <div>@Html.ActionLink(item.ArticalTitle, "Detail文章" , "Artical" ,new{id=item.ArticalId},new{}) <a href="~/Artical/Detail文章/@item.ArticalId"> <img src="~/Image/ArticalPicture/@path" height="30" title="@item.ArticalTitle" /> </a></div>
+                    <td>
+                        <a href="~/Artical/Detail文章/@item.ArticalId"> <img src="~/Image/ArticalPicture/@path" height="50" width="150" title="@item.ArticalTitle" /> </a><br>
+                    @Html.ActionLink(item.ArticalTitle, "Detail文章" , "Artical" ,new{id=item.ArticalId},new{}) 
                 </td>
                 <td>@Html.DisplayFor(modelItem => item.ArticalDate)  </td>
                 </tr>

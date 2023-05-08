@@ -37,65 +37,67 @@
             <div id="carouselExampleNew" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     @*輪播推薦文章*@
-
-                    <div class="carousel-item active"> @*輪播書本第一頁*@
+                    @*輪播書本第一頁*@ <div class="carousel-item active">
                         <div class="row">
                             @{
                                 BookShopContext db = new BookShopContext();
-                                int latestArticalId=0;
-                                var Artical = db.Articals.OrderByDescending(a=>a.ArticalId).Select(a => a).Take(1);
+                                int latestArticalId = 0;
+                                var Artical = db.Articals.OrderByDescending(a => a.ArticalId).Select(a => a).Take(1);
                                 foreach (var g in Artical)
                                 {
                                     string path = g.ArticalTitle + ".jpg";
-                                  latestArticalId = g.ArticalId;
+
+                                    latestArticalId = g.ArticalId;
                                     <table>
                                         <tr>
                                             <td colspan="2">
-                                            <div style="text-align:center"><a href="~/Artical/Detail文章/@g.ArticalId"> <img src="~/Image/ArticalPicture/@path" height="300" title="@g.ArticalTitle" /> </a></div>
+                                                <div style="text-align:center"><a href="~/Artical/Detail文章/@g.ArticalId"> <img src="~/Image/ArticalPicture/@path" height="300" title="@g.ArticalTitle" /> </a></div>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td><span> @g.ArticalTitle</span></td><td style ="color: gray; font-style: oblique;font-size: 60%;text-align: right;"><span>更新日期：@g.ArticalDate</span> </td>
+                                            <td><span> @g.ArticalTitle</span></td>
+                                            <td style="color: gray; font-style: oblique;font-size: 60%;text-align: right;"><span>更新日期：@g.ArticalDate</span> </td>
                                         </tr>
                                     </table>
                                 }
                                 #region 文章內書目
-                            //    var detail = db.ArticalToBookDetails.Where(d => d.ArticalId == 1).Select(d => new { d.Book.BookTitle, d.Book.UnitPrice, d.Book.CoverPath, d.Book.BookId, }).ToList();
-                            //                   <table>
-                            //                   <tr>
-                            //                    @foreach (var b in detail)
-                            //    {
-                            //                string title中 = b.BookTitle.Split("$")[0];
-                            //                var q作者 = db.AuthorDetails.Where(a => a.BookId == b.BookId).Select(a => new { a.Author.AuthorName }).ToList();
-                            //                string s作者 = "";
-                            //                foreach (var item in q作者) { s作者 += item.AuthorName + "    "; }
-                            //                string price原價 = $"{b.UnitPrice:c0}";
+                                //    var detail = db.ArticalToBookDetails.Where(d => d.ArticalId == 1).Select(d => new { d.Book.BookTitle, d.Book.UnitPrice, d.Book.CoverPath, d.Book.BookId, }).ToList();
+                                //                   <table>
+                                //                   <tr>
+                                //                    @foreach (var b in detail)
+                                //    {
+                                //                string title中 = b.BookTitle.Split("$")[0];
+                                //                var q作者 = db.AuthorDetails.Where(a => a.BookId == b.BookId).Select(a => new { a.Author.AuthorName }).ToList();
+                                //                string s作者 = "";
+                                //                foreach (var item in q作者) { s作者 += item.AuthorName + "    "; }
+                                //                string price原價 = $"{b.UnitPrice:c0}";
 
-                            //                        <td>
-                            //                            <div style="position:relative">
-                            //                                <a id="@b.BookId"><img src="@b.CoverPath" class="d-block w-100" alt="..." @b.CoverPath /></a>
-                            //                            </div>
-                            //                            <div class="caption bookCaption">
-                            //                                <ul style="list-style:none; margin:0; padding:0;">
-                            //                                    <li class='prod_TitleMain'> <a id="@b.BookId"> @title中</a> </li>
-                            //                            <li class="discAuthor">作者：@s作者</li>
-                            //                            <li class="discPrice原價">原價：<del style="color:red;font-style:oblique">@price原價</del></li>
-                            //                                 @{
-                            //    var bookDiscountId = db.BookDiscountDetails.Where(a => a.BookId == b.BookId).Select(a => a.BookDiscountId).FirstOrDefault();
-                            //    var q是否優惠 = bookDiscountId != null ? bookDiscountId.ToString() : "";
-                            //    if (!string.IsNullOrEmpty(q是否優惠))
-                            //    {
-                            //        var q優惠折數 = db.BookDiscounts.Where(a => a.BookDiscountId == int.Parse(q是否優惠)).Select(a => new { a.BookDiscountName, a.BookDiscountAmount }).FirstOrDefault();
-                            //        var price優惠價 = $"{(q優惠折數.BookDiscountAmount* b.UnitPrice):0}";
-                            //                                    <li class="discPrice優惠價">優惠價：@q優惠折數.BookDiscountName @price優惠價 元</li>
-                            //}    }
-                            //                                </ul>
-                            //                            </div>
-                            //                        </td>
-                            //    }
-                            //                        </tr>
-                            //                    </table>
-                            #endregion
+                                //                        <td>
+                                //                            <div style="position:relative">
+                                //                                <a id="@b.BookId"><img src="@b.CoverPath" class="d-block w-100" alt="..." @b.CoverPath /></a>
+                                //                            </div>
+                                //                            <div class="caption bookCaption">
+                                //                                <ul style="list-style:none; margin:0; padding:0;">
+                                //                                    <li class='prod_TitleMain'> <a id="@b.BookId"> @title中</a> </li>
+                                //                            <li class="discAuthor">作者：@s作者</li>
+                                //                            <li class="discPrice原價">原價：<del style="color:red;font-style:oblique">@price原價</del></li>
+                                //                                 @{
+                                //    var bookDiscountId = db.BookDiscountDetails.Where(a => a.BookId == b.BookId).Select(a => a.BookDiscountId).FirstOrDefault();
+                                //    var q是否優惠 = bookDiscountId != null ? bookDiscountId.ToString() : "";
+                                //    if (!string.IsNullOrEmpty(q是否優惠))
+                                //    {
+                                //        var q優惠折數 = db.BookDiscounts.Where(a => a.BookDiscountId == int.Parse(q是否優惠)).Select(a => new { a.BookDiscountName, a.BookDiscountAmount }).FirstOrDefault();
+                                //        var price優惠價 = $"{(q優惠折數.BookDiscountAmount* b.UnitPrice):0}";
+                                //                                    <li class="discPrice優惠價">優惠價：@q優惠折數.BookDiscountName @price優惠價 元</li>
+                                //}    }
+                                //                                </ul>
+                                //                            </div>
+                                //                        </td>
+                                //    }
+                                //                        </tr>
+                                //                    </table>
+                                #endregion
+
                             }
                         </div>
                     </div>
@@ -107,68 +109,69 @@
                                 <div class="row">
                                     @{
                                         db = new BookShopContext();
-                                        int preArticalId = latestArticalId- i;
-                                        Artical = db.Articals.Where(a => a.ArticalId ==preArticalId).Select(a => a);
+                                        int preArticalId = latestArticalId - i;
+                                        Artical = db.Articals.Where(a => a.ArticalId == preArticalId).Select(a => a);
                                         foreach (var g in Artical)
                                         {
                                             string path = g.ArticalTitle + ".jpg";
-                                                                    <table>
-                                                                        <tr>
-                                                                            <td colspan="2">
+
+                                            <table>
+                                                <tr>
+                                                    <td colspan="2">
                                                         <div style="text-align:center"><a href="~/Artical/Detail文章/@g.ArticalId"> <img src="~/Image/ArticalPicture/@path" height="300" title="@g.ArticalTitle" /> </a></div>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>@g.ArticalTitle</td>
-                                                                            <td style="color: gray; font-style: oblique;font-size: 60%;text-align: right;">更新日期：@g.ArticalDate</td>
-                                                                        </tr>
-                                                                    </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>@g.ArticalTitle</td>
+                                                    <td style="color: gray; font-style: oblique;font-size: 60%;text-align: right;">更新日期：@g.ArticalDate</td>
+                                                </tr>
+                                            </table>
                                         }
                                         #region 文章內書目
-                                    //    detail = db.ArticalToBookDetails.Where(d => d.ArticalId == i).Select(d => new { d.Book.BookTitle, d.Book.UnitPrice, d.Book.CoverPath, d.Book.BookId, }).ToList();
-                                    //                <table>
-                                    //                    <tr>
-                                    //                        @foreach (var b in detail)
-                                    // {
-                                    //                string title中 = b.BookTitle.Split("$")[0];
-                                    //                var q作者 = db.AuthorDetails.Where(a => a.BookId == b.BookId).Select(a => new { a.Author.AuthorName }).ToList();
-                                    //                string s作者 = "";
-                                    //                foreach (var item in q作者) { s作者 += item.AuthorName + "    "; }
-                                    //                string price原價 = $"{b.UnitPrice:c0}";
+                                        //    detail = db.ArticalToBookDetails.Where(d => d.ArticalId == i).Select(d => new { d.Book.BookTitle, d.Book.UnitPrice, d.Book.CoverPath, d.Book.BookId, }).ToList();
+                                        //                <table>
+                                        //                    <tr>
+                                        //                        @foreach (var b in detail)
+                                        // {
+                                        //                string title中 = b.BookTitle.Split("$")[0];
+                                        //                var q作者 = db.AuthorDetails.Where(a => a.BookId == b.BookId).Select(a => new { a.Author.AuthorName }).ToList();
+                                        //                string s作者 = "";
+                                        //                foreach (var item in q作者) { s作者 += item.AuthorName + "    "; }
+                                        //                string price原價 = $"{b.UnitPrice:c0}";
 
-                                    //                <td>
-                                    //                    <div style="position:relative">
-                                    //                        <a id="@b.BookId"><img src="@b.CoverPath" class="d-block w-100" alt="..." @b.CoverPath /></a>
-                                    //                    </div>
-                                    //                    <div class="caption bookCaption">
-                                    //                        <ul style="list-style:none; margin:0; padding:0;">
-                                    //                            <li class='prod_TitleMain'> <a id="@b.BookId"> @title中</a> </li>
-                                    //                            <li class="discAuthor">作者：@s作者</li>
-                                    //                            <li class="discPrice原價">原價：<del style="color:red;font-style:oblique">@price原價</del></li>
-                                    //                            @{
-                                    //                                var bookDiscountId = db.BookDiscountDetails.Where(a => a.BookId == b.BookId).Select(a => a.BookDiscountId).FirstOrDefault();
-                                    //                                var q是否優惠 = bookDiscountId != null ? bookDiscountId.ToString() : "";
-                                    //                                if (!string.IsNullOrEmpty(q是否優惠))
-                                    //                                {
-                                    //                                    var q優惠折數 = db.BookDiscounts.Where(a => a.BookDiscountId == int.Parse(q是否優惠)).Select(a => new { a.BookDiscountName, a.BookDiscountAmount }).FirstOrDefault();
-                                    //                                    var price優惠價 = $"{(q優惠折數.BookDiscountAmount * b.UnitPrice):0}";
-                                    //                                    <li class="discPrice優惠價">優惠價：@q優惠折數.BookDiscountName @price優惠價 元</li>
-                                    //                                }
-                                    //                            }
-                                    //                        </ul>
-                                    //                                </div>
-                                    //                            </td>
-                                    //}
-                                    //                    </tr>
-                                    //                </table>
-                                    #endregion
-                                            }
-                                    </div>
+                                        //                <td>
+                                        //                    <div style="position:relative">
+                                        //                        <a id="@b.BookId"><img src="@b.CoverPath" class="d-block w-100" alt="..." @b.CoverPath /></a>
+                                        //                    </div>
+                                        //                    <div class="caption bookCaption">
+                                        //                        <ul style="list-style:none; margin:0; padding:0;">
+                                        //                            <li class='prod_TitleMain'> <a id="@b.BookId"> @title中</a> </li>
+                                        //                            <li class="discAuthor">作者：@s作者</li>
+                                        //                            <li class="discPrice原價">原價：<del style="color:red;font-style:oblique">@price原價</del></li>
+                                        //                            @{
+                                        //                                var bookDiscountId = db.BookDiscountDetails.Where(a => a.BookId == b.BookId).Select(a => a.BookDiscountId).FirstOrDefault();
+                                        //                                var q是否優惠 = bookDiscountId != null ? bookDiscountId.ToString() : "";
+                                        //                                if (!string.IsNullOrEmpty(q是否優惠))
+                                        //                                {
+                                        //                                    var q優惠折數 = db.BookDiscounts.Where(a => a.BookDiscountId == int.Parse(q是否優惠)).Select(a => new { a.BookDiscountName, a.BookDiscountAmount }).FirstOrDefault();
+                                        //                                    var price優惠價 = $"{(q優惠折數.BookDiscountAmount * b.UnitPrice):0}";
+                                        //                                    <li class="discPrice優惠價">優惠價：@q優惠折數.BookDiscountName @price優惠價 元</li>
+                                        //                                }
+                                        //                            }
+                                        //                        </ul>
+                                        //                                </div>
+                                        //                            </td>
+                                        //}
+                                        //                    </tr>
+                                        //                </table>
+                                        #endregion
+                                    }
+
 
                                 </div>
+                            </div>
                         }
                     }
-
                     @*輪播圖切換按鈕*@ <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleNew" data-bs-slide="prev" border=5>
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Previous</span>
@@ -181,6 +184,7 @@
                 </div>
             </div>
         </div>
+
         <br />
         <hr />
         <br />
@@ -194,45 +198,47 @@
             <div class="container body-content">
                 <div id="carouselExampleEdit" class="carousel slide">
                     <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            @*輪播書本第一頁*@
+                        @*輪播書本第一頁*@ <div class="carousel-item active">
                             <div class="row">
-                                @{
-                                    var latestBooks = db.Books.Where(b => b.LanguageId == 1).OrderByDescending(b => b.PublicationDate).Take(4).ToList();
-                                    foreach (var book in latestBooks)
-                                    {
-                                        var author = db.AuthorDetails.Where(ad => ad.BookId == book.BookId).Select(ad => ad.Author).FirstOrDefault();
-                                        var discount = db.BookDiscountDetails.Where(dd => dd.BookId == book.BookId).Select(dd => dd.BookDiscount).FirstOrDefault();
-                                        var discountedPrice = book.UnitPrice * (1 - (discount?.BookDiscountAmount ?? 0) / 100);
-                                        <div class="col book-item" data-publication-date="@book.PublicationDate" data-price="@((int)Math.Round(discountedPrice))">
-                                            <div style="position:relative">
-                                                <a><img src="@book.CoverPath"></a>
-                                            </div>
-                                            <div class="caption">
-                                                <ul style="list-style:none; margin:0; padding:0;">
-                                                    <li> <a class="bookCaption">@book.BookTitle</a></li>
-                                                    <li class='prod_author'>
-                                                        作者：
-                                                        @if (author != null)
-                                                        {
-                                                            <a href="/rwd_searchResult.html?keyword%5B%5D=@author.AuthorName&keyType%5B%5D=2">@author.AuthorName</a>
-                                                        }
-                                                    </li>
-                                                    <li class="Price">原    價：<span>@((int)Math.Round(book.UnitPrice))</span>元</li>
-                                                    <li class="discPrice">
-                                                        優惠價：<span>@(discount?.BookDiscountName ?? "")</span>
-                                                        <span>@((int)Math.Round(discountedPrice))</span>元
-                                                    </li>
-                                                    <li class="publicationDate">
-                                                        出版日期：<span>@book.PublicationDate.ToString("yyyy/MM/dd")</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    }
-                                }
+                                @*第一組*@<div class="col-3">
+                                    @*圖片*@<div style="position:relative">
+                                        <a><img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." /></a>
+                                    </div>
+                                    <div class="caption bookCaption">
+                                        <ul style="list-style:none; margin:0; padding:0;">
+                                            <li class='prod_TitleMain'>
+                                                <a>
+                                                    戰勝會考 國中必備英語2000字（編修版）
+                                                </a>
+                                            </li>
+                                            <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
+                                            <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                @*第二組*@  <div class="col-3">
+                                    <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
+                                    @*圖片*@<div style="position:relative">
+                                        <a>
+                                            <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
+                                        </a>
+                                    </div>
+                                    <div class="caption bookCaption">
+                                        <ul style="list-style:none; margin:0; padding:0;">
+                                            <li class='prod_TitleMain'>
+                                                <a>
+                                                    戰勝會考 國中必備英語2000字（編修版）
+                                                </a>
+                                            </li>
+                                            <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
+                                            <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
+
                         @*輪播書本第二~四頁*@
                         @{
                             for (int i = 2; i <= 4; i++)
