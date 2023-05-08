@@ -119,11 +119,16 @@
     let message = "註冊成功，系統將自動轉向登入頁面";
     signin.addEventListener('submit', async (event) => {
         event.preventDefault(); // 防止表單自動提交
-        const response = await fetch('@Url.ActionLink("Create")');
+        const response = await fetch('@Url.ActionLink("Create")',{
+            method:"post",
+            body:new FormData(signin)
+        });
         const confirmtext = await response.text();
         if (confirmtext === "exist") {
             message = "帳號已存在";
         }
+        else{
         alert(message);
-    });
+        window.location.href = '@Url.Action("Login", "Member")'; // 設定要轉向的頁面 URL    });
+        }
 </script>
