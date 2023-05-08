@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewData["Title"] = "Promotions促銷活動";
+}
+
+<h1>Promotions促銷活動</h1>
+
+<div class="container-fluid justify-content-center2" style="margin-top: 20px">
+    <div class="row">
+        @* 左邊功能欄 *@
+        <div class="col-2" style="color:orangered">
+            <div class="card">
+                <div class="card-header">推薦文章</div>
+                <ul class="list-group list-group-flush">
+                    @{
+                        BookShopContext db = new BookShopContext();
+                        var q = db.Articals.Select(a => new { a.ArticalId, a.ArticalTitle }).Take(5);
+                        foreach (var g in q)
+                        {
+                            <li class="list-group-item"><span><a href="~/Artical/Detail文章/@g.ArticalId">@g.ArticalTitle</a></span></li>
+                        }
+                    }
+                </ul>
+            </div>
+          
+        </div>
+        @* Body *@
+        <div class="col-10 bg-light">
+          
+        </div>
+    </div>
+</div>
