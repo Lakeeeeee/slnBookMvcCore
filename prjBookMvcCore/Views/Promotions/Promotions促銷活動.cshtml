@@ -8,25 +8,81 @@
 <div class="container-fluid justify-content-center2" style="margin-top: 20px">
     <div class="row">
         @* 左邊功能欄 *@
-        <div class="col-2" style="color:orangered">
+        <div class="col-2">
             <div class="card">
-                <div class="card-header">推薦文章</div>
+                <div class="card-header">書目優惠</div>
                 <ul class="list-group list-group-flush">
                     @{
                         BookShopContext db = new BookShopContext();
-                        var q = db.Articals.Select(a => new { a.ArticalId, a.ArticalTitle }).Take(5);
-                        foreach (var g in q)
+                        for (int i = 1; i <= 5; i++)
                         {
-                            <li class="list-group-item"><span><a href="~/Artical/Detail文章/@g.ArticalId">@g.ArticalTitle</a></span></li>
+                            var bookDiscount = db.BookDiscounts.Where(b => b.BookDiscountId == i).Select(b => b).ToList();
+                            foreach (var g in bookDiscount)
+                            {
+                                    <li class="list-group-item"><a href="#@g.BookDiscountId">@g.BookDiscountName</a></li>
+                            }
                         }
                     }
                 </ul>
             </div>
-          
+            <div class="card">
+                <div class="card-header">推薦文章</div>
+                <ul class="list-group list-group-flush">
+                    @{
+                        //BookShopContext db = new BookShopContext();
+                        var Artical = db.Articals.OrderByDescending(a=>a.ArticalId).Select(a => new { a.ArticalId, a.ArticalTitle }).Take(5);
+                        foreach (var g in Artical)
+                        {
+                                <li class="list-group-item"><span><a href="~/Artical/Detail文章/@g.ArticalId">@g.ArticalTitle</a></span></li>
+                        }
+                    }
+                </ul>
+            </div>
         </div>
         @* Body *@
-        <div class="col-10 bg-light">
-          
+
+        <div class="col">
+            @{
+                for (int i = 1; i <= 5; i++)
+                {
+                    var bookDiscount = db.BookDiscounts.Where(b => b.BookDiscountId == i).Select(b => b).ToList();  
+                    foreach (var g in bookDiscount)
+                    {
+                            <div class="col" id="@g.BookDiscountId"><h2 style="background-color:aqua">@g.BookDiscountName</h2>
+                            <div class="row">
+                                @{
+                                    var bookDiscountDetail = db.BookDiscountDetails.Where(d => d.BookDiscountId == g.BookDiscountId & d.BookDiscountStartDate<DateTime.Now & d.BookDiscountEndDate>DateTime.Now).Select(d => new { d.Book.BookTitle, d.Book.UnitPrice, d.Book.CoverPath, d.Book.BookId, d.Book.PublicationDate}).Take(8).ToList();
+                                    foreach(var book in bookDiscountDetail)
+                            {
+                                 string title中 = book.BookTitle.Split("$")[0];
+                                    var q作者 = db.AuthorDetails.Where(a => a.BookId == book.BookId).Select(a => new { a.Author.AuthorName }).ToList();
+                                    string s作者 = "";
+                                    foreach (var item in q作者) { s作者 += item.AuthorName + "    "; }
+                                    string price原價 = $"{book.UnitPrice:c0}";
+                                  var price優惠價 = $"{(g.BookDiscountAmount * book.UnitPrice):0}";
+                                <div class="col-3">
+                                    <div class="caption bookCaption text-center">
+                                        <a id="@book.BookId"><img src="@book.CoverPath" class="d-block w-100" alt="..." @book.CoverPath /></a>
+                                        <ul style="list-style:none; margin:0; padding:0;" class="text-start">
+                                            @Html.ActionLink("書本資訊(Test)","BookInformation","Book")
+                                                <li class='prod_TitleMain'><a id="@book.BookId"> @title中</a></li>
+                                                <li class="discAuthor">作者：@s作者</li>
+                                                <li class="discPrice原價">原價：<del style="color:red;font-style:oblique">@price原價</del></li>
+                                                <li class="discPrice優惠價">優惠價：@g.BookDiscountName @price優惠價 元</li>
+                                                 <li class="publicationDate">出版日期：<span>@book.PublicationDate.ToString("yyyy/MM/dd")</span></li>
+                                            </ul>
+                                    </div>
+                                </div>
+                               
+                                }
+                            }
+                            </div>
+                        </div>
+                            }
+                        }
+                    }
+        </div>
+
         </div>
     </div>
 </div>
