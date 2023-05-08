@@ -1,12 +1,17 @@
+using GoogleReCaptcha.V3;
+using GoogleReCaptcha.V3.Interface;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using prjBookMvcCore.Models;
+using prjBookMvcCore.ViewModel;
 using System.Diagnostics.Eventing.Reader;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
+
 //=======db連線設定
 builder.Services.AddDbContext<BookShopContext>(options =>
 {
