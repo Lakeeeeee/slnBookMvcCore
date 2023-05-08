@@ -63,10 +63,11 @@ namespace prjBookMvcCore.Controllers
                         MemberId = newmember.MemberId,
                         MessageTypeId = 1,
                     };
+                    _bookShopContext.MessageSubscribes.Add(subscribe);
                 }
                 _bookShopContext.SaveChanges();
                 _cm.writeWelcomeLetter(newmember, _bookShopContext);
-                return Content("註冊成功");
+                return Content("notexist");
             }
         }
 

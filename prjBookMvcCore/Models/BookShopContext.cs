@@ -482,9 +482,7 @@ namespace prjBookMvcCore.Models
             {
                 entity.ToTable("Message");
 
-                entity.Property(e => e.MessageId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("MessageID");
+                entity.Property(e => e.MessageId).HasColumnName("MessageID");
 
                 entity.Property(e => e.MessageTitle).HasMaxLength(50);
 
@@ -523,9 +521,7 @@ namespace prjBookMvcCore.Models
             {
                 entity.ToTable("MessageSubscribe");
 
-                entity.Property(e => e.MessageSubscribeId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("MessageSubscribeID");
+                entity.Property(e => e.MessageSubscribeId).HasColumnName("MessageSubscribeID");
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
@@ -546,9 +542,7 @@ namespace prjBookMvcCore.Models
             {
                 entity.ToTable("MessageType");
 
-                entity.Property(e => e.MessageTypeId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("MessageTypeID");
+                entity.Property(e => e.MessageTypeId).HasColumnName("MessageTypeID");
 
                 entity.Property(e => e.MessageTypeName).HasMaxLength(50);
             });
