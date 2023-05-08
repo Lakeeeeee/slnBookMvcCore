@@ -14,6 +14,7 @@ using System.Security.Claims;
 using System.Net;
 using GoogleReCaptcha.V3.Interface;
 using System.Text.Encodings.Web;
+using Newtonsoft.Json.Linq;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -36,13 +37,37 @@ namespace prjBookMvcCore.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Member member) //註冊方法
+        public IActionResult Create(NewMemberViewModel member) //註冊方法
         {
-            
-            _bookShopContext.Add(member);
-            _bookShopContext.SaveChanges();
-            _cm.writeWelcomeLetter(member, _bookShopContext);
-            return RedirectToAction("Login");
+            if(_bookShopContext.Members.Any(x=>x.MemberEmail==member.MemberEmail_P))
+            {
+                return Content("exist");
+            }
+            else
+            {
+                Member newmember = new Member()
+                {
+                    MemberEmail = member.MemberEmail_P,
+                    MemberPassword = member.MemberPassword_P,
+                    MemberName = member.MemberName_P,
+                    MemberBrithDate = member.MemberBrithDate_P,
+                    Memberphone = member.Memberphone_P,
+                    MemberAddress = member.MemberAddress_P
+                };
+                _bookShopContext.Add(newmember);
+                _bookShopContext.SaveChanges();
+                if (member.isSubscribe)
+                {
+                    MessageSubscribe subscribe = new MessageSubscribe()
+                    {
+                        MemberId = newmember.MemberId,
+                        MessageTypeId = 1,
+                    };
+                }
+                _bookShopContext.SaveChanges();
+                _cm.writeWelcomeLetter(newmember, _bookShopContext);
+                return Content("註冊成功");
+            }
         }
 
         public IActionResult Login()

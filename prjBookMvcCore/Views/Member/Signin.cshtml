@@ -1,4 +1,4 @@
-﻿@model prjBookMvcCore.Models.Member
+﻿@model prjBookMvcCore.ViewModel.NewMemberViewModel
 @{
     ViewData["Title"] = "Signin";
     Layout = "~/Views/Shared/_Layout_Login.cshtml";
@@ -7,7 +7,7 @@
 
 <style>
     /*    div{border:1px solid #000000}
-        */ /**/
+                    */ /**/
 
     .linkaFormat {
         text-decoration: none;
@@ -19,7 +19,7 @@
         top: 20%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width:600px;
+        width: 600px;
     }
 </style>
 
@@ -36,43 +36,42 @@
         </div>
         <div class="col-4">
             <form asp-action="Create" id="signin_form">
-            <div class="container justify-content-center bg-light" style="border-radius:10px;  padding-block:15px">
-                <p><label class="">會員註冊</label></p>
-                    <p><input asp-for="MemberEmail" placeholder="輸入您的Email" style="width: 100%; max-width:250px" /><br /></p>
-                    <p><input asp-for="MemberPassword" placeholder="設定密碼" style="width: 100%; max-width:250px" /></p>
-                    <p><input placeholder="再次輸入密碼" style="width: 100%; max-width:250px" /></p>
+                <div class="container justify-content-center bg-light" style="border-radius:10px;  padding-block:15px">
+                    <p><label class="">會員註冊</label></p>
+                    <p><input asp-for="MemberEmail_P" placeholder="輸入您的Email" style="width:100%; max-width:250px" required /><br /></p>
+                    <p><input asp-for="MemberPassword_P" placeholder="設定密碼" style="width: 100%; max-width:250px" required /></p>
                     <p><label style="font-size:xx-small">密碼規則</label> </p>
-                    <p><input asp-for="MemberName" placeholder="姓名" style="width: 100%; max-width:250px" /></p>
-                    <p><input asp-for="MemberBrithDate" value="1995-01-01" type="date" style="width: 100%; max-width:250px" /></p>
-                    <p><input asp-for="Memberphone" placeholder="電話" style="width: 100%; max-width:250px" /></p>
-                    <p><input asp-for="MemberAddress" placeholder="地址" style="width: 100%; max-width:250px" /></p>
+                    <p><input asp-for="MemberName_P" placeholder="姓名" style="width: 100%; max-width:250px" required /></p>
+                    <p><input asp-for="MemberBrithDate_P" value="1995-01-01" type="date" style="width: 100%; max-width:250px" required /></p>
+                    <p><input asp-for="Memberphone_P" placeholder="電話" style="width:100%; max-width:250px" required /></p>
+                    <p><input asp-for="MemberAddress_P" placeholder="地址" style="width:100%; max-width:250px" required /></p>
                     <p><input type="text" placeholder="驗證碼" style="width: 100%; max-width:250px" /></p>
-                <div class="form-check">
-                    <input asp-for="MessageSubscribes" class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-                    <label class="form-check-label" for="flexCheckDefault">我想接收到電子報</label>
-                </div>
-                <div class="">
-                    <button class="btn btn-outline-success btn-sm" id="liveToastBtn" type="button">會員條款</button>
-                   <label class="form-check-label" for="flexCheckChecked" id="join_policy_check">閱讀條款</label>
-                </div>
-                <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="form-check">
+                        <input asp-for="isSubscribe" class="form-check-input" value="true" type="checkbox" id="flexCheckChecked">
+                        我想接收到電子報
+                    </div>
+                    <div>
+                        <button class="btn btn-outline-success btn-sm" id="liveToastBtn" type="button">會員條款</button>
+                        <label class="form-check-label" for="flexCheckChecked" id="join_policy_check">閱讀條款</label>
+                    </div>
+                    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                         <div class="toast-header">
                             <strong class="me-auto">閱讀會員服務使用條款</strong>
                             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                         </div>
-                        <div class="toast-body" >
+                        <div class="toast-body">
                             <div>
-                                <iframe class="" src="~/lib/text/join_policy.txt" style="width:100%"></iframe>
+                                <iframe src="~/lib/text/join_policy.txt" style="width:100%"></iframe>
                             </div>
                             <div style="margin-top:10px">
                                 <button id="agree_policy" class="btn btn-outline-success " data-bs-dismiss="toast" aria-label="Close" style="margin-left:35%" value="true" type="button">了解並同意</button>
-                            <button id="disagree_policy" class="btn btn-outline-success " data-bs-dismiss="toast" aria-label="Close" style="margin-left:10px" value="false" type="button">不同意</button>
+                                <button id="disagree_policy" class="btn btn-outline-success " data-bs-dismiss="toast" aria-label="Close" style="margin-left:10px" value="false" type="button">不同意</button>
                             </div>
                         </div>
                     </div> @*吐司*@
-                <p style="margin-top:10px" >
-                    <button class="btn btn-outline-success btn-sm" type="submit" style="display:none" id="checkbtn" >確認送出</button>
-                </p>
+                    <p style="margin-top:10px">
+                        <button class="btn btn-outline-success btn-sm" type="submit" style="display:none" id="checkbtn">確認送出</button>
+                    </p>
                 </div>
             </form>
         </div>
@@ -88,14 +87,14 @@
             toast.show()
         })
 
-    const agreeBtn = document.getElementById('agree_policy');
+        const agreeBtn = document.getElementById('agree_policy');
         const disagreeBtn = document.getElementById('disagree_policy');
         const label = document.getElementById('join_policy_check');
-        var agreed_check =false;
+        var agreed_check = false;
         // 當同意按鈕被點擊時，改變標籤文字
         agreeBtn.addEventListener('click', function () {
             label.textContent = '已同意';
-            agreed_check=true;
+            agreed_check = true;
 
             const btn = document.getElementById('checkbtn');
             btn.style.display = 'block';
@@ -104,20 +103,27 @@
 
         // 當不同意按鈕被點擊時，改變標籤文字
         disagreeBtn.addEventListener('click', function () {
-            label.textContent = '未同意';
+            label.textContent = '請閱讀會員服務使用條款';
             agreed_check = false;
 
-              const btn = document.getElementById('checkbtn');
-  btn.style.display = 'none';
+            const btn = document.getElementById('checkbtn');
+            btn.style.display = 'none';
         });
 
         const btn = document.getElementById('checkbtn');
         btn.style.display = 'none';
-
-
-        const signin = document.querySelector('#signin_form');
-        signin.addEventListener('submit', function (event) {
-            alert('註冊成功，系統將自動轉向登入頁面');
-        });
     }
+</script>
+<script>
+    const signin = document.querySelector('#signin_form');
+    let message = "註冊成功，系統將自動轉向登入頁面";
+    signin.addEventListener('submit', async (event) => {
+        event.preventDefault(); // 防止表單自動提交
+        const response = await fetch('@Url.ActionLink("Create")');
+        const confirmtext = await response.text();
+        if (confirmtext === "exist") {
+            message = "帳號已存在";
+        }
+        alert(message);
+    });
 </script>
