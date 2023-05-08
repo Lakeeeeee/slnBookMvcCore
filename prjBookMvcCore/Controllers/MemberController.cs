@@ -15,6 +15,8 @@ using System.Net;
 using GoogleReCaptcha.V3.Interface;
 using System.Text.Encodings.Web;
 using Newtonsoft.Json.Linq;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
+using System.Net.Mail;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -107,8 +109,21 @@ namespace prjBookMvcCore.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Find_password(int? id) //填完表單後發post然後寄出email
+        public IActionResult Find_password(string target) //填完表單後發post然後寄出email
         {
+            bool isEmailExist =_bookShopContext.Members.Any(x => x.MemberEmail == target);
+
+            if (!isEmailExist)
+            {
+                return Content(isEmailExist.ToString());
+            }
+            else
+            {
+                MailMessage mail = new MailMessage();
+
+
+            }
+            
             return RedirectToAction("Login");
         }
 
