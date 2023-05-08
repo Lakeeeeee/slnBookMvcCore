@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 using prjBookMvcCore.Models;
 using System.Diagnostics.Eventing.Reader;
 
@@ -6,7 +7,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<BookShopContext>();
+//=======db連線設定
+builder.Services.AddDbContext<BookShopContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("BookShopConnection"));
+});
 
 //=======AspNetCore.Authentication用戶登入驗證操作機制使用
 builder.Services.AddHttpContextAccessor();
