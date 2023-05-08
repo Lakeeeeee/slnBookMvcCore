@@ -12,19 +12,24 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Net;
+using GoogleReCaptcha.V3.Interface;
 
 namespace prjBookMvcCore.Controllers
 {
     public class MemberController : Controller
     {
-        private BookShopContext _bookShopContext ;
+        private readonly BookShopContext _bookShopContext ;
+        private readonly ICaptchaValidator _captchaValidator ;
         public UserInforService _userInforService { get; set; }
-        public MemberController(BookShopContext _db, UserInforService userInforService)
+
+
+        public MemberController(BookShopContext db, UserInforService userInforService,ICaptchaValidator captchaValidator)
         {
-            _bookShopContext =  _db;
-            _userInforService =  userInforService ;
+            _bookShopContext = db;
+            _userInforService = userInforService;
+            _captchaValidator = captchaValidator;
         }
-        MemberManeger cm = new MemberManeger();
+        MemberManeger _cm = new MemberManeger();
 
         public IActionResult Signin()
         {
@@ -36,7 +41,7 @@ namespace prjBookMvcCore.Controllers
         {
             _bookShopContext.Add(member);
             _bookShopContext.SaveChanges();
-            cm.writeWelcomeLetter(member, _bookShopContext);
+            _cm.writeWelcomeLetter(member, _bookShopContext);
             return RedirectToAction("Login");
         }
 
@@ -49,6 +54,10 @@ namespace prjBookMvcCore.Controllers
         
         public IActionResult Login(CLoginViewModel vm)
         {
+            //if (!await _captchaValidator.IsCaptchaPassedAsync(vm.Captcha_P.Captcha))
+            //{
+            //    return View("Login");
+            //}
             Member user = _bookShopContext.Members.Include(x=>x.Level).Include(x=>x.Orders).Include(x=>x.MessageMemberDetails).FirstOrDefault(x=>x.MemberEmail==vm.Account_P)!;
             if (user  != null)
             {
@@ -60,7 +69,6 @@ namespace prjBookMvcCore.Controllers
                         new Claim(ClaimTypes.Name, user.MemberName),
                     };
 
-                    ViewBag.isLogin="true";
                     //建構cookie用戶驗證物件的狀態存取
                     var varClainsIdentity = new ClaimsIdentity(useClain, CookieAuthenticationDefaults.AuthenticationScheme);
                     HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(varClainsIdentity));
