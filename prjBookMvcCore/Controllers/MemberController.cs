@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using System.Net;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -30,6 +31,7 @@ namespace prjBookMvcCore.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Member member) //註冊方法
         {
             _bookShopContext.Add(member);
@@ -40,7 +42,7 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult Login()
         {
-            return View();
+            return View(new RECaptcha());
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -70,6 +72,7 @@ namespace prjBookMvcCore.Controllers
             }
             return View();
         }
+
 
         public IActionResult Find_password() //忘記密碼
         {
@@ -124,7 +127,6 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult gerMemberInfor(int id)
         {
-            //Member user = _bookShopContext.Members.FirstOrDefault(x=>x.MemberId ==id);
             var q = from user in _bookShopContext.Members
                     where user.MemberId == id
                     select new

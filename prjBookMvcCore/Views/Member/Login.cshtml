@@ -1,4 +1,5 @@
-﻿
+﻿@model RECaptcha
+@Html.AntiForgeryToken()
 @{
     ViewData["Title"] = "Login";
     Layout = "~/Views/Shared/_Layout_Login.cshtml";
@@ -31,9 +32,11 @@
                 <form asp-action="Login" method="post">
                     <p><input type="text" placeholder="讀本Email" name="Account_P" id="account"/></p>
                     <p><input type="password" placeholder="讀本密碼" name="Password_P" id="password" /></p>
-                <p><input type="text" placeholder="驗證碼" /></p>
+
+
+
                 <p>
-                    <button type="submit" class="btn btn-outline-success">讀本會員登入</button>
+                    <button id="btnSubmit" type="submit" class="btn btn-outline-success">讀本會員登入</button>
                     <a class="linkaFormat small" href="~/Member/Signin">註冊</a>｜
                     <a class="linkaFormat small" href="~/Member/Find_password">忘記帳密</a>
                     </p>
