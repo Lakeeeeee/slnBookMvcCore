@@ -13,6 +13,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Net;
 using GoogleReCaptcha.V3.Interface;
+using System.Text.Encodings.Web;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -21,8 +22,6 @@ namespace prjBookMvcCore.Controllers
         private readonly BookShopContext _bookShopContext ;
         private readonly ICaptchaValidator _captchaValidator ;
         public UserInforService _userInforService { get; set; }
-
-
         public MemberController(BookShopContext db, UserInforService userInforService,ICaptchaValidator captchaValidator)
         {
             _bookShopContext = db;
@@ -54,12 +53,14 @@ namespace prjBookMvcCore.Controllers
         
         public IActionResult Login(CLoginViewModel vm)
         {
+            #region(unfinished)
             //if (!await _captchaValidator.IsCaptchaPassedAsync(vm.Captcha_P.Captcha))
             //{
             //    return View("Login");
             //}
+            #endregion
             Member user = _bookShopContext.Members.Include(x=>x.Level).Include(x=>x.Orders).Include(x=>x.MessageMemberDetails).FirstOrDefault(x=>x.MemberEmail==vm.Account_P)!;
-            if (user  != null)
+            if (user != null)
             {
                 if (user.MemberPassword == vm.Password_P)
                 {
@@ -75,9 +76,9 @@ namespace prjBookMvcCore.Controllers
                     return Redirect("~/Home/Home");
                 }
             }
-            return View();
+            string script = "<script>alert('登入失敗');window.history.back();</script>";
+            return Content(script, "text/html", System.Text.Encoding.UTF8);
         }
-
 
         public IActionResult Find_password() //忘記密碼
         {
