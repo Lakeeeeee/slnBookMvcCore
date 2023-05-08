@@ -66,9 +66,19 @@
                     </div>
                 </form>
                 <form class="justify-content-end">
-                    <div class="input-group navbar navbar-light bg-light menu" style="margin-top:10px; border:1px solid #000">
-                        <input id="search_input" style="border-right: #C4C4C4 2px solid;" placeholder="搜尋" type="search" class="form-control inputForSearch ui-autocomplete-input" maxlength="40" value="" autocomplete="off">
-                        <a role="button" class="btn btn-sm btn-secondary mx-1" href="#id">搜尋</a>
+                    <div class="input-group navbar navbar-light bg-light menu">
+                        <input id="search_input" style="border-right: #C4C4C4 2px solid;" placeholder="搜尋" type="search" class="mx-1 form-control inputForSearch ui-autocomplete-input" maxlength="40" value="" autocomplete="off">
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-success mx-1 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                進階搜尋
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul>
+                            <button class="btn btn-sm btn-outline-success mx-1">搜尋</button>
+                        </div>
                     </div>
                 </form>
             </div>
