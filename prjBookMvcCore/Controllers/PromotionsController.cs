@@ -9,6 +9,12 @@ namespace prjBookMvcCore.Controllers
         {
             return View();
         }
+
+        public IActionResult Promotions會員()
+        {
+            return View();
+        }
+
         public IActionResult Promotions促銷活動()
         {
             return View();
