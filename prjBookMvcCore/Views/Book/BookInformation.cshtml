@@ -255,18 +255,32 @@
                                     </div>
                                     <div class="downCover-slot">
                                         <el-image
-                                            style="width: 70px;"
+                                          style="width: 70px;"
+                                          :src="bookCover"
+                                          :preview-src-list="bookCover"
+                                          v-on:click.native="openPreview"
+                                          class="image-hover"
+                                        >
+                                          <div slot="placeholder" class="image-slot">
+                                            加載中<span class="dot">...</span>
+                                          </div>
+                                        </el-image>
+                                        <el-dialog
+                                          :visible.sync="showDialog"
+                                          :close-on-click-modal="true"
+                                          :close-on-press-escape="true"
+                                          width="400px"
+                                          :show-close="false"
+                                          custom-class="dialog-image"
+                                        >
+                                          <el-image
+                                            style="max-width: 100%; max-height: 80vh;"
                                             :src="bookCover"
                                             :preview-src-list="bookCover"
-                                            v-on:click.native="openPreview"
-                                            class="image-hover"
-                                        >
-                                            <div slot="placeholder" class="image-slot">
-                                                加載中<span class="dot">...</span>
-                                            </div>
-                                        </el-image>
-                                        
-                                    </div>
+                                            fit="contain"
+                                          ></el-image>
+                                        </el-dialog>
+                                      </div>
                                 </div>
                             </div>
                         </div>
@@ -966,6 +980,7 @@
                 originalColor: '',
                 activeName: 'first',
                 fontSize: 'medium',
+                showDialog: false,
                 isLogin: false,
                 fullscreenLoading: false,
                 commentValueMyself: null,
@@ -1185,10 +1200,13 @@
                         this.toggleShow();
                     }, 1200);
                 },
+                openPreview() {
+                    this.showDialog = true
+                }
             },
         })
-        let testLogin = @_userInforService.UserId !== 0
-        app.isLogin = testLogin
+    let testLogin = @_userInforService.UserId !== 0
+    app.isLogin = testLogin
     </script>
 </body>
 </html>
