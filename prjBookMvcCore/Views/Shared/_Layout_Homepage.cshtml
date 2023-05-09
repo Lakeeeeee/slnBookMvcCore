@@ -39,13 +39,13 @@
     </style>
 </head>
 <body>
-    <div class="wrapper" style="height:350px; background-image:url('/image/banner.jpg');background-size:100%;">
+    <div class="wrapper" style="height:450px; background-image:url('/image/banner.jpg');background-size:100%;">
         @*導覽開始*@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm  box-shadow mb-3 ">
             <div class="container">
                 @*LOGO開始*@
                 <div class="align-items-start" style="font-weight:900">
-                    @Html.ActionLink("讀本", "Home", "Home", new { area = "" }, new { @class = "text-white navbar-brand" })  @*須換圖*@
+                    @Html.ActionLink("讀本", "Home", "Home", new { area = "" }, new { @class = "text-black navbar-brand" })  @*須換圖*@
                 </div>
                 @*登入選項開始*@
                 <div class="justify-content-end menu">
@@ -58,12 +58,12 @@
                             }
                             else
                             {
-                                <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-white" href="~/Member/Login">登入</a></li>
-                                <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-white" href="~/Member/Signin">註冊</a></li>
+                                <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-black" href="~/Member/Login">登入</a></li>
+                                <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-black" href="~/Member/Signin">註冊</a></li>
                             }
                         }
-                        <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-white" href="~/Member/MemberCenter">會員中心</a></li>
-                        <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-white" href="~/Order/ShoppingCart"><img src="~/Image/shoppingCartIcon20px.png" /></a></li>
+                        <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-black" href="~/Member/MemberCenter">會員中心</a></li>
+                        <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-black" href="~/Order/ShoppingCart"><img src="~/Image/shoppingCartIcon20px.png" /></a></li>
                     </ul>
                 </div>
             </div>
@@ -76,20 +76,20 @@
                 <form class="justify-content-start">
                     <div class="menu">
                         <ul class="zero">
-                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-white" href="~/Home/Menu">書籍</a></li>
+                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-black" href="~/Home/Menu">書籍</a></li>
                             <li>
-                                <a role="button" class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-white" href="~/Promotions/Index">優惠活動</a>
+                                <a role="button" class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-black" href="~/Promotions/Index">優惠活動</a>
                             </li>
-                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-white" href="~/Artical/List全部文章">推薦文章</a></li>
+                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-black" href="~/Artical/List全部文章">推薦文章</a></li>
                         </ul>
                     </div>
                 </form>
                 @*搜尋*@
                 <form class="justify-content-end">
                     <div class="input-group navbar navbar-light menu">
-                        <input id="search_input" style="border-right: darkgray 2px solid;" placeholder="搜尋" type="search" class="text-white bg-transparent mx-1 form-control inputForSearch ui-autocomplete-input" maxlength="40" value="" autocomplete="off">
+                        <input id="search_input" style="border-right: darkgray 2px solid;" placeholder="搜尋" type="search" class="text-black bg-transparent mx-1 form-control inputForSearch ui-autocomplete-input" maxlength="40" value="" autocomplete="off">
                         <div class="dropdown">
-                            <button class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-black dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 進階搜尋
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="width:500px">
@@ -142,7 +142,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <button class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-white">搜尋</button>
+                        <button class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-black">搜尋</button>
                     </div>
                 </form>
             </div>
