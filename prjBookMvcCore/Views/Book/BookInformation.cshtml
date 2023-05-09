@@ -227,7 +227,7 @@
                     <el-breadcrumb-item><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">中文書</a></el-breadcrumb-item>
                     <el-breadcrumb-item><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">商業</a></el-breadcrumb-item>
                     <el-breadcrumb-item><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">投資理財</a></el-breadcrumb-item>
-                    <el-breadcrumb-item><div style="color: #E3007F;">塔木德：猶太人的致富聖經［修訂版］：1000多年來帶領猶太人快速累積財富的神祕經典</div></el-breadcrumb-item>
+                    <el-breadcrumb-item><div style="color: #E3007F;">{{book.bookTitle}}</div></el-breadcrumb-item>
                 </el-breadcrumb>
             </el-container>
             <br/>
@@ -236,7 +236,7 @@
                     <el-aside width="310px" height="400px">
                         <div class="demo-image__placeholder">
                             <div class="block">
-                                <el-image :src="bookCover">
+                                <el-image :src="book.coverPath">
                                     <div slot="placeholder" class="image-slot">
                                         加載中<span class="dot">...</span>
                                     </div>
@@ -258,8 +258,8 @@
                                     <div class="downCover-slot">
                                         <el-image
                                           style="width: 70px;"
-                                          :src="bookCover"
-                                          :preview-src-list="bookCover"
+                                          :src="book.coverPath"
+                                          :preview-src-list="book.coverPath"
                                           v-on:click.native="openPreview"
                                           class="image-hover"
                                         >
@@ -277,8 +277,8 @@
                                         >
                                           <el-image
                                             style="max-width: 100%; max-height: 80vh;"
-                                            :src="bookCover"
-                                            :preview-src-list="bookCover"
+                                            :src="book.coverPath"
+                                            :preview-src-list="book.coverPath"
                                             fit="contain"
                                           ></el-image>
                                         </el-dialog>
@@ -290,7 +290,7 @@
                 </div>
                 <el-main>
                     <div style="padding-left: 5px;">
-                        <h1 style="line-height: normal;letter-spacing: 0.5px;font-size:20px;font-weight:bold;">塔木德：猶太人的致富聖經［修訂版］：1000多年來帶領猶太人快速累積財富的神祕經典</h1>
+                        <h1 style="line-height: normal;letter-spacing: 0.5px;font-size:20px;font-weight:bold;">{{book.bookTitle}}</h1>
                         <div class="authorBoard">
                             <p style="text-align: left;"><span>作者：<a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">佛蘭克．赫爾</a></span></p>
                         </div>
@@ -317,14 +317,14 @@
                         </div>
                     </div>
                     <div class="price">
-                        <p>定價：NT$ <span style="text-decoration:line-through;">250</span></p>
-                        <p>優惠價：<span style="color:#e2007e;"><strong> 75 </strong></span>折， NT$ <span style="color:#e2007e;"><strong>188</strong></span></p>
+                        <p>定價：NT$ <span style="text-decoration:line-through;">{{book.unitPrice}}</span></p>
+                        <p>優惠價：<span style="color:#e2007e;"><strong> {{book.discount}} </strong></span>折， NT$ <span style="color:#e2007e;"><strong>{{getDiscountPrice(book)}}</strong></span></p>
                         <p style="color:#e2007e;">優惠截止日：至<span>2023年04月30日</span></p>
                     </div>
                     <div class="deliver">
                         <p>運送方式：超商取貨、宅配取貨</p>
                         <p>銷售地區：全球</p>
-                        <p>限量商品，即時庫存>5</p>
+                        <p>庫存： {{book.unitInStock}}</p>
                     </div>
                     <p class="DeliverAndKpst">
                         <a class="18h" href="#" target="_blank">
@@ -391,12 +391,12 @@
                         <p>作者：<span><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">佛蘭克．赫爾</a></span></p>
                         <p>譯者：<span><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">徐世明</a></span></p>
                         <p>出版社：<span><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">智言館</a></span></p>
-                        <p>出版日期：<span>2014-04-01</span></p>
-                        <p>ISBN/ISSN：<span>9789865899332</span></p>
+                        <p>出版日期：<span>{{book.publicationDate}}</span></p>
+                        <p>ISBN/ISSN：<span>{{book.isbn}}</span></p>
                         <p>語言：<span>繁體中文</span></p>
-                        <p>裝訂方式：<span>平裝</span></p>
-                        <p>頁數：<span>288頁</span></p>
-                        <p>商品尺寸：<span>長：210mm \ 寬：148mm</span></p>
+                        <p>裝訂方式：<span>{{book.bindingMethod}}</span></p>
+                        <p>頁數：<span>{{book.pages}}</span></p>
+                        <p>商品尺寸：<span>{{book.dimensions}}</span></p>
                         <p>
                             類別：
                             <span>
@@ -586,6 +586,9 @@
             tempElement.innerHTML = encodedString
             return tempElement.textContent
         }
+        function replaceDoubleDollarSign(str) {
+          return str.replace(/\$\$/g, '\n');
+        }
         let encodedContentIntro = "@Model.ContentIntro"
         let contentIntroJS = decodeHTML(encodedContentIntro)
 
@@ -601,10 +604,27 @@
         let encodedTableContainer = "@Model.TableContainer"
         let tableContainerJS = decodeHTML(encodedTableContainer)
 
+        let bookTitleJS = replaceDoubleDollarSign(decodeHTML("@Model.BookTitle"))
+        let bindingMethodJS = replaceDoubleDollarSign(decodeHTML("@Model.BindingMethod"))
+        let publicationDateJS = decodeHTML("@Model.PublicationDate").split(/[\s上午下午]/)[0];
+        let dimensionsJS = replaceDoubleDollarSign(decodeHTML("@Model.Dimensions"))
+        let pagesJS = replaceDoubleDollarSign(decodeHTML("@Model.Pages"))
+
         let app = new Vue({
             el: '#app',
             data: {
-                bookCover: '../image/Book/bookIcon/bookCover.jpg',
+                book:{
+                    coverPath: '../image/Book/' + "@Model.CoverPath",
+                    bookTitle: bookTitleJS,
+                    unitPrice: "@Model.UnitPrice",
+                    discount: 79,
+                    publicationDate: publicationDateJS,
+                    isbn: "@Model.Isbn",
+                    bindingMethod: bindingMethodJS,
+                    pages: pagesJS,
+                    dimensions: dimensionsJS,
+                    unitInStock: "@Model.UnitInStock",
+                },
                 video: '../image/Book/bookIcon/video1.jpg',
                 originalColor: '',
                 activeName: 'first',
