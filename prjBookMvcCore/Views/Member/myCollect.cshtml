@@ -53,27 +53,27 @@
                                 <td>
                                     @{
                                     string 活動 = "無優惠活動";
-                                    if (item.DiscountDetails.FirstOrDefault() != null)
-                                    {
-                                        活動 = item.DiscountDetails.Select(x => x.Discount.DiscountName).FirstOrDefault().ToString();
-                                    }
+                                    //if (item.DiscountDetails.FirstOrDefault() != null)
+                                    //{
+                                    //    活動 = item.DiscountDetails.Select(x => x.Discount.DiscountName).FirstOrDefault().ToString();
+                                    //}
                                     }
                                     @Html.DisplayFor(modelItem => 活動)
                                 </td>
                                 <td>
                                     @{
                                     decimal 折扣 = 1;
-                                    if (item.DiscountDetails.FirstOrDefault() != null)
-                                    {
-                                        折扣 = Convert.ToDecimal(item.DiscountDetails.Select(x => x.Discount.DiscountAmount));
-                                    }
+                                    //if (item.DiscountDetails.FirstOrDefault() != null)
+                                    //{
+                                    //    折扣 = Convert.ToDecimal(item.DiscountDetails.Select(x => x.Discount.DiscountAmount));
+                                    //}
                                     var 活動價 = item.UnitPrice * 折扣;
                                     }
 
                                     @Html.DisplayFor(modelItem => 活動價)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Publisher.PublisherName)
+                                    @Html.DisplayFor(modelItem => item.Publisher!.PublisherName)
                                 </td>
                                 <td>
                                     @{
@@ -116,27 +116,27 @@
                             <td>
                                 @{
                                     string 活動 = "無優惠活動";
-                                    if (item.DiscountDetails.FirstOrDefault() != null)
-                                    {
-                                        活動 = item.DiscountDetails.Select(x => x.Discount.DiscountName).FirstOrDefault().ToString();
-                                    }
+                                    //if (item.DiscountDetails.FirstOrDefault() != null)
+                                    //{
+                                    //    活動 = item.DiscountDetails.Select(x => x.Discount.DiscountName).FirstOrDefault().ToString();
+                                    //}
                                 }
                                 @Html.DisplayFor(modelItem => 活動)
                             </td>
                             <td>
                                 @{
                                     decimal 折扣 = 1;
-                                    if (item.DiscountDetails.FirstOrDefault() != null)
-                                    {
-                                        折扣 = Convert.ToDecimal(item.DiscountDetails.Select(x => x.Discount.DiscountAmount));
-                                    }
+                                    //if (item.DiscountDetails.FirstOrDefault() != null)
+                                    //{
+                                    //    折扣 = Convert.ToDecimal(item.DiscountDetails.Select(x => x.Discount.DiscountAmount));
+                                    //}
                                     var 活動價 = item.UnitPrice * 折扣;
                                 }
 
                                 @Html.DisplayFor(modelItem => 活動價)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Publisher.PublisherName)
+                                @Html.DisplayFor(modelItem => item.Publisher!.PublisherName)
                             </td>
                             <td>
                                 @{
@@ -179,27 +179,27 @@
                             <td>
                                 @{
                                     string 活動 = "無優惠活動";
-                                    if (item.DiscountDetails.FirstOrDefault() != null)
-                                    {
-                                        活動 = item.DiscountDetails.Select(x => x.Discount.DiscountName).FirstOrDefault().ToString();
-                                    }
+                                    //if (item.DiscountDetails.FirstOrDefault() != null)
+                                    //{
+                                    //    活動 = item.DiscountDetails.Select(x => x.Discount.DiscountName).FirstOrDefault().ToString();
+                                    //}
                                 }
                                 @Html.DisplayFor(modelItem => 活動)
                             </td>
                             <td>
                                 @{
                                     decimal 折扣 = 1;
-                                    if (item.DiscountDetails.FirstOrDefault() != null)
-                                    {
-                                        折扣 = Convert.ToDecimal(item.DiscountDetails.Select(x => x.Discount.DiscountAmount));
-                                    }
+                                    //if (item.DiscountDetails.FirstOrDefault() != null)
+                                    //{
+                                    //    折扣 = Convert.ToDecimal(item.DiscountDetails.Select(x => x.Discount.DiscountAmount));
+                                    //}
                                     var 活動價 = item.UnitPrice * 折扣;
                                 }
 
                                 @Html.DisplayFor(modelItem => 活動價)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Publisher.PublisherName)
+                                @Html.DisplayFor(modelItem => item.Publisher!.PublisherName)
                             </td>
                             <td>
                                 @{
@@ -242,27 +242,27 @@
                             <td>
                                 @{
                                     string 活動 = "無優惠活動";
-                                    if (item.DiscountDetails.FirstOrDefault() != null)
-                                    {
-                                        活動 = item.DiscountDetails.Select(x => x.Discount.DiscountName).FirstOrDefault().ToString();
-                                    }
+                                    //if (item.DiscountDetails.FirstOrDefault() != null)
+                                    //{
+                                    //    活動 = item.DiscountDetails.Select(x => x.Discount.DiscountName).FirstOrDefault().ToString();
+                                    //}
                                 }
                                 @Html.DisplayFor(modelItem => 活動)
                             </td>
                             <td>
                                 @{
                                     decimal 折扣 = 1;
-                                    if (item.DiscountDetails.FirstOrDefault() != null)
-                                    {
-                                        折扣 = Convert.ToDecimal(item.DiscountDetails.Select(x => x.Discount.DiscountAmount));
-                                    }
+                                    //if (item.DiscountDetails.FirstOrDefault() != null)
+                                    //{
+                                    //    折扣 = Convert.ToDecimal(item.DiscountDetails.Select(x => x.Discount.DiscountAmount));
+                                    //}
                                     var 活動價 = item.UnitPrice * 折扣;
                                 }
 
                                 @Html.DisplayFor(modelItem => 活動價)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Publisher.PublisherName)
+                                @Html.DisplayFor(modelItem => item.Publisher!.PublisherName)
                             </td>
                             <td>
                                 @{

@@ -20,25 +20,13 @@
     </div>
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <a><img src="../Image/demo-pic.jpg" class="d-block w-100" alt="page1" height="300"></a>
-            <div class="carousel-caption d-none d-md-block">
-                <h5>First slide label</h5>
-                <p>Some representative placeholder content for the first slide.</p>
-            </div>
+            <a href="~/Promotions/Promotions註冊會員禮"><img src="~/Image/Promotions/註冊會員.png" class="d-block w-100" alt="page1" height="300"></a>
         </div>
         <div class="carousel-item">
-            <a><img src="../Image/demo-pic.jpg" class="d-block w-100" alt="page2" height="300"></a>
-            <div class="carousel-caption d-none d-md-block">
-                <h5>Second slide label</h5>
-                <p>Some representative placeholder content for the second slide.</p>
-            </div>
+            <a href="~/Promotions/Promotions會員"><img src="~/Image/Promotions/會員等級優惠及升等方式.png" class="d-block w-100" alt="page2" height="300"></a>
         </div>
         <div class="carousel-item">
-            <a><img src="../Image/demo-pic.jpg" class="d-block w-100" alt="page3" height="300"></a>
-            <div class="carousel-caption d-none d-md-block">
-                <h5>Third slide label</h5>
-                <p>Some representative placeholder content for the third slide.</p>
-            </div>
+            <a href="~/Promotions/Promotions促銷活動"><img src="~/Image/Promotions/書目特惠.png" class="d-block w-100" alt="page2" height="300"></a>
         </div>
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
@@ -181,48 +169,38 @@
     <div class="row">
         <p>注目新品</p>
         <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
+            @Html.Partial("_ProductPartialView")
         </div>
         <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
+            @Html.Partial("_ProductPartialView")
         </div>
         <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
+            @Html.Partial("_ProductPartialView")
         </div>
         <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
+            @Html.Partial("_ProductPartialView")
         </div>
         <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
+            @Html.Partial("_ProductPartialView")
         </div>
 
     </div>
     <br />
     <div class="row">
         <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
+            @Html.Partial("_ProductPartialView")
         </div>
         <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
+            @Html.Partial("_ProductPartialView")
         </div>
         <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
+            @Html.Partial("_ProductPartialView")
         </div>
         <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
+            @Html.Partial("_ProductPartialView")
         </div>
         <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
+            @Html.Partial("_ProductPartialView")
         </div>
     </div>
 </div>
@@ -239,23 +217,29 @@
     </div>
     <div class="row">
         <div class="col">
-            <a href="~/Book/BookInformation"><img src="~/image/demo-pic.jpg" width="100%" /></a>
+            <div class="caption bookCaption text-center">
+                <a href="~/Book/BookInformation#comment"><img src="~/image/Book/bookCover/10.jpg" height="150" /></a>
+                <ul style="list-style:none; margin:0; padding:0;" class="text-start">
+                    <li class='prod_TitleMain'><a>餘生是你 晚點沒關係</a></li>
+                    <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>坂本一男</a></li>
+                    <li class="prod_comment"><span>評論：</span><span>productshow productshow productshow productshow</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col">
+            <a href="~/Book/BookInformation/#comment"><img src="~/image/demo-pic.jpg" width="100%" /></a>
             productshow productshow productshow productshow productshow productshow productshow productshow
         </div>
         <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
+            <a href="~/Book/BookInformation/#comment"><img src="~/image/demo-pic.jpg" width="100%" /></a>
             productshow productshow productshow productshow productshow productshow productshow productshow
         </div>
         <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
+            <a href="~/Book/BookInformation/#comment"><img src="~/image/demo-pic.jpg" width="100%" /></a>
             productshow productshow productshow productshow productshow productshow productshow productshow
         </div>
         <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
-        </div>
-        <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
+            <a href="~/Book/BookInformation/#comment"><img src="~/image/demo-pic.jpg" width="100%" /></a>
             productshow productshow productshow productshow productshow productshow productshow productshow
         </div>
     </div>

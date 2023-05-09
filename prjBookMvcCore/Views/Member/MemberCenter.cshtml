@@ -1,4 +1,4 @@
-﻿@model UserInforService
+﻿@inject UserInforService user
 @{
     ViewBag.Title = "會員中心首頁";
     Layout = "~/Views/Shared/_Layout_Member.cshtml";
@@ -21,11 +21,11 @@
         <div class="col-4">
                 <div class="card" style="height:100%">
                     <a class="card-header small" style="display:block;width:100%;" href="~/Member/alretProflie">
-                        <h5 class="display-6">@Model.UserLevel</h5>
+                        <h5 class="display-6" id="memberLevel">新皮</h5>
                         <p>等級期限 2023/08/31 止<br />尚差 4058 元即可升等為 <br />金皮 </p>
                     </a>
                     <ul class="list-group list-group-flush" >
-                        <li class="list-group-item small">了解詳細<a href="~/Home/QA" style="color:GrayText"> 會員分級 </a></li>
+                        <li class="list-group-item small">了解詳細<a href="~/Home/QA#card2" style="color:GrayText"> 會員分級 </a></li>
                         <li class="list-group-item small"><a href="~/Member/alretPassword" style="color:GrayText"> 修改密碼 </a></li>
                         <li class="list-group-item small"><a href="~/Member/myCollect" style="color:GrayText"> 收藏清單 </a></li>
                     </ul>
@@ -37,7 +37,8 @@
                 <div class="card">
                     <a class="card-body" style="display:block;width:100%;" href="~/Member/myMessage">
                         <p class="card-text">
-                            您有 </p><span class="display-6">@Model.UserMessageCount  </span>封訊息未讀
+                                    您有
+                                </p><span class="display-6" id="messageCount">0  </span>封訊息未讀
                     </a>
                 </div>
             </div>
@@ -45,7 +46,7 @@
                 <div class="card">
                     <a class="card-body" style="display:block;width:100%;" href="~/Member/myOrders">
                         <p class="card-text">
-                            您已購買過 </p><span class="display-6">@Model.UserOrders  </span>次書籍
+                            您已購買過 </p><span class="display-6" id="orders">0  </span>次書籍
                     </a>
                 </div>
                     </div>
@@ -56,17 +57,17 @@
                         <div class="card-body">
                             <p class="card-text">
                                 您的回饋金餘額：
-                            </p><span class="display-6">@Model.UserPoints  </span>點
+                            </p><span class="display-6" id="points">0  </span>點
                         </div>
                     </div>
                 </div>
                 <div class="col">
                     <div class="card">
-                        <div class="card-body">
+                                <a class="card-body" style="display:block;width:100%;" href="~/Member/myCoupons">
                             <p class="card-text">
                                 您的E-Coupon尚有：
-                            </p><span class="display-6">1  </span>張
-                        </div>
+                             </p><span class="display-6" id="coupons">0  </span>張
+                            </a>
                     </div>
                 </div>
                 </div>
@@ -74,3 +75,27 @@
         </div>
 </div>
 </div>
+
+@section Scripts{
+    <script>
+        const level = document.querySelector('#memberLevel');
+        const messageCount = document.querySelector('#messageCount');
+        const orders = document.querySelector('#orders');
+        const points = document.querySelector('#points');
+        const coupons = document.querySelector('#coupons');
+        const test = document.querySelector('#test');
+
+        window.onload = async () => {
+            const response = await fetch('@Url.Content("~/Member/gerMemberInfor")?id=' + @user.UserId);
+            const datas = await response.json();
+            console.log(datas);
+            level.innerHTML = `${datas.user_leverl}`
+            messageCount.innerHTML = `${datas.user_msCount}  `
+            orders.innerHTML = `${datas.user_odCount}  `
+            points.innerHTML = `${datas.user_points}  `
+            coupons.innerHTML = `${datas.user_coupons}  ` 
+        };
+    </script>
+
+
+}
