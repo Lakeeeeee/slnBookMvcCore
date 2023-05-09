@@ -1,7 +1,7 @@
-﻿@model IEnumerable<BooksCardModel>
+﻿@model IEnumerable<BooksCardViewModel>
 
 <div class="row">
-       @foreach (var item in Model)
+    @foreach (var item in Model)
     {
         <div class="col-md-4 col-xl-3 col-lg-4 col-md-6 col-sm-12">
             <div class="card">
@@ -10,10 +10,10 @@
                          alt="@item.BookId+.jpg" />
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">書名:@(string.IsNullOrEmpty(item.BookTitle) ? "無" : item.BookTitle)</h5>                    
+                    <h5 class="card-title">書名:@(string.IsNullOrEmpty(item.BookTitle) ? "無" : item.book.BookTitle)</h5>
                     <p class="card-author">作者:@(string.IsNullOrEmpty(item.AuthorName) ? "無" : item.AuthorName)</p>
                     <p class="card-text">原    價：@item.UnitPrice</p>
-                    <p class="card-text">優惠價：@(string.IsNullOrEmpty(item.DiscountName) ? "無" : $"{item.DiscountName} {item.DiscountAmount}")</p>
+                    <p class="card-text">優惠價：@(string.IsNullOrEmpty(item.BookDiscountName) ? "無" : $"{item.UnitPrice*item.BookDiscountAmount}")</p>
                     <p class="card-text">出版日期：@item.PublicationDate.ToString("yyyy/MM/dd")</p>
                 </div>
             </div>

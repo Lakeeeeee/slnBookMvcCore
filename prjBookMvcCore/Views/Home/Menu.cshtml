@@ -48,17 +48,17 @@
                                     string path = g.ArticalTitle + ".jpg";
 
                                     latestArticalId = g.ArticalId;
-                                    <table>
-                                        <tr>
-                                            <td colspan="2">
-                                                <div style="text-align:center"><a href="~/Artical/Detail文章/@g.ArticalId"> <img src="~/Image/ArticalPicture/@path" height="300" title="@g.ArticalTitle" /> </a></div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><span> @g.ArticalTitle</span></td>
-                                            <td style="color: gray; font-style: oblique;font-size: 60%;text-align: right;"><span>更新日期：@g.ArticalDate</span> </td>
-                                        </tr>
-                                    </table>
+                                        <table>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <div style="text-align:center"><a href="~/Artical/Detail文章/@g.ArticalId"> <img src="~/Image/ArticalPicture/@path" height="300" title="@g.ArticalTitle" /> </a></div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><span> @g.ArticalTitle</span></td>
+                                                <td style="color: gray; font-style: oblique;font-size: 60%;text-align: right;"><span>更新日期：@g.ArticalDate</span> </td>
+                                            </tr>
+                                        </table>
                                 }
                                 #region 文章內書目
                                 //    var detail = db.ArticalToBookDetails.Where(d => d.ArticalId == 1).Select(d => new { d.Book.BookTitle, d.Book.UnitPrice, d.Book.CoverPath, d.Book.BookId, }).ToList();
@@ -104,9 +104,9 @@
                     @{
                         for (int i = 2; i <= 4; i++)
                         {
-                            <div class="carousel-item">
-                                <div class="row">
-                                    @{
+                                <div class="carousel-item">
+                                    <div class="row">
+                                        @{
                                         db = new BookShopContext();
                                         int preArticalId = latestArticalId - i;
                                         Artical = db.Articals.Where(a => a.ArticalId == preArticalId).Select(a => a);
@@ -114,17 +114,17 @@
                                         {
                                             string path = g.ArticalTitle + ".jpg";
 
-                                            <table>
-                                                <tr>
-                                                    <td colspan="2">
-                                                        <div style="text-align:center"><a href="~/Artical/Detail文章/@g.ArticalId"> <img src="~/Image/ArticalPicture/@path" height="300" title="@g.ArticalTitle" /> </a></div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>@g.ArticalTitle</td>
-                                                    <td style="color: gray; font-style: oblique;font-size: 60%;text-align: right;">更新日期：@g.ArticalDate</td>
-                                                </tr>
-                                            </table>
+                                                    <table>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <div style="text-align:center"><a href="~/Artical/Detail文章/@g.ArticalId"> <img src="~/Image/ArticalPicture/@path" height="300" title="@g.ArticalTitle" /> </a></div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>@g.ArticalTitle</td>
+                                                            <td style="color: gray; font-style: oblique;font-size: 60%;text-align: right;">更新日期：@g.ArticalDate</td>
+                                                        </tr>
+                                                    </table>
                                         }
                                         #region 文章內書目
                                         //    detail = db.ArticalToBookDetails.Where(d => d.ArticalId == i).Select(d => new { d.Book.BookTitle, d.Book.UnitPrice, d.Book.CoverPath, d.Book.BookId, }).ToList();
@@ -164,9 +164,9 @@
                                         //                    </tr>
                                         //                </table>
                                         #endregion
-                                    }
+                                        }
+                                    </div>
                                 </div>
-                            </div>
                         }
                     }
                     @*輪播圖切換按鈕*@ <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleNew" data-bs-slide="prev" border=5>
@@ -203,31 +203,31 @@
                                         var author = db.AuthorDetails.Where(ad => ad.BookId == book.BookId).Select(ad => ad.Author).FirstOrDefault();
                                         var discount = db.BookDiscountDetails.Where(dd => dd.BookId == book.BookId).Select(dd => dd.BookDiscount).FirstOrDefault();
                                         var discountedPrice = book.UnitPrice * (1 - (discount?.BookDiscountAmount ?? 0) / 100);
-                                        <div class="col book-item" data-publication-date="@book.PublicationDate" data-price="@((int)Math.Round(discountedPrice))">
-                                            <div style="position:relative">
-                                                <a><img src="~/images/@book.BookId+.jpg" alt="@book.BookId+.jpg"></a>
-                                            </div>
-                                            <div class="caption">
-                                                <ul style="list-style:none; margin:0; padding:0;">
-                                                    <li> <a class="bookCaption">@book.BookTitle</a></li>
-                                                    <li class='prod_author'>
-                                                        作者：
-                                                        @if (author != null)
+                                            <div class="col book-item" data-publication-date="@book.PublicationDate" data-price="@((int)Math.Round(discountedPrice))">
+                                                <div style="position:relative">
+                                                    <a><img src="~/images/@book.BookId+.jpg" alt="@book.BookId+.jpg"></a>
+                                                </div>
+                                                <div class="caption">
+                                                    <ul style="list-style:none; margin:0; padding:0;">
+                                                        <li> <a class="bookCaption">@book.BookTitle</a></li>
+                                                        <li class='prod_author'>
+                                                            作者：
+                                                            @if (author != null)
                                                         {
-                                                            <a href="/rwd_searchResult.html?keyword%5B%5D=@author.AuthorName&keyType%5B%5D=2">@author.AuthorName</a>
+                                                                <a href="/rwd_searchResult.html?keyword%5B%5D=@author.AuthorName&keyType%5B%5D=2">@author.AuthorName</a>
                                                         }
-                                                    </li>
-                                                    <li class="Price">原    價：<span>@((int)Math.Round(book.UnitPrice))</span>元</li>
-                                                    <li class="discPrice">
-                                                        優惠價：<span>@(discount?.BookDiscountName ?? "")</span>
-                                                        <span>@((int)Math.Round(discountedPrice))</span>元
-                                                    </li>
-                                                    <li class="publicationDate">
-                                                        出版日期：<span>@book.PublicationDate.ToString("yyyy/MM/dd")</span>
-                                                    </li>
-                                                </ul>
+                                                        </li>
+                                                        <li class="Price">原    價：<span>@((int)Math.Round(book.UnitPrice))</span>元</li>
+                                                        <li class="discPrice">
+                                                            優惠價：<span>@(discount?.BookDiscountName ?? "")</span>
+                                                            <span>@((int)Math.Round(discountedPrice))</span>元
+                                                        </li>
+                                                        <li class="publicationDate">
+                                                            出版日期：<span>@book.PublicationDate.ToString("yyyy/MM/dd")</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
-                                        </div>
                                     }
                                 }
                             </div>
@@ -236,9 +236,9 @@
                         @{
                             for (int i = 2; i <= 4; i++)
                             {
-                                <div class="carousel-item">
-                                    <div class="row">
-                                        @{
+                                    <div class="carousel-item">
+                                        <div class="row">
+                                            @{
                                             using (var bookDb = new BookShopContext())
                                             {
                                                 var preBookId = db.Books.Where(b => b.LanguageId == 1).OrderByDescending(b => b.PublicationDate).Select(b => b.BookId).Take((i - 1) * 4).ToList();
@@ -250,32 +250,32 @@
                                                     var discount = bookDb.BookDiscountDetails.Where(d => d.BookId == book.BookId).Select(d => new { d.BookDiscountId }).FirstOrDefault();
                                                     var discountAmount = discount != null ? bookDb.BookDiscounts.Where(d => d.BookDiscountId == discount.BookDiscountId).Select(d => new { d.BookDiscountId, d.BookDiscountAmount, d.BookDiscountName }).FirstOrDefault() : null;
                                                     var discountedPrice = book?.UnitPrice * (1 - (discountAmount != null ? discountAmount.BookDiscountAmount : 0) / 100) ?? book?.UnitPrice ?? 0;
-                                                    <div class="col book-item" data-publication-date="@book?.PublicationDate" data-price="@((int)Math.Round(discountedPrice))">
-                                                        <div style="position:relative">
-                                                            <a><img src="@book?.CoverPath"></a>
-                                                        </div>
-                                                        <div class="caption">
-                                                            <ul style="list-style:none; margin:0; padding:0;">
-                                                                <li>
-                                                                    <a class="bookCaption">@book?.BookTitle</a>
-                                                                </li>
-                                                                <li class='prod_author'>
-                                                                    作者：@if (authorName != null)
+                                                            <div class="col book-item" data-publication-date="@book?.PublicationDate" data-price="@((int)Math.Round(discountedPrice))">
+                                                                <div style="position:relative">
+                                                                    <a><img src="@book?.CoverPath"></a>
+                                                                </div>
+                                                                <div class="caption">
+                                                                    <ul style="list-style:none; margin:0; padding:0;">
+                                                                        <li>
+                                                                            <a class="bookCaption">@book?.BookTitle</a>
+                                                                        </li>
+                                                                        <li class='prod_author'>
+                                                                            作者：@if (authorName != null)
                                                                     {
-                                                                        <a href="/rwd_searchResult.html?keyword%5B%5D=@authorName&keyType%5B%5D=2">@authorName.AuthorName</a>
+                                                                                <a href="/rwd_searchResult.html?keyword%5B%5D=@authorName&keyType%5B%5D=2">@authorName.AuthorName</a>
                                                                     }
-                                                                </li>
-                                                                <li class="Price">原    價：<span>@((int)Math.Round(book?.UnitPrice ?? 0))</span>元</li>
-                                                                <li class="discPrice">優惠價：<span>@(discountAmount != null ? discountAmount.BookDiscountName : "")</span><span>@((int)Math.Round(discountedPrice))</span>元</li>
-                                                                <li class="publicationDate">出版日期：<span>@book?.PublicationDate.ToString("yyyy/MM/dd")</span></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
+                                                                        </li>
+                                                                        <li class="Price">原    價：<span>@((int)Math.Round(book?.UnitPrice ?? 0))</span>元</li>
+                                                                        <li class="discPrice">優惠價：<span>@(discountAmount != null ? discountAmount.BookDiscountName : "")</span><span>@((int)Math.Round(discountedPrice))</span>元</li>
+                                                                        <li class="publicationDate">出版日期：<span>@book?.PublicationDate.ToString("yyyy/MM/dd")</span></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
                                                 }
                                             }
-                                        }
+                                            }
+                                        </div>
                                     </div>
-                                </div>
                             }
                         }
                         @*輪播圖切換按鈕*@ <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleEdit" data-bs-slide="prev" border=5>
@@ -293,7 +293,7 @@
     </div>
 </div>
 
- @await Html.PartialAsync("_BookCardPartial", (IEnumerable<BooksCardModel>)Model)
+
 
 
 
