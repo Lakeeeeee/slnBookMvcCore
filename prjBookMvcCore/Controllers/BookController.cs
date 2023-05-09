@@ -9,7 +9,8 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult BookInformation()
         {
-            return View();
+            Book test = db.Books.FirstOrDefault(x => x.BookId == 10);
+            return View(test);
         }
     }
 }
