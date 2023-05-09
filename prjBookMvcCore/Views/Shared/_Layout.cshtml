@@ -27,8 +27,7 @@
 <body>
     <div style="height:400px; background-image:url('/Image/banner.jpg');background-size:100%;">
         @*導覽開始*@
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm  box-shadow mb-3">
-            @*navbar-light bg-white border-bottom*@
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm  box-shadow mb-3 ">
             <div class="container">
                 <div class="align-items-start">
                     @Html.ActionLink("讀本", "Home", "Home", new { area = "" }, new { @class = "navbar-brand" })  @*須換圖*@
@@ -56,8 +55,7 @@
         @*導覽結束*@
         @*分類 & 搜尋開始*@
         <div class="navbar navbar-default navbar-fixed-top" style="">
-            <div class="container">
-                <div class="navbar navbar-light bg-light container-fluid" style="border:1px solid #000000; background-color:#ebf8bc">
+                <div class="navbar navbar-light bg-light container" style="border:1px solid #000000; background-color:#ebf8bc">
                     @* 分類  *@
                     <form class="justify-content-start">
                         <div class="menu">
@@ -131,7 +129,6 @@
                         </div>
                     </form>
                 </div>
-            </div>
         </div>
         @*分類 & 搜尋結束*@
 
