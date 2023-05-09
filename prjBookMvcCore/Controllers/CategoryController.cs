@@ -6,7 +6,7 @@ namespace prjBookMvcCore.Controllers
     public class CategoryController : Controller
     {
         BookShopContext db = new();
-
+        //TODO:(書玉)分頁controller發法改寫
         public IActionResult 中文書()
         {
             var datas = from c in db.Categories

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using prjBookMvcCore.Models;
+using static prjBookMvcCore.Models.BooksCardModel;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -13,13 +14,29 @@ namespace prjBookMvcCore.Controllers
             return View();
         }
 
+
         public IActionResult _BookCardPartial(int? id)
         {
             if (id == null)
                 return RedirectToAction("Home");
-            IQueryable datas = from s in db.Books.Include(s => s.BookId)
-                               where s.BookId == id
-                               select s;
+
+            var db = new BooksCardModel();
+
+            var datas = db.Books
+                .Where(book => book.BookId == id)
+                .Include(book => book.Authors)
+                .Include(book => book.BookDiscounts)
+                .Select(book => new
+                {
+                    book.BookId,
+                    book.BookTitle,
+                    book.UnitPrice,
+                    book.PublicationDate,
+                    Author = book.Authors.Select(author => author.AuthorName).ToList(),
+                    BookDiscountName = book.BookDiscounts.Select(discount => discount.DiscountName).FirstOrDefault()
+                })
+                .FirstOrDefault();
+
             return View(datas);
         }
     }
