@@ -635,7 +635,6 @@
                 commentValueMyself: null,
                 showAll: false,
                 showAllComments: false,
-                displayCount: 15,
                 contentIntro: contentIntroJS.split("\n"),
                 endorsements: endorsementsJS.split("\n"),
                 foreward: forewardJS.split("\n"),
@@ -770,16 +769,17 @@
             },
             computed: {
                 tableContainerText() {
-                    return this.showAll ? this.tableContainer : this.tableContainer.slice(0, this.displayCount);
+                    //displayCount
+                    return this.showAll ? this.tableContainer : this.tableContainer.slice(0, 8);
                 },
                 tryContentText() {
-                    return this.showAll ? this.tryContent : this.tryContent.slice(0, this.displayCount);
+                    return this.showAll ? this.tryContent : this.tryContent.slice(0, 8);
                 },
                 endorsementsText(){
-                    return this.showAll ? this.endorsements : this.endorsements.slice(0, this.displayCount);
+                    return this.showAll ? this.endorsements : this.endorsements.slice(0, 5);
                 },
                 forewardText(){
-                    return this.showAll ? this.foreward : this.foreward.slice(0, this.displayCount);
+                    return this.showAll ? this.foreward : this.foreward.slice(0, 5);
                 }
             },
             methods: {
