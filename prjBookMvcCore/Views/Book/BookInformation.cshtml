@@ -625,7 +625,7 @@
                 content: commentInformations[i]._comment.commentText,
                 date: commentInformations[i]._comment.commentTime.split(/[\sT]/)[0],
                 value: commentInformations[i]._comment.stars,
-                author: commentInformations[i]._member.MemberName,
+                author: commentInformations[i]._member.memberName,
                 profile: '../image/Book/bookComment/' + commentInformations[i]._comment.memberId + '.jpg',
             };
             commentsJS.push(comment);
