@@ -15,10 +15,6 @@ namespace prjBookMvcCore.Controllers
         public IActionResult BookInformation()
         {
             int bookId = 5;
-            using(var context = new BookShopContext())
-            {
-
-            }
             var query = from b in db.Books
                         where b.BookId == bookId
                         select new
