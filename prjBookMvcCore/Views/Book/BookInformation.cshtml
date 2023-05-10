@@ -618,6 +618,19 @@
         let categoryNameJS = replaceDoubleDollarSign(decodeHTML("@Model.category.CategoryName"))
         let subCategoryNameJS = replaceDoubleDollarSign(decodeHTML("@Model.subCategory.SubCategoryName"))
 
+        let commentInformations = @Html.Raw(Json.Serialize(Model.commentInformations));
+        let commentsJS = [];
+        for (let i = 0; i < commentInformations.length; i++) {
+            let comment = {
+                content: commentInformations[i]._comment.commentText,
+                date: commentInformations[i]._comment.commentTime.split(/[\sT]/)[0],
+                value: commentInformations[i]._comment.stars,
+                author: commentInformations[i]._member.MemberName,
+                profile: '../image/Book/bookComment/' + commentInformations[i]._comment.memberId + '.jpg',
+            };
+            commentsJS.push(comment);
+        }
+
         let app = new Vue({
             el: '#app',
             data: {
@@ -721,66 +734,8 @@
                     },
 
                 ],
-                comment: [
-                    {
-                        value: 4.0,
-                        author: 'Arthur Huang',
-                        date: '2022-07-15',
-                        content:
-                            '原子習慣：細微改變帶來巨大成就的實證法則\r\n不錯好看的一本書',
-                        profile: '../Image/Book/bookComment/anonymous.jpg'
-                    },
-                    {
-                        value: 5.0,
-                        author: '俐君',
-                        date: '2021-10-08',
-                        content:
-                            '很實用的一本書，有明確且直白的舉例，完全能理解且能夠拿來應用在生活之中！',
-                        profile: '../Image/Book/bookComment/p2.jpg'
-                    },
-                    {
-                        value: 5.0,
-                        author: 'Gary Kang',
-                        date: '2021-06-09',
-                        content: '大推！一本看完會令你想動起來做些改變的書！',
-                        profile: '../Image/Book/bookComment/p3.jpg'
-                    },
-                    {
-                        value: 5.0,
-                        author: 'RongChu',
-                        date: '2021-05-05',
-                        content: '書中提出很多的想法、做法，都是從小事情開始，不需要為自己設限，開始做就對了！',
-                        profile: '../Image/Book/bookComment/p4.jpg'
-                    },
-                    {
-                        value: 3.0,
-                        author: 'Angela Lu',
-                        date: '2021-01-21',
-                        content: '很紅的一本書',
-                        profile: '../Image/Book/bookComment/p5.jpg'
-                    },
-                    {
-                        value: 3.0,
-                        author: 'Liyu',
-                        date: '2020-09-15',
-                        content: '內容是大家普遍知道的道理，但做得到的人並不多。',
-                        profile: '../Image/Book/bookComment/p6.jpg'
-                    },
-                    {
-                        value: 5.0,
-                        author: 'Mercedes陽光在你身邊',
-                        date: '2020-03-14',
-                        content: '《原子習慣》主要是從作者的經驗出發、分享如何建立習慣，而《為什麼我們這樣生活、那樣工作》則是從學術研究來探討習慣的運作。',
-                        profile: '../Image/Book/bookComment/p7.jpg'
-                    },
-                    {
-                        value: 5.0,
-                        author: 'Dibby 遞筆',
-                        date: '2019-09-21',
-                        content: '這本書確讓我迫不急待地看完，也確實提起近來改變習慣!',
-                        profile: '../Image/Book/bookComment/p8.jpg'
-                    },
-                ],
+                test: "@Model.commentInformations",
+                comment: commentsJS,
             },
             computed: {
                 tableContainerText() {

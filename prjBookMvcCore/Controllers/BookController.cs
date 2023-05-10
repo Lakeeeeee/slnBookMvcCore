@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.ProjectModel;
 using prjBookMvcCore.Models;
 using System.Linq;
+using System.Net;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace prjBookMvcCore.Controllers
@@ -12,7 +14,11 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult BookInformation()
         {
-            int bookId = 123;
+            int bookId = 5;
+            using(var context = new BookShopContext())
+            {
+
+            }
             var query = from b in db.Books
                         where b.BookId == bookId
                         select new
@@ -72,6 +78,8 @@ namespace prjBookMvcCore.Controllers
                 Painter pt = new Painter { PainterName = item.繪者 };
                 Author a = new Author { AuthorName = item.作者 };
 
+                List<CommentInformation> cis = getCommentInformation(bookId);
+
                 CInformation newBook = new CInformation
                 {
                     book = b,
@@ -82,10 +90,42 @@ namespace prjBookMvcCore.Controllers
                     author = a,
                     translator = t,
                     painter = pt,
+                    commentInformations = cis,
                 };
+
                 return View(newBook);
             }
             return View();
+        }
+        public List<CommentInformation> getCommentInformation(int bookId)
+        {
+            using (var db = new BookShopContext())
+            {
+                var comments = (from ct in db.Comments
+                                join m in db.Members on ct.MemberId equals m.MemberId
+                                where ct.BookId == bookId
+                                select new
+                                {
+                                    留言內容 = ct.CommentText,
+                                    留言時間 = ct.CommentTime,
+                                    留言作者 = m.MemberName,
+                                    留言作者ID = ct.MemberId,
+                                    評分 = ct.Stars,
+                                }).ToList();
+                List<CommentInformation> cis = new List<CommentInformation>();
+                foreach (var comment in comments)
+                {
+                    Comment cc = new Comment { CommentText = comment.留言內容, CommentTime = comment.留言時間, Stars = comment.評分, MemberId = comment.留言作者ID};
+                    Member m = new Member { MemberName = comment.留言作者 };
+                    CommentInformation tmp = new CommentInformation()
+                    {
+                        _comment = cc,
+                        _member = m,
+                    };
+                    cis.Add(tmp);
+                }
+                return cis;
+            }
         }
     }
 }

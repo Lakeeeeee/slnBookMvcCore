@@ -9,7 +9,7 @@ namespace prjBookMvcCore.Models
         public int? MemberId { get; set; }
         public int BookId { get; set; }
         public string? CommentText { get; set; }
-        public string Stars { get; set; } = null!;
+        public int Stars { get; set; }
         public DateTime CommentTime { get; set; }
 
         public virtual Book Book { get; set; } = null!;
