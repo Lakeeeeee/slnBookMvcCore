@@ -83,7 +83,7 @@
                                     var subcategories = db.SubCategories.Where(s => s.CategoryId == 15).Select(s => new { s.SubCategoryName}).ToList();
                                     foreach (var subcategory in subcategories)
                                     {
-                                            <li class="list-group-item"><span><a href="~/Category/@category.CategoryName/@subcategory.SubCategoryName">@subcategory.SubCategoryName</a></span></li>
+                                        <li class="list-group-item"><span><a href="~/Category/@category.CategoryName/@subcategory.SubCategoryName">@subcategory.SubCategoryName</a></span></li>
                                     }
                                 }
                             }

@@ -6,11 +6,11 @@
         <div class="col-md-4 col-xl-3 col-lg-4 col-md-6 col-sm-12">
             <div class="card">
                 <div class="headshot">
-                    <img class="card-img-top" src="~/images/@item.BookId+.jpg"
-                         alt="@item.BookId+.jpg" />
+                    <img class="card-img-top" src="~/images/@item.CoverPath"
+                     alt="@item.CoverPath" />
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">書名:@(string.IsNullOrEmpty(item.BookTitle) ? "無" : item.book.BookTitle)</h5>
+                    <h5 class="card-title">書名:@(string.IsNullOrEmpty(item.BookTitle) ? "無" : item.BookTitle)</h5>
                     <p class="card-author">作者:@(string.IsNullOrEmpty(item.AuthorName) ? "無" : item.AuthorName)</p>
                     <p class="card-text">原    價：@item.UnitPrice</p>
                     <p class="card-text">優惠價：@(string.IsNullOrEmpty(item.BookDiscountName) ? "無" : $"{item.UnitPrice*item.BookDiscountAmount}")</p>

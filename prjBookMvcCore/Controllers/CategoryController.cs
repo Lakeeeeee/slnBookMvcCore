@@ -7,11 +7,12 @@ namespace prjBookMvcCore.Controllers
     {
         BookShopContext db = new();
         //TODO:(書玉)分頁controller發法改寫
-        public IActionResult 中文書()
+        public IActionResult 中文書(int? id)
         {
-            var datas = from c in db.Categories
-                        select c;
-            return View(datas);
+            if (id == null) { return RedirectToAction("中文書"); }
+            var datas = db.Books.Where(b => b.LanguageId == id).Select(b=>b.BookId);
+            ViewBag.BookId = datas;
+            return View(); 
         }
 
         public IActionResult 人文社科()
