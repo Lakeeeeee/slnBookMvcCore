@@ -1,5 +1,5 @@
 ﻿@using prjBookMvcCore.Models
-@model Book
+@model CInformation
 @{
     ViewData["Title"] = "BookInformation";
 }
@@ -223,10 +223,10 @@
         <div>
             <el-container>
                 <el-breadcrumb separator-class="el-icon-arrow-right">
-                    <el-breadcrumb-item><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">首頁</a></el-breadcrumb-item>
-                    <el-breadcrumb-item><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">中文書</a></el-breadcrumb-item>
-                    <el-breadcrumb-item><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">商業</a></el-breadcrumb-item>
-                    <el-breadcrumb-item><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">投資理財</a></el-breadcrumb-item>
+                    <el-breadcrumb-item ><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">首頁</a></el-breadcrumb-item>
+                    <el-breadcrumb-item v-if="book.languageName && book.languageName.length > 1"><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.languageName}}</a></el-breadcrumb-item>
+                    <el-breadcrumb-item v-if="book.categoryName && book.categoryName.length > 1"><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.categoryName}}</a></el-breadcrumb-item>
+                    <el-breadcrumb-item v-if="book.subCategoryName && book.subCategoryName.length > 1"><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.subCategoryName}}</a></el-breadcrumb-item>
                     <el-breadcrumb-item><div style="color: #E3007F;">{{book.bookTitle}}</div></el-breadcrumb-item>
                 </el-breadcrumb>
             </el-container>
@@ -292,7 +292,7 @@
                     <div style="padding-left: 5px;">
                         <h1 style="line-height: normal;letter-spacing: 0.5px;font-size:20px;font-weight:bold;">{{book.bookTitle}}</h1>
                         <div class="authorBoard">
-                            <p style="text-align: left;"><span>作者：<a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">佛蘭克．赫爾</a></span></p>
+                            <p style="text-align: left;"><span>作者：<a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.authorName}}</a></span></p>
                         </div>
                         <el-row>
                             <el-button round size="small" type="pinkBorder" style="margin-left: 0px; padding: 9px;"><i class="el-icon-edit"></i><span style="color:#E3007F;">11</span>評價</el-button>
@@ -388,8 +388,9 @@
                 <el-main>
                     <div class="information">
                         <span style="font-size: 20px; font-weight: bold;">商品資料</span>
-                        <p>作者：<span><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">佛蘭克．赫爾</a></span></p>
-                        <p>譯者：<span><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">徐世明</a></span></p>
+                        <p>作者：<span><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.authorName}}</a></span></p>
+                        <p v-if="book.translatorName && book.translatorName.length > 1">譯者：<span><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.translatorName}}</a></span></p>
+                        <p v-if="book.painterName && book.painterName.length > 1">繪者：<span><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.painterName}}</a></span></p>
                         <p>出版社：<span><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.publisherName}}</a></span></p>
                         <p>出版日期：<span>{{book.publicationDate}}</span></p>
                         <p>ISBN/ISSN：<span>{{book.isbn}}</span></p>
@@ -400,9 +401,9 @@
                         <p>
                             類別：
                             <span>
-                                <a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">中文書</a>>
-                                <a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">商業</a>>
-                                <a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">投資理財</a>
+                                <a v-if="book.languageName && book.languageName.length > 1" href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.languageName}}</a>>
+                                <a v-if="book.categoryName && book.categoryName.length > 1" href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.categoryName}}</a>>
+                                <a v-if="book.subCategoryName && book.subCategoryName.length > 1" href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.subCategoryName}}</a>
                             </span>
                         </p>
                     </div>
@@ -589,45 +590,55 @@
         function replaceDoubleDollarSign(str) {
           return str.replace(/\$\$/g, '\n');
         }
-        let encodedContentIntro = "@Model.ContentIntro"
+        let encodedContentIntro = "@Model.book.ContentIntro"
         let contentIntroJS = decodeHTML(encodedContentIntro)
 
-        let encodedTryContent = "@Model.TryContent"
+        let encodedTryContent = "@Model.book.TryContent"
         let tryContentJS = decodeHTML(encodedTryContent)
 
-        let encodedEndorsements = "@Model.Endorsements"
+        let encodedEndorsements = "@Model.book.Endorsements"
         let endorsementsJS = decodeHTML(encodedEndorsements)
 
-        let encodedForeward = "@Model.Foreward"
+        let encodedForeward = "@Model.book.Foreward"
         let forewardJS = decodeHTML(encodedForeward)
 
-        let encodedTableContainer = "@Model.TableContainer"
+        let encodedTableContainer = "@Model.book.TableContainer"
         let tableContainerJS = decodeHTML(encodedTableContainer)
 
-        let bookTitleJS = replaceDoubleDollarSign(decodeHTML("@Model.BookTitle"))
-        let bindingMethodJS = replaceDoubleDollarSign(decodeHTML("@Model.BindingMethod"))
-        let publicationDateJS = decodeHTML("@Model.PublicationDate").split(/[\s上午下午]/)[0];
-        let dimensionsJS = replaceDoubleDollarSign(decodeHTML("@Model.Dimensions"))
-        let pagesJS = replaceDoubleDollarSign(decodeHTML("@Model.Pages"))
-        let languageNameJS = replaceDoubleDollarSign(decodeHTML("@Model.Language.LanguageName"))
-        let publisherNameJS = replaceDoubleDollarSign(decodeHTML("@Model.Publisher.PublisherName"))
+        let bookTitleJS = replaceDoubleDollarSign(decodeHTML("@Model.book.BookTitle"))
+        let bindingMethodJS = replaceDoubleDollarSign(decodeHTML("@Model.book.BindingMethod"))
+        let publicationDateJS = decodeHTML("@Model.book.PublicationDate").split(/[\s上午下午]/)[0];
+        let dimensionsJS = replaceDoubleDollarSign(decodeHTML("@Model.book.Dimensions"))
+        let pagesJS = replaceDoubleDollarSign(decodeHTML("@Model.book.Pages"))
+        let languageNameJS = replaceDoubleDollarSign(decodeHTML("@Model.language.LanguageName"))
+        let publisherNameJS = replaceDoubleDollarSign(decodeHTML("@Model.publisher.PublisherName"))
+        let authorNameJS = replaceDoubleDollarSign(decodeHTML("@Model.author.AuthorName"))
+        let translatorNameJS = replaceDoubleDollarSign(decodeHTML("@Model.translator.TranslatorName"))
+        let painterNameJS = replaceDoubleDollarSign(decodeHTML("@Model.painter.PainterName"))
+        let categoryNameJS = replaceDoubleDollarSign(decodeHTML("@Model.category.CategoryName"))
+        let subCategoryNameJS = replaceDoubleDollarSign(decodeHTML("@Model.subCategory.SubCategoryName"))
 
         let app = new Vue({
             el: '#app',
             data: {
                 book:{
-                    coverPath: '../image/Book/' + "@Model.CoverPath",
+                    coverPath: '../image/Book/' + "@Model.book.CoverPath",
                     bookTitle: bookTitleJS,
-                    unitPrice: "@Model.UnitPrice",
+                    unitPrice: "@Model.book.UnitPrice",
                     discount: 79,
                     publicationDate: publicationDateJS,
-                    isbn: "@Model.Isbn",
+                    isbn: "@Model.book.Isbn",
                     bindingMethod: bindingMethodJS,
                     pages: pagesJS,
                     dimensions: dimensionsJS,
-                    unitInStock: "@Model.UnitInStock",
+                    unitInStock: "@Model.book.UnitInStock",
                     languageName: languageNameJS,
                     publisherName: publisherNameJS,
+                    authorName: authorNameJS,
+                    translatorName: translatorNameJS,
+                    painterName: painterNameJS,
+                    categoryName: categoryNameJS,
+                    subCategoryName: subCategoryNameJS,
                 },
                 video: '../image/Book/bookIcon/video1.jpg',
                 originalColor: '',
