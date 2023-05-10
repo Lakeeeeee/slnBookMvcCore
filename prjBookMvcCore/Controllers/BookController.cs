@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using prjBookMvcCore.Models;
 
 namespace prjBookMvcCore.Controllers
@@ -9,7 +10,7 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult BookInformation()
         {
-            Book test = db.Books.FirstOrDefault(x => x.BookId == 123);
+            Book test = db.Books.Include(x => x.Language).Include(x => x.Publisher).FirstOrDefault(x => x.BookId == 123);
             return View(test);
         }
     }

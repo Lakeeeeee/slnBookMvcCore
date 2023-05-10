@@ -390,10 +390,10 @@
                         <span style="font-size: 20px; font-weight: bold;">商品資料</span>
                         <p>作者：<span><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">佛蘭克．赫爾</a></span></p>
                         <p>譯者：<span><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">徐世明</a></span></p>
-                        <p>出版社：<span><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">智言館</a></span></p>
+                        <p>出版社：<span><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.publisherName}}</a></span></p>
                         <p>出版日期：<span>{{book.publicationDate}}</span></p>
                         <p>ISBN/ISSN：<span>{{book.isbn}}</span></p>
-                        <p>語言：<span>繁體中文</span></p>
+                        <p>語言：<span>{{book.languageName}}</span></p>
                         <p>裝訂方式：<span>{{book.bindingMethod}}</span></p>
                         <p>頁數：<span>{{book.pages}}</span></p>
                         <p>商品尺寸：<span>{{book.dimensions}}</span></p>
@@ -609,6 +609,8 @@
         let publicationDateJS = decodeHTML("@Model.PublicationDate").split(/[\s上午下午]/)[0];
         let dimensionsJS = replaceDoubleDollarSign(decodeHTML("@Model.Dimensions"))
         let pagesJS = replaceDoubleDollarSign(decodeHTML("@Model.Pages"))
+        let languageNameJS = replaceDoubleDollarSign(decodeHTML("@Model.Language.LanguageName"))
+        let publisherNameJS = replaceDoubleDollarSign(decodeHTML("@Model.Publisher.PublisherName"))
 
         let app = new Vue({
             el: '#app',
@@ -624,6 +626,8 @@
                     pages: pagesJS,
                     dimensions: dimensionsJS,
                     unitInStock: "@Model.UnitInStock",
+                    languageName: languageNameJS,
+                    publisherName: publisherNameJS,
                 },
                 video: '../image/Book/bookIcon/video1.jpg',
                 originalColor: '',
