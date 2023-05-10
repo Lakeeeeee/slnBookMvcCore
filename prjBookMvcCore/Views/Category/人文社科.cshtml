@@ -80,11 +80,10 @@
                                 var categories = db.Categories.Where(c => c.CategoryId == 15).Select(c => new { c.CategoryName }).ToList();
                                 foreach (var category in categories)
                                 {
-                                    var subcategories = db.SubCategories.Where(s => s.CategoryId == 15).Select(s => new { s.SubCategoryName}).ToList();
-                                    foreach (var subcategory in subcategories)
-                                    {
-                                        <li class="list-group-item"><span><a href="~/Category/@category.CategoryName/@subcategory.SubCategoryName">@subcategory.SubCategoryName</a></span></li>
-                                    }
+                                    var subcategories = db.SubCategories
+                                    .Where(s => s.CategoryId == 15)
+                                    .Select(s => new { SubCategoryName = s.SubCategoryName ?? "" })
+                                    .ToList();
                                 }
                             }
                         </ul>

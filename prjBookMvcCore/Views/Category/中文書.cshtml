@@ -74,17 +74,12 @@
                     </div>
                     <div>
                         <ul class="list-group list-group-flush">
-                            
-                            @{
-
-                                var c = db.Categories.Select(a => new { a.CategoryId, a.CategoryName }).ToList();
-                                for (int i = 14; i < c.Count(); i++)
-                                    foreach(var i in Model){
-                                    <li class="list-group-item"><span><a href="~/Category/@i">@c[i].CategoryName</a></span></li>
-
+                          @*  @{
+                                foreach (var i in Model)
+                                {
+                                    //<li class="list-group-item"><span><a href="~/Category/@Html.ActionLink("")">@Html.ActionLink</a></span></li>
                                 }
-                                }
-                                }
+                            }*@
                         </ul>
                     </div>
                 </div>
@@ -111,50 +106,7 @@
                     <div class="col" id="bookList" style='padding:0'>
                         <div class="row" id="booksview">
                             @{
-                                var pageSize = 30; // 每頁顯示30筆資料
-                                var books = db.Books.Where(c => c.LanguageId == 1).Select(c => new { c.BookId }).ToList();
-                                var bookCount = books.Count();
-                                int pageCount = (int)Math.Ceiling((double)bookCount / pageSize);
-                                int pageIndex = 1;
-                                while (pageIndex <= pageCount)
-                                {
-                                    var pageBooks = books.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
-                                    if (pageBooks.Any())
-                                    {
-                                        foreach (var categoryBook in pageBooks)
-                                        {
-                                            var book = db.Books.Where(b => b.BookId == categoryBook.BookId).FirstOrDefault();
-                                            var author = db.AuthorDetails.Where(a => a.BookId == categoryBook.BookId).Select(a => new { a.AuthorId }).FirstOrDefault();
-                                            var authorName = author != null ? db.Authors.Where(a => a.AuthorId == author.AuthorId).Select(a => new { a.AuthorName }).FirstOrDefault() : null;
-                                            var discount = db.BookDiscountDetails.Where(d => d.BookId == categoryBook.BookId).Select(d => new { d.BookDiscountId }).FirstOrDefault();
-                                            var discountAmount = discount != null ? db.BookDiscounts.Where(d => d.BookDiscountId == discount.BookDiscountId).Select(d => new { d.BookDiscountId, d.BookDiscountAmount, d.BookDiscountName }).FirstOrDefault() : null;
-                                            var discountedPrice = book?.UnitPrice * (1 - (discountAmount != null ? discountAmount.BookDiscountAmount : 0) / 100) ?? 0;
 
-                                            <div class="col book-item" data-publication-date="@book?.PublicationDate" data-price="@((int)Math.Round(discountedPrice))">
-                                                <div style="position:relative">
-                                                    <a><img src="@book?.CoverPath"></a>
-                                                </div>
-                                                <div class="caption">
-                                                    <ul style="list-style:none; margin:0; padding:0;">
-                                                        <li>
-                                                            <a class="bookCaption">@book?.BookTitle</a>
-                                                        </li>
-                                                        <li class='prod_author'>
-                                                            作者：@if (authorName != null)
-                                                            {
-                                                                <a href="/rwd_searchResult.html?keyword%5B%5D=@authorName&keyType%5B%5D=2">@authorName.AuthorName</a>
-                                                            }
-                                                        </li>
-                                                        <li class="Price">原    價：<span>@((int)Math.Round(book?.UnitPrice ?? 0))</span>元</li>
-                                                        <li class="discPrice">優惠價：<span>@(discountAmount != null ? discountAmount.BookDiscountName : "")</span><span>@((int)Math.Round(discountedPrice))</span>元</li>
-                                                        <li class="publicationDate">出版日期：<span>@book?.PublicationDate.ToString("yyyy/MM/dd")</span></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        }
-                                    }
-                                    pageIndex++;
-                                }
                             }
                         </div>
                     </div>

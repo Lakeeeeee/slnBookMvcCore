@@ -5,7 +5,7 @@
         public int ArticalID { get; set; }
         public string? ArticalTitle { get; set; }
         public string? ArticalDescription { get; set; }
-        public byte[] ArticalPicture { get; set; }
+        public byte[]? ArticalPicture { get; set; }
         public int BookId { get; set; }
         public string? BookTitle { get; set; }
         public decimal UnitPrice { get; set; }
