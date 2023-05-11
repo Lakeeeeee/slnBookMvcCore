@@ -14,7 +14,7 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult BookInformation()
         {
-            int bookId = 5;
+            int bookId = 12;
             var query = from b in db.Books
                         where b.BookId == bookId
                         select new
@@ -81,7 +81,7 @@ namespace prjBookMvcCore.Controllers
 
                 List<CommentInformation> cis = getCommentInformation(bookId);
 
-                List<Book> recommendBooks = getRecommendBooks(item.子分類);
+                List<Book> recommendBooks = getRecommendBooks(item.子分類,bookId);
 
                 CInformation newBook = new CInformation
                 {
@@ -132,7 +132,7 @@ namespace prjBookMvcCore.Controllers
                 return cis;
             }
         }
-        public List<Book> getRecommendBooks(string subCategoryName)
+        public List<Book> getRecommendBooks(string subCategoryName,int bookID)
         {
             using (var db = new BookShopContext())
             {
@@ -142,7 +142,7 @@ namespace prjBookMvcCore.Controllers
                             on sc.SubCategoryId equals sd.SubCategoryId
                             join b in db.Books
                             on sd.BookId equals b.BookId
-                            where sc.SubCategoryName == subCategoryName
+                            where sc.SubCategoryName == subCategoryName && b.BookId != bookID
                             select b;
                 foreach (var book in books)
                 {
