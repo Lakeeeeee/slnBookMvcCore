@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.ProjectModel;
 using prjBookMvcCore.Models;
@@ -102,6 +102,7 @@ namespace prjBookMvcCore.Controllers
             }
             return View();
         }
+
         public List<CommentInformation> getCommentInformation(int bookId)
         {
             using (var db = new BookShopContext())

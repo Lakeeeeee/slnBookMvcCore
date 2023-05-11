@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<prjBookMvcCore.Models.Category>
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <!DOCTYPE html>
@@ -6,9 +7,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+@*    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/prjBookMvcCore.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/prjBookMvcCore.styles.css" asp-append-version="true" />*@
     <style>
         a:link, a:visited {
             text-decoration: none;
@@ -320,24 +321,12 @@
                         中文書
                     </div>
                     <ul class="list-group list-group-flush">
-                        @{
-                            var c = db.Categories.Select(a => new { a.CategoryId, a.CategoryName }).ToList();
-                            for (int i = 14; i < c.Count(); i++)
-                            {
-                                if (i == 25)
+                         @{
+                                foreach (var item in Model.Where(x => x.CategoryId > 14))
                                 {
-                                    <li class="list-group-item"><span><a href="~/Category/@c[i].CategoryName.Replace("/", "").">@c[i].CategoryName.Replace("/", "")</a></span></li>
-                                }
-                                else if (i == 28)
-                                {
-                                    <li class="list-group-item"><span><a href="~/Category/@c[i].CategoryName.Replace("/", "")">@c[i].CategoryName.Replace("/", "")</a></span></li>
-                                }
-                                else
-                                {
-                                    <li class="list-group-item"><span><a href="~/Category/@c[i].CategoryName">@c[i].CategoryName</a></span></li>
+                                    <li class="list-group-item"><span><a href="~/Category/@Html.DisplayFor(modelItem => item.CategoryId)">@Html.DisplayFor(modelItem => item.CategoryName)</a></span></li>
                                 }
                             }
-                        }
                     </ul>
                 </div>
             </div>
@@ -348,9 +337,9 @@
             </div>
         </div>
     </div>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+@*    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>*@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
