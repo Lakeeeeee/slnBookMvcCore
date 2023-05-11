@@ -20,7 +20,7 @@
         public int SubCategoryId { get; set; }
         public string ?SubCategoryName { get; set; }
 
-        //private Book _book;
+        private Book _book { get; set; }
         //private AuthorDetail _authorDetail;
         //private Author _author;
         //private BookDiscountDetail _bookDiscountDetail;

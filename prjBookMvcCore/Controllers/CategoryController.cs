@@ -16,9 +16,27 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult 人文社科(int ?id)
         {
-            if (id == null) { return RedirectToAction("Menu"); }
-            IEnumerable<SubCategory> datas = db.SubCategories.Where(x => x.CategoryId == 29);
-            return View(datas);
+            if (id == null)
+            {
+                return RedirectToAction("Menu");
+            }
+
+            var category = db.Categories.FirstOrDefault(c => c.CategoryId == id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            var subCategory = db.SubCategories.FirstOrDefault(c => c.CategoryId == id);
+
+            var subviewModel = new ViewModel.CategoryViewModel
+            {
+                CategoryId = category.CategoryId,
+                CategoryName = category.CategoryName,
+                SubCategoryId = subCategory?.SubCategoryId??0,
+                SubCategoryName = subCategory?.SubCategoryName,
+            };
+            return View(subviewModel);
         }
 
         public IActionResult 心理勵志()

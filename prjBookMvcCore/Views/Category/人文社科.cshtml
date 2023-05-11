@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<prjBookMvcCore.ViewModel.CategoryViewModel>
+@{
     ViewData["Title"] = "人文社科";
 }
 <!DOCTYPE html>
@@ -70,24 +71,19 @@
             <div class="col-2">
                 <div class="card">
                     @*分類選單*@
-                    <div class="card-header">
-                        人文社科
-                    </div>
-                    <div>
-                        <ul class="list-group list-group-flush">
-                            @{
-                                BookShopContext db = new BookShopContext();
-                                var categories = db.Categories.Where(c => c.CategoryId == 15).Select(c => new { c.CategoryName }).ToList();
-                                foreach (var category in categories)
-                                {
-                                    var subcategories = db.SubCategories
-                                    .Where(s => s.CategoryId == 15)
-                                    .Select(s => new { SubCategoryName = s.SubCategoryName ?? "" })
-                                    .ToList();
-                                }
-                            }
-                        </ul>
-                    </div>
+                    @{
+                        foreach (var item in Model)
+                        {
+                            <div class="card-header">
+                                @Html.DisplayFor(modelItem => item.CategoryName)
+                            </div>
+                            <div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><span><a href="~/Category/@Html.DisplayFor(modelItem => item.CategoryId)">@Html.DisplayFor(modelItem => item.CategoryName)</a></span></li>
+                                </ul>
+                            </div>
+                        }
+                    }
                 </div>
             </div>
             @*右邊書籍欄*@
@@ -111,7 +107,7 @@
                 <div class="row">
                     <div class="col" id="bookList" style='padding:0'>
                         <div class="row" id="booksview">
-                            @await Html.PartialAsync("_BookCardPartial")
+                            @*                            @await Html.PartialAsync("_BookCardPartial")*@
 
                         </div>
                     </div>
