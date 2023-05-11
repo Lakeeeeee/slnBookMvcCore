@@ -11,7 +11,11 @@
         public Painter ?painter { get; set; }
         public Author ?author { get; set; }
 
+        public Preview ?preview { get; set; }
+
         public List<CommentInformation> ?commentInformations { get; set; }
+
+        public List<Book> ?recommendBooks { get; set; }
 
     }
 }

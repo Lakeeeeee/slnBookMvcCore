@@ -217,6 +217,12 @@
         .image-hover:hover {
             transform: scale(1.1);
         }
+
+        .el-image-viewer__img {
+            max-width: 600px !important;
+            width: 100% !important;
+            height: auto !important;
+        }
     </style>
 </head>
 <body>
@@ -249,41 +255,28 @@
                         <div class="demo-image__placeholder">
                             <div class="block">
                                 <div class="downCover-wrapper">
-                                    <div class="downCover-slot">
-                                        <el-image :src="video" style="width: 140px;">
+                                    <div v-for="(preview, index) in book.preview" :key="index">
+                                        <el-image v-if="preview"
+                                                  style="width: 70px;"
+                                                  :src="preview"
+                                                  :preview-src-list="book.preview"
+                                                  class="image-hover">
                                             <div slot="placeholder" class="image-slot">
                                                 加載中<span class="dot">...</span>
                                             </div>
                                         </el-image>
-                                    </div>
-                                    <div class="downCover-slot">
-                                        <el-image
-                                          style="width: 70px;"
-                                          :src="book.coverPath"
-                                          :preview-src-list="book.coverPath"
-                                          v-on:click.native="openPreview"
-                                          class="image-hover"
-                                        >
-                                          <div slot="placeholder" class="image-slot">
-                                            加載中<span class="dot">...</span>
-                                          </div>
-                                        </el-image>
-                                        <el-dialog
-                                          :visible.sync="showDialog"
-                                          :close-on-click-modal="true"
-                                          :close-on-press-escape="true"
-                                          width="400px"
-                                          :show-close="false"
-                                          custom-class="dialog-image"
-                                        >
-                                          <el-image
-                                            style="max-width: 100%; max-height: 80vh;"
-                                            :src="book.coverPath"
-                                            :preview-src-list="book.coverPath"
-                                            fit="contain"
-                                          ></el-image>
+                                        <el-dialog :visible.sync="showDialog"
+                                                   :close-on-click-modal="true"
+                                                   :close-on-press-escape="true"
+                                                   width="1200px"
+                                                   :show-close="false"
+                                                   custom-class="dialog-image">
+                                            <el-image v-if="dialogIndex !== null"
+                                                      :src="book.preview[dialogIndex]"
+                                                      fit="contain"
+                                                      style="width: 2000px; height: 2000px;"></el-image>
                                         </el-dialog>
-                                      </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -362,7 +355,7 @@
                         <div v-for="(group, index) in Math.ceil(recommend.length / 5)">
                             <el-carousel-item :key="index">
                                 <div class="recommendTable">
-                                    <div v-for="(item, i) in recommend.slice(index * 5, (index + 1) * 5)" style="margin-right: 50px;">
+                                    <div v-for="(item, i) in recommend.slice(index * 5, (index + 1) * 5)" style="margin-right: 40px;">
                                         <a href="#">
                                             <el-image :src="item.coverPath" style="width: 180px;">
                                                 <div slot="placeholder" class="image-slot">
@@ -615,6 +608,25 @@
             commentsJS.push(comment);
         }
 
+        let preview1JS = "@Model.preview.PreviewImagePath1".length > 1 ? '../image/Book/' + "@Model.preview.PreviewImagePath1": ""
+        let preview2JS = "@Model.preview.PreviewImagePath2".length > 1 ? '../image/Book/' + "@Model.preview.PreviewImagePath2": ""
+        let preview3JS = "@Model.preview.PreviewImagePath3".length > 1 ? '../image/Book/' + "@Model.preview.PreviewImagePath3": ""
+        let preview4JS = "@Model.preview.PreviewImagePath4".length > 1 ? '../image/Book/' + "@Model.preview.PreviewImagePath4": ""
+
+
+        let recommendBooks = @Html.Raw(Json.Serialize(Model.recommendBooks));
+        let recommendBooksJS = []
+        for (let i = 0; i < recommendBooks.length ; i++) {
+            let recommend = {
+                bookTitle: replaceDoubleDollarSign(recommendBooks[i].bookTitle),
+                coverPath: '../Image/Book/' + recommendBooks[i].coverPath,
+                unitPrice: recommendBooks[i].unitPrice,
+                discount: 79,
+            };
+            console.log(recommendBooks[i].coverPath)
+            recommendBooksJS.push(recommend);
+        }
+
         let app = new Vue({
             el: '#app',
             data: {
@@ -636,12 +648,14 @@
                     painterName: painterNameJS,
                     categoryName: categoryNameJS,
                     subCategoryName: subCategoryNameJS,
+                    preview: [preview1JS,preview2JS,preview3JS,preview4JS],
                 },
                 video: '../image/Book/bookIcon/video1.jpg',
                 originalColor: '',
                 activeName: 'first',
                 fontSize: 'medium',
                 showDialog: false,
+                dialogIndex: 0,
                 isLogin: false,
                 fullscreenLoading: false,
                 commentValueMyself: null,
@@ -654,71 +668,7 @@
                 tryContent: tryContentJS.split("\n"),
                 commentArea: '',
                 circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
-                recommend: [
-                    {
-                        bookTitle: '投資最重要的事：一本股神巴菲特讀了兩遍的書',
-                        coverPath: '../Image/Book/bookCover/1.jpg',
-                        unitPrice: 380,
-                        // 79折
-                        discount: 79,
-                    },
-                    {
-                        bookTitle: '有錢人想的和你不一樣',
-                        coverPath: '../Image/Book/bookCover/2.jpg',
-                        unitPrice: 250,
-                        discount: 79,
-                    },
-                    {
-                        bookTitle: '窮查理的普通常識（增修版）：巴菲特50年智慧合夥人查理．蒙格的人生哲學',
-                        coverPath: '../Image/Book/bookCover/3.jpg',
-                        unitPrice: 450,
-                        discount: 79,
-                    },
-                    {
-                        bookTitle: '灰階思考',
-                        coverPath: '../Image/Book/bookCover/4.jpg',
-                        unitPrice: 400,
-                        discount: 79,
-                    },
-                    {
-                        bookTitle: '股息Cover我每一天：600張存股達人絕活全公開',
-                        coverPath: '../Image/Book/bookCover/5.jpg',
-                        unitPrice: 320,
-                        discount: 79,
-                    },
-                    {
-                        bookTitle: '我畢業五年，用ETF賺到400萬：每月1,000元就能開始！不用兼差斜槓，兩檔ETF投資組合，年賺20％以上',
-                        coverPath: '../Image/Book/bookCover/6.jpg',
-                        unitPrice: 380,
-                        discount: 79,
-                    },
-                    {
-                        bookTitle: '投資金律：建立獲利投資組合的四大關鍵和十四個關卡（全新增訂版）',
-                        coverPath: '../Image/Book/bookCover/7.jpg',
-                        unitPrice: 460,
-                        discount: 79,
-                    },
-                    {
-                        bookTitle: '下班後賺更多：記帳、存錢、再投資，富朋友的「破窮理財法」提早20年退休不是夢！',
-                        coverPath: '../Image/Book/bookCover/8.jpg',
-                        unitPrice: 300,
-                        discount: 79,
-                    },
-                    {
-                        bookTitle: '你也可以成為股市天才',
-                        coverPath: '../Image/Book/bookCover/9.jpg',
-                        unitPrice: 350,
-                        discount: 79,
-                    },
-                    {
-                        bookTitle: '巴菲特寫給股東的信（全新增修版） The Essays of Warren Buffett: Lessons for Corporate America, Fourth Edition',
-                        coverPath: '../Image/Book/bookCover/10.jpg',
-                        unitPrice: 420,
-                        discount: 79,
-                    },
-
-                ],
-                test: "@Model.commentInformations",
+                recommend: recommendBooksJS,
                 comment: commentsJS,
             },
             computed: {
@@ -812,7 +762,8 @@
                         this.toggleShow();
                     }, 1200);
                 },
-                openPreview() {
+                openPreview(index) {
+                    this.dialogIndex = index
                     this.showDialog = true
                 }
             },

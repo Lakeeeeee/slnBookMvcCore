@@ -71,11 +71,10 @@
                             var categories = db.Categories.Where(c => c.CategoryId == 16).Select(c => new { c.CategoryName }).ToList();
                             foreach (var category in categories)
                             {
-                                var subcategories = db.SubCategories.Where(s => s.CategoryId ==16).Select(s => new { s.SubCategoryName }).ToList();
-                                foreach (var subcategory in subcategories)
-                                {
-                                    <li class="list-group-item"><span><a href="~/Category/@category.CategoryName/@subcategory.SubCategoryName">@subcategory.SubCategoryName</a></span></li>
-                                }
+                                var subcategories = db.SubCategories
+                                .Where(s => s.CategoryId == 16)
+                                .Select(s => new { SubCategoryName = s.SubCategoryName ?? "" })
+                                .ToList();
                             }
                         }
                     </ul>
@@ -120,7 +119,7 @@
                                             {
                                                 var book = db.Books.Where(b => b.BookId == categoryBook.BookId).FirstOrDefault();
                                                 var author = db.AuthorDetails.Where(a => a.BookId == categoryBook.BookId).Select(a => new { a.AuthorId }).FirstOrDefault();
-                                                var authorName = author != null ? db.Authors.Where(a => a.AuthorId == author.AuthorId).Select(a => new { a.AuthorName }).FirstOrDefault() : null;
+                                                var authorName = author != null ? db.Authors.Where(a => a.AuthorId == author.AuthorId).Select(a => new { a.AuthorName }).FirstOrDefault() : null ;
                                                 var discount = db.BookDiscountDetails.Where(d => d.BookId == categoryBook.BookId).Select(d => new { d.BookDiscountId }).FirstOrDefault();
                                                 var discountAmount = discount != null ? db.BookDiscounts.Where(d => d.BookDiscountId == discount.BookDiscountId).Select(d => new { d.BookDiscountId, d.BookDiscountAmount, d.BookDiscountName }).FirstOrDefault() : null;
                                                 var discountedPrice = book?.UnitPrice * (1 - (discountAmount != null ? discountAmount.BookDiscountAmount : 0) / 100) ?? 0;

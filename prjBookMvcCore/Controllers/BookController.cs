@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.ProjectModel;
 using prjBookMvcCore.Models;
@@ -14,7 +14,7 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult BookInformation()
         {
-            int bookId = 5;
+            int bookId = 105;
             var query = from b in db.Books
                         where b.BookId == bookId
                         select new
@@ -43,6 +43,10 @@ namespace prjBookMvcCore.Controllers
                             各界推薦 = b.Endorsements,
                             作者序 = b.Foreward,
                             目錄 = b.TableContainer,
+                            試讀1 = b.Previews.Select(x => x.PreviewImagePath1).FirstOrDefault(),
+                            試讀2 = b.Previews.Select(x => x.PreviewImagePath2).FirstOrDefault(),
+                            試讀3 = b.Previews.Select(x => x.PreviewImagePath3).FirstOrDefault(),
+                            試讀4 = b.Previews.Select(x => x.PreviewImagePath4).FirstOrDefault(),
                         };
             foreach (var item in query)
             {
@@ -73,8 +77,11 @@ namespace prjBookMvcCore.Controllers
                 Translator t = new Translator { TranslatorName = item.譯者 };
                 Painter pt = new Painter { PainterName = item.繪者 };
                 Author a = new Author { AuthorName = item.作者 };
+                Preview pv = new Preview { PreviewImagePath1 = item.試讀1, PreviewImagePath2 = item.試讀2, PreviewImagePath3 = item.試讀3, PreviewImagePath4 = item.試讀4 };
 
                 List<CommentInformation> cis = getCommentInformation(bookId);
+
+                List<Book> recommendBooks = getRecommendBooks(item.子分類,bookId);
 
                 CInformation newBook = new CInformation
                 {
@@ -87,12 +94,15 @@ namespace prjBookMvcCore.Controllers
                     translator = t,
                     painter = pt,
                     commentInformations = cis,
+                    preview = pv,
+                    recommendBooks = recommendBooks,
                 };
 
                 return View(newBook);
             }
             return View();
         }
+
         public List<CommentInformation> getCommentInformation(int bookId)
         {
             using (var db = new BookShopContext())
@@ -121,6 +131,25 @@ namespace prjBookMvcCore.Controllers
                     cis.Add(tmp);
                 }
                 return cis;
+            }
+        }
+        public List<Book> getRecommendBooks(string subCategoryName,int bookID)
+        {
+            using (var db = new BookShopContext())
+            {
+                List<Book> recommendBooks = new List<Book>();
+                var books = from sc in db.SubCategories
+                            join sd in db.CategoryDetails
+                            on sc.SubCategoryId equals sd.SubCategoryId
+                            join b in db.Books
+                            on sd.BookId equals b.BookId
+                            where sc.SubCategoryName == subCategoryName && b.BookId != bookID
+                            select b;
+                foreach (var book in books)
+                {
+                    recommendBooks.Add(book);
+                }
+                return recommendBooks;
             }
         }
     }
