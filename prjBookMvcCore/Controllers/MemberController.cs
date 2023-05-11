@@ -115,16 +115,15 @@ namespace prjBookMvcCore.Controllers
 
             if (!isEmailExist)
             {
-                return Content(isEmailExist.ToString());
             }
-            else
+            if(isEmailExist)
             {
                 MailMessage mail = new MailMessage();
 
 
             }
-            
-            return RedirectToAction("Login");
+
+            return Content(isEmailExist.ToString());
         }
 
         public IActionResult reset_Password() //忘記密碼的重設密碼頁面
@@ -231,7 +230,9 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult myNotice() //可購買時通知我 空的
         {
-            return View();
+            IEnumerable<Book> q = _bookShopContext.ActionDetials.Where(x => x.MemberId == _userInforService.UserId && x.ActionId == 1).
+                 Include(x => x.Book.Publisher).Select(x => x.Book);
+            return View(q);
         }
         [Authorize]
         public IActionResult myCollect() //暫存清單
