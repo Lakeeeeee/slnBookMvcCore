@@ -321,12 +321,12 @@
                         中文書
                     </div>
                     <ul class="list-group list-group-flush">
-                        @{
-                            foreach (var item in Model.Where(x => x.CategoryId > 14))
-                            {
-                                <li class="list-group-item"><span><a href="~/Category/@Html.DisplayFor(modelItem => item.CategoryId)">@Html.DisplayFor(modelItem => item.CategoryName)</a></span></li>
+                         @{
+                                foreach (var item in Model.Where(x => x.CategoryId > 14))
+                                {
+                                    <li class="list-group-item"><span><a href="~/Category/@Html.DisplayFor(modelItem => item.CategoryId)">@Html.DisplayFor(modelItem => item.CategoryName)</a></span></li>
+                                }
                             }
-                        }
                     </ul>
                 </div>
             </div>

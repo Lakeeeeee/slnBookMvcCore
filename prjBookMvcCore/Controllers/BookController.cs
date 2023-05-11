@@ -21,118 +21,63 @@ namespace prjBookMvcCore.Controllers
             // Find the category and subcategory information
             var category = db.Categories.Where(c => c.CategoryId == id).FirstOrDefault();
             if (category == null)
-                return RedirectToAction("Home");
-            var subcategories = db.SubCategories.Where(sc => sc.CategoryId == id)
-                                                .Select(sc => new { sc.SubCategoryId, sc.SubCategoryName })
-                                                .ToList();
+            {
+                var subcategory = db.SubCategories.Where(sc => sc.SubCategoryId == id).FirstOrDefault();
+                if (subcategory == null)
+                    return RedirectToAction("Home");
+                else
+                    category = db.Categories.Where(c => c.CategoryId == subcategory.CategoryId).FirstOrDefault();
+            }
+
+            // Find the subcategory information
+            var subcategoryInfo = db.SubCategories.Where(sc => sc.CategoryId == category.CategoryId && sc.SubCategoryId == id)
+                                                   .Select(sc => new { sc.SubCategoryId, sc.SubCategoryName, sc.CategoryId })
+                                                   .FirstOrDefault();
 
             // Find the book information
-            var books = db.CategoryDetails.Where(cd => cd.SubCategoryId == subcategories.Select(s => s.SubCategoryId).FirstOrDefault())
-                                           .Select(cd => new { cd.BookId })
-                                           .Distinct()
-                                           .Join(db.Books, cd => cd.BookId, b => b.BookId, (cd, b) => new
-                                           {
-                                               b.BookId,
-                                               b.BookTitle,
-                                               b.UnitPrice,
-                                               b.PublicationDate,
-                                               b.CoverPath
-                                           });
+            var bookIds = db.CategoryDetails.Where(cd => cd.SubCategoryId == subcategoryInfo.SubCategoryId)
+                                             .Select(cd => cd.BookId)
+                                             .Distinct()
+                                             .ToList();
 
-            // Find the author information
-            var author = db.Authors.Where(a => a.AuthorId == id).FirstOrDefault();
-            if (author == null)
-                return RedirectToAction("Home");
-            var authorBooks = db.AuthorDetails.Where(ad => ad.AuthorId == id)
-                                               .Select(ad => new { ad.BookId })
-                                               .Join(db.Books, ad => ad.BookId, b => b.BookId, (ad, b) => new
-                                               {
-                                                   b.BookId,
-                                                   b.BookTitle,
-                                                   b.UnitPrice,
-                                                   b.PublicationDate,
-                                                   b.CoverPath
-                                               });
+            var bookInfo = db.Books.Where(b => bookIds.Contains(b.BookId))
+                               .Join(db.AuthorDetails, b => b.BookId, ad => ad.BookId, (b, ad) => new { b, ad.AuthorId })
+                               .Join(db.Authors, b_ad => b_ad.AuthorId, a => a.AuthorId, (b_ad, a) => new { b_ad.b, a.AuthorName, b_ad.AuthorId })
+                               .Join(db.BookDiscountDetails, ba => ba.b.BookId, bd => bd.BookId, (ba, bd) => new { ba.b, ba.AuthorName, ba.AuthorId, bd.BookDiscountId })
+                               .Join(db.BookDiscounts, b_bd => b_bd.BookDiscountId, bd => bd.BookDiscountId, (b_bd, bd) => new { b_bd.b, b_bd.AuthorName, b_bd.AuthorId, bd.BookDiscountName, bd.BookDiscountAmount })
+                               .Select(b => new
+                               {
+                                   b.b.BookId,
+                                   b.b.BookTitle,
+                                   b.b.UnitPrice,
+                                   b.b.PublicationDate,
+                                   b.AuthorName,
+                                   b.BookDiscountName,
+                                   b.BookDiscountAmount,
+                                   b.b.CoverPath,
+                                   b.AuthorId
+                               })
+                               .FirstOrDefault();
 
-            // Find the book discount information
-            var bookDiscount = db.BookDiscounts.Where(bd => bd.BookDiscountId == id).FirstOrDefault();
-            if (bookDiscount == null)
-                return RedirectToAction("Home");
-            var bookDiscountBooks = db.BookDiscountDetails.Where(bdd => bdd.BookDiscountId == id)
-                                                           .Select(bdd => new { bdd.BookId })
-                                                           .Join(db.Books, bdd => bdd.BookId, b => b.BookId, (bdd, b) => new
-                                                           {
-                                                               b.BookId,
-                                                               b.BookTitle,
-                                                               b.UnitPrice,
-                                                               b.PublicationDate,
-                                                               b.CoverPath
-                                                           });
-
-            // Find the painter information
-            var painter = db.Painters.Where(p => p.PainterId == id).FirstOrDefault();
-            if (painter == null)
-                return RedirectToAction("Home");
-            var painterBooks = db.PainterDetails.Where(pd => pd.PainterId == id)
-                                                 .Select(pd => new { pd.BookId })
-                                                 .Join(db.Books, pd => pd.BookId, b => b.BookId, (pd, b) => new
-                                                 {
-                                                     b.BookId,
-                                                     b.BookTitle,
-                                                     b.UnitPrice,
-                                                     b.PublicationDate,
-                                                     b.CoverPath
-                                                 });
-
-            // Find the translator information
-            var translator = db.Translators.Where(t => t.TranslatorId == id).FirstOrDefault();
-            if (translator == null)
-                return RedirectToAction("Home");
-            var translatorBooks = db.TranslatorDetails.Where(td => td.TranslatorId == id)
-                                                       .Select(td => new { td.BookId })
-                                                       .Join(db.Books, td => td.BookId, b => b.BookId, (td, b) => new
-                                                       {
-                                                           b.BookId,
-                                                           b.BookTitle,
-                                                           b.UnitPrice,
-                                                           b.PublicationDate,
-                                                           b.CoverPath
-                                                       });
-            // Find the article information
-            var artical = db.Articals.Where(a => a.ArticalId == id)
-                                     .Select(a => new { a.ArticalId, a.ArticalTitle, a.ArticalDescription, a.ArticalPicture })
-                                     .FirstOrDefault();
-            if (artical == null)
-                return RedirectToAction("Home");
-
-            // Find the book information for the article
-            var bookDetail = db.ArticalToBookDetails.FirstOrDefault(ad => ad.ArticalId == id);
-            if (bookDetail == null)
-                return RedirectToAction("Home");
-            var book = db.Books.FirstOrDefault(b => b.BookId == bookDetail.BookId);
-            if (book == null)
+            if (bookInfo == null)
                 return RedirectToAction("Home");
 
             // Create view model
             var model = new BooksCardViewModel
             {
-                BookId = book.BookId,
-                BookTitle = book.BookTitle,
-                UnitPrice = book.UnitPrice,
-                CoverPath=book.CoverPath,
-                PublicationDate = book.PublicationDate,
-                AuthorId = author.AuthorId,
-                AuthorName = author.AuthorName,
-                BookDiscountName = bookDiscount.BookDiscountName,
-                BookDiscountAmount = bookDiscount.BookDiscountAmount,
-                ArticalID = artical.ArticalId,
-                ArticalTitle = artical.ArticalTitle,
-                ArticalDescription = artical.ArticalDescription,
-                ArticalPicture = artical.ArticalPicture,
-                CategoryId = category.CategoryId,
-                CategoryName = category.CategoryName,
-                SubCategoryId = subcategories.Select(s => s.SubCategoryId).FirstOrDefault(),
-                SubCategoryName = subcategories.Select(s => s.SubCategoryName).FirstOrDefault()
+                BookId = bookInfo.BookId,
+                BookTitle = bookInfo.BookTitle,
+                UnitPrice = bookInfo.UnitPrice,
+                CoverPath = bookInfo.CoverPath,
+                PublicationDate = bookInfo.PublicationDate,
+                AuthorId = bookInfo.AuthorId,
+                AuthorName = bookInfo.AuthorName,
+                BookDiscountName = bookInfo.BookDiscountName,
+                BookDiscountAmount = bookInfo.BookDiscountAmount,
+                CategoryId = category?.CategoryId??0,
+                CategoryName = category?.CategoryName,
+                SubCategoryId = subcategoryInfo?.SubCategoryId??0,
+                SubCategoryName = subcategoryInfo?.SubCategoryName
             };
             return View(model);
         }
