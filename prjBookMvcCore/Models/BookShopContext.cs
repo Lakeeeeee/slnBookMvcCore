@@ -337,11 +337,6 @@ namespace prjBookMvcCore.Models
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
-                entity.Property(e => e.Stars)
-                    .HasMaxLength(5)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
                 entity.HasOne(d => d.Book)
                     .WithMany(p => p.Comments)
                     .HasForeignKey(d => d.BookId)

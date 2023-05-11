@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="~/prjBookMvcCore.styles.css" asp-append-version="true" />
     <style>
         div {
-            border: 1px solid #ff0000
+            /*border: 1px solid #ff0000*/
         }
 
         .zero {
@@ -25,35 +25,40 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container">
-            <div class="align-items-start">
-                @Html.ActionLink("讀本", "Home", "Home", new { area = "" }, new { @class = "navbar-brand" })  @*須換圖*@
-            </div>
-            <div class="justify-content-end menu">
-                <ul class="zero">
-                    @{
-                        if (_userInforService.UserId != 0)
-                        {
-                            <li> Hi! @_userInforService.UserName </li>
-                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/LogOut">登出</a></li>
+    <div style="background-image:url('');background-size:100%;">
+        @*導覽開始*@
+        <nav class="navbar navbar-expand-sm navbar-light bg-light border-bottom navbar-toggleable-sm  box-shadow mb-3 ">
+            <div class="container">
+                @*LOGO開始*@
+                <div class="align-items-start">
+                    @Html.ActionLink("讀本", "Home", "Home", new { area = "" }, new { @class = "navbar-brand" })  @*須換圖*@
+                </div>
+                @*登入選項開始*@
+                <div class="justify-content-end menu">
+                    <ul class="zero">
+                        @{
+                            if (_userInforService.UserId != 0)
+                            {
+                                <li> Hi! @_userInforService.UserName </li>
+                                <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/LogOut">登出</a></li>
+                            }
+                            else
+                            {
+                                <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/Login">登入</a></li>
+                                <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/Signin">註冊</a></li>
+                            }
                         }
-                        else
-                        {
-                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/Login">登入</a></li>
-                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/Signin">註冊</a></li>
-                        }
-                    }
-                    <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/MemberCenter">會員中心</a></li>
-                    <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Order/ShoppingCart"><img src="~/Image/shoppingCartIcon20px.png" style="width:20" /></a></li>
-                </ul>
+                        <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/MemberCenter">會員中心</a></li>
+                        <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Order/ShoppingCart"><img src="~/Image/shoppingCartIcon20px.png" style="width:20" /></a></li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
-    <div class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <div class="navbar navbar-light bg-light container-fluid" style="border:1px solid #000000; background-color:#ebf8bc">
-                @* 分類  *@
+        </nav>
+        @*導覽結束*@
+        @*分類 & 搜尋開始*@
+        <div class="navbar navbar-default navbar-fixed-top" style="">
+            <div class="navbar navbar-light bg-light container" style="border:1px solid #000000; background-color:#ebf8bc">
+                @*分類*@
                 <form class="justify-content-start">
                     <div class="menu">
                         <ul class="zero">
@@ -65,6 +70,7 @@
                         </ul>
                     </div>
                 </form>
+                @*搜尋*@
                 <form class="justify-content-end">
                     <div class="input-group navbar navbar-light bg-light menu">
                         <input id="search_input" style="border-right: #C4C4C4 2px solid;" placeholder="搜尋" type="search" class="mx-1 form-control inputForSearch ui-autocomplete-input" maxlength="40" value="" autocomplete="off">
@@ -126,11 +132,9 @@
                     </div>
                 </form>
             </div>
-            <div class="navbar navbar-light bg-light container-fluid" style="margin-top:10px; border:1px solid #000">
-                @* 活動 *@
-                <img src="~/Image/demo-pic.jpg" width="100%" height="30px" />
-            </div>
         </div>
+        @*分類 & 搜尋結束*@
+
     </div>
     <br />
     <div class="container body-content">

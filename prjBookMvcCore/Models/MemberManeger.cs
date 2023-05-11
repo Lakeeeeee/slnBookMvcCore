@@ -1,14 +1,21 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Configuration;
 using System.Drawing;
+using System.Net.Mail;
+using System.Security.Cryptography;
+using System.Security.Policy;
+using System.Text;
+using System.Web;
 using System.Xml;
 
 namespace prjBookMvcCore.Models
 {
     public class MemberManeger
     {
+
         public void writeWelcomeLetter(Member receiver, BookShopContext content)
         {
-
             Message welcomeLetter = new Message()
             {
                 MessageContent = 
@@ -25,10 +32,19 @@ namespace prjBookMvcCore.Models
                 MessageId = welcomeLetter.MessageId,
                 MemberId= receiver.MemberId,
                 UpdateTime = DateTime.Now,
-                //ReadStatu = 0,
+                ReadStatu = 0
             };
             content.Add(welcomeNewMember); content.SaveChanges();
+
+        }
+
+        public void sendMailToken(string email)
+        {
+
+
+
         }
 
     }
+
 }

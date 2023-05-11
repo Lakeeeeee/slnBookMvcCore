@@ -1,0 +1,196 @@
+﻿@inject UserInforService _userInforService
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - prjBookMvcCore</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/prjBookMvcCore.styles.css" asp-append-version="true" />
+    <style>
+        div {
+            /*border: 1px solid #ff0000*/
+        }
+
+        .zero {
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu ul li { /*li水平顯示*/
+            display: inline;
+        }
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end; /* 內容區塊往下對齊 */
+            align-items: center; /* 內容區塊水平置中 */
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper" style="height:450px; background-image:url('/image/banner.jpg'); background-repeat: no-repeat; background-size: cover;">
+        @*導覽開始*@
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm  box-shadow mb-3 ">
+            <div class="container">
+                @*LOGO開始*@
+                <div class="align-items-start" style="font-weight:900">
+                    @Html.ActionLink("讀本", "Home", "Home", new { area = "" }, new { @class = "text-black navbar-brand" })  @*須換圖*@
+                </div>
+                @*登入選項開始*@
+                <div class="justify-content-end menu">
+                    <ul class="zero">
+                        @{
+                            if (_userInforService.UserId != 0)
+                            {
+                                <li> Hi! @_userInforService.UserName </li>
+                                <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent" href="~/Member/LogOut">登出</a></li>
+                            }
+                            else
+                            {
+                                <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-black" href="~/Member/Login">登入</a></li>
+                                <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-black" href="~/Member/Signin">註冊</a></li>
+                            }
+                        }
+                        <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-black" href="~/Member/MemberCenter">會員中心</a></li>
+                        <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-black" href="~/Order/ShoppingCart"><img src="~/Image/shoppingCartIcon20px.png" /></a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        @*導覽結束*@
+        @*分類 & 搜尋開始*@
+        <div class="navbar navbar-default navbar-fixed-top content">
+            <div class="navbar navbar-light container">
+                @*分類*@
+                <form class="justify-content-start">
+                    <div class="menu">
+                        <ul class="zero">
+                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-black" href="~/Home/Menu">書籍</a></li>
+                            <li>
+                                <a role="button" class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-black" href="~/Promotions/Index">優惠活動</a>
+                            </li>
+                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-black" href="~/Artical/List全部文章">推薦文章</a></li>
+                        </ul>
+                    </div>
+                </form>
+                @*搜尋*@
+                <form class="justify-content-end">
+                    <div class="input-group navbar navbar-light menu">
+                        <input id="search_input" style="border-right: darkgray 2px solid;" placeholder="搜尋" type="search" class="text-black bg-transparent mx-1 form-control inputForSearch ui-autocomplete-input" maxlength="40" value="" autocomplete="off">
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-black dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                進階搜尋
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="width:500px">
+                                <li>
+                                    <div class="m-1 p-1">
+                                        <span class="mx-2">搜尋欄位</span>
+                                        <button class="btn btn-sm btn-outline-success mx-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            全文
+                                        </button>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="m-1 p-1">
+                                        <span class="mx-2">商品類型</span>
+                                        <button class="btn btn-sm btn-outline-success mx-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            選擇類型
+                                        </button>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="m-1 p-1">
+                                        <span class="mx-2">售價</span>
+                                        <input style="border-right: #C4C4C4 2px solid;width:100px" placeholder="金額" type="search" maxlength="20" value="" autocomplete="off" />
+                                        <span class="mx-2">至</span>
+                                        <input style="border-right: #C4C4C4 2px solid;width:100px" placeholder="金額" type="search" maxlength="20" value="" autocomplete="off" />
+                                        <span class="mx-2">之間</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="m-1 p-1">
+                                        <span class="mx-2">折扣</span>
+                                        <button class="btn btn-sm btn-outline-success mx-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            請選擇
+                                        </button>
+                                        <span class="mx-2">至</span>
+                                        <button class="btn btn-sm btn-outline-success mx-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            請選擇
+                                        </button>
+                                        <span class="mx-2">之間</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="m-1 p-1">
+                                        <span class="mx-2">出版日期</span>
+                                        <input style="border-right: #C4C4C4 2px solid;width:100px" placeholder="日期" type="search" maxlength="20" value="" autocomplete="off" />
+                                        <span class="mx-2">至</span>
+                                        <input style="border-right: #C4C4C4 2px solid;width:100px" placeholder="日期" type="search" maxlength="20" value="" autocomplete="off" />
+                                        <span class="mx-2">之間</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-sm btn-outline-secondary mx-1 border-0 bg-transparent text-black">搜尋</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        @*分類 & 搜尋結束*@
+
+    </div>
+    <br />
+    <div class="container body-content">
+        @* body *@
+        @RenderBody()
+    </div>
+
+    <div class="container body-content">
+        @* buttom *@
+        <br /><hr />
+        <div class="container">
+            <div class="row">
+                <div class="col" style="text-align:center">
+                    <img src="~/Image/AD.png" alt="活動or優惠or廣告" width="100%" />
+                    廣告招商中
+                </div>
+                <div class="col" style="text-align:center">
+                    <img src="~/Image/AD.png" alt="活動or優惠or廣告" width="100%" />
+                    廣告招商中
+                </div>
+                <div class="col" style="text-align:center">
+                    <img src="~/Image/AD.png" alt="活動or優惠or廣告" width="100%" />
+                    廣告招商中
+                </div>
+            </div>
+        </div>
+
+        <br />
+        <hr />
+        <div>
+            <span style="margin-right:10px"><a href="#id">客服專區</a></span>
+            <span style="margin-right:10px"><a href="~/Home/QA">客服專區</a></span>
+        </div>
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
