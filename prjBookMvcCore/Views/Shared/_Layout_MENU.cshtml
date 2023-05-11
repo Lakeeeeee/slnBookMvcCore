@@ -309,7 +309,7 @@
                             var q = db.Articals.Select(a => new { a.ArticalId, a.ArticalTitle }).Take(8);
                             foreach (var g in q)
                             {
-                                <li class="list-group-item"><span><a href="~/Artical/Detail文章/@g.ArticalId">@g.ArticalTitle</a></span></li>
+                                <li class="list-group-item"><span><a href="~/Promotions/Promotions活動文章Detail/@g.ArticalId">@g.ArticalTitle</a></span></li>
                             }
                         }
                     </ul>

@@ -1,11 +1,29 @@
 ﻿
-@{
-    ViewData["Title"] = "Promotions會員";
-}
+@{ ViewData["Title"] = "Promotions會員";}
 
+<html>
+    <head>
+        <style>
+        h2 {
+            font-family: 標楷體;
+            color: #28004D;
+            text-align: center;
+            font-weight: 900;
+        }
+            th{
+            font-size:larger;
+            }
+
+        </style>
+    </head>
+<body>
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="~/Home/Home" style="color:black">首頁</a></li>
+            <li class="breadcrumb-item active" aria-current="page" style="color:gray">會員等級優惠及升等方式</li>
+    </ol>
+</nav>
 <h2>會員等級優惠及升等方式</h2>
-
-
 <table class="table align-middle" style="text-align:center">
     <thead style="background-color:blanchedalmond">
     <tr><th> </th><th>新皮</th><th> 白皮</th><th> 綠皮</th><th> 金皮</th><th> 鑽皮</th></tr>
@@ -55,4 +73,5 @@
     <tr><td><img src="~/Image/Promotions/累積週期.png" width="50" /><br />累積週期</td><td colspan="5">前年度的8/1至當年度的7/31止​</td> </tr>
     <tr><<td colspan="6" style="background-color:black;color:aliceblue">注意：​1.訂單完成才列入升等計算​  2.優惠卷限當月使用，早領早享受​</td></tr>
 </table>
-
+</body>
+</html>
