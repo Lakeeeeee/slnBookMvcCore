@@ -43,6 +43,10 @@ namespace prjBookMvcCore.Controllers
                             各界推薦 = b.Endorsements,
                             作者序 = b.Foreward,
                             目錄 = b.TableContainer,
+                            試讀1 = b.Previews.Select(x => x.PreviewImagePath1).FirstOrDefault(),
+                            試讀2 = b.Previews.Select(x => x.PreviewImagePath2).FirstOrDefault(),
+                            試讀3 = b.Previews.Select(x => x.PreviewImagePath3).FirstOrDefault(),
+                            試讀4 = b.Previews.Select(x => x.PreviewImagePath4).FirstOrDefault(),
                         };
             foreach (var item in query)
             {
@@ -73,6 +77,7 @@ namespace prjBookMvcCore.Controllers
                 Translator t = new Translator { TranslatorName = item.譯者 };
                 Painter pt = new Painter { PainterName = item.繪者 };
                 Author a = new Author { AuthorName = item.作者 };
+                Preview pv = new Preview { PreviewImagePath1 = item.試讀1, PreviewImagePath2 = item.試讀2, PreviewImagePath3 = item.試讀3, PreviewImagePath4 = item.試讀4 };
 
                 List<CommentInformation> cis = getCommentInformation(bookId);
 
@@ -87,6 +92,7 @@ namespace prjBookMvcCore.Controllers
                     translator = t,
                     painter = pt,
                     commentInformations = cis,
+                    preview = pv,
                 };
 
                 return View(newBook);
