@@ -156,18 +156,14 @@ namespace prjBookMvcCore.Controllers
         public IActionResult ResetPwd(string verify)
         {
             // 由信件連結回來會帶參數 verify
-
             if (verify == "")
             {
                 ViewData["ErrorMsg"] = "缺少驗證碼";
                 return View();
             }
-
             string UserID = verify.Split('|')[0];
-
             // 取得重設時間
             string ResetTime = verify.Split('|')[1];
-
             // 檢查時間是否超過 30 分鐘
             DateTime dResetTime = Convert.ToDateTime(ResetTime);
             TimeSpan TS = new System.TimeSpan(DateTime.Now.Ticks - dResetTime.Ticks);
@@ -177,6 +173,13 @@ namespace prjBookMvcCore.Controllers
                 ViewData["ErrorMsg"] = "超過驗證碼有效時間，請重寄驗證碼";
                 return View();
             }
+            
+            Member member= _bookShopContext.Members.FirstOrDefault(x=>x.MemberEmail== UserID);
+            return View(member);
+        }
+
+        public IActionResult doResetPwd()  //修改密碼的方法
+        {
             return View();
         }
 
