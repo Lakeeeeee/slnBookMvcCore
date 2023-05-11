@@ -25,5 +25,11 @@ namespace prjBookMvcCore.ViewModel
         [Required] public string Memberphone_P { get { return member.Memberphone; } set { member.Memberphone = value; } }
         [Required] public string MemberAddress_P { get { return member.MemberAddress; } set { member.MemberAddress = value; } }
         public bool isSubscribe { get; set; }
+
+        public class SendMailTokenIn
+        {
+            public string UserID { get; set; }
+        }
+
     }
 }

@@ -17,19 +17,23 @@ using System.Text.Encodings.Web;
 using Newtonsoft.Json.Linq;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using System.Net.Mail;
+using System.Web;
+using System.Text;
 
 namespace prjBookMvcCore.Controllers
 {
     public class MemberController : Controller
     {
         private readonly BookShopContext _bookShopContext ;
+        private readonly IConfiguration _config;
         private readonly ICaptchaValidator _captchaValidator ;
         public UserInforService _userInforService { get; set; }
-        public MemberController(BookShopContext db, UserInforService userInforService,ICaptchaValidator captchaValidator)
+        public MemberController(BookShopContext db, UserInforService userInforService, IConfiguration config,ICaptchaValidator captchaValidator)
         {
             _bookShopContext = db;
             _userInforService = userInforService;
             _captchaValidator = captchaValidator;
+            _config = config;
         }
         MemberManeger _cm = new MemberManeger();
 
@@ -111,31 +115,69 @@ namespace prjBookMvcCore.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Find_password(string target) //填完表單後發post然後寄出email
         {
-            bool isEmailExist =_bookShopContext.Members.Any(x => x.MemberEmail == target);
+            bool isEmailExist = _bookShopContext.Members.Any(x => x.MemberEmail == target);
 
             if (!isEmailExist)
+            {            }
+            if (isEmailExist)
             {
-            }
-            if(isEmailExist)
-            {
-                MailMessage mail = new MailMessage();
+                string sVerify = target + "|" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");// 產生帳號+時間驗證碼
+                sVerify = HttpUtility.UrlEncode(sVerify);// 將驗證碼使用網址編碼處理
+                string webPath = Request.Scheme + "://" + Request.HttpContext + Url.Content("~/");// 網站網址
+                string receivePage = "Member/ResetPwd";
+                string mailContent = "請點擊以下連結，返回網站重新設定密碼，逾期 30 分鐘後，此連結將會失效。<br><br>";
+                mailContent = mailContent + "<a href='" + webPath + receivePage + "?verify=" + sVerify + "'  target='_blank'>點此連結</a>";
 
-
-            }
-
-            return Content(isEmailExist.ToString());
+                // 信件主題
+                string mailSubject = "[測試] 重設密碼申請信";
+                string SmtpServer = "smtp.gmail.com";
+                string GoogleMailUserID = _config["GoogleMailUserID"];
+                string GoogleMailUserPwd = _config["GoogleMailUserPwd"];
+                int port = 587;
+                MailMessage mms = new MailMessage();
+                mms.From = new MailAddress(GoogleMailUserID);
+                mms.Subject = mailSubject;
+                mms.Body = mailContent;
+                mms.IsBodyHtml = true;
+                mms.SubjectEncoding = Encoding.UTF8;
+                mms.To.Add(new MailAddress(target));
+                using (SmtpClient client = new SmtpClient(SmtpServer, port))
+                {
+                    client.EnableSsl = true;
+                    client.Credentials = new NetworkCredential(GoogleMailUserID, GoogleMailUserPwd);//寄信帳密 
+                    client.Send(mms); //寄出信件
+                }
+            } 
+             return Content(isEmailExist.ToString());
         }
 
-        public IActionResult reset_Password() //忘記密碼的重設密碼頁面
+
+        [HttpGet]
+        public IActionResult ResetPwd(string verify)
         {
+            // 由信件連結回來會帶參數 verify
+
+            if (verify == "")
+            {
+                ViewData["ErrorMsg"] = "缺少驗證碼";
+                return View();
+            }
+
+            string UserID = verify.Split('|')[0];
+
+            // 取得重設時間
+            string ResetTime = verify.Split('|')[1];
+
+            // 檢查時間是否超過 30 分鐘
+            DateTime dResetTime = Convert.ToDateTime(ResetTime);
+            TimeSpan TS = new System.TimeSpan(DateTime.Now.Ticks - dResetTime.Ticks);
+            double diff = Convert.ToDouble(TS.TotalMinutes);
+            if (diff > 30)
+            {
+                ViewData["ErrorMsg"] = "超過驗證碼有效時間，請重寄驗證碼";
+                return View();
+            }
             return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult reset_PasswordMethod(int? id) //忘記密碼的重設密碼方法
-        {
-            return RedirectToAction("Login");
         }
 
         //==========================================以下會員才能訪問
@@ -146,7 +188,6 @@ namespace prjBookMvcCore.Controllers
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Redirect("~/Home/Home");
         }
-
 
         [Authorize]
         public IActionResult alretPassword()  //會員專區的重設密碼頁面
