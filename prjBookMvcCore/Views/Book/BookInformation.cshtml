@@ -618,7 +618,7 @@
         let recommendBooksJS = []
         for (let i = 0; i < recommendBooks.length ; i++) {
             let recommend = {
-                bookTitle: recommendBooks[i].bookTitle,
+                bookTitle: replaceDoubleDollarSign(recommendBooks[i].bookTitle),
                 coverPath: '../Image/Book/' + recommendBooks[i].coverPath,
                 unitPrice: recommendBooks[i].unitPrice,
                 discount: 79,

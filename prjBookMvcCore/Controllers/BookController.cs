@@ -14,7 +14,7 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult BookInformation()
         {
-            int bookId = 12;
+            int bookId = 105;
             var query = from b in db.Books
                         where b.BookId == bookId
                         select new
