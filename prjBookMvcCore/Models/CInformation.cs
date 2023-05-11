@@ -15,5 +15,7 @@
 
         public List<CommentInformation> ?commentInformations { get; set; }
 
+        public List<Book> ?recommendBooks { get; set; }
+
     }
 }

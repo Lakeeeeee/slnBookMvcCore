@@ -81,6 +81,8 @@ namespace prjBookMvcCore.Controllers
 
                 List<CommentInformation> cis = getCommentInformation(bookId);
 
+                List<Book> recommendBooks = getRecommendBooks(item.子分類);
+
                 CInformation newBook = new CInformation
                 {
                     book = b,
@@ -93,6 +95,7 @@ namespace prjBookMvcCore.Controllers
                     painter = pt,
                     commentInformations = cis,
                     preview = pv,
+                    recommendBooks = recommendBooks,
                 };
 
                 return View(newBook);
@@ -127,6 +130,25 @@ namespace prjBookMvcCore.Controllers
                     cis.Add(tmp);
                 }
                 return cis;
+            }
+        }
+        public List<Book> getRecommendBooks(string subCategoryName)
+        {
+            using (var db = new BookShopContext())
+            {
+                List<Book> recommendBooks = new List<Book>();
+                var books = from sc in db.SubCategories
+                            join sd in db.CategoryDetails
+                            on sc.SubCategoryId equals sd.SubCategoryId
+                            join b in db.Books
+                            on sd.BookId equals b.BookId
+                            where sc.SubCategoryName == subCategoryName
+                            select b;
+                foreach (var book in books)
+                {
+                    recommendBooks.Add(book);
+                }
+                return recommendBooks;
             }
         }
     }
