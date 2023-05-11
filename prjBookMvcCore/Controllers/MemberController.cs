@@ -19,6 +19,7 @@ using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using System.Net.Mail;
 using System.Web;
 using System.Text;
+using System.Reflection.Metadata;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -123,12 +124,10 @@ namespace prjBookMvcCore.Controllers
             {
                 string sVerify = target + "|" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");// 產生帳號+時間驗證碼
                 sVerify = HttpUtility.UrlEncode(sVerify);// 將驗證碼使用網址編碼處理
-                string webPath = Request.Scheme + "://" + Request.HttpContext + Url.Content("~/");// 網站網址
+                string webPath = "http://localhost:7145";// 網站網址
                 string receivePage = "Member/ResetPwd";
                 string mailContent = "請點擊以下連結，返回網站重新設定密碼，逾期 30 分鐘後，此連結將會失效。<br><br>";
                 mailContent = mailContent + "<a href='" + webPath + receivePage + "?verify=" + sVerify + "'  target='_blank'>點此連結</a>";
-
-                // 信件主題
                 string mailSubject = "[測試] 重設密碼申請信";
                 string SmtpServer = "smtp.gmail.com";
                 string GoogleMailUserID = _config["GoogleMailUserID"];
@@ -158,29 +157,34 @@ namespace prjBookMvcCore.Controllers
             // 由信件連結回來會帶參數 verify
             if (verify == "")
             {
-                ViewData["ErrorMsg"] = "缺少驗證碼";
-                return View();
+                return Content("false");
             }
             string UserID = verify.Split('|')[0];
             // 取得重設時間
             string ResetTime = verify.Split('|')[1];
             // 檢查時間是否超過 30 分鐘
             DateTime dResetTime = Convert.ToDateTime(ResetTime);
-            TimeSpan TS = new System.TimeSpan(DateTime.Now.Ticks - dResetTime.Ticks);
+            TimeSpan TS = new TimeSpan(DateTime.Now.Ticks - dResetTime.Ticks);
             double diff = Convert.ToDouble(TS.TotalMinutes);
             if (diff > 30)
             {
-                ViewData["ErrorMsg"] = "超過驗證碼有效時間，請重寄驗證碼";
-                return View();
+                return Content("overtime");
             }
-            
-            Member member= _bookShopContext.Members.FirstOrDefault(x=>x.MemberEmail== UserID);
+            Member member= _bookShopContext.Members.FirstOrDefault(x=>x.MemberEmail== UserID)!;
             return View(member);
         }
 
-        public IActionResult doResetPwd()  //修改密碼的方法
+        public IActionResult doResetPwd(Member target)  //修改密碼的方法
         {
-            return View();
+            bool isSaved = false;
+            try {
+                Member member = _bookShopContext.Members.FirstOrDefault(x => x.MemberId == target.MemberId)!;
+                member.MemberPassword = target.MemberPassword;
+                _bookShopContext.SaveChanges();
+                isSaved = true;
+            } catch { }
+            
+            return Content(isSaved.ToString());
         }
 
         //==========================================以下會員才能訪問
