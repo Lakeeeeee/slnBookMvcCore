@@ -22,7 +22,6 @@
                     };
 </script>
 <div class="container" style="margin-top:15px">
-    <form asp-action="doResetPwd" id="reset_form">
         <div>
             <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                 <ol class="breadcrumb">
@@ -32,7 +31,8 @@
             </nav>
         </div>
         <p><h6>讀本｜重設密碼</h6></p>
-        <input type="hidden" value="@Model.MemberId" />
+    <form asp-controller="Member" asp-action="doResetPwd" id="reset_form">
+        <input asp-for="MemberId" type="hidden" value="@Model.MemberId" />
         <div>
             <br />
             <p>請重新設定您的密碼，完成後重新登入</p>
@@ -42,13 +42,17 @@
         </div>
     </form>
 </div>
-<script>
+@*<script>
     const form = document.querySelector('#reset_form');
     form.addEventListener('submit', async(event) => {
         event.preventDefault();
-        const response = await fetch('@Url.ActionLink("doResetPwd")');
+        const response = await fetch('@Url.Action("doResetPwd", "Member")');
         const confirm = await response.text();
-        if(confirm){
+        console.log(confirm);
+        setTimeout(function(){
+        }, 15000)
+
+        if(confirm==="true"){
             alert('修改成功，系統將自動轉向登入頁面');
             window.location.href='@Url.ActionLink("Login", "Member")';
         }
@@ -57,13 +61,8 @@
             window.close();
         }
     }
-        
-        
     }
-    
-    )
-
-
-
 </script>
+*@
+
 

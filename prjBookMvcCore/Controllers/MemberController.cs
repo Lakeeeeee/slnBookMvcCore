@@ -20,6 +20,7 @@ using System.Net.Mail;
 using System.Web;
 using System.Text;
 using System.Reflection.Metadata;
+using Microsoft.CodeAnalysis.Scripting;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -116,16 +117,19 @@ namespace prjBookMvcCore.Controllers
         public IActionResult Find_password(string target) //填完表單後發post然後寄出email
         {
             bool isEmailExist = _bookShopContext.Members.Any(x => x.MemberEmail == target);
-
+            string script = "<script>alert('信箱沒有註冊過');</script>";
             if (!isEmailExist)
-            {            }
+            {
+                return Content(script, "text/html", System.Text.Encoding.UTF8);
+            }
             if (isEmailExist)
             {
-                string sVerify = target + "|" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");// 產生帳號+時間驗證碼
+                Member member = _bookShopContext.Members.FirstOrDefault(x => x.MemberEmail == target);
+                string sVerify = member.MemberId + "|" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");// 產生帳號+時間驗證碼
                 sVerify = HttpUtility.UrlEncode(sVerify);// 將驗證碼使用網址編碼處理
                 string webPath = "https://localhost:7145/";// 網站網址
                 string receivePage = "Member/ResetPwd";
-                string mailContent = "請點擊以下連結，返回網站重新設定密碼，逾期 30 分鐘後，此連結將會失效。<br><br>";
+                string mailContent = "請點擊以下連結，返回網站重新設定密碼，逾期 5 分鐘後，此連結將會失效。<br><br>";
                 mailContent = mailContent + "<a href='" + webPath + receivePage + "?verify=" + sVerify + "'  target='_blank'>點此連結</a>";
                 string mailSubject = "[測試] 重設密碼申請信";
                 string SmtpServer = "smtp.gmail.com";
@@ -145,43 +149,46 @@ namespace prjBookMvcCore.Controllers
                     client.Credentials = new NetworkCredential(GoogleMailUserID, GoogleMailUserPwd);//寄信帳密 
                     client.Send(mms); //寄出信件
                 }
-            } 
-             return Content(isEmailExist.ToString());
+            }
+            script = "<script>alert('我們已經將查詢資料寄到您的信箱，請前往點選驗證連結');window.history.back();</script>";
+            return Content(script, "text/html", System.Text.Encoding.UTF8);
         }
 
         public IActionResult ResetPwd(string verify)
         {
-            // 由信件連結回來會帶參數 verify
+            string script = "<script>alert('驗證碼錯誤或逾期失效');window.close();</script>";
+
             if (verify == "")
             {
-                return Content("false");
+                return Content(script, "text/html", System.Text.Encoding.UTF8);
             }
-            string UserID = verify.Split('|')[0];
-            // 取得重設時間
-            string ResetTime = verify.Split('|')[1];
-            // 檢查時間是否超過 30 分鐘
-            DateTime dResetTime = Convert.ToDateTime(ResetTime);
+            int UserID = Convert.ToInt32(verify.Split('|')[0]);
+            string ResetTime = verify.Split('|')[1];  // 取得重設時間
+            DateTime dResetTime = Convert.ToDateTime(ResetTime);  // 檢查時間是否超過 30 分鐘
             TimeSpan TS = new TimeSpan(DateTime.Now.Ticks - dResetTime.Ticks);
             double diff = Convert.ToDouble(TS.TotalMinutes);
-            if (diff > 30)
+            if (diff > 5)
             {
-                return Content("overtime");
+                return Content(script, "text/html", System.Text.Encoding.UTF8);
             }
-            Member member= _bookShopContext.Members.FirstOrDefault(x=>x.MemberEmail== UserID)!;
+            Member member = _bookShopContext.Members.FirstOrDefault(x => x.MemberId == UserID);
+            
             return View(member);
         }
 
         public IActionResult doResetPwd(Member target)  //修改密碼的方法
         {
-            bool isSaved = false;
-            try {
+            string script = "<script>alert('密碼重新設定成功，請回原頁面並嘗試登入');window.close();</script>";
+            try
+            {
                 Member member = _bookShopContext.Members.FirstOrDefault(x => x.MemberId == target.MemberId)!;
                 member.MemberPassword = target.MemberPassword;
                 _bookShopContext.SaveChanges();
-                isSaved = true;
-            } catch { }
-            
-            return Content(isSaved.ToString());
+            } catch {
+
+                script = "<script>alert('密碼重新設定失敗，請重新發送驗證信件');window.close();</script>";
+            }
+            return Content(script, "text/html", System.Text.Encoding.UTF8);
         }
 
         //==========================================以下會員才能訪問
