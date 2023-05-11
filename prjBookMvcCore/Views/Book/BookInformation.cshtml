@@ -227,7 +227,7 @@
 </head>
 <body>
     <div id="app">
-        <div>
+        <div v-loading.fullscreen.lock="loadThisPage">
             <el-container>
                 <el-breadcrumb separator-class="el-icon-arrow-right">
                     <el-breadcrumb-item ><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">首頁</a></el-breadcrumb-item>
@@ -295,16 +295,16 @@
                         </el-row>
                         <div class="icon_wrapper">
                             <div id="fb_shared" class="share" v-on:click="windowOpen('https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.taaze.tw%2Fproducts%2F11100697818.html')">
-                                <a href=""><img src="../image/Book/bookIcon/fb.png" alt="" style="width: 30px; height: 26px;"></a>
+                                <a href=""><img src="../../image/Book/bookIcon/fb.png" alt="" style="width: 30px; height: 26px;"></a>
                             </div>
                             <div id="gmail_shared" class="share" v-on:click="windowOpen('https://mail.google.com/mail/?ui=1&amp;view=cm&amp;fs=1&amp;tf=1&amp;su=%E3%80%90TAAZE%20%7C%20%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB%E7%B6%B2%E8%B7%AF%E6%9B%B8%E5%BA%97%E3%80%91%E5%A1%94%E6%9C%A8%E5%BE%B7%EF%BC%9A%E7%8C%B6%E5%A4%AA%E4%BA%BA%E7%9A%84%E8%87%B4%E5%AF%8C%E8%81%96%E7%B6%93%EF%BC%BB%E4%BF%AE%E8%A8%82%E7%89%88%EF%BC%BD%EF%BC%9A1000%E5%A4%9A%E5%B9%B4%E4%BE%86%E5%B8%B6%E9%A0%98%E7%8C%B6%E5%A4%AA%E4%BA%BA%E5%BF%AB%E9%80%9F%E7%B4%AF%E7%A9%8D%E8%B2%A1%E5%AF%8C%E7%9A%84%E7%A5%9E%E7%A5%95%E7%B6%93%E5%85%B8-%20TAAZE%20%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB&amp;body=%E3%80%90TAAZE%20%7C%20%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB%E7%B6%B2%E8%B7%AF%E6%9B%B8%E5%BA%97%E3%80%91%E5%A1%94%E6%9C%A8%E5%BE%B7%EF%BC%9A%E7%8C%B6%E5%A4%AA%E4%BA%BA%E7%9A%84%E8%87%B4%E5%AF%8C%E8%81%96%E7%B6%93%EF%BC%BB%E4%BF%AE%E8%A8%82%E7%89%88%EF%BC%BD%EF%BC%9A1000%E5%A4%9A%E5%B9%B4%E4%BE%86%E5%B8%B6%E9%A0%98%E7%8C%B6%E5%A4%AA%E4%BA%BA%E5%BF%AB%E9%80%9F%E7%B4%AF%E7%A9%8D%E8%B2%A1%E5%AF%8C%E7%9A%84%E7%A5%9E%E7%A5%95%E7%B6%93%E5%85%B8-%20TAAZE%20%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB%2F%E5%A1%94%E6%9C%A8%E5%BE%B7%EF%BC%9A%E7%8C%B6%E5%A4%AA%E4%BA%BA%E7%9A%84%E8%87%B4%E5%AF%8C%E8%81%96%E7%B6%93%EF%BC%BB%E4%BF%AE%E8%A8%82%E7%89%88%EF%BC%BD%EF%BC%9A1000%E5%A4%9A%E5%B9%B4%E4%BE%86%E5%B8%B6%E9%A0%98%E7%8C%B6%E5%A4%AA%E4%BA%BA%E5%BF%AB%E9%80%9F%E7%B4%AF%E7%A9%8D%E8%B2%A1%E5%AF%8C%E7%9A%84%E7%A5%9E%E7%A5%95%E7%B6%93%E5%85%B8.%20%E4%BD%9B%E8%98%AD%E5%85%8B%EF%BC%8E%E8%B5%AB%E7%88%BE.%20%E5%BE%90%E4%B8%96%E6%98%8E.%20%E6%99%BA%E8%A8%80%E9%A4%A8.%209789865899332.%20%E3%80%8A%E8%81%96%E7%B6%93%E3%80%8B%E8%AE%93%E6%AF%8F%E4%B8%80%E5%80%8B%E4%BA%BA%E6%9C%8D%E5%BE%9E%E4%B8%8A%E5%B8%9D%E7%9A%84%E5%AE%89%E6%8E%92%EF%BC%8C%E4%BD%86%E3%80%8A%E5%A1%94%E6%9C%A8%E5%BE%B7%E3%80%8B%E8%AE%93%E3%80%8C%E8%B2%A1%E5%AF%8C%E3%80%8D%E6%9C%8D%E5%BE%9E%E4%BA%86%E6%88%91%E5%80%91%E7%9A%84%E9%81%B8%E6%93%87%E3%80%82%E2%94%80%E2%94%80%E5%93%88%E9%BB%98%E4%B8%96%E7%95%8C%E5%AF%8C%E7%BF%81%E6%91%A9....%20https%3A%2F%2Fwww.taaze.tw%2Fproducts%2F11100697818.html&amp;shva=1&amp;ov=0')">
-                                <a href=""><img src="../image/Book/bookIcon/gmail.png" alt="" style="width: 30px; height: 26px;"></a>
+                                <a href=""><img src="../../image/Book/bookIcon/gmail.png" alt="" style="width: 30px; height: 26px;"></a>
                             </div>
                             <div id="plurk_shared" class="share" v-on:click="windowOpen('http://www.plurk.com/?qualifier=shares&amp;status=%E5%A1%94%E6%9C%A8%E5%BE%B7%EF%BC%9A%E7%8C%B6%E5%A4%AA%E4%BA%BA%E7%9A%84%E8%87%B4%E5%AF%8C%E8%81%96%E7%B6%93%EF%BC%BB%E4%BF%AE%E8%A8%82%E7%89%88%EF%BC%BD%EF%BC%9A1000%E5%A4%9A%E5%B9%B4%E4%BE%86%E5%B8%B6%E9%A0%98%E7%8C%B6%E5%A4%AA%E4%BA%BA%E5%BF%AB%E9%80%9F%E7%B4%AF%E7%A9%8D%E8%B2%A1%E5%AF%8C%E7%9A%84%E7%A5%9E%E7%A5%95%E7%B6%93%E5%85%B8-%20TAAZE%20%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB%20https%3A%2F%2Fwww.taaze.tw%2Fproducts%2F11100697818.html%20TAAZE%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB%E7%B6%B2%E8%B7%AF%E6%9B%B8%E5%BA%97')">
-                                <a href=""><img src="../image/Book/bookIcon/plurk.png" alt="" style="width: 30px; height: 26px;"></a>
+                                <a href=""><img src="../../image/Book/bookIcon/plurk.png" alt="" style="width: 30px; height: 26px;"></a>
                             </div>
                             <div id="twitter_shared" class="share" v-on:click="windowOpen('https://twitter.com/home?status=%E5%A1%94%E6%9C%A8%E5%BE%B7%EF%BC%9A%E7%8C%B6%E5%A4%AA%E4%BA%BA%E7%9A%84%E8%87%B4%E5%AF%8C%E8%81%96%E7%B6%93%EF%BC%BB%E4%BF%AE%E8%A8%82%E7%89%88%EF%BC%BD%EF%BC%9A1000%E5%A4%9A%E5%B9%B4%E4%BE%86%E5%B8%B6%E9%A0%98%E7%8C%B6%E5%A4%AA%E4%BA%BA%E5%BF%AB%E9%80%9F%E7%B4%AF%E7%A9%8D%E8%B2%A1%E5%AF%8C%E7%9A%84%E7%A5%9E%E7%A5%95%E7%B6%93%E5%85%B8-%20TAAZE%20%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB%20https%3A%2F%2Fwww.taaze.tw%2Fproducts%2F11100697818.html%20TAAZE%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB%E7%B6%B2%E8%B7%AF%E6%9B%B8%E5%BA%97')">
-                                <a href=""><img src="../image/Book/bookIcon/twitter.png" alt="" style="width: 30px; height: 26px;"></a>
+                                <a href=""><img src="../../image/Book/bookIcon/twitter.png" alt="" style="width: 30px; height: 26px;"></a>
                             </div>
                             <!--<div class='gplus_frame'></div>-->
                             <div class="share"><iframe frameborder="0" border="0" cellspacing="0" width="70" height="25" id="fb_like" style="border: none;overflow:hidden;" src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.taaze.tw%2Fproducts%2F11100697818.html&amp;layout=button_count&amp;action=like&amp;show_faces=false&amp;share=false&amp;height=70&amp;width=100&amp;size=small&amp;appId=626893700667334"></iframe></div>
@@ -322,10 +322,10 @@
                     </div>
                     <p class="DeliverAndKpst">
                         <a class="18h" href="#" target="_blank">
-                            <img style="width: 50px;height: 50px;" src="../image/Book/bookIcon/shipIcon.png" alt="">
+                            <img style="width: 50px;height: 50px;" src="../../image/Book/bookIcon/shipIcon.png" alt="">
                         </a>
                         <a class="cartreserved" href="#" target="_blank">
-                            <img style="width: 50px;height: 50px;" src="../image/Book/bookIcon/reserveIcon.png" alt="">
+                            <img style="width: 50px;height: 50px;" src="../../image/Book/bookIcon/reserveIcon.png" alt="">
                         </a>
                     </p>
                 </el-main>
@@ -355,8 +355,8 @@
                         <div v-for="(group, index) in Math.ceil(recommend.length / 5)">
                             <el-carousel-item :key="index">
                                 <div class="recommendTable">
-                                    <div v-for="(item, i) in recommend.slice(index * 5, (index + 1) * 5)" style="margin-right: 40px;">
-                                        <a href="#">
+                                    <div v-for="(item, i) in recommend.slice(index * 5, (index + 1) * 5)" style="margin-right: 30px; margin-left: 40px">
+                                        <a :href="bookUrl(item.bookID)">
                                             <el-image :src="item.coverPath" style="width: 180px;">
                                                 <div slot="placeholder" class="image-slot">
                                                     加載中<span class="dot">...</span>
@@ -567,6 +567,7 @@
         function replaceDoubleDollarSign(str) {
           return str.replace(/\$\$/g, '\n');
         }
+
         let encodedContentIntro = "@Model.book.ContentIntro"
         let contentIntroJS = decodeHTML(encodedContentIntro)
 
@@ -603,27 +604,26 @@
                 date: commentInformations[i]._comment.commentTime.split(/[\sT]/)[0],
                 value: commentInformations[i]._comment.stars,
                 author: commentInformations[i]._member.memberName,
-                profile: '../image/Book/bookComment/' + commentInformations[i]._comment.memberId + '.jpg',
+                profile: '../../image/Book/bookComment/' + commentInformations[i]._comment.memberId + '.jpg',
             };
             commentsJS.push(comment);
         }
 
-        let preview1JS = "@Model.preview.PreviewImagePath1".length > 1 ? '../image/Book/' + "@Model.preview.PreviewImagePath1": ""
-        let preview2JS = "@Model.preview.PreviewImagePath2".length > 1 ? '../image/Book/' + "@Model.preview.PreviewImagePath2": ""
-        let preview3JS = "@Model.preview.PreviewImagePath3".length > 1 ? '../image/Book/' + "@Model.preview.PreviewImagePath3": ""
-        let preview4JS = "@Model.preview.PreviewImagePath4".length > 1 ? '../image/Book/' + "@Model.preview.PreviewImagePath4": ""
-
+        let preview1JS = "@Model.preview.PreviewImagePath1".length > 1 ? '../../image/Book/' + "@Model.preview.PreviewImagePath1": ""
+        let preview2JS = "@Model.preview.PreviewImagePath2".length > 1 ? '../../image/Book/' + "@Model.preview.PreviewImagePath2": ""
+        let preview3JS = "@Model.preview.PreviewImagePath3".length > 1 ? '../../image/Book/' + "@Model.preview.PreviewImagePath3": ""
+        let preview4JS = "@Model.preview.PreviewImagePath4".length > 1 ? '../../image/Book/' + "@Model.preview.PreviewImagePath4" : ""
 
         let recommendBooks = @Html.Raw(Json.Serialize(Model.recommendBooks));
         let recommendBooksJS = []
         for (let i = 0; i < recommendBooks.length ; i++) {
             let recommend = {
                 bookTitle: replaceDoubleDollarSign(recommendBooks[i].bookTitle),
-                coverPath: '../Image/Book/' + recommendBooks[i].coverPath,
+                bookID: recommendBooks[i].bookId,
+                coverPath: '../../Image/Book/' + recommendBooks[i].coverPath,
                 unitPrice: recommendBooks[i].unitPrice,
                 discount: 79,
             };
-            console.log(recommendBooks[i].coverPath)
             recommendBooksJS.push(recommend);
         }
 
@@ -631,7 +631,7 @@
             el: '#app',
             data: {
                 book:{
-                    coverPath: '../image/Book/' + "@Model.book.CoverPath",
+                    coverPath: '../../image/Book/' + "@Model.book.CoverPath",
                     bookTitle: bookTitleJS,
                     unitPrice: "@Model.book.UnitPrice",
                     discount: 79,
@@ -650,7 +650,7 @@
                     subCategoryName: subCategoryNameJS,
                     preview: [preview1JS,preview2JS,preview3JS,preview4JS],
                 },
-                video: '../image/Book/bookIcon/video1.jpg',
+                video: '../../image/Book/bookIcon/video1.jpg',
                 originalColor: '',
                 activeName: 'first',
                 fontSize: 'medium',
@@ -670,6 +670,7 @@
                 circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
                 recommend: recommendBooksJS,
                 comment: commentsJS,
+                loadThisPage: true,
             },
             computed: {
                 tableContainerText() {
@@ -765,8 +766,16 @@
                 openPreview(index) {
                     this.dialogIndex = index
                     this.showDialog = true
-                }
+                },
+                bookUrl(bookID) {
+                    return "@Url.Action("BookInformation", "Book", new { id = "BOOKID" })".replace("BOOKID", bookID);
+                },
             },
+            mounted() {
+                setTimeout(() => {
+                    this.loadThisPage = false
+                }, 500)
+            }
         })
     let testLogin = @_userInforService.UserId !== 0
     app.isLogin = testLogin

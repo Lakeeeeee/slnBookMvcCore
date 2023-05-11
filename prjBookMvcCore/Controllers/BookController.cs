@@ -12,9 +12,9 @@ namespace prjBookMvcCore.Controllers
     {
         BookShopContext db = new();
 
-        public IActionResult BookInformation()
+        public IActionResult BookInformation(int id)
         {
-            int bookId = 105;
+            int bookId = id;
             var query = from b in db.Books
                         where b.BookId == bookId
                         select new
