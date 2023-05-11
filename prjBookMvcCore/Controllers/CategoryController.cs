@@ -14,7 +14,7 @@ namespace prjBookMvcCore.Controllers
             return View(category); 
         }
 
-        public IActionResult 人文社科(int ?id)
+        public IActionResult 中文書分類(int ?id)
         {
             if (id == null)
             {
