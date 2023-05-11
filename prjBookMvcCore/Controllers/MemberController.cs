@@ -125,13 +125,14 @@ namespace prjBookMvcCore.Controllers
             if (isEmailExist)
             {
                 Member member = _bookShopContext.Members.FirstOrDefault(x => x.MemberEmail == target);
-                string sVerify = member.MemberId + "|" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");// 產生帳號+時間驗證碼
-                sVerify = HttpUtility.UrlEncode(sVerify);// 將驗證碼使用網址編碼處理
-                string webPath = "https://localhost:7145/";// 網站網址
+                string sVerify = member.MemberId + "|" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+                sVerify = HttpUtility.UrlEncode(sVerify);
+                int portNumber = HttpContext.Connection.LocalPort;
+                string webPath = "https://localhost:"+ portNumber + "/";
                 string receivePage = "Member/ResetPwd";
                 string mailContent = "請點擊以下連結，返回網站重新設定密碼，逾期 5 分鐘後，此連結將會失效。<br><br>";
                 mailContent = mailContent + "<a href='" + webPath + receivePage + "?verify=" + sVerify + "'  target='_blank'>點此連結</a>";
-                string mailSubject = "[測試] 重設密碼申請信";
+                string mailSubject = "[讀本] 重設密碼申請信";
                 string SmtpServer = "smtp.gmail.com";
                 string GoogleMailUserID = _config["GoogleMailUserID"];
                 string GoogleMailUserPwd = _config["GoogleMailUserPwd"];
@@ -146,8 +147,8 @@ namespace prjBookMvcCore.Controllers
                 using (SmtpClient client = new SmtpClient(SmtpServer, port))
                 {
                     client.EnableSsl = true;
-                    client.Credentials = new NetworkCredential(GoogleMailUserID, GoogleMailUserPwd);//寄信帳密 
-                    client.Send(mms); //寄出信件
+                    client.Credentials = new NetworkCredential(GoogleMailUserID, GoogleMailUserPwd);
+                    client.Send(mms);
                 }
             }
             script = "<script>alert('我們已經將查詢資料寄到您的信箱，請前往點選驗證連結');window.history.back();</script>";
@@ -163,8 +164,8 @@ namespace prjBookMvcCore.Controllers
                 return Content(script, "text/html", System.Text.Encoding.UTF8);
             }
             int UserID = Convert.ToInt32(verify.Split('|')[0]);
-            string ResetTime = verify.Split('|')[1];  // 取得重設時間
-            DateTime dResetTime = Convert.ToDateTime(ResetTime);  // 檢查時間是否超過 30 分鐘
+            string ResetTime = verify.Split('|')[1];
+            DateTime dResetTime = Convert.ToDateTime(ResetTime);
             TimeSpan TS = new TimeSpan(DateTime.Now.Ticks - dResetTime.Ticks);
             double diff = Convert.ToDouble(TS.TotalMinutes);
             if (diff > 5)
