@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<prjBookMvcCore.Models.Category>
+@{
     ViewData["Title"] = "中文書";
 }
 <!DOCTYPE html>
@@ -74,12 +75,12 @@
                     </div>
                     <div>
                         <ul class="list-group list-group-flush">
-                          @*  @{
-                                foreach (var i in Model)
+                            @{
+                                foreach (var item in Model.Where(x => x.CategoryId > 14))
                                 {
-                                    //<li class="list-group-item"><span><a href="~/Category/@Html.ActionLink("")">@Html.ActionLink</a></span></li>
+                                    <li class="list-group-item"><span><a href="~/Category/@Html.DisplayFor(modelItem => item.CategoryId)">@Html.DisplayFor(modelItem => item.CategoryName)</a></span></li>
                                 }
-                            }*@
+                            }
                         </ul>
                     </div>
                 </div>
@@ -106,7 +107,7 @@
                     <div class="col" id="bookList" style='padding:0'>
                         <div class="row" id="booksview">
                             @{
-
+                                @await Html.PartialAsync("_BookCardPartial")
                             }
                         </div>
                     </div>

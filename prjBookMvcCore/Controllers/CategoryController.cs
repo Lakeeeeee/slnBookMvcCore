@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using prjBookMvcCore.Models;
 
 namespace prjBookMvcCore.Controllers
@@ -7,16 +8,15 @@ namespace prjBookMvcCore.Controllers
     {
         BookShopContext db = new();
         //TODO:(書玉)分頁controller發法改寫
-        public IActionResult 中文書(int? id)
+        public IActionResult 中文書()
         {
-            if (id == null) { return RedirectToAction("中文書"); }
-            var datas = db.Books.Where(b => b.LanguageId == id).Select(b=>b.BookId);
-            ViewBag.BookId = datas;
-            return View(); 
+            var category = db.Categories.Select(b => b);
+            return View(category); 
         }
 
-        public IActionResult 人文社科()
+        public IActionResult 人文社科(int ?id)
         {
+            if (id == null) { return RedirectToAction("Menu"); }
             IEnumerable<SubCategory> datas = db.SubCategories.Where(x => x.CategoryId == 29);
             return View(datas);
         }
