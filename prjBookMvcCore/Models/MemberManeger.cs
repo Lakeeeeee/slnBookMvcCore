@@ -1,12 +1,19 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Configuration;
 using System.Drawing;
 using System.Net.Mail;
+using System.Security.Cryptography;
+using System.Security.Policy;
+using System.Text;
+using System.Web;
 using System.Xml;
 
 namespace prjBookMvcCore.Models
 {
     public class MemberManeger
     {
+
         public void writeWelcomeLetter(Member receiver, BookShopContext content)
         {
             Message welcomeLetter = new Message()
@@ -31,5 +38,13 @@ namespace prjBookMvcCore.Models
 
         }
 
+        public void sendMailToken(string email)
+        {
+
+
+
+        }
+
     }
+
 }
