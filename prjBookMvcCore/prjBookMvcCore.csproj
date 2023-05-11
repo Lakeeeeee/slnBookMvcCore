@@ -8,13 +8,21 @@
 
   <ItemGroup>
     <Compile Remove="Image\ART\**" />
+    <Compile Remove="Views\Artical\**" />
     <Compile Remove="Views\NewFolder1\**" />
     <Content Remove="Image\ART\**" />
+    <Content Remove="Views\Artical\**" />
     <Content Remove="Views\NewFolder1\**" />
     <EmbeddedResource Remove="Image\ART\**" />
+    <EmbeddedResource Remove="Views\Artical\**" />
     <EmbeddedResource Remove="Views\NewFolder1\**" />
     <None Remove="Image\ART\**" />
+    <None Remove="Views\Artical\**" />
     <None Remove="Views\NewFolder1\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\ArticalController.cs" />
   </ItemGroup>
 
   <ItemGroup>

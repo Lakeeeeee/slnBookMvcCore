@@ -30,7 +30,7 @@
                 <h3>推薦文章</h3>
             </div>
             <div class="col justify-content-end" style="display: flex; padding:5px">
-                <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Artical/List全部文章">看更多</a>
+                <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Promotions/Promotions活動總覽表">看更多</a>
             </div>
         </div>
         <div class="row">
@@ -46,17 +46,17 @@
                                 foreach (var g in Artical)
                                 {
                                     string path = g.ArticalTitle + ".jpg";
-
+                                    string date = g.ArticalDate.ToString("yyyy/MM/dd HH:mm");
                                     latestArticalId = g.ArticalId;
                                     <table>
                                         <tr>
                                             <td colspan="2">
-                                                <div style="text-align:center"><a href="~/Artical/Detail文章/@g.ArticalId"> <img src="~/Image/ArticalPicture/@path" height="300" title="@g.ArticalTitle" /> </a></div>
+                                                <div style="text-align:center"><a href="~/Promotions/Promotions活動文章Detail/@g.ArticalId"> <img src="~/Image/ArticalPicture/@path" height="300" title="@g.ArticalTitle" /> </a></div>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td><span> @g.ArticalTitle</span></td>
-                                            <td style="color: gray; font-style: oblique;font-size: 60%;text-align: right;"><span>更新日期：@g.ArticalDate</span> </td>
+                                            <td style="color: gray; font-style: oblique;font-size: 60%;text-align: right;"><span>更新日期：@date</span> </td>
                                         </tr>
                                     </table>
                                 }
@@ -113,16 +113,16 @@
                                         foreach (var g in Artical)
                                         {
                                             string path = g.ArticalTitle + ".jpg";
-
+                                            string date = g.ArticalDate.ToString("yyyy/MM/dd HH:mm");
                                             <table>
                                                 <tr>
                                                     <td colspan="2">
-                                                        <div style="text-align:center"><a href="~/Artical/Detail文章/@g.ArticalId"> <img src="~/Image/ArticalPicture/@path" height="300" title="@g.ArticalTitle" /> </a></div>
+                                                        <div style="text-align:center"><a href="~/Promotions/Promotions活動文章Detail/@g.ArticalId"> <img src="~/Image/ArticalPicture/@path" height="300" title="@g.ArticalTitle" /> </a></div>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>@g.ArticalTitle</td>
-                                                    <td style="color: gray; font-style: oblique;font-size: 60%;text-align: right;">更新日期：@g.ArticalDate</td>
+                                                    <td style="color: gray; font-style: oblique;font-size: 60%;text-align: right;">更新日期：@date</td>
                                                 </tr>
                                             </table>
                                         }
