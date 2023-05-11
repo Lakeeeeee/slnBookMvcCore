@@ -218,6 +218,11 @@
             transform: scale(1.1);
         }
 
+        .el-image-viewer__img {
+            max-width: 600px !important;
+            width: 100% !important;
+            height: auto !important;
+        }
     </style>
 </head>
 <body>
@@ -252,25 +257,24 @@
                                 <div class="downCover-wrapper">
                                     <div v-for="(preview, index) in book.preview" :key="index">
                                         <el-image v-if="preview"
-                                                    style="width: 70px;"
-                                                    :src="preview"
-                                                    :preview-src-list="preview"
-                                                    v-on:click.native="openPreview(index)"
-                                                    class="image-hover">
+                                                  style="width: 70px;"
+                                                  :src="preview"
+                                                  :preview-src-list="book.preview"
+                                                  class="image-hover">
                                             <div slot="placeholder" class="image-slot">
                                                 加載中<span class="dot">...</span>
                                             </div>
                                         </el-image>
                                         <el-dialog :visible.sync="showDialog"
-                                                    :close-on-click-modal="true"
-                                                    :close-on-press-escape="true"
-                                                    width="400px"
-                                                    :show-close="false"
-                                                    custom-class="dialog-image">
-                                            <el-image style="max-width: 100%; max-height: 80vh;"
-                                                        :src="book.preview[dialogIndex]"
-                                                        :preview-src-list="book.preview[dialogIndex]"
-                                                        fit="contain"></el-image>
+                                                   :close-on-click-modal="true"
+                                                   :close-on-press-escape="true"
+                                                   width="1200px"
+                                                   :show-close="false"
+                                                   custom-class="dialog-image">
+                                            <el-image v-if="dialogIndex !== null"
+                                                      :src="book.preview[dialogIndex]"
+                                                      fit="contain"
+                                                      style="width: 2000px; height: 2000px;"></el-image>
                                         </el-dialog>
                                     </div>
                                 </div>
