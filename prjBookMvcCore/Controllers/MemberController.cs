@@ -113,7 +113,6 @@ namespace prjBookMvcCore.Controllers
             return View();
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Find_password(string target) //填完表單後發post然後寄出email
         {
             bool isEmailExist = _bookShopContext.Members.Any(x => x.MemberEmail == target);
@@ -124,7 +123,7 @@ namespace prjBookMvcCore.Controllers
             {
                 string sVerify = target + "|" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");// 產生帳號+時間驗證碼
                 sVerify = HttpUtility.UrlEncode(sVerify);// 將驗證碼使用網址編碼處理
-                string webPath = "http://localhost:7145";// 網站網址
+                string webPath = "https://localhost:7145/";// 網站網址
                 string receivePage = "Member/ResetPwd";
                 string mailContent = "請點擊以下連結，返回網站重新設定密碼，逾期 30 分鐘後，此連結將會失效。<br><br>";
                 mailContent = mailContent + "<a href='" + webPath + receivePage + "?verify=" + sVerify + "'  target='_blank'>點此連結</a>";
@@ -150,8 +149,6 @@ namespace prjBookMvcCore.Controllers
              return Content(isEmailExist.ToString());
         }
 
-
-        [HttpGet]
         public IActionResult ResetPwd(string verify)
         {
             // 由信件連結回來會帶參數 verify
