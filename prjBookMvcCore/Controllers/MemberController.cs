@@ -179,17 +179,27 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult doResetPwd(Member target)  //修改密碼的方法
         {
-            string script = "<script>alert('密碼重新設定成功，請回原頁面並嘗試登入');window.close();</script>";
+            //string script = "<script>alert('密碼重新設定成功，請回原頁面並嘗試登入');window.close();</script>";
             try
             {
                 Member member = _bookShopContext.Members.FirstOrDefault(x => x.MemberId == target.MemberId)!;
                 member.MemberPassword = target.MemberPassword;
                 _bookShopContext.SaveChanges();
+                return Json(new
+                {
+                    success = "true",
+                    message = "密碼重新設定成功"
+                });
             } catch {
 
-                script = "<script>alert('密碼重新設定失敗，請重新發送驗證信件');window.close();</script>";
+                return Json(new
+                {
+                    success = "true",
+                    message = "密碼重新設定失敗"
+                });
+                //script = "<script>alert('密碼重新設定失敗，請重新發送驗證信件');window.close();</script>";
             }
-            return Content(script, "text/html", System.Text.Encoding.UTF8);
+            //return Content(script, "text/html", System.Text.Encoding.UTF8);
         }
 
         //==========================================以下會員才能訪問
