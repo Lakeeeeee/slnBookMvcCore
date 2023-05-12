@@ -9,38 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        a:link, a:visited {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .font14px {
-            font-size: 14px
-        }
-
-        .fontClean {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .accordion-button {
-            background-color: #eeeeee;
-            min-height: 15px
-        }
-
-            .accordion-button:active, .accordion-button::backdrop, .accordion-button:is(:hover) {
-                background-color: #ffffff;
-            }
-
-            .accordion-button:not(.collapsed) {
-                background-color: #eeeeee;
-                color: inherit;
-            }
-
-        .layoutList, .layoutGrid {
-            width: 6%;
-            height: 6%;
-        }
+      
 
         .bookCaption {
             display: -webkit-box;
@@ -50,7 +19,7 @@
             text-overflow: ellipsis;
         }
     </style>
-    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+
 </head>
 <body>
     @*頁面位置*@
@@ -103,7 +72,7 @@
                 <div class="row">
                     <div class="col" id="bookList" style='padding:0'>
                         <div class="row" id="booksview">
-                                @await Html.PartialAsync("_BookCardPartial")
+                            @*@await Html.PartialAsync("_BookCardPartial")*@
                         </div>
                     </div>
                 </div>
@@ -113,3 +82,39 @@
     <script src="~/js/booksview.js"></script>  @*選單排序判斷*@
 </body>
 </html>
+
+
+@*<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+*@
