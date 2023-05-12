@@ -47,11 +47,11 @@
                     <div>
                         <ul class="list-group list-group-flush">
                             @{
-                                
-                                //foreach (var item in Model.category.CategoryId>14)
-                                //{
-                                //    <li class="list-group-item"><span><a href="~/Category/@item.CategoryId">@item.CategoryName</a></span></li>
-                                //}
+                                BookShopContext db = new BookShopContext();
+                                foreach (var item in db.Categories.Where(c => c.CategoryId > 14).Select(c => new { c.CategoryName })) /*Model.category.CategoryId > 14*/
+                                {
+                                    <li class="list-group-item"><span><a href="~/Category/@item.CategoryName">@item.CategoryName</a></span></li>
+                                }
                             }
                         </ul>
                     </div>
