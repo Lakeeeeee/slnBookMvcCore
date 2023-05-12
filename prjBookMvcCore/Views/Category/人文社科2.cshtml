@@ -9,38 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        a:link, a:visited {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .font14px {
-            font-size: 14px
-        }
-
-        .fontClean {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .accordion-button {
-            background-color: #eeeeee;
-            min-height: 15px
-        }
-
-            .accordion-button:active, .accordion-button::backdrop, .accordion-button:is(:hover) {
-                background-color: #ffffff;
-            }
-
-            .accordion-button:not(.collapsed) {
-                background-color: #eeeeee;
-                color: inherit;
-            }
-
-        .layoutList, .layoutGrid {
-            width: 6%;
-            height: 6%;
-        }
+      
 
         .bookCaption {
             display: -webkit-box;
@@ -72,11 +41,11 @@
                         foreach (var item in Model)
                         {
                             <div class="card-header">
-                                @Html.DisplayFor(modelItem => item.CategoryName)
+                                @item.CategoryName
                             </div>
                             <div>
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item"><span><a href="~/Category/@Html.DisplayFor(modelItem => item.CategoryId)">@Html.DisplayFor(modelItem => item.CategoryName)</a></span></li>
+                                    <li class="list-group-item"><span><a href="~/Category/@item.CategoryId">@item.CategoryName</a></span></li>
                                 </ul>
                             </div>
                         }

@@ -1,17 +1,14 @@
-﻿
+﻿@model IEnumerable<prjBookMvcCore.Models.Category>
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@model IEnumerable<prjBookMvcCore.Models.Category>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - 讀本｜Menu</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/prjBookMvcCore.styles.css" asp-append-version="true" />
+
     <style>
         div {
             /*border: 1px solid #ff0000*/
@@ -26,7 +23,6 @@
             display: inline;
         }
     </style>
-    <script src="~/Scripts/modernizr-2.8.3.js"></script>
 </head>
 <body>
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -296,7 +292,7 @@
                             var q = db.Articals.Select(a => new { a.ArticalId, a.ArticalTitle }).Take(8);
                             foreach (var g in q)
                             {
-                                <li class="list-group-item"><span><a href="~/Artical/Detail文章/@g.ArticalId">@g.ArticalTitle</a></span></li>
+                                    <li class="list-group-item"><span><a href="~/Artical/Detail文章/@g.ArticalId">@g.ArticalTitle</a></span></li>
                             }
                         }
                     </ul>
@@ -308,10 +304,11 @@
                         中文書
                     </div>
                     <ul class="list-group list-group-flush">
-                         @{
-                                foreach (var item in Model.Where(x => x.CategoryId > 14))
+                        @{
+                            var c = db.Categories.Where(x => x.CategoryId > 14).Select(x=>new { x.CategoryId, x.CategoryName});
+                            foreach (var item in c)
                                 {
-                                    <li class="list-group-item"><span><a href="~/Category/@Html.DisplayFor(modelItem => item.CategoryId)">@Html.DisplayFor(modelItem => item.CategoryName)</a></span></li>
+                                        <li class="list-group-item"><span><a href="~/Category/@item.CategoryId">@item.CategoryName</a></span></li>
                                 }
                             }
                     </ul>
