@@ -452,9 +452,9 @@
                                         <span style="font-size: 20px; font-weight: bold;">各界推薦</span>
                                         <div>
                                             <span v-for="(text, index) in endorsementsText" :key="index"><br>{{ text }}</span>
-                                            <span v-if="!showAll && endorsementsText.length > 1">...</span>
+                                            <span v-if="!showAllEndorsements && endorsementsText.length > 1">...</span>
                                             <div class="moreButton" style="margin-top: 10px;">
-                                                <div v-if="!showAll" viewall="0" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;" v-on:click="toggleShow">顯示全部內容</div>
+                                                <div v-if="!showAllEndorsements" viewall="0" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;" v-on:click="toggleShowEndorsements">顯示全部內容</div>
                                                 <div v-else viewall="1" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;" v-on:click="changeMethod('endorsements')">顯示部分內容</div>
                                             </div>
                                         </div>
@@ -466,9 +466,9 @@
                                         <span style="font-size: 20px; font-weight: bold;">作者序</span>
                                         <div>
                                             <span v-for="(text, index) in forewardText" :key="index"><br>{{ text }}</span>
-                                            <span v-if="!showAll && forewardText.length > 1">...</span>
+                                            <span v-if="!showAllForeward && forewardText.length > 1">...</span>
                                             <div class="moreButton" style="margin-top: 10px;">
-                                                <div v-if="!showAll" viewall="0" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;" v-on:click="toggleShow">顯示全部內容</div>
+                                                <div v-if="!showAllForeward" viewall="0" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;" v-on:click="toggleShowForeward">顯示全部內容</div>
                                                 <div v-else viewall="1" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;" v-on:click="changeMethod('foreward')">顯示部分內容</div>
                                             </div>
                                         </div>
@@ -480,9 +480,9 @@
                                         <span style="font-size: 20px; font-weight: bold;">目錄</span>
                                         <div>
                                             <span v-for="(text, index) in tableContainerText" :key="index"><br>{{ text }}</span>
-                                            <span v-if="!showAll && tableContainerText.length > 1">...</span>
+                                            <span v-if="!showAllTableContainer && tableContainerText.length > 1">...</span>
                                             <div class="moreButton" style="margin-top: 10px;">
-                                                <div v-if="!showAll" viewall="0" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;" v-on:click="toggleShow">顯示全部內容</div>
+                                                <div v-if="!showAllTableContainer" viewall="0" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;" v-on:click="toggleShowTableContainer">顯示全部內容</div>
                                                 <div v-else viewall="1" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;" v-on:click="changeMethod('tableContainer')">顯示部分內容</div>
                                             </div>
                                         </div>
@@ -664,6 +664,9 @@
                 isLogin: false,
                 fullscreenLoading: false,
                 commentValueMyself: null,
+                showAllEndorsements: false,
+                showAllForeward: false,
+                showAllTableContainer: false,
                 showAll: false,
                 showAllComments: false,
                 contentIntro: contentIntroJS.split("\n"),
@@ -680,16 +683,16 @@
             computed: {
                 tableContainerText() {
                     //displayCount
-                    return this.showAll ? this.tableContainer : this.tableContainer.slice(0, 8);
+                    return this.showAllTableContainer ? this.tableContainer : this.tableContainer.slice(0, 8);
                 },
                 tryContentText() {
                     return this.showAll ? this.tryContent : this.tryContent.slice(0, 8);
                 },
                 endorsementsText(){
-                    return this.showAll ? this.endorsements : this.endorsements.slice(0, 5);
+                    return this.showAllEndorsements ? this.endorsements : this.endorsements.slice(0, 5);
                 },
                 forewardText(){
-                    return this.showAll ? this.foreward : this.foreward.slice(0, 5);
+                    return this.showAllForeward ? this.foreward : this.foreward.slice(0, 5);
                 }
             },
             methods: {
@@ -757,7 +760,16 @@
                     }
                 },
                 toggleShow: function () {
-                    this.showAll = !this.showAll;
+                    this.showAll = !this.showAll
+                },
+                toggleShowEndorsements: function(){
+                    this.showAllEndorsements = !this.showAllEndorsements
+                },
+                toggleShowForeward: function(){
+                    this.showAllForeward = !this.showAllForeward
+                },
+                toggleShowTableContainer: function(){
+                    this.showAllTableContainer = !this.showAllTableContainer
                 },
                 changeMethod: function (type) {
                     this.activeName = type
@@ -765,7 +777,18 @@
                         this.handleClick();
                     }, 200);
                     setTimeout(() => {
-                        this.toggleShow();
+                        if(type == 'foreward'){
+                            this.toggleShowForeward();
+                        }
+                        else if(type == 'endorsements'){
+                            this.toggleShowEndorsements();
+                        }
+                        else if(type == 'tableContainer'){
+                            this.toggleShowTableContainer();
+                        }
+                        else{
+                            this.toggleShow();
+                        }
                     }, 1200);
                 },
                 openPreview(index) {
