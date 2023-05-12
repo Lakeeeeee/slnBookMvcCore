@@ -1,7 +1,9 @@
-﻿@model IEnumerable<prjBookMvcCore.Models.Category>
+﻿@using prjBookMvcCore.Models
+@model CInformation
 @{
     ViewData["Title"] = "中文書";
 }
+@inject UserInforService _userInforService
 <!DOCTYPE html>
 
 <html>
@@ -44,9 +46,10 @@
                     <div>
                         <ul class="list-group list-group-flush">
                             @{
-                                foreach (var item in Model.Where(x => x.CategoryId > 14))
+                                
+                                foreach (var item in Model.category.CategoryId>14)
                                 {
-                                    <li class="list-group-item"><span><a href="~/Category/@Html.DisplayFor(modelItem => item.CategoryId)">@Html.DisplayFor(modelItem => item.CategoryName)</a></span></li>
+                                    <li class="list-group-item"><span><a href="~/Category/@item.CategoryId">@item.CategoryName</a></span></li>
                                 }
                             }
                         </ul>
