@@ -69,7 +69,7 @@
                                 <h3 >@g.BookDiscountName</h3>
                             </div>
                             <div class="col justify-content-end" style="display: flex; padding:5px">
-                                <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Artical/List全部文章">看更多</a>
+                                    <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Promotions/Index">看更多</a>
                              </div>
                             </div>
                                 <div class="row">
@@ -85,10 +85,11 @@
                                   var price優惠價 = $"{(g.BookDiscountAmount * book.UnitPrice):0}";
                                         <div class="col-3">
                                             <div class="caption bookCaption text-center">
-                                                <a id="@book.BookId"><img src="@book.CoverPath" class="d-block w-100" alt="..." @book.CoverPath /></a>
+
+                                                <a id="@book.BookId" href="~/Book/BookInformation/@book.BookId"><img src="~/Image//Book/@book.CoverPath" class="d-block w-100" alt="..." /></a>
                                                 <ul style="list-style:none; margin:0; padding:0;" class="text-start">
-                                                    @Html.ActionLink("書本資訊(Test)","BookInformation","Book")
-                                                        <li class='prod_TitleMain'><a id="@book.BookId"> @title中</a></li>
+                                                    
+                                                    <li class='prod_TitleMain'><a id="@book.BookId" href="~/Book/BookInformation/@book.BookId"> @title中</a></li>
                                                         <li class="discAuthor">作者：@s作者</li>
                                                         <li class="discPrice原價">原價：<del style="color:red;font-style:oblique">@price原價</del></li>
                                                         <li class="discPrice優惠價">優惠價：@g.BookDiscountName @price優惠價 元</li>

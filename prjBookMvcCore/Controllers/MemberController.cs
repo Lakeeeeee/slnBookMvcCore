@@ -109,19 +109,16 @@ namespace prjBookMvcCore.Controllers
             return Content(script, "text/html", System.Text.Encoding.UTF8);
         }
 
+        
         public IActionResult Find_password() //忘記密碼
         {
             return View();
         }
-        [HttpPost]
+        //[HttpPost]  //用ajax方法請求回傳值跟form/submit是無相關的兩條路, 使用時要分清楚
+        [Route("Member/find")]
         public IActionResult Find_password(string target) //填完表單後發post然後寄出email
         {
             bool isEmailExist = _bookShopContext.Members.Any(x => x.MemberEmail == target);
-            string script = "<script>alert('信箱沒有註冊過');</script>";
-            if (!isEmailExist)
-            {
-                return Content(script, "text/html", System.Text.Encoding.UTF8);
-            }
             if (isEmailExist)
             {
                 Member member = _bookShopContext.Members.FirstOrDefault(x => x.MemberEmail == target);
@@ -151,8 +148,7 @@ namespace prjBookMvcCore.Controllers
                     client.Send(mms);
                 }
             }
-            script = "<script>alert('我們已經將查詢資料寄到您的信箱，請前往點選驗證連結');window.history.back();</script>";
-            return Content(script, "text/html", System.Text.Encoding.UTF8);
+            return Content(isEmailExist.ToString());
         }
 
         public IActionResult ResetPwd(string verify)
@@ -176,20 +172,29 @@ namespace prjBookMvcCore.Controllers
             
             return View(member);
         }
-
+        [HttpPost]
         public IActionResult doResetPwd(Member target)  //修改密碼的方法
         {
-            string script = "<script>alert('密碼重新設定成功，請回原頁面並嘗試登入');window.close();</script>";
-            try
+            
+            if (_bookShopContext.Members.Any(x => x.MemberId == target.MemberId))
             {
                 Member member = _bookShopContext.Members.FirstOrDefault(x => x.MemberId == target.MemberId)!;
                 member.MemberPassword = target.MemberPassword;
                 _bookShopContext.SaveChanges();
-            } catch {
-
-                script = "<script>alert('密碼重新設定失敗，請重新發送驗證信件');window.close();</script>";
+                return Json(new
+                {
+                    success = "true",
+                    message = "密碼重新設定成功"
+                });
             }
-            return Content(script, "text/html", System.Text.Encoding.UTF8);
+            else
+            {
+                return Json(new
+                {
+                    success = "false",
+                    message = "密碼重新設定失敗"
+                });
+            }
         }
 
         //==========================================以下會員才能訪問

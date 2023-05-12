@@ -39,23 +39,5 @@ namespace prjBookMvcCore.Controllers
             };
             return View(subviewModel);
         }
-
-        public IActionResult 心理勵志()
-        {
-            IEnumerable<SubCategory> datas = db.SubCategories.Where(x => x.CategoryId == 28);
-            return View(datas);
-        }
-
-        public IActionResult 文學小說()
-        {
-            IEnumerable<SubCategory> datas = db.SubCategories.Where(x => x.CategoryId ==23);
-            return View(datas);
-        }
-
-        public IActionResult 日中對照()
-        {
-            IEnumerable<SubCategory> datas = db.SubCategories.Where(x => x.CategoryId ==1);
-            return View(datas);
-        }
     }
 }

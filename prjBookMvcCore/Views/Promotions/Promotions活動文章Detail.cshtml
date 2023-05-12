@@ -15,10 +15,10 @@
         }
 
         .imgB {
-            width: 100%;
+            height: 300px;
         }
 
-        .fig1 {
+ /*       .fig1 {
             width: 10%;
             /* float: left;*/
             font-size: 80%;
@@ -26,7 +26,7 @@
             padding: 10px;
             border: 2px dotted #F2E6E6;
             border-radius: 0 25px 0 25px;
-        }
+        }*/
 
         .date {
             color: gray;
@@ -77,11 +77,13 @@
                         <table>
                             <tr>
                                 <td>
-                                    <figure class="fig1">
-                                        <img class="imgB" src="../../@g.CoverPath" title="@title中" />
+                            <a href ="~/Book/BookInformation/@g.BookId">
+                                <figure class="fig1">
+                                        <img class="imgB" src="~/Image/Book/@g.CoverPath" title="@title中" />
                                         <figcaption>@title中</figcaption>
-                                    </figure>
-                                </td>
+                                </figure>
+                            </a>
+                        </td>
                                 <td>
                                     <p>作者：@s</p>
                                     <p>出版日期：@g.PublicationDate.ToShortDateString()</p>
