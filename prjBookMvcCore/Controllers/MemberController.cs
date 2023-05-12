@@ -21,6 +21,7 @@ using System.Web;
 using System.Text;
 using System.Reflection.Metadata;
 using Microsoft.CodeAnalysis.Scripting;
+using NuGet.Protocol;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -276,29 +277,51 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult myPublisher() //關注的出版社
         {
-            IEnumerable<CollectedPublisher> q = _bookShopContext.CollectedPublishers.Where(x => x.MemberId == _userInforService.UserId).Include(x=>x.Publisher);
-            return View(q);
+            var q = (from cp in _bookShopContext.CollectedPublishers
+                     join p in _bookShopContext.Publishers on cp.PublisherId equals p.PublisherId
+                     where cp.MemberId == _userInforService.UserId
+                     select new
+                     {
+                         publisherId = p.PublisherId,
+                         publisherName = p.PublisherName,
+                     }).ToJson();
+            return Json(q);
         }
         [Authorize]
         public IActionResult myAuthor() //關注的作者
         {
-            IEnumerable<CollectedAuthor> q = _bookShopContext.CollectedAuthors.Where(x => x.MemberId == _userInforService.UserId).Include(x=>x.Author);
-            return View(q);
+            var q = (from ca in _bookShopContext.CollectedAuthors
+                     join a in _bookShopContext.Authors on ca.AuthorId equals a.AuthorId
+                     where ca.MemberId == _userInforService.UserId
+                     select new
+                     {
+                         authorId = a.AuthorId,
+                         authorName = a.AuthorName,
+                     }).ToJson();
+            return Json(q);
         }
         [Authorize]
         public IActionResult myNotice() //可購買時通知我 空的
         {
-            IEnumerable<Book> q = _bookShopContext.ActionDetials.Where(x => x.MemberId == _userInforService.UserId && x.ActionId == 1).
-                 Include(x => x.Book.Publisher).Select(x => x.Book);
-            return View(q);
+            //IEnumerable<Book> q = _bookShopContext.ActionDetials.Where(x => x.MemberId == _userInforService.UserId && x.ActionId == 1).
+            //     Include(x => x.Book.Publisher).Select(x => x.Book);
+            var q = (from b in _bookShopContext.Books
+                     join ac in _bookShopContext.ActionDetials on b.BookId equals ac.BookId
+                     where ac.MemberId == _userInforService.UserId
+                     select new
+                     {
+                         bookId = b.BookId,
+                         bookStock = (b.UnitInStock>0)?"可購買":"缺貨中",
+                         bookName = b.BookTitle
+                     }).ToJson();
+
+            return Json(q);
         }
         [Authorize]
         public IActionResult myCollect() //暫存清單
         {
-            
-            IEnumerable<Book> q = _bookShopContext.ActionDetials.Where(x => x.MemberId == _userInforService.UserId && x.ActionId == 2).
-             Include(x => x.Book.Publisher).Select(x => x.Book);
-
+            IEnumerable<Book> q = _bookShopContext.ActionDetials.Where(x => x.MemberId == _userInforService.UserId && x.ActionId == 4).
+            Include(x => x.Book.Publisher).Select(x => x.Book);
             return View(q);
         }
         [Authorize]
