@@ -12,7 +12,6 @@ namespace prjBookMvcCore.Controllers
     public class BookController : Controller
     {
         BookShopContext db = new();
-
         public IActionResult BookInformation(int id)
         {
             int bookId = id;
