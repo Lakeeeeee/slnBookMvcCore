@@ -37,41 +37,41 @@
                     foreach (var item in Model)
                     {
                         count++;
-                        <tr>
-                            <td>
-                                @count
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.BookTitle)
-                            </td>
-                            <td>
-                                @{
+                                        <tr>
+                                            <td>
+                                                @count
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.BookTitle)
+                                            </td>
+                                            <td>
+                                                @{
                                     string 活動 = "無優惠活動";
-                                }
-                                @Html.DisplayFor(modelItem => 活動)
-                            </td>
-                            <td>
-                                @{
+                                                }
+                                                @Html.DisplayFor(modelItem => 活動)
+                                            </td>
+                                            <td>
+                                                @{
                                     decimal 折扣 = 1;
                                     var 活動價 = item.UnitPrice * 折扣;
-                                }
+                                                }
 
-                                @Html.DisplayFor(modelItem => 活動價)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Publisher!.PublisherName)
-                            </td>
-                            <td>
-                                @{
+                                                @Html.DisplayFor(modelItem => 活動價)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Publisher!.PublisherName)
+                                            </td>
+                                            <td>
+                                                @{
                                     string 供貨狀況 = item.UnitInStock > 0 ? "可供貨" : "缺貨";
-                                }
-                                @Html.DisplayFor(modelItem => 供貨狀況)
-                            </td>
+                                                }
+                                                @Html.DisplayFor(modelItem => 供貨狀況)
+                                            </td>
 
-                            <td>
-                                @Html.ActionLink("刪除", "Delete", new { id = item.BookId }, new { onclick = "return confirm('確定要刪除嗎?')" })
-                            </td>
-                        </tr>
+                                            <td>
+                                                @Html.ActionLink("刪除", "Delete", new { id = item.BookId }, new { onclick = "return confirm('確定要刪除嗎?')" })
+                                            </td>
+                                        </tr>
                     }
                 }
             </table> @*//暫存清單*@
@@ -163,6 +163,7 @@
             row.insertCell().innerText = data.name;
             row.insertCell().innerText = data.stock;
             row.insertCell().innerHTML = `<form><button type="submit" name="id" value="${data.id}" class="btn btn-outline-secondary">來去購買</button></form>`;
+            row.insertCell().innerHTML = `@Url.Content("~/Book/BookInformation/")?id=${data.id}`;
         });
         table.appendChild(thead, tbody);
     })
