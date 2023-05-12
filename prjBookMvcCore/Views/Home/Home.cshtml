@@ -1,4 +1,6 @@
-﻿@{
+﻿@using prjBookMvcCore.Models
+@model CInformation
+@{
     ViewBag.Title = "Home";
     Layout = "~/Views/Shared/_Layout_Homepage.cshtml";
 }
@@ -169,7 +171,7 @@
     <div class="row">
         <p>注目新品</p>
         <div class="col">
-            @Html.PartialAsync("_BookCardPartial")
+            <p><img src="@Model.book.CoverPath" /></p>
         </div>
         <div class="col">
             @Html.PartialAsync("_BookCardPartial")
