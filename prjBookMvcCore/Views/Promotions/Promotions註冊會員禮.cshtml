@@ -9,16 +9,18 @@
     <style></style>
 </head>
 <body>
-    
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a class="text-decoration-none" href="~/Home/Home" style="color:black">首頁</a></li>
+            <li class="breadcrumb-item"><a class="text-decoration-none" href="~/Promotions/Promotions活動總覽圖" style="color:black">活動</a></li>
+            <li class="breadcrumb-item active" aria-current="page" style="color:gray">註冊會員禮</li>
+    </ol>
+</nav>
     <div>
         <img src="~/Image/Promotions/註冊會員_上.png" class="d-block w-100" alt="page1" width="80%">
     </div>
-    
-    <div style="text-align:center;">
-        <a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/Login">立即加入會員!!</a>
-        <img src="~/Image/Promotions/註冊會員_下.png" class="d-block w-100" alt="page1" width="80%">
+    <div class="d-block w-100" style="background-image: url('/Image/Promotions/註冊會員_下.png'); background-size: cover; padding:50px;border:unset ;text-align:center">
+        <a role="button" class="btn btn-outline-info fs-2" href="~/Member/Signin" style="font-size:large">立即加入會員!!</a>
     </div>
-
 </body>
 </html>
-
