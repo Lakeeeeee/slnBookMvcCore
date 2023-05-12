@@ -175,7 +175,8 @@ namespace prjBookMvcCore.Controllers
         [HttpPost]
         public IActionResult doResetPwd(Member target)  //修改密碼的方法
         {
-            try
+            
+            if (_bookShopContext.Members.Any(x => x.MemberId == target.MemberId))
             {
                 Member member = _bookShopContext.Members.FirstOrDefault(x => x.MemberId == target.MemberId)!;
                 member.MemberPassword = target.MemberPassword;
@@ -185,8 +186,9 @@ namespace prjBookMvcCore.Controllers
                     success = "true",
                     message = "密碼重新設定成功"
                 });
-            } catch {
-
+            }
+            else
+            {
                 return Json(new
                 {
                     success = "false",

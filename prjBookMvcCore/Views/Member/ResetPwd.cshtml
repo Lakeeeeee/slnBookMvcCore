@@ -1,7 +1,7 @@
 ﻿@model Member
 @{
     ViewData["Title"] = "reset_Password";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout_Login.cshtml";
 }
 <div class="container" style="margin-top:15px">
     <div>
@@ -29,8 +29,8 @@
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
         const response = await fetch('@Url.ActionLink("doResetPwd")', {
-            method: 'POST';
-            body: new FormData(form);
+            method: 'POST',
+            body: new FormData(form)
         });
 
         const datas = await response.json();
@@ -42,8 +42,7 @@
             alert(datas.message);
             window.close();
         }
-    }
-            }
+    });
 </script>
 
 
