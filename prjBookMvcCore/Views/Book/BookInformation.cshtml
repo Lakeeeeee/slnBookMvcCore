@@ -350,7 +350,9 @@
             </el-container>
             <el-divider></el-divider>
             <el-container>
-                <el-main>
+                <el-main v-if="recommend.length > 1">
+                    <span style="font-size: 20px; font-weight: bold;">買了這本書的人也買了</span>
+                    <br/>
                     <el-carousel arrow="always" :interval="0" height="350px" indicator-style="{ transform: 'translateY(80%)' }">
                         <div v-for="(group, index) in Math.ceil(recommend.length / 5)">
                             <el-carousel-item :key="index">
@@ -375,9 +377,9 @@
                             </el-carousel-item>
                         </div>
                     </el-carousel>
+                    <el-divider></el-divider>
                 </el-main>
             </el-container>
-            <el-divider></el-divider>
             <el-container>
                 <el-main>
                     <div class="information">
