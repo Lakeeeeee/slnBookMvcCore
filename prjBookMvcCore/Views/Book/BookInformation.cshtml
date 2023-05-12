@@ -343,7 +343,7 @@
                             <el-button round class="rightButton" v-on:click="redirectToCart">直接購買</el-button>
                         </div>
                         <div class="buttonRight">
-                            <el-button round class="rightButton" v-on:click="storeTempList">放入暫存清單</el-button>
+                            <el-button round class="rightButton" v-on:click="storeTempList(book.bookID,@_userInforService.UserId)">放入暫存清單</el-button>
                         </div>
                     </el-row>
                 </el-aside>
@@ -636,6 +636,7 @@
             data: {
                 book:{
                     coverPath: '../../image/Book/' + "@Model.book.CoverPath",
+                    bookID: "@Model.book.BookId",
                     bookTitle: bookTitleJS,
                     unitPrice: "@Model.book.UnitPrice",
                     discount: "@Model.bookDiscount.BookDiscountAmount" * 100,
@@ -717,8 +718,20 @@
                 getDiscountPrice(item) {
                     return Math.floor(item.unitPrice * item.discount / 100);
                 },
-                storeTempList() {
+                storeTempList(bookID,memberID) {
                     if (this.loginCheck()) {
+                        let url = '@Url.Action("ActionTo", "Action")?bookID=' + bookID + '&memberID=' + memberID + '&actionID=' + 4;
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (result) {
+                                console.log(result);
+                            },
+                            error: function (xhr, status, error) {
+                                console.log(error);
+                            }
+                        });
                         this.$notify({
                             title: '放入暫存清單成功',
                             message: '本書已加入暫存清單',
