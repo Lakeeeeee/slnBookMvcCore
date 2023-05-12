@@ -7,7 +7,7 @@
 
 <style>
     /*    div{border:1px solid #000000}
-                    */ /**/
+                        */ /**/
 
     .linkaFormat {
         text-decoration: none;
@@ -125,9 +125,8 @@
         const confirmtext = await response.text();
         if (confirmtext === "exist") {
             alert("帳號已存在");
-        } 
-        if (confirmtext==="notexist") 
-        {
+        }
+        if (confirmtext === "notexist") {
             alert("註冊成功，系統將自動轉向登入頁面");
             window.location.href = '@Url.Action("Login", "Member")'; // 設定要轉向的頁面 URL
         }
