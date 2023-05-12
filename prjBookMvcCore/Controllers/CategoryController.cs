@@ -11,6 +11,7 @@ namespace prjBookMvcCore.Controllers
         public IActionResult 中文書()
         {
             var category = db.Categories.Select(b => b);
+            
             return View(category); 
         }
 
@@ -38,6 +39,5 @@ namespace prjBookMvcCore.Controllers
             };
             return View(subviewModel);
         }
-
     }
 }

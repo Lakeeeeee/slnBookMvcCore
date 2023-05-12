@@ -1,6 +1,5 @@
-﻿@model IEnumerable<prjBookMvcCore.Models.Category>
 @using prjBookMvcCore.Models
-
+@model CInformation
 @{
     ViewData["Title"] = "中文書";
 }
@@ -17,7 +16,6 @@
             text-decoration: none;
             color: inherit;
         }
-
         .bookCaption {
             display: -webkit-box;
             -webkit-box-orient: vertical;
@@ -49,9 +47,10 @@
                     <div>
                         <ul class="list-group list-group-flush">
                             @{
-                                foreach (var item in Model.Where(x => x.CategoryId > 14))
+                                
+                                foreach (var item in Model.category.CategoryId>14)
                                 {
-                                                    <li class="list-group-item"><span><a href="~/Category/@Html.DisplayFor(modelItem => item.CategoryId)">@Html.DisplayFor(modelItem => item.CategoryName)</a></span></li>
+                                    <li class="list-group-item"><span><a href="~/Category/@item.CategoryId">@item.CategoryName</a></span></li>
                                 }
                             }
                         </ul>
