@@ -1,7 +1,11 @@
 ﻿@model IEnumerable<prjBookMvcCore.Models.Category>
+@using prjBookMvcCore.Models
+@model prjBookMvcCore.Models.CInformation
 @{
     ViewData["Title"] = "中文書";
 }
+
+@inject UserInforService _userInforService
 <!DOCTYPE html>
 
 <html>
@@ -72,7 +76,41 @@
                 <div class="row">
                     <div class="col" id="bookList" style='padding:0'>
                         <div class="row" id="booksview">
-                            @*@await Html.PartialAsync("_BookCardPartial")*@
+                            
+                                <div class="col-md-4 col-xl-3 col-lg-4 col-md-6 col-sm-12">
+                                    <div class="card">
+                                        <div class="headshot">
+                                            <img class="card-img-top" src="~/images/@item.CoverPath" alt="@item.CoverPath" />
+                                        </div>
+                                       @* <div class="card-body">
+                                            <h5 class="card-title">書名:  @Html.DisplayFor(modelItem => item.BookTitle)</h5>
+                                            <p class="card-author">作者:@(string.IsNullOrEmpty(item.AuthorName) ? "無" : item.AuthorName)</p>
+                                            <p class="card-text">原    價：@item.UnitPrice</p>
+                                            <p class="card-text">優惠價：@(string.IsNullOrEmpty(item.BookDiscountName) ? "無" : $"{item.UnitPrice * item.BookDiscountAmount}")</p>
+                                            <p class="card-text">出版日期：@item.PublicationDate.ToString("yyyy/MM/dd")</p>
+                                        </div>*@
+                                    @*<div class="row">
+                                        @foreach (var item in Model)
+                                        {
+                                            <div class="col-md-4 col-xl-3 col-lg-4 col-md-6 col-sm-12">
+                                                <div class="card">
+                                                    <div class="headshot">
+                                                        <img class="card-img-top" src="~/images/@item.CoverPath" alt="@item.CoverPath" />
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">書名:  @Html.DisplayFor(modelItem => item.BookTitle)</h5>
+                                                        <p class="card-author">作者:@(string.IsNullOrEmpty(item.AuthorName) ? "無" : item.AuthorName)</p>
+                                                        <p class="card-text">原    價：@item.UnitPrice</p>
+                                                        <p class="card-text">優惠價：@(string.IsNullOrEmpty(item.BookDiscountName) ? "無" : $"{item.UnitPrice * item.BookDiscountAmount}")</p>
+                                                        <p class="card-text">出版日期：@item.PublicationDate.ToString("yyyy/MM/dd")</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>*@
+                                    </div>
+                                </div>
+
                         </div>
                     </div>
                 </div>
