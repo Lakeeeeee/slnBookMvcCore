@@ -4,6 +4,7 @@ using NuGet.ProjectModel;
 using prjBookMvcCore.Models;
 using System.Linq;
 using System.Net;
+using System.Xml.Linq;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace prjBookMvcCore.Controllers
@@ -47,6 +48,8 @@ namespace prjBookMvcCore.Controllers
                             試讀2 = b.Previews.Select(x => x.PreviewImagePath2).FirstOrDefault(),
                             試讀3 = b.Previews.Select(x => x.PreviewImagePath3).FirstOrDefault(),
                             試讀4 = b.Previews.Select(x => x.PreviewImagePath4).FirstOrDefault(),
+                            折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                            截止日 = b.BookDiscountDetails.Select(x => x.BookDiscountEndDate).FirstOrDefault(),
                         };
             foreach (var item in query)
             {
@@ -78,10 +81,14 @@ namespace prjBookMvcCore.Controllers
                 Painter pt = new Painter { PainterName = item.繪者 };
                 Author a = new Author { AuthorName = item.作者 };
                 Preview pv = new Preview { PreviewImagePath1 = item.試讀1, PreviewImagePath2 = item.試讀2, PreviewImagePath3 = item.試讀3, PreviewImagePath4 = item.試讀4 };
+                BookDiscount bd = new BookDiscount { BookDiscountAmount = item.折扣 };
+                BookDiscountDetail bdd = new BookDiscountDetail { BookDiscountEndDate = item.截止日 };
+
 
                 List<CommentInformation> cis = getCommentInformation(bookId);
 
-                List<Book> recommendBooks = getRecommendBooks(item.子分類,bookId);
+                List<RecommendInformation> recommendBooks = getRecommendBooks(item.子分類,bookId);
+
 
                 CInformation newBook = new CInformation
                 {
@@ -96,6 +103,8 @@ namespace prjBookMvcCore.Controllers
                     commentInformations = cis,
                     preview = pv,
                     recommendBooks = recommendBooks,
+                    bookDiscount = bd,
+                    bookDiscountDetail = bdd,
                 };
 
                 return View(newBook);
@@ -133,23 +142,44 @@ namespace prjBookMvcCore.Controllers
                 return cis;
             }
         }
-        public List<Book> getRecommendBooks(string subCategoryName,int bookID)
+        public List<RecommendInformation> getRecommendBooks(string subCategoryName,int bookId)
         {
             using (var db = new BookShopContext())
             {
-                List<Book> recommendBooks = new List<Book>();
-                var books = from sc in db.SubCategories
-                            join sd in db.CategoryDetails
-                            on sc.SubCategoryId equals sd.SubCategoryId
-                            join b in db.Books
-                            on sd.BookId equals b.BookId
-                            where sc.SubCategoryName == subCategoryName && b.BookId != bookID
-                            select b;
-                foreach (var book in books)
+                var recommendBooks = from b in db.Books
+                                     join bdd in db.BookDiscountDetails
+                                     on b.BookId equals bdd.BookId
+                                     join bd in db.BookDiscounts
+                                     on bdd.BookDiscountId equals bd.BookDiscountId
+                                     join sd in db.CategoryDetails
+                                     on b.BookId equals sd.BookId
+                                     join sc in db.SubCategories
+                                     on sd.SubCategoryId equals sc.SubCategoryId
+                                     where sc.SubCategoryName == subCategoryName && b.BookId != bookId
+                                     select new
+                                     {
+                                         書本ID = b.BookId,
+                                         書名 = b.BookTitle,
+                                         定價 = b.UnitPrice,
+                                         路徑 = b.CoverPath,
+                                         折扣 = bd.BookDiscountAmount,
+                                         截止日 = bdd.BookDiscountEndDate,
+                                     };
+                List<RecommendInformation> ris = new List<RecommendInformation>();
+                foreach (var recommendBook in recommendBooks)
                 {
-                    recommendBooks.Add(book);
+                    Book b = new Book { BookTitle = recommendBook.書名, BookId = recommendBook.書本ID, UnitPrice = recommendBook.定價, CoverPath = recommendBook.路徑 };
+                    BookDiscount bd = new BookDiscount { BookDiscountAmount = recommendBook.折扣 };
+                    BookDiscountDetail bdd = new BookDiscountDetail { BookDiscountEndDate = recommendBook.截止日 };
+                    RecommendInformation tmp = new RecommendInformation()
+                    {
+                        book = b,
+                        bookDiscount = bd,
+                        bookDiscountDetail = bdd
+                    };
+                    ris.Add(tmp);
                 }
-                return recommendBooks;
+                return ris;
             }
         }
     }

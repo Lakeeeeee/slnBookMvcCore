@@ -313,7 +313,7 @@
                     <div class="price">
                         <p>定價：NT$ <span style="text-decoration:line-through;">{{book.unitPrice}}</span></p>
                         <p>優惠價：<span style="color:#e2007e;"><strong> {{book.discount}} </strong></span>折， NT$ <span style="color:#e2007e;"><strong>{{getDiscountPrice(book)}}</strong></span></p>
-                        <p style="color:#e2007e;">優惠截止日：至<span>2023年04月30日</span></p>
+                        <p style="color:#e2007e;">優惠截止日：至 <span>{{book.discountDate}}</span></p>
                     </div>
                     <div class="deliver">
                         <p>運送方式：超商取貨、宅配取貨</p>
@@ -596,6 +596,8 @@
         let categoryNameJS = replaceDoubleDollarSign(decodeHTML("@Model.category.CategoryName"))
         let subCategoryNameJS = replaceDoubleDollarSign(decodeHTML("@Model.subCategory.SubCategoryName"))
 
+        let discountDateJS = replaceDoubleDollarSign(decodeHTML("@Model.bookDiscountDetail.BookDiscountEndDate")).split(/[\s上午下午]/)[0];
+
         let commentInformations = @Html.Raw(Json.Serialize(Model.commentInformations));
         let commentsJS = [];
         for (let i = 0; i < commentInformations.length; i++) {
@@ -618,11 +620,11 @@
         let recommendBooksJS = []
         for (let i = 0; i < recommendBooks.length ; i++) {
             let recommend = {
-                bookTitle: replaceDoubleDollarSign(recommendBooks[i].bookTitle),
-                bookID: recommendBooks[i].bookId,
-                coverPath: '../../Image/Book/' + recommendBooks[i].coverPath,
-                unitPrice: recommendBooks[i].unitPrice,
-                discount: 79,
+                bookTitle: replaceDoubleDollarSign(recommendBooks[i].book.bookTitle),
+                bookID: recommendBooks[i].book.bookId,
+                coverPath: '../../Image/Book/' + recommendBooks[i].book.coverPath,
+                unitPrice: recommendBooks[i].book.unitPrice,
+                discount: recommendBooks[i].bookDiscount.bookDiscountAmount * 100,
             };
             recommendBooksJS.push(recommend);
         }
@@ -634,7 +636,8 @@
                     coverPath: '../../image/Book/' + "@Model.book.CoverPath",
                     bookTitle: bookTitleJS,
                     unitPrice: "@Model.book.UnitPrice",
-                    discount: 79,
+                    discount: "@Model.bookDiscount.BookDiscountAmount" * 100,
+                    discountDate: discountDateJS,
                     publicationDate: publicationDateJS,
                     isbn: "@Model.book.Isbn",
                     bindingMethod: bindingMethodJS,
