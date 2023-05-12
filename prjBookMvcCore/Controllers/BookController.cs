@@ -147,10 +147,6 @@ namespace prjBookMvcCore.Controllers
             using (var db = new BookShopContext())
             {
                 var recommendBooks = from b in db.Books
-                                     join bdd in db.BookDiscountDetails
-                                     on b.BookId equals bdd.BookId
-                                     join bd in db.BookDiscounts
-                                     on bdd.BookDiscountId equals bd.BookDiscountId
                                      join sd in db.CategoryDetails
                                      on b.BookId equals sd.BookId
                                      join sc in db.SubCategories
@@ -162,8 +158,8 @@ namespace prjBookMvcCore.Controllers
                                          書名 = b.BookTitle,
                                          定價 = b.UnitPrice,
                                          路徑 = b.CoverPath,
-                                         折扣 = bd.BookDiscountAmount,
-                                         截止日 = bdd.BookDiscountEndDate,
+                                         折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                         截止日 = b.BookDiscountDetails.Select(x => x.BookDiscountEndDate).FirstOrDefault(),
                                      };
                 List<RecommendInformation> ris = new List<RecommendInformation>();
                 foreach (var recommendBook in recommendBooks)
