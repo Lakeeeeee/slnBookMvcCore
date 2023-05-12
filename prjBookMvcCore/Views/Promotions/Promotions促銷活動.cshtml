@@ -86,10 +86,10 @@
                                         <div class="col-3">
                                             <div class="caption bookCaption text-center">
 
-                                                <a id="@book.BookId" href="~/BookInformation/@book.BookId"><img src="~/Image//Book/@book.CoverPath" class="d-block w-100" alt="..." /></a>
+                                                <a id="@book.BookId" href="~/Book/BookInformation/@book.BookId"><img src="~/Image//Book/@book.CoverPath" class="d-block w-100" alt="..." /></a>
                                                 <ul style="list-style:none; margin:0; padding:0;" class="text-start">
-                                                    @Html.ActionLink("書本資訊(Test)","BookInformation","Book")
-                                                        <li class='prod_TitleMain'><a id="@book.BookId"> @title中</a></li>
+                                                    
+                                                    <li class='prod_TitleMain'><a id="@book.BookId" href="~/Book/BookInformation/@book.BookId"> @title中</a></li>
                                                         <li class="discAuthor">作者：@s作者</li>
                                                         <li class="discPrice原價">原價：<del style="color:red;font-style:oblique">@price原價</del></li>
                                                         <li class="discPrice優惠價">優惠價：@g.BookDiscountName @price優惠價 元</li>
