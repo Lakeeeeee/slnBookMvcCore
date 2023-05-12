@@ -13,9 +13,12 @@
 
         public Preview ?preview { get; set; }
 
+        public BookDiscount ?bookDiscount { get; set; }
+        public BookDiscountDetail? bookDiscountDetail { get; set; }
+
         public List<CommentInformation> ?commentInformations { get; set; }
 
-        public List<Book> ?recommendBooks { get; set; }
+        public List<RecommendInformation> ?recommendBooks { get; set; }
 
     }
 }
