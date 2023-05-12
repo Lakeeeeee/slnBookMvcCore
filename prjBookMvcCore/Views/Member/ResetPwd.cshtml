@@ -1,68 +1,50 @@
 ﻿@model Member
-@Html.AntiForgeryToken()
 @{
     ViewData["Title"] = "reset_Password";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<script>
-    window.onload = async () => {
-        const response = await fetch('@Url.ActionLink("ResetPwd")', {
-            method: 'Get'
-        })
-    };
-    const confirmtext = await response.text();
-    if (confirmtext === "false") {
-        alert("驗證碼錯誤");
-        window.location.href = '@Url.Action("Login", "Member")';
-    }
-    if (confirmtext === "overtime") {
-        alert("超過驗證碼有效時間，請重寄驗證碼");
-        window.location.href = '@Url.Action("Find_password", "Member")'; // 設定要轉向的頁面 URL
-    }
-                    };
-</script>
 <div class="container" style="margin-top:15px">
-        <div>
-            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item "><a class="fontClean" href="">忘記密碼</a></li>
-                    <li class="breadcrumb-item ">重設密碼</li>
-                </ol>
-            </nav>
-        </div>
-        <p><h6>讀本｜重設密碼</h6></p>
-    <form asp-controller="Member" asp-action="doResetPwd" id="reset_form">
+    <div>
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item "><a class="fontClean" href="">忘記密碼</a></li>
+                <li class="breadcrumb-item ">重設密碼</li>
+            </ol>
+        </nav>
+    </div>
+    <p><h6>讀本｜重設密碼</h6></p>
+    <form asp-action="doResetPwd" id="reset_form">
         <input asp-for="MemberId" type="hidden" value="@Model.MemberId" />
         <div>
             <br />
             <p>請重新設定您的密碼，完成後重新登入</p>
-            <p>新的密碼: <input asp-for="MemberPassword" id=""></p>
-            <p>確認密碼: <input name="" id=""></p>
-            <p><input type="submit" value="確認送出" class="btn btn-outline-success btn-sm"></p>
+            <p>新的密碼: <input asp-for="MemberPassword"></p>
+            <p>確認密碼: <input></p>
+            <p><button id="check" type="submit" class="btn btn-outline-success btn-sm">確認送出</button></p>
         </div>
     </form>
 </div>
-@*<script>
+<script>
     const form = document.querySelector('#reset_form');
-    form.addEventListener('submit', async(event) => {
+    form.addEventListener('submit', async (event) => {
         event.preventDefault();
-        const response = await fetch('@Url.Action("doResetPwd", "Member")');
-        const confirm = await response.text();
-        console.log(confirm);
-        setTimeout(function(){
-        }, 15000)
+        const response = await fetch('@Url.ActionLink("doResetPwd")', {
+            method: 'POST';
+            body: new FormData(form);
+        });
 
-        if(confirm==="true"){
-            alert('修改成功，系統將自動轉向登入頁面');
-            window.location.href='@Url.ActionLink("Login", "Member")';
+        const datas = await response.json();
+        if (datas.success === "true") {
+            alert(datas.message);
+            window.location.href = '@Url.ActionLink("Login", "Member")';
         }
-        if(confirm==="false"){
-            alert('修改失敗，請於驗證時間內再次嘗試');
+        if (datas.success === "false") {
+            alert(datas.message);
             window.close();
         }
     }
-    }
+            }
 </script>
-*@
+
 
 
