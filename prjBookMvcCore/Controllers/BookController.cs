@@ -22,9 +22,11 @@ namespace prjBookMvcCore.Controllers
                             書本ID = b.BookId,
                             書名 = b.BookTitle,
                             ISBN = b.Isbn,
+                            作者ID = b.AuthorDetails.Select(x => x.AuthorId).FirstOrDefault(),
                             作者 = b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault(),
                             譯者 = b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault(),
                             繪者 = b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault(),
+                            出版社ID = b.Publisher.PublisherId,
                             出版社 = b.Publisher.PublisherName,
                             出版日期 = b.PublicationDate,
                             語言 = b.Language.LanguageName,
@@ -72,13 +74,13 @@ namespace prjBookMvcCore.Controllers
                     Foreward = item.作者序,
                     TableContainer = item.目錄,
                 };
-                Publisher p = new Publisher { PublisherName = item.出版社 };
+                Publisher p = new Publisher { PublisherName = item.出版社 , PublisherId = item.出版社ID};
                 Language l = new Language { LanguageName = item.語言 };
                 Category c = new Category { CategoryName = item.分類 };
                 SubCategory sc = new SubCategory { SubCategoryName = item.子分類 };
                 Translator t = new Translator { TranslatorName = item.譯者 };
                 Painter pt = new Painter { PainterName = item.繪者 };
-                Author a = new Author { AuthorName = item.作者 };
+                Author a = new Author { AuthorName = item.作者, AuthorId = item.作者ID};
                 Preview pv = new Preview { PreviewImagePath1 = item.試讀1, PreviewImagePath2 = item.試讀2, PreviewImagePath3 = item.試讀3, PreviewImagePath4 = item.試讀4 };
                 BookDiscount bd = new BookDiscount { BookDiscountAmount = item.折扣 };
                 BookDiscountDetail bdd = new BookDiscountDetail { BookDiscountEndDate = item.截止日 };
