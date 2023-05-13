@@ -4,11 +4,19 @@
     ViewData["Title"] = "authorInformation";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    .as1 {
+        text-decoration: none;
+        color: inherit;
+    }
 @inject UserInforService _userInforService
+
+</style>
+
 
 <h6>作者資訊</h6>
 
-<div class="container">
+<div class="container mt-3">
     <div class="row">
         <div class="col">
             @{
@@ -19,23 +27,34 @@
                     name = item.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault();
                     authorID = item.AuthorDetails.Select(x => x.AuthorId).FirstOrDefault();
                 }
-                <h6>@name</h6>
+                    <h5>@name</h5>
             }
         </div>
     </div>
     <div class="row">
         <table id="table" class="table table-hover">
             <thead>
+                <tr>
+                    <th style="width:200px"></th>
+                    <th></th>
+                </tr>
             </thead>
             <tbody>
                 @{
                     foreach (var item in Model)
                     {
-                        <tr>
-                            <td><img style="width:200px" src="~/Image/Book/@item.CoverPath"></td>
-                            <td>@Html.ActionLink(item.BookTitle, "BookInformation", "Book", new{id=item.BookId}/*, new{@class="btn btn-outline-secondary"}*/)</td>
-                            <td>@(item.ContentIntro.Length > 50 ? item.ContentIntro.Substring(0, 50) + "..." : item.ContentIntro)</td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    <a class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
+                                    <img src="~/Image/Book/@item.CoverPath" alt="@item.BookTitle" style="margin-bottom:15px; width:200px" />
+                                    <br />
+                                        @item.BookTitle</a>
+                                </td>
+                                <td >
+                                    <a style="" class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
+                                        @(item.ContentIntro.Length > 200 ? item.ContentIntro.Substring(0, 200) + "..." : item.ContentIntro)</a>
+                                </td>
+                            </tr>
                     }
                 }
             </tbody>

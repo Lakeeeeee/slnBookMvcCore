@@ -185,7 +185,6 @@ namespace prjBookMvcCore.Controllers
         {
             using (var db = new BookShopContext())
             {
-
                 var q = from b in db.Books.Include("AuthorDetails.Author")
                         where b.AuthorDetails.Any(ad => ad.AuthorId == id)
                         select b;
