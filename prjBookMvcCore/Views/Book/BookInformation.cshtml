@@ -337,7 +337,7 @@
                             </p>
                         </div>
                         <div class="buttonRight">
-                            <el-button round class="rightButton" v-on:click="addToCart(book.bookID)">加入購物車</el-button>
+                            <el-button round class="rightButton" v-on:click="addToCart(book.bookID,book.bookTitle,book.discountName,book,book.publisherName,book.unitInStock)">加入購物車</el-button>
                         </div>
                         <div class="buttonRight">
                             <el-button round class="rightButton" v-on:click="redirectToCart">直接購買</el-button>
@@ -347,6 +347,9 @@
                         </div>
                         <div class="buttonRight">
                             <el-button round class="rightButton" v-on:click="collectPublisher(book.publisherID,@_userInforService.UserId)">收藏出版社</el-button>
+                        </div>
+                        <div class="buttonRight">
+                            <el-button round class="rightButton" v-on:click="clearAllCookies">Clear cookie</el-button>
                         </div>
                     </el-row>
                 </el-aside>
@@ -602,6 +605,8 @@
         let subCategoryNameJS = replaceDoubleDollarSign(decodeHTML("@Model.subCategory.SubCategoryName"))
 
         let discountDateJS = replaceDoubleDollarSign(decodeHTML("@Model.bookDiscountDetail.BookDiscountEndDate")).split(/[\s上午下午]/)[0];
+        let discountNameJS = replaceDoubleDollarSign(decodeHTML("@Model.bookDiscount.BookDiscountName"))
+
 
         let commentInformations = @Html.Raw(Json.Serialize(Model.commentInformations));
         let commentsJS = [];
@@ -644,6 +649,7 @@
                     unitPrice: "@Model.book.UnitPrice",
                     discount: "@Model.bookDiscount.BookDiscountAmount" * 100,
                     discountDate: discountDateJS,
+                    discountName: discountNameJS,
                     publicationDate: publicationDateJS,
                     isbn: "@Model.book.Isbn",
                     bindingMethod: bindingMethodJS,
@@ -813,22 +819,46 @@
                         });
                     }
                 },
-                addToCart(bookID){
-                    var bookIDs = localStorage.getItem("bookIDs");
-                    if (bookIDs === null) {
-                        bookIDs = [];
+                addToCart(bookID,bookTitle,discountName,book,publisherName,unitInStock){
+                    var cartItems = localStorage.getItem("cartItems");
+                    if (cartItems === null) {
+                        cartItems = [];
                     } else {
-                        bookIDs = JSON.parse(bookIDs);
+                        cartItems = JSON.parse(cartItems);
                     }
-                    bookIDs.push(bookID);
-                    localStorage.setItem("bookIDs", JSON.stringify(bookIDs));
-                    this.$message({
-                        message: '已加入購物車',
-                        type: 'success'
-                    });
+                    var isExist = false;
+                    for (var i = 0; i < cartItems.length; i++) {
+                        if (cartItems[i].bookID === bookID) {
+                            isExist = true;
+                            break;
+                        }
+                    }
+                    if (isExist) {
+                        this.$message({
+                            message: '這本書已在購物車',
+                            type: 'warning'
+                        });
+                    } 
+                    else {
+                        // 如果購物車中沒有相同的書籍，則添加書籍到購物車中
+                        var newItem = {
+                            bookID: bookID,
+                            bookTitle: bookTitle,
+                            discountName: discountName,
+                            price: app.getDiscountPrice(book),
+                            publisherName: publisherName,
+                            unitInStock: unitInStock
+                        };
+                        cartItems.push(newItem);
+                        localStorage.setItem("cartItems", JSON.stringify(cartItems));
+                        this.$message({
+                            message: '已加入購物車',
+                            type: 'success'
+                        });
+                    }
                 },
                 redirectToCart() {
-                    window.location.href = "../../Order/ShoppingCartInformation";
+                    window.location.href = "../../Order/ShoppingCart";
                 },
                 loginCheck() {
                     if (!this.isLogin) {
@@ -899,6 +929,10 @@
                 },
                 authorUrl(authorID){
                     return "@Url.Action("authorInformation", "Book", new { id = "AUTHORID" })".replace("AUTHORID", authorID);
+                },
+                clearAllCookies() {
+                    localStorage.clear();
+                    alert('All cookie clear')
                 },
             },
             mounted() {
