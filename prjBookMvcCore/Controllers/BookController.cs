@@ -50,6 +50,7 @@ namespace prjBookMvcCore.Controllers
                             試讀3 = b.Previews.Select(x => x.PreviewImagePath3).FirstOrDefault(),
                             試讀4 = b.Previews.Select(x => x.PreviewImagePath4).FirstOrDefault(),
                             折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                            折扣名稱 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountName).FirstOrDefault(),
                             截止日 = b.BookDiscountDetails.Select(x => x.BookDiscountEndDate).FirstOrDefault(),
                         };
             foreach (var item in query)
@@ -82,7 +83,7 @@ namespace prjBookMvcCore.Controllers
                 Painter pt = new Painter { PainterName = item.繪者 };
                 Author a = new Author { AuthorName = item.作者, AuthorId = item.作者ID};
                 Preview pv = new Preview { PreviewImagePath1 = item.試讀1, PreviewImagePath2 = item.試讀2, PreviewImagePath3 = item.試讀3, PreviewImagePath4 = item.試讀4 };
-                BookDiscount bd = new BookDiscount { BookDiscountAmount = item.折扣 };
+                BookDiscount bd = new BookDiscount { BookDiscountAmount = item.折扣, BookDiscountName = item.折扣名稱};
                 BookDiscountDetail bdd = new BookDiscountDetail { BookDiscountEndDate = item.截止日 };
 
 
@@ -184,13 +185,11 @@ namespace prjBookMvcCore.Controllers
         {
             using (var db = new BookShopContext())
             {
-
                 var q = from b in db.Books.Include("AuthorDetails.Author")
                         where b.AuthorDetails.Any(ad => ad.AuthorId == id)
                         select b;
 
                 return View(q.ToList());
-
 
             }
         }
