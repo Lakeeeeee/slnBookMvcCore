@@ -96,6 +96,13 @@
                                         <button class="btn btn-sm btn-outline-success mx-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             全文
                                         </button>
+
+                                        <select id="搜尋欄位" name="搜尋欄位">
+                                            <option value="ALL" selected>全文 </option>
+                                            <option value="BookTitle" >書名</option>
+                                            <option value="Author">作者</option>
+                                            <option value="ELSE">...</option>
+                                        </select>
                                     </div>
                                 </li>
                                 <li>
@@ -121,10 +128,31 @@
                                         <button class="btn btn-sm btn-outline-success mx-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             請選擇
                                         </button>
+                                        <select id="折扣1" name="折扣1">
+                                            <option value="0" selected>請選擇 </option>
+                                        @{
+                                            BookShopContext db = new BookShopContext();
+                                            var bookDiscount = db.BookDiscounts.Select(dis => new { dis.BookDiscountId, dis.BookDiscountName }).ToList();
+                                            foreach(var dis in bookDiscount)
+                                            {
+                                                <option value="@dis.BookDiscountId">@dis.BookDiscountName</option>
+                                            }
+                                        }
+                                        </select>
                                         <span class="mx-2">至</span>
                                         <button class="btn btn-sm btn-outline-success mx-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             請選擇
                                         </button>
+                                        <select id="折扣2" name="折扣2">
+                                        <option value="0" selected>請選擇 </option>
+                                        @{
+                                            foreach (var dis in bookDiscount)
+                                            {
+                                                    <option value="@dis.BookDiscountId">@dis.BookDiscountName</option>
+                                                }
+                                            }
+                                        </select>
+                                     
                                         <span class="mx-2">之間</span>
                                     </div>
                                 </li>
