@@ -337,7 +337,7 @@
                             </p>
                         </div>
                         <div class="buttonRight">
-                            <el-button round class="rightButton">放入購物車</el-button>
+                            <el-button round class="rightButton" v-on:click="addToCart(book.bookID)">加入購物車</el-button>
                         </div>
                         <div class="buttonRight">
                             <el-button round class="rightButton" v-on:click="redirectToCart">直接購買</el-button>
@@ -816,10 +816,22 @@
                         });
                     }
                 },
-                redirectToCart() {
-                    if (this.loginCheck()) {
-                        window.location.href = "../../Order/ShoppingCart";
+                addToCart(bookID){
+                    var bookIDs = localStorage.getItem("bookIDs");
+                    if (bookIDs === null) {
+                        bookIDs = [];
+                    } else {
+                        bookIDs = JSON.parse(bookIDs);
                     }
+                    bookIDs.push(bookID);
+                    localStorage.setItem("bookIDs", JSON.stringify(bookIDs));
+                    this.$message({
+                        message: '已加入購物車',
+                        type: 'success'
+                    });
+                },
+                redirectToCart() {
+                    window.location.href = "../../Order/ShoppingCartInformation";
                 },
                 loginCheck() {
                     if (!this.isLogin) {
