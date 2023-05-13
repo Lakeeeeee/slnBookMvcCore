@@ -720,22 +720,31 @@
                 },
                 storeTempList(bookID,memberID) {
                     if (this.loginCheck()) {
+                        let self = this;
                         let url = '@Url.Action("ActionTo", "Action")?bookID=' + bookID + '&memberID=' + memberID + '&actionID=' + 4;
                         $.ajax({
                             url: url,
                             type: 'POST',
                             dataType: 'json',
                             success: function (result) {
-                                console.log(result);
+                                if (result) {
+                                    self.$notify({
+                                        title: '放入暫存清單成功',
+                                        message: '本書已加入暫存清單',
+                                        type: 'success'
+                                    });
+                                }
+                                else {
+                                    self.$notify({
+                                        title: '放入暫存清單失敗',
+                                        message: '本書已加入過暫存清單',
+                                        type: 'warning'
+                                    });
+                                }
                             },
                             error: function (xhr, status, error) {
                                 console.log(error);
                             }
-                        });
-                        this.$notify({
-                            title: '放入暫存清單成功',
-                            message: '本書已加入暫存清單',
-                            type: 'success'
                         });
                     }
                 },
