@@ -16,6 +16,10 @@ namespace prjBookMvcCore.Controllers
         {
             return View();
         }
+        public IActionResult ShoppingCartInformation()
+        {
+            return View();
+        }
 
         public IActionResult checkOutInfo()
         {

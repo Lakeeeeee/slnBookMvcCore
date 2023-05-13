@@ -7,7 +7,19 @@
 <!DOCTYPE html>
 <html>
 <head>
+
     <style>
+        a {
+            color: black;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        /* 滑鼠移過時的狀態 */
+        a:hover {
+            color: rgb(125, 175, 75);
+            text-decoration: underline;
+        }
 
         .imgT {
             width: 80%;
@@ -18,16 +30,6 @@
             height: 300px;
         }
 
- /*       .fig1 {
-            width: 10%;
-            /* float: left;*/
-            font-size: 80%;
-            margin-right: 10px;
-            padding: 10px;
-            border: 2px dotted #F2E6E6;
-            border-radius: 0 25px 0 25px;
-        }*/
-
         .date {
             color: gray;
             font-style: oblique;
@@ -37,7 +39,6 @@
 
         p {
             font-family: 標楷體;
-            margin: 20px 0;
             text-align: justify;
             text-indent: 2em;
         }
@@ -46,12 +47,31 @@
             font-family: 標楷體;
             color: #28004D;
             text-align: center;
-            font-weight:900;
+            font-weight: 900;
         }
+
+        .clamp {
+            white-space: pre-wrap;
+            display: -webkit-box;
+            -webkit-line-clamp: 15;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .box {
+            border: 2px solid rgb(255, 165, 0);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            /* 垂直置中 */
+        }
+
     </style>
 </head>
+
 <body>
-    
+
     @{
         int ArticalId = ViewBag.ArticalId;
         BookShopContext db = new BookShopContext();
@@ -59,52 +79,46 @@
         foreach (var g in Artical)
         {
             string path = g.ArticalTitle + ".jpg";
-                    <h1 style="text-align:center">@g.ArticalTitle</h1>
-                    <p class="date">更新日期：@g.ArticalDate</p>
-                    <div style="text-align:center"><img src="~/Image/ArticalPicture/@path" class="imgT" title="@g.ArticalTitle" /></div>
-                    <p style="font-size:larger">@g.ArticalDescription</p>
+            <h1 style="text-align:center">@g.ArticalTitle</h1>
+            <p class="date">更新日期：@g.ArticalDate</p>
+            <div style="text-align:center"><img src="~/Image/ArticalPicture/@path" class="imgT" title="@g.ArticalTitle" /></div>
+            <p style="font-size:larger;">@g.ArticalDescription</p>
         }
-        var detail = db.ArticalToBookDetails.Where(d => d.ArticalId == ArticalId).Select(d => new { d.Book.BookTitle, d.Book.Isbn, d.Book.UnitPrice, d.Book.Introduction, d.Book.CoverPath, d.Book.BookId, d.Book.PublicationDate, }).ToList();
+        var detail = db.ArticalToBookDetails.Where(d => d.ArticalId == ArticalId).Select(d => new { d.Book.BookTitle,d.Book.Isbn,d.Book.UnitPrice,d.Book.ContentIntro,d.Book.CoverPath,d.Book.BookId,d.Book.PublicationDate,}).ToList();
         foreach (var g in detail)
         {
             var q作者 = db.AuthorDetails.Where(a => a.BookId == g.BookId).Select(a => new { a.Author.AuthorName });
             string s = "";
-            foreach (var item in q作者) { s += item.AuthorName + "    "; }
+            foreach (var item in q作者) { s += item.AuthorName + " "; }
             int price原價 = (int)g.UnitPrice;
             string title中 = g.BookTitle.Split("$")[0];
+            var bookDiscountDetail = db.BookDiscountDetails.Where(d => d.BookId == g.BookId & d.BookDiscountStartDate < DateTime.Now & d.BookDiscountEndDate > DateTime.Now).Select(d => new { d.BookDiscountId ,d.BookDiscount.BookDiscountName,d.BookDiscount.BookDiscountAmount});
+            string price優惠價="";
+            foreach(var dis in bookDiscountDetail){ price優惠價 =dis.BookDiscountName +" "+$"{ (dis.BookDiscountAmount * g.UnitPrice):0}";}
 
-                    <div>
-                        <table>
-                            <tr>
-                                <td>
-                            <a href ="~/Book/BookInformation/@g.BookId">
-                                <figure class="fig1">
-                                        <img class="imgB" src="~/Image/Book/@g.CoverPath" title="@title中" />
-                                        <figcaption>@title中</figcaption>
-                                </figure>
-                            </a>
-                        </td>
-                                <td>
-                                    <p>作者：@s</p>
-                                    <p>出版日期：@g.PublicationDate.ToShortDateString()</p>
-                                    <p>ISBN：@g.Isbn</p>
-                                    <p>原價：<del style="color:red;font-style:oblique">@price原價</del> 元</p>
-                                    @{
-                                var bookDiscountId = db.BookDiscountDetails.Where(a => a.BookId == g.BookId).Select(a => a.BookDiscountId).FirstOrDefault();
-                                var q是否優惠 = bookDiscountId != null ? bookDiscountId.ToString() : "";
-                                if (!string.IsNullOrEmpty(q是否優惠))
-                                {
-                                    var q優惠折數 = db.BookDiscounts.Where(a => a.BookDiscountId == int.Parse(q是否優惠)).Select(a => new { a.BookDiscountName, a.BookDiscountAmount }).FirstOrDefault();
-                                    var price優惠價 = $"{q優惠折數.BookDiscountAmount * price原價:0}";
-                                                    <p>優惠價：@q優惠折數.BookDiscountName @price優惠價 元</p>
-                                }
-                                    }
-                                </td>
-                            </tr>
-                            <tr><td colspan="2"><p> 簡介：@g.Introduction </p></td> </tr>
-                        </table>
-                    </div>
+            <div class="row box">
+                <div class="col-3">
+                    <a href="~/Book/BookInformation/@g.BookId">
+                        <figure class="fig1">
+                            <img class="imgB" src="~/Image/Book/@g.CoverPath" title="@title中" />
+                            <figcaption>@title中</figcaption>
+                        </figure>
+                    </a>
+                </div>
+                <div class="col-3">
+                    <p>作者：@s</p>
+                    <p>出版日期：@g.PublicationDate.ToString("yyyy/MM/dd")</p>
+                    <p>ISBN：@g.Isbn</p>
+                    <p>原價：<del style="color:red;font-style:oblique">@price原價</del> 元</p>
+                    <p>優惠價： @price優惠價 元</p>
+                </div>
+                <div class="col-6">
+                    <a href="~/Book/BookInformation/@g.BookId#contentIntro" title="移至完整內容簡介">簡介：</a>
+                    <p class=" clamp"> <br>@g.ContentIntro </p>
+                </div>
+            </div>
         }
     }
 </body>
+
 </html>

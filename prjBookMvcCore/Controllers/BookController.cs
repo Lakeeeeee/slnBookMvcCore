@@ -22,9 +22,11 @@ namespace prjBookMvcCore.Controllers
                             書本ID = b.BookId,
                             書名 = b.BookTitle,
                             ISBN = b.Isbn,
+                            作者ID = b.AuthorDetails.Select(x => x.AuthorId).FirstOrDefault(),
                             作者 = b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault(),
                             譯者 = b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault(),
                             繪者 = b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault(),
+                            出版社ID = b.Publisher.PublisherId,
                             出版社 = b.Publisher.PublisherName,
                             出版日期 = b.PublicationDate,
                             語言 = b.Language.LanguageName,
@@ -48,6 +50,7 @@ namespace prjBookMvcCore.Controllers
                             試讀3 = b.Previews.Select(x => x.PreviewImagePath3).FirstOrDefault(),
                             試讀4 = b.Previews.Select(x => x.PreviewImagePath4).FirstOrDefault(),
                             折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                            折扣名稱 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountName).FirstOrDefault(),
                             截止日 = b.BookDiscountDetails.Select(x => x.BookDiscountEndDate).FirstOrDefault(),
                         };
             foreach (var item in query)
@@ -72,15 +75,15 @@ namespace prjBookMvcCore.Controllers
                     Foreward = item.作者序,
                     TableContainer = item.目錄,
                 };
-                Publisher p = new Publisher { PublisherName = item.出版社 };
+                Publisher p = new Publisher { PublisherName = item.出版社 , PublisherId = item.出版社ID};
                 Language l = new Language { LanguageName = item.語言 };
                 Category c = new Category { CategoryName = item.分類 };
                 SubCategory sc = new SubCategory { SubCategoryName = item.子分類 };
                 Translator t = new Translator { TranslatorName = item.譯者 };
                 Painter pt = new Painter { PainterName = item.繪者 };
-                Author a = new Author { AuthorName = item.作者 };
+                Author a = new Author { AuthorName = item.作者, AuthorId = item.作者ID};
                 Preview pv = new Preview { PreviewImagePath1 = item.試讀1, PreviewImagePath2 = item.試讀2, PreviewImagePath3 = item.試讀3, PreviewImagePath4 = item.試讀4 };
-                BookDiscount bd = new BookDiscount { BookDiscountAmount = item.折扣 };
+                BookDiscount bd = new BookDiscount { BookDiscountAmount = item.折扣, BookDiscountName = item.折扣名稱};
                 BookDiscountDetail bdd = new BookDiscountDetail { BookDiscountEndDate = item.截止日 };
 
 
@@ -178,6 +181,31 @@ namespace prjBookMvcCore.Controllers
             }
         }
 
-        
+        public IActionResult authorInformation(int id)
+        {
+            using (var db = new BookShopContext())
+            {
+                var q = from b in db.Books.Include("AuthorDetails.Author")
+                        where b.AuthorDetails.Any(ad => ad.AuthorId == id)
+                        select b;
+
+                return View(q.ToList());
+
+            }
+        }
+        public IActionResult publisherInformation(int id)
+        {
+            using (var db = new BookShopContext())
+            {
+                var q = from b in db.Books.Include("Publisher")
+                        where b.PublisherId == id
+                        select b;
+
+                return View(q.ToList());
+
+            }
+        }
+
+
     }
 }

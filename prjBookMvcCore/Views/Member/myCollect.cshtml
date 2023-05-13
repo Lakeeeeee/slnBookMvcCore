@@ -67,10 +67,13 @@
                                 }
                                 @Html.DisplayFor(modelItem => 供貨狀況)
                             </td>
-
+                            <td>
+                                @Html.ActionLink("來去購買", "BookInformation", "Book", new{id=item.BookId}, new{@class="btn btn-outline-secondary"})
+                            </td>
                             <td>
                                 @Html.ActionLink("刪除", "Delete", new { id = item.BookId }, new { onclick = "return confirm('確定要刪除嗎?')" })
                             </td>
+
                         </tr>
                     }
                 }
@@ -111,10 +114,16 @@
             const row = tbody.insertRow();
             row.insertCell().innerText = count;
             row.insertCell().innerText = data.name;
-            row.insertCell().innerHTML = `<button asp-action="Detail" name="id" value="${data.id}" class="btn btn-outline-secondary">最近的書目</button>`;
+            const btnHtml = `<button type="submit" name="id" value="${data.id}" class="btn btn-outline-secondary" onclick="redirectToAction(${data.id})">最近的書目</button>`;
+            row.insertCell().innerHTML = btnHtml;
         });
         table.appendChild(thead, tbody);
     })
+    function redirectToAction(id) {
+        const url = '@Url.Action("BookInformation", "Book")' + "?id=" + id;
+        window.location.href = url
+    };
+
 </script>
 <script>
     const btn3 = document.querySelector('#pills-3-tab');
@@ -136,11 +145,15 @@
             const row = tbody.insertRow();
             row.insertCell().innerText = count;
             row.insertCell().innerText = data.name;
-            row.insertCell().innerHTML = `<button asp-action="Detail" name="id" value="${data.id}" class="btn btn-outline-secondary">最近的書目</button>`;
+            const btnHtml = `<button type="submit" name="id" value="${data.id}" class="btn btn-outline-secondary" onclick="redirectToAction(${data.id})">最近的書目</button>`;
+            row.insertCell().innerHTML = btnHtml;
         });
         table.appendChild(thead, tbody);
     })
-</script>
+    function redirectToAction(id) {
+        const url = '@Url.Action("BookInformation", "Book")' + "?id=" + id;
+        window.location.href = url
+    };</script>
 <script>
     const btn4 = document.querySelector('#pills-4-tab');
     btn4.addEventListener('click', async () => {

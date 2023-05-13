@@ -2,24 +2,36 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using prjBookMvcCore.Models;
+using Newtonsoft.Json;
 namespace prjBookMvcCore.Controllers
 {
     public class ActionController : Controller
     {
         BookShopContext db = new();
-        public IActionResult ActionTo(int bookID, int memberID,int actionID)
+        public string ActionTo(int bookID, int memberID,int actionID)
         {
-            ActionDetial ad = new ActionDetial
+            bool isSuccess = true;
+
+            var query = from ad in db.ActionDetials
+                        where ad.ActionId == actionID && ad.MemberId == memberID && ad.BookId == bookID
+                        select ad;
+            if(query.Count() != 0)
             {
-                ActionId = actionID,
-                BookId = bookID,
-                MemberId = memberID,
-            };
-
-            db.ActionDetials.Add(ad);
-            db.SaveChanges();
-
-            return View();
+                isSuccess = false;
+            }
+            else
+            {
+                ActionDetial newAd = new ActionDetial
+                {
+                    ActionId = actionID,
+                    BookId = bookID,
+                    MemberId = memberID,
+                };
+                db.ActionDetials.Add(newAd);
+                db.SaveChanges();
+            }
+            string jsonData = JsonConvert.SerializeObject(isSuccess);
+            return jsonData;
         }
     }
 }

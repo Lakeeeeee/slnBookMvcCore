@@ -286,7 +286,7 @@
                     <div style="padding-left: 5px;">
                         <h1 style="line-height: normal;letter-spacing: 0.5px;font-size:20px;font-weight:bold;">{{book.bookTitle}}</h1>
                         <div class="authorBoard">
-                            <p style="text-align: left;"><span>作者：<a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.authorName}}</a></span></p>
+                            <p style="text-align: left;"><span>作者：<a :href="authorUrl(book.authorID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.authorName}}</a></span></p>
                         </div>
                         <el-row>
                             <el-button round size="small" type="pinkBorder" style="margin-left: 0px; padding: 9px;"><i class="el-icon-edit"></i><span style="color:#E3007F;">11</span>評價</el-button>
@@ -337,13 +337,19 @@
                             </p>
                         </div>
                         <div class="buttonRight">
-                            <el-button round class="rightButton">放入購物車</el-button>
+                            <el-button round class="rightButton" v-on:click="addToCart(book.bookID,book.bookTitle,book.discountName,book,book.publisherName,book.unitInStock)">加入購物車</el-button>
                         </div>
                         <div class="buttonRight">
                             <el-button round class="rightButton" v-on:click="redirectToCart">直接購買</el-button>
                         </div>
                         <div class="buttonRight">
                             <el-button round class="rightButton" v-on:click="storeTempList(book.bookID,@_userInforService.UserId)">放入暫存清單</el-button>
+                        </div>
+                        <div class="buttonRight">
+                            <el-button round class="rightButton" v-on:click="collectPublisher(book.publisherID,@_userInforService.UserId)">收藏出版社</el-button>
+                        </div>
+                        <div class="buttonRight">
+                            <el-button round class="rightButton" v-on:click="clearAllCookies">Clear cookie</el-button>
                         </div>
                     </el-row>
                 </el-aside>
@@ -599,6 +605,8 @@
         let subCategoryNameJS = replaceDoubleDollarSign(decodeHTML("@Model.subCategory.SubCategoryName"))
 
         let discountDateJS = replaceDoubleDollarSign(decodeHTML("@Model.bookDiscountDetail.BookDiscountEndDate")).split(/[\s上午下午]/)[0];
+        let discountNameJS = replaceDoubleDollarSign(decodeHTML("@Model.bookDiscount.BookDiscountName"))
+
 
         let commentInformations = @Html.Raw(Json.Serialize(Model.commentInformations));
         let commentsJS = [];
@@ -641,6 +649,7 @@
                     unitPrice: "@Model.book.UnitPrice",
                     discount: "@Model.bookDiscount.BookDiscountAmount" * 100,
                     discountDate: discountDateJS,
+                    discountName: discountNameJS,
                     publicationDate: publicationDateJS,
                     isbn: "@Model.book.Isbn",
                     bindingMethod: bindingMethodJS,
@@ -649,7 +658,9 @@
                     unitInStock: "@Model.book.UnitInStock",
                     languageName: languageNameJS,
                     publisherName: publisherNameJS,
+                    publisherID: "@Model.publisher.PublisherId",
                     authorName: authorNameJS,
+                    authorID: "@Model.author.AuthorId",
                     translatorName: translatorNameJS,
                     painterName: painterNameJS,
                     categoryName: categoryNameJS,
@@ -718,31 +729,136 @@
                 getDiscountPrice(item) {
                     return Math.floor(item.unitPrice * item.discount / 100);
                 },
+                collectAuthor(authorID,memberID){
+                    if(this.loginCheck()){
+                        let self = this;
+                        let url = '@Url.Action("CollectAuthor", "Collect")?memberID=' + memberID + '&authorID=' + authorID;
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (result) {
+                                if (result) {
+                                    self.$notify({
+                                        title: '收藏作者成功',
+                                        message: '作者已加入收藏清單',
+                                        type: 'success'
+                                    });
+                                }
+                                else {
+                                    self.$notify({
+                                        title: '收藏作者失敗',
+                                        message: '作者已加入過收藏清單',
+                                        type: 'warning'
+                                    });
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.log(error);
+                            }
+                        });
+                    }
+                },
+                collectPublisher(publisherID,memberID) {
+                    if (this.loginCheck()) {
+                        let self = this;
+                        let url = '@Url.Action("CollectPublisher", "Collect")?memberID=' + memberID + '&publisherID=' + publisherID;
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (result) {
+                                if (result) {
+                                    self.$notify({
+                                        title: '收藏出版社成功',
+                                        message: '出版社已加入收藏清單',
+                                        type: 'success'
+                                    });
+                                }
+                                else {
+                                    self.$notify({
+                                        title: '收藏出版社失敗',
+                                        message: '出版社已加入過收藏清單',
+                                        type: 'warning'
+                                    });
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.log(error);
+                            }
+                        });
+                    }
+                },
                 storeTempList(bookID,memberID) {
                     if (this.loginCheck()) {
+                        let self = this;
                         let url = '@Url.Action("ActionTo", "Action")?bookID=' + bookID + '&memberID=' + memberID + '&actionID=' + 4;
                         $.ajax({
                             url: url,
                             type: 'POST',
                             dataType: 'json',
                             success: function (result) {
-                                console.log(result);
+                                if (result) {
+                                    self.$notify({
+                                        title: '放入暫存清單成功',
+                                        message: '本書已加入暫存清單',
+                                        type: 'success'
+                                    });
+                                }
+                                else {
+                                    self.$notify({
+                                        title: '放入暫存清單失敗',
+                                        message: '本書已加入過暫存清單',
+                                        type: 'warning'
+                                    });
+                                }
                             },
                             error: function (xhr, status, error) {
                                 console.log(error);
                             }
                         });
-                        this.$notify({
-                            title: '放入暫存清單成功',
-                            message: '本書已加入暫存清單',
+                    }
+                },
+                addToCart(bookID,bookTitle,discountName,book,publisherName,unitInStock){
+                    var cartItems = localStorage.getItem("cartItems");
+                    if (cartItems === null) {
+                        cartItems = [];
+                    } else {
+                        cartItems = JSON.parse(cartItems);
+                    }
+                    var isExist = false;
+                    for (var i = 0; i < cartItems.length; i++) {
+                        if (cartItems[i].bookID === bookID) {
+                            isExist = true;
+                            break;
+                        }
+                    }
+                    if (isExist) {
+                        this.$message({
+                            message: '這本書已在購物車',
+                            type: 'warning'
+                        });
+                    } 
+                    else {
+                        // 如果購物車中沒有相同的書籍，則添加書籍到購物車中
+                        var newItem = {
+                            bookID: bookID,
+                            bookTitle: bookTitle,
+                            discountName: discountName,
+                            price: app.getDiscountPrice(book),
+                            publisherName: publisherName,
+                            unitInStock: unitInStock
+                        };
+                        cartItems.push(newItem);
+                        localStorage.setItem("cartItems", JSON.stringify(cartItems));
+                        this.$message({
+                            message: '已加入購物車',
                             type: 'success'
                         });
                     }
                 },
                 redirectToCart() {
-                    if (this.loginCheck()) {
-                        window.location.href = "../../Order/ShoppingCart";
-                    }
+                    window.location.href = "../../Order/ShoppingCart";
                 },
                 loginCheck() {
                     if (!this.isLogin) {
@@ -810,6 +926,13 @@
                 },
                 bookUrl(bookID) {
                     return "@Url.Action("BookInformation", "Book", new { id = "BOOKID" })".replace("BOOKID", bookID);
+                },
+                authorUrl(authorID){
+                    return "@Url.Action("authorInformation", "Book", new { id = "AUTHORID" })".replace("AUTHORID", authorID);
+                },
+                clearAllCookies() {
+                    localStorage.clear();
+                    alert('All cookie clear')
                 },
             },
             mounted() {
