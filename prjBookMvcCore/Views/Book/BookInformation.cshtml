@@ -286,7 +286,7 @@
                     <div style="padding-left: 5px;">
                         <h1 style="line-height: normal;letter-spacing: 0.5px;font-size:20px;font-weight:bold;">{{book.bookTitle}}</h1>
                         <div class="authorBoard">
-                            <p style="text-align: left;"><span>作者：<a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.authorName}}</a></span></p>
+                            <p style="text-align: left;"><span>作者：<a :href="authorUrl(book.authorID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.authorName}}</a></span></p>
                         </div>
                         <el-row>
                             <el-button round size="small" type="pinkBorder" style="margin-left: 0px; padding: 9px;"><i class="el-icon-edit"></i><span style="color:#E3007F;">11</span>評價</el-button>
@@ -344,9 +344,6 @@
                         </div>
                         <div class="buttonRight">
                             <el-button round class="rightButton" v-on:click="storeTempList(book.bookID,@_userInforService.UserId)">放入暫存清單</el-button>
-                        </div>
-                        <div class="buttonRight">
-                            <el-button round class="rightButton" v-on:click="collectAuthor(book.authorID,@_userInforService.UserId)">收藏作者</el-button>
                         </div>
                         <div class="buttonRight">
                             <el-button round class="rightButton" v-on:click="collectPublisher(book.publisherID,@_userInforService.UserId)">收藏出版社</el-button>
@@ -899,6 +896,9 @@
                 },
                 bookUrl(bookID) {
                     return "@Url.Action("BookInformation", "Book", new { id = "BOOKID" })".replace("BOOKID", bookID);
+                },
+                authorUrl(authorID){
+                    return "@Url.Action("authorInformation", "Book", new { id = "AUTHORID" })".replace("AUTHORID", authorID);
                 },
             },
             mounted() {
