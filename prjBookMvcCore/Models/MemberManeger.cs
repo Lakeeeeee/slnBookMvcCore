@@ -38,13 +38,6 @@ namespace prjBookMvcCore.Models
 
         }
 
-        public void sendMailToken(string email)
-        {
-
-
-
-        }
-
     }
 
 }
