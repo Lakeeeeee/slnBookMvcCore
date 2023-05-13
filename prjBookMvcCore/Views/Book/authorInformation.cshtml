@@ -1,18 +1,41 @@
-﻿@model IQueryable<Book>
+﻿@model List<Book>
 
 @{
     ViewData["Title"] = "authorInformation";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h6>authorInformation</h6>
+<h6>作者資訊</h6>
 
 <div class="container">
-    <table>
-
-
-
-
-    </table>
-
+    <div class="row">
+        <div class="col">
+            @{
+                string name = "";
+                foreach (var item in Model)
+                {
+                    name = item.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault();
+                }
+                <h6>@name</h6>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <table id="table" class="table table-hover">
+            <thead>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><img style="width:200px" src="~/Image/Book/@item.CoverPath"></td>
+                            <td>@Html.ActionLink(item.BookTitle, "BookInformation", "Book", new{id=item.BookId}/*, new{@class="btn btn-outline-secondary"}*/)</td>
+                            <td>@(item.ContentIntro.Length > 50 ? item.ContentIntro.Substring(0, 50) + "..." : item.ContentIntro)</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
