@@ -1,0 +1,13 @@
+﻿@inject UserInforService _userInforService
+@model List<Book>
+@{
+    string name = ""; int publisherID = 0;
+    foreach (var item in Model)
+    {
+        name = item.Publisher.PublisherName;
+        publisherID = (int)item.PublisherId;
+    }
+}
+
+<h1>publisherInformation</h1>
+
