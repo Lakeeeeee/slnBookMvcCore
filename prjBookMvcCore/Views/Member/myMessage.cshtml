@@ -72,7 +72,6 @@
         message.addEventListener('click', async()=>{
             const response = await fetch('@Url.Content("~/Member/getMessage")?Inputid=' + message.value);
             const data = await response.json();
-            //console.log(data);
             content.innerHTML = `${data.content_a}`;
             messagetype.innerHTML = `${data.type_a}`;
             createtime.innerHTML = `${data.time}`;
