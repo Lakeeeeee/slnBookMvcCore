@@ -20,9 +20,17 @@
 </style>
 <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 
-<h6>作者資訊</h6>
+<div>
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href ="#" class="as1" onclick="window.history.back()">回上頁</a></li>
+            <li class="breadcrumb-item active" aria-current="page">作者資訊</li>
+            <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+        </ol>
+    </nav>
+</div>
 
-<div class="container mt-3">
+<div class="container mt-4">
     <div class="row">
         <div class="col-10">
             <h5>@name</h5>
@@ -43,20 +51,20 @@
                 @{
                     foreach (var item in Model)
                     {
-                        <tr>
-                            <td>
-                                <a class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
-                                    <img src="~/Image/Book/@item.CoverPath" alt="@item.BookTitle" style="margin-bottom:15px; width:200px" />
-                                    <br />
-                                    @item.BookTitle
-                                </a>
-                            </td>
-                            <td>
-                                <a style="" class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
-                                    @(item.ContentIntro.Length > 200 ? item.ContentIntro.Substring(0, 200) + "..." : item.ContentIntro)
-                                </a>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    <a class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
+                                        <img src="~/Image/Book/@item.CoverPath" alt="@item.BookTitle" style="margin-bottom:15px; width:200px" />
+                                        <br />
+                                        @item.BookTitle
+                                    </a>
+                                </td>
+                                <td>
+                                    <a style="" class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
+                                        @(item.ContentIntro.Length > 200 ? item.ContentIntro.Substring(0, 200) + "..." : item.ContentIntro)
+                                    </a>
+                                </td>
+                            </tr>
                     }
                 }
 
