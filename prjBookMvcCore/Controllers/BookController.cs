@@ -193,11 +193,17 @@ namespace prjBookMvcCore.Controllers
 
             }
         }
-        public IActionResult publisherInformation()
+        public IActionResult publisherInformation(int id)
         {
+            using (var db = new BookShopContext())
+            {
+                var q = from b in db.Books.Include("Publisher")
+                        where b.PublisherId == id
+                        select b;
 
+                return View(q.ToList());
 
-            return View();
+            }
         }
 
 

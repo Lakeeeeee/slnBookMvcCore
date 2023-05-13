@@ -24,9 +24,11 @@
 
 <div class="container mt-3">
     <div class="row">
-        <div class="col">
+        <div class="col-10">
             <h5>@name</h5>
-
+        </div>
+        <div class="col-2">
+            <button id="collect" onclick="collectAuthor(@authorID,@_userInforService.UserId)" class="btn btn-outline-secondary">收藏作者</button>
         </div>
     </div>
     <div class="row">
@@ -60,9 +62,6 @@
 
             </tbody>
         </table>
-    </div>
-    <div class="buttonRight">
-        <button id="collect" onclick="collectAuthor(@authorID,@_userInforService.UserId)">收藏作者</button>
     </div>
 </div>
 <!-- import Vue before Element -->
