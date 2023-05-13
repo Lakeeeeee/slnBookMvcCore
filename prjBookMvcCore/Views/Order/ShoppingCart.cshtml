@@ -145,11 +145,17 @@
     
 </div>
 
+<button onclick="clearAllCookies()">清除購物車Cookie</button>
+
 <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
     <button class="btn btn-primary col-4 me-md-2" type="button" onclick="addToList()">加入暫存</button>
     <a href="~/Order/CheckOutInfo" class=" btn btn-primary col-4 me-md-2" type="button">來去結帳</a>
     </div>
 <script>
-    var bookIDs = JSON.parse(localStorage.getItem("bookIDs"));
-    console.log(bookIDs)
+    function clearAllCookies() {
+        localStorage.clear();
+        alert('All cookie clear')
+    }
+    let cartItems = JSON.parse(localStorage.getItem("cartItems"));
+    console.log(cartItems)
 </script>
