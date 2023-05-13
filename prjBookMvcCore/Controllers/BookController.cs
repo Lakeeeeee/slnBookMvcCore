@@ -180,6 +180,25 @@ namespace prjBookMvcCore.Controllers
             }
         }
 
-        
+        public IActionResult authorInformation(int inputId)
+        {
+            using (var db = new BookShopContext())
+            {
+                var q = from b in db.Books
+                        join a in db.AuthorDetails on b.BookId equals a.BookId
+                        where a.AuthorId == inputId
+                        select b;
+
+            return View(q);
+            }
+        }
+        public IActionResult publisherInformation()
+        {
+
+
+            return View();
+        }
+
+
     }
 }
