@@ -189,6 +189,7 @@ namespace prjBookMvcCore.Controllers
                         select b;
 
                 return View(q.ToList());
+
             }
         }
         public IActionResult publisherInformation()

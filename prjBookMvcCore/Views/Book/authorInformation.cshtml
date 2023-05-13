@@ -9,6 +9,7 @@
         text-decoration: none;
         color: inherit;
     }
+@inject UserInforService _userInforService
 
 </style>
 
@@ -20,9 +21,11 @@
         <div class="col">
             @{
                 string name = "";
+                int authorID = 1;
                 foreach (var item in Model)
                 {
                     name = item.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault();
+                    authorID = item.AuthorDetails.Select(x => x.AuthorId).FirstOrDefault();
                 }
                     <h5>@name</h5>
             }
@@ -57,4 +60,59 @@
             </tbody>
         </table>
     </div>
+    <div class="buttonRight">
+        <button onclick="collectAuthor(@authorID,@_userInforService.UserId)">收藏作者</button>
+    </div>
 </div>
+<script>
+    function collectAuthor(authorID, memberID){
+        if (this.loginCheck()) {
+            let self = this;
+            let url = '@Url.Action("CollectAuthor", "Collect")?memberID=' + memberID + '&authorID=' + authorID;
+            $.ajax({
+                url: url,
+                type: 'POST',
+                dataType: 'json',
+                success: function (result) {
+                    if (result) {
+                        self.$notify({
+                            title: '收藏作者成功',
+                            message: '作者已加入收藏清單',
+                            type: 'success'
+                        });
+                    }
+                    else {
+                        self.$notify({
+                            title: '收藏作者失敗',
+                            message: '作者已加入過收藏清單',
+                            type: 'warning'
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+    },
+    function loginCheck() {
+        if (!this.isLogin) {
+            this.$alert('尚未登入', '', {
+                confirmButtonText: '前往登入',
+                showCancelButton: true,
+                cancelButtonText: '取消',
+                callback: action => {
+                    if (action === 'confirm') {
+                        this.fullscreenLoading = true;
+                        setTimeout(() => {
+                            this.fullscreenLoading = false;
+                            window.location.href = "../../Member/Login";
+                        }, 1000);
+                    }
+                }
+            });
+            return false;
+        }
+        return true;
+    }
+</script>
