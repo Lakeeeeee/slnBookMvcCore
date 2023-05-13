@@ -180,16 +180,18 @@ namespace prjBookMvcCore.Controllers
             }
         }
 
-        public IActionResult authorInformation(int inputId)
+        public IActionResult authorInformation(int id)
         {
             using (var db = new BookShopContext())
             {
-                var q = from b in db.Books
-                        join a in db.AuthorDetails on b.BookId equals a.BookId
-                        where a.AuthorId == inputId
+
+                var q = from b in db.Books.Include("AuthorDetails.Author")
+                        where b.AuthorDetails.Any(ad => ad.AuthorId == id)
                         select b;
 
-            return View(q);
+                return View(q.ToList());
+
+
             }
         }
         public IActionResult publisherInformation()
