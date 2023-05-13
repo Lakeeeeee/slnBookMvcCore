@@ -1,5 +1,5 @@
-﻿@model List<Book>
-
+﻿@inject UserInforService _userInforService
+@model List<Book>
 @{
     ViewData["Title"] = "authorInformation";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,10 +9,8 @@
         text-decoration: none;
         color: inherit;
     }
-@inject UserInforService _userInforService
-
 </style>
-
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 
 <h6>作者資訊</h6>
 
@@ -27,7 +25,7 @@
                     name = item.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault();
                     authorID = item.AuthorDetails.Select(x => x.AuthorId).FirstOrDefault();
                 }
-                    <h5>@name</h5>
+                <h5>@name</h5>
             }
         </div>
     </div>
@@ -36,83 +34,116 @@
             <thead>
                 <tr>
                     <th style="width:200px"></th>
-                    <th></th>
+                    <th>@_userInforService.UserId</th>
                 </tr>
             </thead>
             <tbody>
                 @{
                     foreach (var item in Model)
                     {
-                            <tr>
-                                <td>
-                                    <a class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
+                        <tr>
+                            <td>
+                                <a class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
                                     <img src="~/Image/Book/@item.CoverPath" alt="@item.BookTitle" style="margin-bottom:15px; width:200px" />
                                     <br />
-                                        @item.BookTitle</a>
-                                </td>
-                                <td >
-                                    <a style="" class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
-                                        @(item.ContentIntro.Length > 200 ? item.ContentIntro.Substring(0, 200) + "..." : item.ContentIntro)</a>
-                                </td>
-                            </tr>
+                                    @item.BookTitle
+                                </a>
+                            </td>
+                            <td>
+                                <a style="" class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
+                                    @(item.ContentIntro.Length > 200 ? item.ContentIntro.Substring(0, 200) + "..." : item.ContentIntro)
+                                </a>
+                            </td>
+                        </tr>
                     }
                 }
+
             </tbody>
         </table>
     </div>
     <div class="buttonRight">
-        <button onclick="collectAuthor(@authorID,@_userInforService.UserId)">收藏作者</button>
+        <button id="collect" onclick="collectAuthor(@authorID,@_userInforService.UserId)">收藏作者</button>
     </div>
 </div>
 <script>
-    function collectAuthor(authorID, memberID){
-        if (this.loginCheck()) {
-            let self = this;
-            let url = '@Url.Action("CollectAuthor", "Collect")?memberID=' + memberID + '&authorID=' + authorID;
-            $.ajax({
-                url: url,
-                type: 'POST',
-                dataType: 'json',
-                success: function (result) {
-                    if (result) {
-                        self.$notify({
-                            title: '收藏作者成功',
-                            message: '作者已加入收藏清單',
-                            type: 'success'
-                        });
-                    }
-                    else {
-                        self.$notify({
-                            title: '收藏作者失敗',
-                            message: '作者已加入過收藏清單',
-                            type: 'warning'
-                        });
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.log(error);
-                }
-            });
+    let isLogin = false;
+    window.onload = () => {
+        if (@_userInforService.UserId !== 0) {
+            isLogin = true;
         }
-    },
-    function loginCheck() {
-        if (!this.isLogin) {
-            this.$alert('尚未登入', '', {
-                confirmButtonText: '前往登入',
-                showCancelButton: true,
-                cancelButtonText: '取消',
-                callback: action => {
-                    if (action === 'confirm') {
-                        this.fullscreenLoading = true;
-                        setTimeout(() => {
-                            this.fullscreenLoading = false;
-                            window.location.href = "../../Member/Login";
-                        }, 1000);
-                    }
+        console.log(isLogin);
+    };
+
+    function collectAuthor(authorID, memberID) {
+        if (loginCheck()) {
+            let url = '/Collect/CollectAuthor?memberID=' + memberID + '&authorID=' + authorID;
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
                 }
-            });
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data) {
+                        alert('收藏作者成功');
+                    } else {
+                        alert('收藏作者失敗');
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    }
+
+
+
+    //function collectAuthor(authorID, memberID) {
+    //    if (loginCheck()) {
+    //        let self = this;
+    //        let url = '@Url.Action("CollectAuthor", "Collect")?memberID=' + memberID + '&authorID=' + authorID;
+    //        $.ajax({
+    //            url: url,
+    //            type: 'POST',
+    //            dataType: 'json',
+    //            success: function (result) {
+    //                if (result) {
+    //                    self.$notify({
+    //                        title: '收藏作者成功',
+    //                        message: '作者已加入收藏清單',
+    //                        type: 'success'
+    //                    });
+    //                }
+    //                else {
+    //                    self.$notify({
+    //                        title: '收藏作者失敗',
+    //                        message: '作者已加入過收藏清單',
+    //                        type: 'warning'
+    //                    });
+    //                }
+    //            },
+    //            error: function (xhr, status, error) {
+    //                console.log(error);
+    //            }
+    //        });
+    //    }
+    //};
+
+    function loginCheck() {
+        if (!isLogin) {
+            alert('尚未登入');
+
+            if (confirm('前往登入')) {
+                window.location.href = "../../Member/Login";
+            } else {
+                // 用户点击了取消按钮
+                // 不执行任何操作
+            }
             return false;
         }
         return true;
     }
+
+
 </script>
