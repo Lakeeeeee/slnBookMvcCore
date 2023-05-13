@@ -289,9 +289,7 @@
                             <p style="text-align: left;"><span>作者：<a :href="authorUrl(book.authorID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.authorName}}</a></span></p>
                         </div>
                         <el-row>
-                            <el-button round size="small" type="pinkBorder" style="margin-left: 0px; padding: 9px;"><i class="el-icon-edit"></i><span style="color:#E3007F;">11</span>評價</el-button>
-                            <el-button round size="small" type="pinkBorder" style="margin-left: 0px; padding: 9px;"><i class="el-icon-star-off"></i><span style="color:#E3007F;">285</span>收藏</el-button>
-                            <el-button round size="small" type="pinkBorder" style="margin-left: 0px; padding: 9px;"><i class="el-icon-reading"></i><span style="color:#E3007F;">568</span>人次試讀</el-button>
+                            <el-button round size="small" type="pinkBorder" style="margin-left: 0px; padding: 9px;"><i class="el-icon-edit"></i><span style="color:#E3007F;"> {{comment.length}} </span>評價</el-button>
                         </el-row>
                         <div class="icon_wrapper">
                             <div id="fb_shared" class="share" v-on:click="windowOpen('https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.taaze.tw%2Fproducts%2F11100697818.html')">
@@ -323,9 +321,6 @@
                     <p class="DeliverAndKpst">
                         <a class="18h" href="#" target="_blank">
                             <img style="width: 50px;height: 50px;" src="../../image/Book/bookIcon/shipIcon.png" alt="">
-                        </a>
-                        <a class="cartreserved" href="#" target="_blank">
-                            <img style="width: 50px;height: 50px;" src="../../image/Book/bookIcon/reserveIcon.png" alt="">
                         </a>
                     </p>
                 </el-main>
@@ -518,17 +513,17 @@
                         <br>
                         <div style="margin-top: 20px; margin-bottom: 20px;">
                             <span class="demonstration"></span>
-                            <el-rate v-model="commentValueMyself"></el-rate>
+                            <el-rate v-model="stars"></el-rate>
                         </div>
                         <div style="display: flex; align-items: center;">
-                            <el-avatar :size="50" :src="circleUrl" style="margin-right: 20px;"></el-avatar>
+                            <el-avatar :size="50" :src="profile" style="margin-right: 20px;"></el-avatar>
                             <el-input type="textarea"
                                       placeholder="請輸入評論"
                                       v-model="commentArea"
-                                      maxlength="30"
+                                      maxlength="50"
                                       show-word-limit style="width: 400px;"
                                       ></el-input>
-                            <el-button type="primary" icon="el-icon-edit" style="margin-left: 20px;" v-on:click="writeComment" v-loading.fullscreen.lock="fullscreenLoading">確定</el-button>
+                            <el-button type="primary" icon="el-icon-edit" style="margin-left: 20px;" v-on:click="writeComment(book.bookID,@_userInforService.UserId,commentArea,stars)" v-loading.fullscreen.lock="fullscreenLoading">確定</el-button>
                         </div>
                     </div>
                 </div>
@@ -675,7 +670,7 @@
                 dialogIndex: 0,
                 isLogin: false,
                 fullscreenLoading: false,
-                commentValueMyself: null,
+                stars: 5,
                 showAllEndorsements: false,
                 showAllForeward: false,
                 showAllTableContainer: false,
@@ -691,6 +686,7 @@
                 recommend: recommendBooksJS,
                 comment: commentsJS,
                 loadThisPage: true,
+                profile: '../../image/Book/bookComment/' + @_userInforService.UserId + '.jpg',
             },
             computed: {
                 tableContainerText() {
@@ -880,11 +876,31 @@
                     }
                     return true;
                 },
-                writeComment() {
+                writeComment(bookID,memberID,text,stars) {
                     if (this.loginCheck()) {
-                        this.$message({
-                            message: '評論成功',
-                            type: 'success'
+                        let self = this;
+                        let url = '@Url.Action("writeComment", "Comment")?memberID=' + memberID + '&bookID=' + bookID + '&stars=' + stars + '&text=' + text;
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (result) {
+                                if (result) {
+                                    self.$message({
+                                        message: '評價成功！請重載網頁',
+                                        type: 'success'
+                                    });
+                                }
+                                else {
+                                    self.$notify({
+                                        title: '已評價此書',
+                                        type: 'warning'
+                                    });
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.log(error);
+                            }
                         });
                     }
                 },
