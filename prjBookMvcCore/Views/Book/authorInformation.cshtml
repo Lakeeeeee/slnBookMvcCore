@@ -11,14 +11,16 @@
     ViewData["Title"] = name;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<style>
-    .as1 {
-        text-decoration: none;
-        color: inherit;
-    }
-</style>
-<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<head>
+    <style>
+        .as1 {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+    @*    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    *@
+</head>
 
 <div>
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -51,20 +53,24 @@
                 @{
                     foreach (var item in Model)
                     {
-                            <tr>
-                                <td>
-                                    <a class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
-                                        <img src="~/Image/Book/@item.CoverPath" alt="@item.BookTitle" style="margin-bottom:15px; width:200px" />
-                                        <br />
-                                        @item.BookTitle
-                                    </a>
-                                </td>
-                                <td>
-                                    <a style="" class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
-                                        @(item.ContentIntro.Length > 200 ? item.ContentIntro.Substring(0, 200) + "..." : item.ContentIntro)
-                                    </a>
-                                </td>
-                            </tr>
+                        string bookName = item.BookTitle;
+                                        <tr>
+                                            <td>
+                                                <a class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
+                                                    <img src="~/Image/Book/@item.CoverPath" alt="@item.BookTitle" style="margin-bottom:15px; width:200px" />
+                                                    <br />
+                                                    <p id="text1">
+                                                        @bookName
+                                                    </p>
+                                                </a>
+                                            </td>
+                                            <td><button type="submit" id="btn1">按我</button></td>
+                                            <td>
+                                                <a style="" class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
+                                                    @(item.ContentIntro.Length > 200 ? item.ContentIntro.Substring(0, 200) + "..." : item.ContentIntro)
+                                                </a>
+                                            </td>
+                                        </tr>
                     }
                 }
 
@@ -72,82 +78,62 @@
         </table>
     </div>
 </div>
-<!-- import Vue before Element -->
+@*<!-- import Vue before Element -->
 <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
 <!-- import JavaScript -->
-<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>*@
 <script>
-    let isLogin = false;
-    window.onload = () => {
-        if (@_userInforService.UserId !== 0) {
-            isLogin = true;
-        }
-        console.log(isLogin);
-    };
+      let isLogin = false;
+      window.onload = () => {
+          if (@_userInforService.UserId !== 0) {
+              isLogin = true;
+          }
+          console.log(isLogin);
+      };
 
-    function collectAuthor(authorID, memberID) {
-        if (loginCheck()) {
-            let url = '/Collect/CollectAuthor?memberID=' + memberID + '&authorID=' + authorID;
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data) {
-                        alert('收藏作者成功');
-                    } else {
-                        alert('收藏作者失敗');
-                    }
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
+      function collectAuthor(authorID, memberID) {
+          if (loginCheck()) {
+              let url = '/Collect/CollectAuthor?memberID=' + memberID + '&authorID=' + authorID;
+              fetch(url, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  }
+              })
+                  .then(response => response.json())
+                  .then(data => {
+                      if (data) {
+                          alert('收藏作者成功');
+                      } else {
+                          alert('收藏作者失敗');
+                      }
+                  })
+                  .catch(error => {
+                      console.error(error);
+                  });
+          }
+      }
+
+      function loginCheck() {
+          if (!isLogin) {
+              alert('尚未登入');
+              if (confirm('前往登入')) {
+                  window.location.href = "../../Member/Login";
+              } else {
+              }
+              return false;
+          }
+          return true;
+      };
+
+    const a = document.getElementById('btn1')
+    const b = document.getElementById('text1')
+    a.addEventListener('click', function(){
+        b.innerText = replaceDoubleDollarSign(b.innerText);
+});
+    function replaceDoubleDollarSign(str) {
+        return str.replace(/\$\$/g, '\n');
+        console.log(str);
     }
 
-    //function collectAuthor(authorID, memberID) {
-    //    if (loginCheck()) {
-    //        let self = this;
-    //        let url = '@Url.Action("CollectAuthor", "Collect")?memberID=' + memberID + '&authorID=' + authorID;
-    //        $.ajax({
-    //            url: url,
-    //            type: 'POST',
-    //            dataType: 'json',
-    //            success: function (result) {
-    //                if (result) {
-    //                    self.$notify({
-    //                        title: '收藏作者成功',
-    //                        message: '作者已加入收藏清單',
-    //                        type: 'success'
-    //                    });
-    //                }
-    //                else {
-    //                    self.$notify({
-    //                        title: '收藏作者失敗',
-    //                        message: '作者已加入過收藏清單',
-    //                        type: 'warning'
-    //                    });
-    //                }
-    //            },
-    //            error: function (xhr, status, error) {
-    //                console.log(error);
-    //            }
-    //        });
-    //    }
-    //};
-
-    function loginCheck() {
-        if (!isLogin) {
-            alert('尚未登入');
-            if (confirm('前往登入')) {
-                window.location.href = "../../Member/Login";
-            } else {
-            }
-            return false;
-        }
-        return true;
-    }
 </script>
