@@ -15,7 +15,7 @@ namespace prjBookMvcCore.Controllers
             var query = from ad in db.ActionDetials
                         where ad.ActionId == actionID && ad.MemberId == memberID && ad.BookId == bookID
                         select ad;
-            if(query != null)
+            if(query.Count() != 0)
             {
                 isSuccess = false;
             }
