@@ -84,8 +84,10 @@ namespace prjBookMvcCore.Controllers
                     };
                     _bookShopContext.MessageSubscribes.Add(subscribe);
                 }
-                _bookShopContext.SaveChanges();
+                _bookShopContext.SaveChanges(); 
+                _cm.write註冊會員禮Letter(newmember, _bookShopContext);
                 _cm.writeWelcomeLetter(newmember, _bookShopContext);
+               
                 return Content("notexist");
             }
         }
@@ -362,7 +364,7 @@ namespace prjBookMvcCore.Controllers
                 Include(x => x.Payment).
                 Include(x => x.Shipment).
                 Include(x => x.PayStatus).
-                Include(x => x.ShippingStatus).ToList();
+                Include(x => x.ShippingStatus).Include(x=>x.Member).ThenInclude(x=>x.Level).ToList();
             return View(q);
         }
         [Authorize]
@@ -393,5 +395,12 @@ namespace prjBookMvcCore.Controllers
 
             return Content(isExsit.ToString());
         }
+        
+        public IActionResult PartailOrderDetail(int id)
+        {
+            var q = _bookShopContext.OrderDetails.Include(x => x.Book).ThenInclude(x => x.BookDiscountDetails).ThenInclude(x => x.BookDiscount).Where(x => x.OrderId == id);
+            return PartialView("PartailOrderDetail", q);
+        }
+
     }
 }

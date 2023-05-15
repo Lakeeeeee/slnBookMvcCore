@@ -114,13 +114,13 @@
             const row = tbody.insertRow();
             row.insertCell().innerText = count;
             row.insertCell().innerText = data.name;
-            const btnHtml = `<button type="submit" name="id" value="${data.id}" class="btn btn-outline-secondary" onclick="redirectToAction(${data.id})">最近的書目</button>`;
+            const btnHtml = `<button type="submit" name="id" value="${data.id}" class="btn btn-outline-secondary" onclick="redirectToAuthor(${data.id})">最近的書目</button>`;
             row.insertCell().innerHTML = btnHtml;
         });
         table.appendChild(thead, tbody);
     })
-    function redirectToAction(id) {
-        const url = '@Url.Action("BookInformation", "Book")' + "?id=" + id;
+    function redirectToAuthor(id) {
+        const url = '@Url.Action("authorInformation", "Book")' + "?id=" + id;
         window.location.href = url
     };
 
@@ -145,13 +145,13 @@
             const row = tbody.insertRow();
             row.insertCell().innerText = count;
             row.insertCell().innerText = data.name;
-            const btnHtml = `<button type="submit" name="id" value="${data.id}" class="btn btn-outline-secondary" onclick="redirectToAction(${data.id})">最近的書目</button>`;
+            const btnHtml = `<button type="submit" name="id" value="${data.id}" class="btn btn-outline-secondary" onclick="redirectToPublisher(${data.id})">最近的書目</button>`;
             row.insertCell().innerHTML = btnHtml;
         });
         table.appendChild(thead, tbody);
     })
-    function redirectToAction(id) {
-        const url = '@Url.Action("BookInformation", "Book")' + "?id=" + id;
+    function redirectToPublisher(id) {
+        const url = '@Url.Action("publisherInformation", "Book")' + "?id=" + id;
         window.location.href = url
     };</script>
 <script>
