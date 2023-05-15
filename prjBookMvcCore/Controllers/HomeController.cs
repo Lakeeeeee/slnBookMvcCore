@@ -95,19 +95,16 @@ namespace prjBookMvcCore.Controllers
                             定價 = b.UnitPrice,
                             路徑 = b.CoverPath,
                             折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
-                            截止日 = b.BookDiscountDetails.Select(x => x.BookDiscountEndDate).FirstOrDefault(),
                         };
 
             foreach (var recommendBook in query)
             {
                 Book b = new Book { BookTitle = recommendBook.書名, BookId = recommendBook.書本ID, UnitPrice = recommendBook.定價, CoverPath = recommendBook.路徑 };
                 BookDiscount bd = new BookDiscount { BookDiscountAmount = recommendBook.折扣 };
-                BookDiscountDetail bdd = new BookDiscountDetail { BookDiscountEndDate = recommendBook.截止日 };
                 RecommendInformation tmp = new RecommendInformation()
                 {
                     book = b,
                     bookDiscount = bd,
-                    bookDiscountDetail = bdd
                 };
                 normal.Add(tmp);
             }
@@ -123,8 +120,10 @@ namespace prjBookMvcCore.Controllers
                                      on b.BookId equals sd.BookId
                                      join sc in db.SubCategories
                                      on sd.SubCategoryId equals sc.SubCategoryId
-                                    
-                                     orderby b.PublicationDate descending
+                                    join c in db.Comments
+                                    on b.BookId equals c.BookId
+
+                                     orderby c.CommentTime descending
                                     
                                      select new
                                      {
@@ -133,10 +132,10 @@ namespace prjBookMvcCore.Controllers
                                          定價 = b.UnitPrice,
                                          路徑 = b.CoverPath,
                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
-                                         截止日 = b.BookDiscountDetails.Select(x => x.BookDiscountEndDate).FirstOrDefault(),
                                          出版日期 = b.PublicationDate,
-                                         最新評論 = b.Comments
-                                     }).Take(10);
+                                         最新評論 = c.CommentText,
+                                         評分 = c.Stars,
+                                     }).Take(5);
                 List<RecommendInformation> ris = new List<RecommendInformation>();
                 int count = 0;
                 foreach (var recommendBook in recommendBooks)
@@ -145,12 +144,12 @@ namespace prjBookMvcCore.Controllers
                    
                     Book b = new Book { BookTitle = recommendBook.書名, BookId = recommendBook.書本ID, UnitPrice = recommendBook.定價, CoverPath = recommendBook.路徑, PublicationDate = recommendBook.出版日期 };
                     BookDiscount bd = new BookDiscount { BookDiscountAmount = recommendBook.折扣 };
-                    BookDiscountDetail bdd = new BookDiscountDetail { BookDiscountEndDate = recommendBook.截止日 };
+                    Comment c = new Comment { CommentText = recommendBook.最新評論 , Stars = recommendBook.評分};
                     RecommendInformation tmp = new RecommendInformation()
                     {
                         book = b,
                         bookDiscount = bd,
-                        bookDiscountDetail = bdd
+                        comment = c,
                     };
                     ris.Add(tmp);
                 }
@@ -177,9 +176,7 @@ namespace prjBookMvcCore.Controllers
                                           定價 = b.UnitPrice,
                                           路徑 = b.CoverPath,
                                           折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
-                                          截止日 = b.BookDiscountDetails.Select(x => x.BookDiscountEndDate).FirstOrDefault(),
                                           出版日期 = b.PublicationDate,
-                                          最新評論 = b.Comments
                                       }).Take(10);
                 List<RecommendInformation> ris = new List<RecommendInformation>();
                 int count = 0;
@@ -189,12 +186,10 @@ namespace prjBookMvcCore.Controllers
 
                     Book b = new Book { BookTitle = recommendBook.書名, BookId = recommendBook.書本ID, UnitPrice = recommendBook.定價, CoverPath = recommendBook.路徑, PublicationDate = recommendBook.出版日期 };
                     BookDiscount bd = new BookDiscount { BookDiscountAmount = recommendBook.折扣 };
-                    BookDiscountDetail bdd = new BookDiscountDetail { BookDiscountEndDate = recommendBook.截止日 };
                     RecommendInformation tmp = new RecommendInformation()
                     {
                         book = b,
                         bookDiscount = bd,
-                        bookDiscountDetail = bdd
                     };
                     ris.Add(tmp);
                 }
