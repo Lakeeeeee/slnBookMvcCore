@@ -73,14 +73,14 @@ namespace prjBookMvcCore.Controllers
                     OrderDiscountStartDate = DateTime.Now,
                     OrderDiscountEndDate = DateTime.Now.AddMonths(1),
                 };
-                _bookShopContext.Add(newmemberdiscount);
+                _bookShopContext.OrderDiscountDetails.Add(newmemberdiscount);
                 _bookShopContext.SaveChanges();
                 if (member.isSubscribe)
                 {
                     MessageSubscribe subscribe = new MessageSubscribe()
                     {
-                        MemberId = newmember.MemberId,
                         MessageTypeId = 1,
+                        MemberId = newmember.MemberId
                     };
                     _bookShopContext.MessageSubscribes.Add(subscribe);
                 }
@@ -96,7 +96,6 @@ namespace prjBookMvcCore.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        
         public IActionResult Login(CLoginViewModel vm) //登入方法
         {
             Member user = _bookShopContext.Members.Include(x=>x.Level).Include(x=>x.Orders).Include(x=>x.MessageMemberDetails).FirstOrDefault(x=>x.MemberEmail==vm.Account_P)!;
@@ -119,8 +118,6 @@ namespace prjBookMvcCore.Controllers
             string script = "<script>alert('登入失敗');window.history.back();</script>";
             return Content(script, "text/html", System.Text.Encoding.UTF8);
         }
-
-        
         public IActionResult Find_password() //忘記密碼頁面
         {
             return View();
