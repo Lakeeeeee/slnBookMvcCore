@@ -8,11 +8,9 @@ namespace prjBookMvcCore.Controllers
     {
         BookShopContext db = new();
         //TODO:(書玉)分頁controller發法改寫
-        public IActionResult 中文書()
+        public IActionResult 繁中()
         {
-            var category = db.Categories.Select(b => b);
-            
-            return View(category); 
+            return View(); 
         }
 
         public IActionResult 中文書分類(int ?id)

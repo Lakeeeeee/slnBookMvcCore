@@ -14,6 +14,10 @@
         border-radius: 20px;
     }
 
+    .two-lines {
+        line-height: 1.2em; /* 調整需要的行高 */
+        height: 2.5em; /* 行高的兩倍 */
+    }
     .bookCaption {
         display: -webkit-box;
         -webkit-box-orient: vertical;
@@ -190,22 +194,22 @@
                             @*輪播書本第一頁*@
                             <div class="row">
                                 @{
-                                    for (int i = 0; i < 4; i++)
+                                    for (int i = 0; i < 6; i++)
                                     {
                                         MenuItem item = Model.menuItems[i];
                                         var discountedPrice = item.book.UnitPrice * item.bookDiscount.BookDiscountAmount;
                                         <div class="col book-item" data-publication-date="@item.book.PublicationDate" data-price="@((int)Math.Round(item.bookDiscount.BookDiscountAmount * item.book.UnitPrice))">
                                             <div style="position:relative">
-                                                <a><img src="~/Image/Book/@item.book.CoverPath" alt="@item.book.CoverPath"></a>
+                                                <a><img src="~/Image/Book/@item.book.CoverPath" alt="@item.book.CoverPath" height="300px"></a>
                                             </div>
                                             <div class="caption">
                                                 <ul style="list-style:none; margin:0; padding:0;">
-                                                    <li> <a class="bookCaption">@item.book.BookTitle</a></li>
+                                                    <li> <a class="bookCaption two-lines" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle</a></li>
                                                     <li class='prod_author'>
                                                         作者：
                                                         @if (item.author != null)
                                                         {
-                                                            <a href="/rwd_searchResult.html?keyword%5B%5D=@item.author.AuthorName&keyType%5B%5D=2">@item.author.AuthorName</a>
+                                                            <a href="~/Book/authorInformation/@item.author.AuthorId">@item.author.AuthorName</a>
                                                         }
                                                     </li>
                                                     <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))</span>元</li>
@@ -225,22 +229,22 @@
                         </div>
                         @*輪播書本第二~四頁*@
                         @{
-                            for (int p = 2; p <= 4; p++)
+                            for (int p = 2; p <= 6; p++)
                             {
                                 <div class="carousel-item">
                                     <div class="row">
                                         @{
-                                            for (int i = (p - 1) * 4; i < p * 4; i++)
+                                            for (int i = (p - 1) * 6; i < p * 6; i++)
                                             {
                                                 MenuItem item = Model.menuItems[i];
                                                 var discountedPrice = item.book.UnitPrice * item.bookDiscount.BookDiscountAmount;
                                                 <div class="col book-item" data-publication-date="@item.book.PublicationDate" data-price="@((int)Math.Round(item.bookDiscount.BookDiscountAmount * item.book.UnitPrice))">
                                                     <div style="position:relative">
-                                                        <a><img src="~/Image/Book/@item.book.CoverPath" alt="@item.book.CoverPath"></a>
+                                                        <a><img src="~/Image/Book/@item.book.CoverPath" alt="@item.book.CoverPath" height="300px"></a>
                                                     </div>
                                                     <div class="caption">
                                                         <ul style="list-style:none; margin:0; padding:0;">
-                                                            <li> <a class="bookCaption">@item.book.BookTitle</a></li>
+                                                            <li> <a class="bookCaption two-lines" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle</a></li>
                                                             <li class='prod_author'>
                                                                 作者：
                                                                 @if (item.author != null)
