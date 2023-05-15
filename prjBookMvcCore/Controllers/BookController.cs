@@ -91,6 +91,8 @@ namespace prjBookMvcCore.Controllers
 
                 List<RecommendInformation> recommendBooks = getRecommendBooks(item.分類,bookId);
 
+                Artical ac = getArtical(bookId);
+
                 CInformation newBook = new CInformation
                 {
                     book = b,
@@ -106,6 +108,7 @@ namespace prjBookMvcCore.Controllers
                     recommendBooks = recommendBooks,
                     bookDiscount = bd,
                     bookDiscountDetail = bdd,
+                    artical = ac,
                 };
 
                 return View(newBook);
@@ -206,6 +209,40 @@ namespace prjBookMvcCore.Controllers
             }
         }
 
+        public Artical getArtical(int bookID)
+        {
+            using (var db = new BookShopContext())
+            {
+                var artical = from atbd in db.ArticalToBookDetails
+                              join ac in db.Articals
+                              on atbd.ArticalId equals ac.ArticalId
+                              where atbd.BookId == bookID
+                              select ac;
+                if(artical.Count() != 0)
+                {
+                    Artical newArtical = new Artical();
+                    foreach(var item in artical)
+                    {
+                        newArtical = item;
+                    }
+                    return newArtical;
+                }
+                else
+                {
+                    Random random = new Random();
+                    int index = random.Next(30);
+                    Artical newArtical = new Artical();
+                    var query = from ac in db.Articals
+                                 where ac.ArticalId == index
+                                 select ac;
+                    foreach (var item in query)
+                    {
+                        newArtical = item;
+                    }
+                    return newArtical;
+                }
+            }
+        }
 
     }
 }
