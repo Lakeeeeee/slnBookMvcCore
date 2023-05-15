@@ -18,7 +18,7 @@
             <th>序號</th>
             <th>日期</th>
             <th>優惠</th>
-            <th>支付方式</th>
+            <th style="width:fit-content">支付方式</th>
             <th>貨運方式</th>
             <th>支付狀態</th>
             <th>運送狀態</th>
@@ -36,13 +36,13 @@
                         @count
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.OrderDate)
+                        @item.OrderDate.ToString("yyyy/MM/dd")
                     </td>
                     <td>
                         @Discount
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.OrderDate)
+                        @Html.DisplayFor(modelItem => item.Payment.PaymentName)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Shipment.ShipmentName)
@@ -58,14 +58,12 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Shipment.Freight)
                     </td>
-                    @*
-            <td>
-            @Html.DisplayFor(modelItem => item.Freight)
-            </td>*@
-                    @*//小計 = (x.OrderDetails.Sum(y => y.UnitPrice * y.Quantity)) + (x.Freight ?? 0)*@
 
                     <td>
-                        @Html.ActionLink("修改", "Edit", new { /* id=item.PrimaryKey */ })
+                        @Html.DisplayFor(modelitem=> item.TotalPay)
+                    </td>
+                    <td>
+                        <button onclick="viewDetails(@item.OrderId)" class="btn btn-outline-secondary btn-sm">檢視詳細</button>
                     </td>
                 </tr>
             }
@@ -73,3 +71,9 @@
     </table>
 
 </div>
+<script>
+    function viewDetails(id) {
+        var url = '@Url.Action("PartailOrderDetail", "Member")?id=' + id;
+        window.open(url, "訂單詳細清單", "height=500,width=500");
+    }
+</script>

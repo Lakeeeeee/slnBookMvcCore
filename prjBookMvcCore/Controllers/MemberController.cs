@@ -393,5 +393,12 @@ namespace prjBookMvcCore.Controllers
 
             return Content(isExsit.ToString());
         }
+        
+        public IActionResult PartailOrderDetail(int id)
+        {
+            var q = _bookShopContext.OrderDetails.Include(x => x.Book).ThenInclude(x => x.BookDiscountDetails).ThenInclude(x => x.BookDiscount).Where(x => x.OrderId == id);
+            return PartialView("PartailOrderDetail", q);
+        }
+
     }
 }
