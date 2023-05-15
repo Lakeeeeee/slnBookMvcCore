@@ -99,11 +99,13 @@ namespace prjBookMvcCore.Controllers
 
             List<Artical> articals = getArticals();
             List<Category> categories = getCategories();
+            List<SubCategory> subCategories = getSubCategories();
             
             MenuInformation menuInformation = new MenuInformation
             {
                 articals = articals,
                 categories = categories,
+                subCategories = subCategories,
                 menuItems = menuItems,
             };
             return View(menuInformation);
@@ -136,6 +138,21 @@ namespace prjBookMvcCore.Controllers
                     categories.Add(c);
                 }
                 return categories;
+            }
+        }
+
+        public List<SubCategory> getSubCategories()
+        {
+            using (var db = new BookShopContext())
+            {
+                var query = from sc in db.SubCategories
+                            select sc;
+                List<SubCategory> subCategories = new List<SubCategory>();
+                foreach (var sc in query)
+                {
+                    subCategories.Add(sc);
+                }
+                return subCategories;
             }
         }
     }
