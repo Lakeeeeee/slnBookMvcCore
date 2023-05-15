@@ -35,6 +35,28 @@ namespace prjBookMvcCore.Models
             };
             content.Add(welcomeNewMember); content.SaveChanges();
         }
-    }
 
+        public void write註冊會員禮Letter(Member receiver, BookShopContext content)
+        {
+            Message Letter = new Message()
+            {  
+                MessageTypeId = 2,
+                MessageTitle = $"註冊會員禮已發送",
+                MessageContent =
+                $"<p>Hi! {receiver.MemberName}!</p>" +
+                $"<p>歡迎加入我們的網路書店會員！我們非常高興你決定成為我們的一員，相信你將會在這裡找到許多有趣的閱讀體驗。</p>" +
+                $"<p>註冊會員禮已發送，請至<a href=\"myCoupons\">我的Coupons</a>確認，並請注意使用期限。</p>" +
+                $"<a href=\"../../Promotions/Promotions促銷活動\">快來使用吧!!</a>",
+            };
+            content.Add(Letter); content.SaveChanges();
+            MessageMemberDetail MemberMessage = new MessageMemberDetail()
+            {
+                MessageId = Letter.MessageId,
+                MemberId = receiver.MemberId,
+                UpdateTime = DateTime.Now,
+                ReadStatu = 0
+            };
+            content.Add(MemberMessage); content.SaveChanges();
+        }
+    }
 }
