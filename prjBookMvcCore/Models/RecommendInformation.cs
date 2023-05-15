@@ -6,5 +6,6 @@
 
         public BookDiscount ?bookDiscount { get; set; }
         public BookDiscountDetail ?bookDiscountDetail { get; set; }
+
     }
 }
