@@ -1,0 +1,49 @@
+﻿@model Member
+@{
+    ViewData["Title"] = "reset_Password";
+    Layout = "~/Views/Shared/_Layout_Login.cshtml";
+}
+<div class="container" style="margin-top:15px">
+    <div>
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item "><a class="fontClean" href="">忘記密碼</a></li>
+                <li class="breadcrumb-item ">重設密碼</li>
+            </ol>
+        </nav>
+    </div>
+    <p><h6>讀本｜重設密碼</h6></p>
+    <form asp-action="doResetPwd" id="reset_form">
+        <input asp-for="MemberId" type="hidden" value="@Model.MemberId" />
+        <div>
+            <br />
+            <p>請重新設定您的密碼，完成後重新登入</p>
+            <p>新的密碼: <input asp-for="MemberPassword"></p>
+            <p>確認密碼: <input></p>
+            <p><button id="check" type="submit" class="btn btn-outline-success btn-sm">確認送出</button></p>
+        </div>
+    </form>
+</div>
+<script>
+    const form = document.querySelector('#reset_form');
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const response = await fetch('@Url.ActionLink("doResetPwd")', {
+            method: 'POST',
+            body: new FormData(form)
+        });
+
+        const datas = await response.json();
+        if (datas.success === "true") {
+            alert(datas.message);
+            window.location.href = '@Url.ActionLink("Login", "Member")';
+        }
+        if (datas.success === "false") {
+            alert(datas.message);
+            window.close();
+        }
+    });
+</script>
+
+
+

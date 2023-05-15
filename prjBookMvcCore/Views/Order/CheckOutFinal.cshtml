@@ -15,8 +15,8 @@
         }
 
 		.container {
-	max-width: 800px;
-	margin: 0 auto;
+	max-width: 
+	margin: 10 auto;
 	padding: 20px;
 }
 
@@ -51,8 +51,42 @@ th {
 
 .checkout-section p {
 	margin: 0;
-}		
+}
+
+		#payment-button {
+			width: 300px;
+			height: 50px;
+		}
+
+		#PayStatus {
+			font-size: 20px;
+		}
+
     </style>
+	<script src="https://www.paypal.com/sdk/js?client-id=AQD2E8XndV3uPoaErR5zdfjhgeHdVhOzTyhRmf7oA3F-Ta2sfVTU4uMrC3sfqmT-j7FnauXqXXBSvqsw"></script>
+	<script>
+		// Render the PayPal button into #paypal-button-container
+		paypal.Buttons({
+			// Set up the transaction
+			createOrder: function (data, actions) {
+				return actions.order.create({
+					purchase_units: [{
+						amount: {
+							value: '88.44'
+						}
+					}]
+				});
+			},
+
+			// Finalize the transaction
+			onApprove: function (data, actions) {
+				return actions.order.capture().then(function (orderData) {
+					console.log('Capture result', orderData,
+						JSON.stringify(orderData, null, 2));
+				});
+			}
+		}).render('#payment-button');
+	</script>
 </head>
 
 <body>
@@ -89,8 +123,9 @@ th {
 				</tbody>
 			</table>
 		</div>
-		<h2>結帳資訊</h2>
-		<div class="checkout-info">
+	
+	<h2>結帳資訊</h2>
+	<div class="checkout-info">
 			<div class="checkout-section">
 				<h3>訂購人</h3>
 				<div class="col-md-6">
@@ -107,13 +142,19 @@ th {
 					<p>優惠折扣：</p>
 					<p>運費：</p>
 					<P>結帳金額：</P>
-				</div>
-				<div class="col-md-6">
+				</div>			
 			</div>
+	</div>
+	<div class="checkout-info">
+		<div class="checkout-section">
+			<h3>訂單狀態</h3>
+				<spin id="PayStatus">未付款</spin>
+			<br>
+            <div><p>立即付款：</p><div id="payment-button"></div></div>
+						
 		</div>
 	</div>
-
-
+	</div>
 
     <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
         <a href="~/Home/Home" class=" btn btn-primary col-4 me-md-2" type="button">返回首頁</a>

@@ -28,18 +28,16 @@
             <div class="align-items-start">
                 @Html.ActionLink("讀本", "Home", "Home", new { area = "" }, new { @class = "navbar-brand" })  @*須換圖*@
             </div>
-                    </div>
+        </div>
     </nav>
-    <div class="navbar navbar-default navbar-fixed-top" @*style="border:1px solid #000000"*@>
-        <div class="container" @*style="border:1px solid #000000"*@>
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
         </div>
     </div>
     <br />
     <div class="container body-content">
-        @* body *@
         @RenderBody()
     </div>
-
 
     <div class="container body-content">
         @* buttom *@
@@ -47,16 +45,16 @@
         <div class="container">
             <div class="row">
                 <div class="col" style="text-align:center">
-                    <a href="#id"><img src="../Image/demo-pic.jpg" alt="活動or優惠or廣告" width="100%" /></a>
-                    活動or優惠or廣告
+                    <img src="~/Image/AD.png" alt="活動or優惠or廣告" width="100%" />
+                    廣告招商中
                 </div>
                 <div class="col" style="text-align:center">
-                    <a href="#id"><img src="../Image/demo-pic.jpg" alt="活動or優惠or廣告" width="100%" /></a>
-                    活動or優惠or廣告
+                    <img src="~/Image/AD.png" alt="活動or優惠or廣告" width="100%" />
+                    廣告招商中
                 </div>
                 <div class="col" style="text-align:center">
-                    <a href="#id"><img src="../Image/demo-pic.jpg" alt="活動or優惠or廣告" width="100%" /></a>
-                    活動or優惠or廣告
+                    <img src="~/Image/AD.png" alt="活動or優惠or廣告" width="100%" />
+                    廣告招商中
                 </div>
             </div>
         </div>
@@ -64,8 +62,7 @@
         <br />
         <hr />
         <div>
-            <span style="margin-right:10px"><a href="#id">客服專區</a></span>
-            <span style="margin-right:10px"><a href="#id">客服專區</a></span>
+            <span style="margin-right:10px"><a href="~/Home/QA">客服專區</a></span>
         </div>
         <hr />
         <footer>

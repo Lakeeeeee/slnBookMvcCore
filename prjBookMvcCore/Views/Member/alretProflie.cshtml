@@ -5,32 +5,36 @@
 @{
     ViewData["Title"] = "alretProflie";
     Layout = "~/Views/Shared/_Layout_Member.cshtml";
+    BookShopContext db = new BookShopContext();
 }
 
 <style>
-    td{
-        border-top:5px solid transparent;
-        line-height:2;
-        vertical-align:top;
+    td {
+        border-top: 5px solid transparent;
+        line-height: 2;
+        vertical-align: top;
     }
 
-tbody td:nth-child(1){text-align:right}
+    tbody td:nth-child(1) {
+        text-align: right
+    }
 
     tbody td:nth-child(2) {
         padding-left: 15px;
         text-align: left;
- }
-.ips01{
-    border:none;
-    transition: all 0.5s ease-in-out; /* 增加過渡時間至 0.5 秒 */
+    }
+
+    .ips01 {
+        border: none;
+        transition: all 0.5s ease-in-out; /* 增加過渡時間至 0.5 秒 */
         display: block;
         width: 100%
     }
 
-    .ips01:hover {
-        box-shadow: 0 0 5px grey;
-        transform : scale(1. 05);
-        border-radius:5px
+        .ips01:hover {
+            box-shadow: 0 0 5px grey;
+            transform: scale(1. 05);
+            border-radius: 5px
         }
 
     .card:hover {
@@ -46,70 +50,91 @@ tbody td:nth-child(1){text-align:right}
 
 <div class="contan">
     <p><h6>會員資料</h6></p>
-<div class="row">
-    <div class="col">
-        <p >
-            今年累積消費金額: @Model.CostAmount 元
-        </p>
-        <form asp-action="alretProflie">
-            <table style="width:max-content">
-            <tbody>
-            <tr>
-                    <td><input type="hidden" name="MemberId" value="@Model.MemberId" /></td>
-                </tr>  
-                <tr>
-             <td> 會員姓名：</td>
-                        <td><input asp-for="MemberName" class="ips01" /></td>
-            <td><span asp-validation-for="MemberName" class="text-danger"></span></td>
-            </tr>
-            <tr>
-                        <td>會員帳號(Email)：</td>
-                        <td><input asp-for="MemberEmail" class="ips01" /></td>
-                <td><span asp-validation-for="MemberEmail" class="text-danger"></span></td>
-            </tr>
-                    <tr>
-                        <td>手機號碼：</td>
-                        <td><input asp-for="Memberphone" class="ips01" /></td>
-                        <td><span asp-validation-for="Memberphone" class="text-danger"></span></td>
-                    </tr>
+    <div class="row">
+        <div class="col">
+            <p>
+                今年累積消費金額: @Model.CostAmount 元
+            </p>
+            <form asp-action="alretProflie" id="form">
+                <table style="width:max-content">
+                    <tbody>
+                        <tr>
+                            <td><input type="hidden" name="MemberId" value="@Model.MemberId" /></td>
+                        </tr>
+                        <tr>
+                            <td> 會員姓名：</td>
+                            <td><input asp-for="MemberName" class="ips01" /></td>
+                            <td><span asp-validation-for="MemberName" class="text-danger"></span></td>
+                        </tr>
+                        <tr>
+                            <td>會員帳號(Email)：</td>
+                            <td><input asp-for="MemberEmail" class="ips01" readonly /></td>
+                            <td><span asp-validation-for="MemberEmail" class="text-danger"></span></td>
+                        </tr>
+                        <tr>
+                            <td>手機號碼：</td>
+                            <td><input asp-for="Memberphone" class="ips01" /></td>
+                            <td><span asp-validation-for="Memberphone" class="text-danger"></span></td>
+                        </tr>
 
-            <tr>
-                        <td>生日：</td>
-                        <td><input asp-for="MemberBrithDate" class="ips01" type="date"/></td>
-                <td><span asp-validation-for="MemberBrithDate" class="text-danger"></span></td>
-            </tr>
-            <tr>
-                        <td>預設運送地址：</td>
-                        <td><input asp-for="MemberAddress" class="ips01" />
-                        </td>
-                <td><span asp-validation-for="MemberAddress" class="text-danger"></span></td>
-                    </tr>
-                    <tr>
-                        <td>預設支付方式：</td>
-                        <td>
-                            <select class="btn btn-light" name="PaymentId">
-                                @{
-                                    BookShopContext db = new BookShopContext();
-                                    foreach (var item in db.Payments.Select(x => x))
-                                    {
-                                        <option class="btn btn-light" value="@item.PaymentId">
-                                            @item.PaymentName
-                                        </option>
-                                    } }
-                            </select>
-                        </td>
-                     <td><span asp-validation-for="PaymentId" class="text-danger"></span></td>
-            </tr>
-            </tbody>
-            </table>
-            <div>
-                <p>
-                    <div class="card" style=""> 
-                        <input class="card-body" value="確認修改" type="submit" style="display:block;width:100%;border:none; background-color:transparent">
+                        <tr>
+                            <td>生日：</td>
+                            <td><input asp-for="MemberBrithDate" class="ips01" type="date" readonly /></td>
+                            <td><span asp-validation-for="MemberBrithDate" class="text-danger"></span></td>
+                        </tr>
+                        <tr>
+                            <td>預設運送地址：</td>
+                            <td>
+                                <input asp-for="MemberAddress" class="ips01" />
+                            </td>
+                            <td><span asp-validation-for="MemberAddress" class="text-danger"></span></td>
+                        </tr>
+                        <tr>
+                            <td>預設支付方式：</td>
+                            <td>
+                                <select class="btn btn-light" name="PaymentId">
+                                    @{
+                                        foreach (var item in db.Payments.Select(x => x))
+                                        {
+                                                                                <option class="btn btn-light" value="@item.PaymentId">
+                                                                                    @item.PaymentName
+                                                                                </option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+                            <td><span asp-validation-for="PaymentId" class="text-danger"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div>
+                    <p>
+                        <div class="card" style="">
+                            <input id="check" class="card-body" value="確認修改" type="submit" style="display:block;width:100%;border:none; background-color:transparent">
+                        </div>
+                    </p>
                 </div>
-                </p>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
-</div>
+<script>
+    const form = document.querySelector('#form');
+
+    form.addEventListener('submit', async ()=> {
+        const response = await fetch('@Url.ActionLink("alretProflie")', {
+            method:'Post',
+            body: new FormData(form)
+        })
+        
+        const confirm = await response.text();
+        if(confirm){
+            alert('修改成功');
+            location.reload();
+        }
+        else{
+            location.reload();
+        }
+    });
+
+</script>

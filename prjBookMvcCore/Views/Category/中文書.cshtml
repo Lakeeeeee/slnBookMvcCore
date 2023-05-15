@@ -1,49 +1,21 @@
-﻿@{
+@using prjBookMvcCore.Models
+@model CInformation
+@{
     ViewData["Title"] = "中文書";
 }
+
+@inject UserInforService _userInforService
 <!DOCTYPE html>
 
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/prjBookMvcCore.styles.css" asp-append-version="true" />
     <style>
         a:link, a:visited {
             text-decoration: none;
             color: inherit;
         }
-
-        .font14px {
-            font-size: 14px
-        }
-
-        .fontClean {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .accordion-button {
-            background-color: #eeeeee;
-            min-height: 15px
-        }
-
-            .accordion-button:active, .accordion-button::backdrop, .accordion-button:is(:hover) {
-                background-color: #ffffff;
-            }
-
-            .accordion-button:not(.collapsed) {
-                background-color: #eeeeee;
-                color: inherit;
-            }
-
-        .layoutList, .layoutGrid {
-            width: 6%;
-            height: 6%;
-        }
-
         .bookCaption {
             display: -webkit-box;
             -webkit-box-orient: vertical;
@@ -52,7 +24,7 @@
             text-overflow: ellipsis;
         }
     </style>
-    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+
 </head>
 <body>
     @*頁面位置*@
@@ -74,25 +46,13 @@
                     </div>
                     <div>
                         <ul class="list-group list-group-flush">
-                                @{
-                                    BookShopContext db = new BookShopContext();
-                                var c = db.Categories.Select(a => new { a.CategoryId, a.CategoryName }).ToList();
-                                for (int i = 14; i < c.Count(); i++)
+                            @{
+                                BookShopContext db = new BookShopContext();
+                                foreach (var item in db.Categories.Where(c => c.CategoryId > 14).Select(c => new { c.CategoryName })) /*Model.category.CategoryId > 14*/
                                 {
-                                    if (i == 25)
-                                    {
-                                        <li class="list-group-item"><span><a href="~/Category/@c[i].CategoryName.Replace("/", "")">@c[i].CategoryName</a></span></li>
-                                    }
-                                    else if (i == 28)
-                                    {
-                                        <li class="list-group-item"><span><a href="~/Category/@c[i].CategoryName.Replace("/", "")">@c[i].CategoryName</a></span></li>
-                                    }
-                                    else
-                                    {
-                                        <li class="list-group-item"><span><a href="~/Category/@c[i].CategoryName">@c[i].CategoryName</a></span></li>
-                                    }
+                                    <li class="list-group-item"><span><a href="~/Category/@item.CategoryName">@item.CategoryName</a></span></li>
                                 }
-                                }
+                            }
                         </ul>
                     </div>
                 </div>
@@ -118,61 +78,29 @@
                 <div class="row">
                     <div class="col" id="bookList" style='padding:0'>
                         <div class="row" id="booksview">
-                            @{
-                                var pageSize = 30; // 每頁顯示30筆資料
-                                var books = db.Books.Where(c => c.LanguageId == 1).Select(c => new { c.BookId }).ToList();
-                                var bookCount = books.Count();
-                                int pageCount = (int)Math.Ceiling((double)bookCount / pageSize);
-                                int pageIndex = 1;
-                                while (pageIndex <= pageCount)
-                                {
-                                    var pageBooks = books.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
-                                    if (pageBooks.Any())
-                                    {
-                                        foreach (var categoryBook in pageBooks)
-                                        {
-                                            var book = db.Books.Where(b => b.BookId == categoryBook.BookId).FirstOrDefault();
-                                            var author = db.AuthorDetails.Where(a => a.BookId == categoryBook.BookId).Select(a => new { a.AuthorId }).FirstOrDefault();
-                                            var authorName = author != null ? db.Authors.Where(a => a.AuthorId == author.AuthorId).Select(a => new { a.AuthorName }).FirstOrDefault() : null;
-                                            var discount = db.BookDiscountDetails.Where(d => d.BookId == categoryBook.BookId).Select(d => new { d.BookDiscountId }).FirstOrDefault();
-                                            var discountAmount = discount != null ? db.BookDiscounts.Where(d => d.BookDiscountId == discount.BookDiscountId).Select(d => new { d.BookDiscountId, d.BookDiscountAmount, d.BookDiscountName }).FirstOrDefault() : null;
-                                            var discountedPrice = book?.UnitPrice * (1 - (discountAmount != null ? discountAmount.BookDiscountAmount : 0) / 100) ?? 0;
-
-                                            <div class="col book-item" data-publication-date="@book?.PublicationDate" data-price="@((int)Math.Round(discountedPrice))">
-                                                <div style="position:relative">
-                                                    <a><img src="@book?.CoverPath"></a>
-                                                </div>
-                                                <div class="caption">
-                                                    <ul style="list-style:none; margin:0; padding:0;">
-                                                        <li>
-                                                            <a class="bookCaption">@book?.BookTitle</a>
-                                                        </li>
-                                                        <li class='prod_author'>
-                                                            作者：@if (authorName != null)
-                                                            {
-                                                                <a href="/rwd_searchResult.html?keyword%5B%5D=@authorName&keyType%5B%5D=2">@authorName.AuthorName</a>
-                                                            }
-                                                        </li>
-                                                        <li class="Price">原    價：<span>@((int)Math.Round(book?.UnitPrice ?? 0))</span>元</li>
-                                                        <li class="discPrice">優惠價：<span>@(discountAmount != null ? discountAmount.BookDiscountName : "")</span><span>@((int)Math.Round(discountedPrice))</span>元</li>
-                                                        <li class="publicationDate">出版日期：<span>@book?.PublicationDate.ToString("yyyy/MM/dd")</span></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        }
-                                    }
-                                    pageIndex++;
-                                }
-                            }
+                            <div class="row">
+                                <div class="col-md-4 col-xl-3 col-lg-4 col-md-6 col-sm-12">
+                                    <div class="card">
+                                        <div class="headshot">
+                                            @*<img class="card-img-top" src="~/images/@item.CoverPath" alt="@item.CoverPath" />*@
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title">書名:  {{book.bookTitle}}</h5>
+                                            <p class="card-author">作者:{{book.authorName}}</p>
+                                            <p class="card-text">原    價：{{book.unitPrice}}</p>
+                                            <p class="card-text">優惠價：<span> {{book.discount}}</span> 折， NT$<span> { { getDiscountPrice(book)} }</span></p>
+                                            <p class="card-text">出版日期：{{book.publicationDate}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/booksview.js"></script>  @*選單排序判斷*@
 </body>
 </html>
+

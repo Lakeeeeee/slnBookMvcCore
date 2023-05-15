@@ -5,7 +5,7 @@ using System.Security.Claims;
 public class UserInforService
 {
     private readonly IHttpContextAccessor _contextAccessor;
-
+    public readonly BookShopContext _db = new BookShopContext();
     public UserInforService (IHttpContextAccessor contextAccessor)
     {
         _contextAccessor = contextAccessor;

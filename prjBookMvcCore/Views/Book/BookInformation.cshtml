@@ -1,4 +1,6 @@
-﻿@{
+﻿@using prjBookMvcCore.Models
+@model CInformation
+@{
     ViewData["Title"] = "BookInformation";
 }
 @inject UserInforService _userInforService
@@ -7,6 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <!-- import CSS -->
+    <!-- 6-37 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 
     <style>
@@ -57,10 +60,10 @@
             font-size: 18px;
         }
 
-            .rightButton:hover {
-                background: linear-gradient(to right,#bd2275,#c27079);
-                color: #ccadba;
-            }
+        .rightButton:hover {
+            background: linear-gradient(to right,#bd2275,#c27079);
+            color: #ccadba;
+        }
 
         .buttonRight {
             margin-left: 10px;
@@ -73,9 +76,9 @@
             background: none;
         }
 
-            .share:hover {
-                filter: hue-rotate(30deg);
-            }
+        .share:hover {
+            filter: hue-rotate(30deg);
+        }
 
         .icon_wrapper {
             display: flex;
@@ -214,18 +217,24 @@
         .image-hover:hover {
             transform: scale(1.1);
         }
+
+        .el-image-viewer__img {
+            max-width: 600px !important;
+            width: 100% !important;
+            height: auto !important;
+        }
     </style>
 </head>
 <body>
     <div id="app">
-        <div>
+        <div v-loading.fullscreen.lock="loadThisPage">
             <el-container>
                 <el-breadcrumb separator-class="el-icon-arrow-right">
-                    <el-breadcrumb-item><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">首頁</a></el-breadcrumb-item>
-                    <el-breadcrumb-item><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">中文書</a></el-breadcrumb-item>
-                    <el-breadcrumb-item><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">商業</a></el-breadcrumb-item>
-                    <el-breadcrumb-item><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">投資理財</a></el-breadcrumb-item>
-                    <el-breadcrumb-item><div style="color: #E3007F;">塔木德：猶太人的致富聖經［修訂版］：1000多年來帶領猶太人快速累積財富的神祕經典</div></el-breadcrumb-item>
+                    <el-breadcrumb-item><a :href="homeUrl()" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">首頁</a></el-breadcrumb-item>
+                    <el-breadcrumb-item v-if="book.languageName && book.languageName.length > 1"><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.languageName}}</a></el-breadcrumb-item>
+                    <el-breadcrumb-item v-if="book.categoryName && book.categoryName.length > 1"><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.categoryName}}</a></el-breadcrumb-item>
+                    <el-breadcrumb-item v-if="book.subCategoryName && book.subCategoryName.length > 1"><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.subCategoryName}}</a></el-breadcrumb-item>
+                    <el-breadcrumb-item><div style="color: #E3007F;">{{book.bookTitle}}</div></el-breadcrumb-item>
                 </el-breadcrumb>
             </el-container>
             <br/>
@@ -234,7 +243,7 @@
                     <el-aside width="310px" height="400px">
                         <div class="demo-image__placeholder">
                             <div class="block">
-                                <el-image :src="bookCover">
+                                <el-image :src="book.coverPath">
                                     <div slot="placeholder" class="image-slot">
                                         加載中<span class="dot">...</span>
                                     </div>
@@ -246,41 +255,28 @@
                         <div class="demo-image__placeholder">
                             <div class="block">
                                 <div class="downCover-wrapper">
-                                    <div class="downCover-slot">
-                                        <el-image :src="video" style="width: 140px;">
+                                    <div v-for="(preview, index) in book.preview" :key="index">
+                                        <el-image v-if="preview"
+                                                  style="width: 70px;"
+                                                  :src="preview"
+                                                  :preview-src-list="book.preview"
+                                                  class="image-hover">
                                             <div slot="placeholder" class="image-slot">
                                                 加載中<span class="dot">...</span>
                                             </div>
                                         </el-image>
-                                    </div>
-                                    <div class="downCover-slot">
-                                        <el-image
-                                          style="width: 70px;"
-                                          :src="bookCover"
-                                          :preview-src-list="bookCover"
-                                          v-on:click.native="openPreview"
-                                          class="image-hover"
-                                        >
-                                          <div slot="placeholder" class="image-slot">
-                                            加載中<span class="dot">...</span>
-                                          </div>
-                                        </el-image>
-                                        <el-dialog
-                                          :visible.sync="showDialog"
-                                          :close-on-click-modal="true"
-                                          :close-on-press-escape="true"
-                                          width="400px"
-                                          :show-close="false"
-                                          custom-class="dialog-image"
-                                        >
-                                          <el-image
-                                            style="max-width: 100%; max-height: 80vh;"
-                                            :src="bookCover"
-                                            :preview-src-list="bookCover"
-                                            fit="contain"
-                                          ></el-image>
+                                        <el-dialog :visible.sync="showDialog"
+                                                   :close-on-click-modal="true"
+                                                   :close-on-press-escape="true"
+                                                   width="1200px"
+                                                   :show-close="false"
+                                                   custom-class="dialog-image">
+                                            <el-image v-if="dialogIndex !== null"
+                                                      :src="book.preview[dialogIndex]"
+                                                      fit="contain"
+                                                      style="width: 2000px; height: 2000px;"></el-image>
                                         </el-dialog>
-                                      </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -288,48 +284,43 @@
                 </div>
                 <el-main>
                     <div style="padding-left: 5px;">
-                        <h1 style="line-height: normal;letter-spacing: 0.5px;font-size:20px;font-weight:bold;">塔木德：猶太人的致富聖經［修訂版］：1000多年來帶領猶太人快速累積財富的神祕經典</h1>
+                        <h1 style="line-height: normal;letter-spacing: 0.5px;font-size:20px;font-weight:bold;">{{book.bookTitle}}</h1>
                         <div class="authorBoard">
-                            <p style="text-align: left;"><span>作者：<a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">佛蘭克．赫爾</a></span></p>
+                            <p style="text-align: left;"><span>作者：<a :href="authorUrl(book.authorID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.authorName}}</a></span></p>
                         </div>
                         <el-row>
-                            <el-button round size="small" type="pinkBorder" style="margin-left: 0px; padding: 9px;"><i class="el-icon-edit"></i><span style="color:#E3007F;">11</span>評價</el-button>
-                            <el-button round size="small" type="pinkBorder" style="margin-left: 0px; padding: 9px;"><i class="el-icon-star-off"></i><span style="color:#E3007F;">285</span>收藏</el-button>
-                            <el-button round size="small" type="pinkBorder" style="margin-left: 0px; padding: 9px;"><i class="el-icon-reading"></i><span style="color:#E3007F;">568</span>人次試讀</el-button>
+                            <el-button round size="small" type="pinkBorder" style="margin-left: 0px; padding: 9px;"><i class="el-icon-edit"></i><span style="color:#E3007F;"> {{comment.length}} </span>評價</el-button>
                         </el-row>
                         <div class="icon_wrapper">
                             <div id="fb_shared" class="share" v-on:click="windowOpen('https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.taaze.tw%2Fproducts%2F11100697818.html')">
-                                <a href=""><img src="../image/Book/bookIcon/fb.png" alt="" style="width: 30px; height: 26px;"></a>
+                                <a href=""><img src="../../image/Book/bookIcon/fb.png" alt="" style="width: 30px; height: 26px;"></a>
                             </div>
                             <div id="gmail_shared" class="share" v-on:click="windowOpen('https://mail.google.com/mail/?ui=1&amp;view=cm&amp;fs=1&amp;tf=1&amp;su=%E3%80%90TAAZE%20%7C%20%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB%E7%B6%B2%E8%B7%AF%E6%9B%B8%E5%BA%97%E3%80%91%E5%A1%94%E6%9C%A8%E5%BE%B7%EF%BC%9A%E7%8C%B6%E5%A4%AA%E4%BA%BA%E7%9A%84%E8%87%B4%E5%AF%8C%E8%81%96%E7%B6%93%EF%BC%BB%E4%BF%AE%E8%A8%82%E7%89%88%EF%BC%BD%EF%BC%9A1000%E5%A4%9A%E5%B9%B4%E4%BE%86%E5%B8%B6%E9%A0%98%E7%8C%B6%E5%A4%AA%E4%BA%BA%E5%BF%AB%E9%80%9F%E7%B4%AF%E7%A9%8D%E8%B2%A1%E5%AF%8C%E7%9A%84%E7%A5%9E%E7%A5%95%E7%B6%93%E5%85%B8-%20TAAZE%20%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB&amp;body=%E3%80%90TAAZE%20%7C%20%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB%E7%B6%B2%E8%B7%AF%E6%9B%B8%E5%BA%97%E3%80%91%E5%A1%94%E6%9C%A8%E5%BE%B7%EF%BC%9A%E7%8C%B6%E5%A4%AA%E4%BA%BA%E7%9A%84%E8%87%B4%E5%AF%8C%E8%81%96%E7%B6%93%EF%BC%BB%E4%BF%AE%E8%A8%82%E7%89%88%EF%BC%BD%EF%BC%9A1000%E5%A4%9A%E5%B9%B4%E4%BE%86%E5%B8%B6%E9%A0%98%E7%8C%B6%E5%A4%AA%E4%BA%BA%E5%BF%AB%E9%80%9F%E7%B4%AF%E7%A9%8D%E8%B2%A1%E5%AF%8C%E7%9A%84%E7%A5%9E%E7%A5%95%E7%B6%93%E5%85%B8-%20TAAZE%20%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB%2F%E5%A1%94%E6%9C%A8%E5%BE%B7%EF%BC%9A%E7%8C%B6%E5%A4%AA%E4%BA%BA%E7%9A%84%E8%87%B4%E5%AF%8C%E8%81%96%E7%B6%93%EF%BC%BB%E4%BF%AE%E8%A8%82%E7%89%88%EF%BC%BD%EF%BC%9A1000%E5%A4%9A%E5%B9%B4%E4%BE%86%E5%B8%B6%E9%A0%98%E7%8C%B6%E5%A4%AA%E4%BA%BA%E5%BF%AB%E9%80%9F%E7%B4%AF%E7%A9%8D%E8%B2%A1%E5%AF%8C%E7%9A%84%E7%A5%9E%E7%A5%95%E7%B6%93%E5%85%B8.%20%E4%BD%9B%E8%98%AD%E5%85%8B%EF%BC%8E%E8%B5%AB%E7%88%BE.%20%E5%BE%90%E4%B8%96%E6%98%8E.%20%E6%99%BA%E8%A8%80%E9%A4%A8.%209789865899332.%20%E3%80%8A%E8%81%96%E7%B6%93%E3%80%8B%E8%AE%93%E6%AF%8F%E4%B8%80%E5%80%8B%E4%BA%BA%E6%9C%8D%E5%BE%9E%E4%B8%8A%E5%B8%9D%E7%9A%84%E5%AE%89%E6%8E%92%EF%BC%8C%E4%BD%86%E3%80%8A%E5%A1%94%E6%9C%A8%E5%BE%B7%E3%80%8B%E8%AE%93%E3%80%8C%E8%B2%A1%E5%AF%8C%E3%80%8D%E6%9C%8D%E5%BE%9E%E4%BA%86%E6%88%91%E5%80%91%E7%9A%84%E9%81%B8%E6%93%87%E3%80%82%E2%94%80%E2%94%80%E5%93%88%E9%BB%98%E4%B8%96%E7%95%8C%E5%AF%8C%E7%BF%81%E6%91%A9....%20https%3A%2F%2Fwww.taaze.tw%2Fproducts%2F11100697818.html&amp;shva=1&amp;ov=0')">
-                                <a href=""><img src="../image/Book/bookIcon/gmail.png" alt="" style="width: 30px; height: 26px;"></a>
+                                <a href=""><img src="../../image/Book/bookIcon/gmail.png" alt="" style="width: 30px; height: 26px;"></a>
                             </div>
                             <div id="plurk_shared" class="share" v-on:click="windowOpen('http://www.plurk.com/?qualifier=shares&amp;status=%E5%A1%94%E6%9C%A8%E5%BE%B7%EF%BC%9A%E7%8C%B6%E5%A4%AA%E4%BA%BA%E7%9A%84%E8%87%B4%E5%AF%8C%E8%81%96%E7%B6%93%EF%BC%BB%E4%BF%AE%E8%A8%82%E7%89%88%EF%BC%BD%EF%BC%9A1000%E5%A4%9A%E5%B9%B4%E4%BE%86%E5%B8%B6%E9%A0%98%E7%8C%B6%E5%A4%AA%E4%BA%BA%E5%BF%AB%E9%80%9F%E7%B4%AF%E7%A9%8D%E8%B2%A1%E5%AF%8C%E7%9A%84%E7%A5%9E%E7%A5%95%E7%B6%93%E5%85%B8-%20TAAZE%20%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB%20https%3A%2F%2Fwww.taaze.tw%2Fproducts%2F11100697818.html%20TAAZE%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB%E7%B6%B2%E8%B7%AF%E6%9B%B8%E5%BA%97')">
-                                <a href=""><img src="../image/Book/bookIcon/plurk.png" alt="" style="width: 30px; height: 26px;"></a>
+                                <a href=""><img src="../../image/Book/bookIcon/plurk.png" alt="" style="width: 30px; height: 26px;"></a>
                             </div>
                             <div id="twitter_shared" class="share" v-on:click="windowOpen('https://twitter.com/home?status=%E5%A1%94%E6%9C%A8%E5%BE%B7%EF%BC%9A%E7%8C%B6%E5%A4%AA%E4%BA%BA%E7%9A%84%E8%87%B4%E5%AF%8C%E8%81%96%E7%B6%93%EF%BC%BB%E4%BF%AE%E8%A8%82%E7%89%88%EF%BC%BD%EF%BC%9A1000%E5%A4%9A%E5%B9%B4%E4%BE%86%E5%B8%B6%E9%A0%98%E7%8C%B6%E5%A4%AA%E4%BA%BA%E5%BF%AB%E9%80%9F%E7%B4%AF%E7%A9%8D%E8%B2%A1%E5%AF%8C%E7%9A%84%E7%A5%9E%E7%A5%95%E7%B6%93%E5%85%B8-%20TAAZE%20%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB%20https%3A%2F%2Fwww.taaze.tw%2Fproducts%2F11100697818.html%20TAAZE%E8%AE%80%E5%86%8A%E7%94%9F%E6%B4%BB%E7%B6%B2%E8%B7%AF%E6%9B%B8%E5%BA%97')">
-                                <a href=""><img src="../image/Book/bookIcon/twitter.png" alt="" style="width: 30px; height: 26px;"></a>
+                                <a href=""><img src="../../image/Book/bookIcon/twitter.png" alt="" style="width: 30px; height: 26px;"></a>
                             </div>
                             <!--<div class='gplus_frame'></div>-->
                             <div class="share"><iframe frameborder="0" border="0" cellspacing="0" width="70" height="25" id="fb_like" style="border: none;overflow:hidden;" src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.taaze.tw%2Fproducts%2F11100697818.html&amp;layout=button_count&amp;action=like&amp;show_faces=false&amp;share=false&amp;height=70&amp;width=100&amp;size=small&amp;appId=626893700667334"></iframe></div>
                         </div>
                     </div>
                     <div class="price">
-                        <p>定價：NT$ <span style="text-decoration:line-through;">250</span></p>
-                        <p>優惠價：<span style="color:#e2007e;"><strong> 75 </strong></span>折， NT$ <span style="color:#e2007e;"><strong>188</strong></span></p>
-                        <p style="color:#e2007e;">優惠截止日：至<span>2023年04月30日</span></p>
+                        <p>定價：NT$ <span style="text-decoration:line-through;">{{book.unitPrice}}</span></p>
+                        <p>優惠價：<span style="color:#e2007e;"><strong> {{book.discount}} </strong></span>折， NT$ <span style="color:#e2007e;"><strong>{{getDiscountPrice(book)}}</strong></span></p>
+                        <p style="color:#e2007e;">優惠截止日：至 <span>{{book.discountDate}}</span></p>
                     </div>
                     <div class="deliver">
                         <p>運送方式：超商取貨、宅配取貨</p>
                         <p>銷售地區：全球</p>
-                        <p>限量商品，即時庫存>5</p>
+                        <p>庫存： {{book.unitInStock}}</p>
                     </div>
                     <p class="DeliverAndKpst">
                         <a class="18h" href="#" target="_blank">
-                            <img style="width: 50px;height: 50px;" src="../image/Book/bookIcon/shipIcon.png" alt="">
-                        </a>
-                        <a class="cartreserved" href="#" target="_blank">
-                            <img style="width: 50px;height: 50px;" src="../image/Book/bookIcon/reserveIcon.png" alt="">
+                            <img style="width: 50px;height: 50px;" src="../../image/Book/bookIcon/shipIcon.png" alt="">
                         </a>
                     </p>
                 </el-main>
@@ -337,30 +328,38 @@
                     <el-row>
                         <div>
                             <p class="ad1">
-                                <a href="#" class="ad1" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">【哲學宗教】參展書籍5折起</a>
+                                <a :href="articalUrl(articalID)" class="ad1" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">活動文宣--{{articalTitle}}</a>
                             </p>
                         </div>
                         <div class="buttonRight">
-                            <el-button round class="rightButton">放入購物車</el-button>
+                            <el-button round class="rightButton" v-on:click="addToCart(book.bookID,book.bookTitle,book.discountName,book,book.publisherName,book.unitInStock)">加入購物車</el-button>
                         </div>
                         <div class="buttonRight">
                             <el-button round class="rightButton" v-on:click="redirectToCart">直接購買</el-button>
                         </div>
                         <div class="buttonRight">
-                            <el-button round class="rightButton" v-on:click="storeTempList">放入暫存清單</el-button>
+                            <el-button round class="rightButton" v-on:click="storeTempList(book.bookID,@_userInforService.UserId)">放入暫存清單</el-button>
+                        </div>
+                        <div class="buttonRight">
+                            <el-button round class="rightButton" v-on:click="collectPublisher(book.publisherID,@_userInforService.UserId)">收藏出版社</el-button>
+                        </div>
+                        <div class="buttonRight">
+                            <el-button round class="rightButton" v-on:click="clearAllCookies">Clear cookie</el-button>
                         </div>
                     </el-row>
                 </el-aside>
             </el-container>
             <el-divider></el-divider>
             <el-container>
-                <el-main>
+                <el-main v-if="recommend.length > 1">
+                    <span style="font-size: 20px; font-weight: bold;">買了這本書的人也買了</span>
+                    <br/>
                     <el-carousel arrow="always" :interval="0" height="350px" indicator-style="{ transform: 'translateY(80%)' }">
                         <div v-for="(group, index) in Math.ceil(recommend.length / 5)">
                             <el-carousel-item :key="index">
                                 <div class="recommendTable">
-                                    <div v-for="(item, i) in recommend.slice(index * 5, (index + 1) * 5)" style="margin-right: 50px;">
-                                        <a href="#">
+                                    <div v-for="(item, i) in recommend.slice(index * 5, (index + 1) * 5)" style="margin-right: 30px; margin-left: 40px">
+                                        <a :href="bookUrl(item.bookID)">
                                             <el-image :src="item.coverPath" style="width: 180px;">
                                                 <div slot="placeholder" class="image-slot">
                                                     加載中<span class="dot">...</span>
@@ -379,28 +378,29 @@
                             </el-carousel-item>
                         </div>
                     </el-carousel>
+                    <el-divider></el-divider>
                 </el-main>
             </el-container>
-            <el-divider></el-divider>
             <el-container>
                 <el-main>
                     <div class="information">
                         <span style="font-size: 20px; font-weight: bold;">商品資料</span>
-                        <p>作者：<span><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">佛蘭克．赫爾</a></span></p>
-                        <p>譯者：<span><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">徐世明</a></span></p>
-                        <p>出版社：<span><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">智言館</a></span></p>
-                        <p>出版日期：<span>2014-04-01</span></p>
-                        <p>ISBN/ISSN：<span>9789865899332</span></p>
-                        <p>語言：<span>繁體中文</span></p>
-                        <p>裝訂方式：<span>平裝</span></p>
-                        <p>頁數：<span>288頁</span></p>
-                        <p>商品尺寸：<span>長：210mm \ 寬：148mm</span></p>
+                        <p>作者：<span><a :href="authorUrl(book.authorID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.authorName}}</a></span></p>
+                        <p v-if="book.translatorName && book.translatorName.length > 1">譯者：<span><a :href="translatorUrl(book.translatorID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.translatorName}}</a></span></p>
+                        <p v-if="book.painterName && book.painterName.length > 1">繪者：<span><a :href="painterUrl(book.painterID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.painterName}}</a></span></p>
+                        <p>出版社：<span><a :href="publisherUrl(book.publisherID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.publisherName}}</a></span></p>
+                        <p>出版日期：<span>{{book.publicationDate}}</span></p>
+                        <p>ISBN/ISSN：<span>{{book.isbn}}</span></p>
+                        <p>語言：<span>{{book.languageName}}</span></p>
+                        <p>裝訂方式：<span>{{book.bindingMethod}}</span></p>
+                        <p>頁數：<span>{{book.pages}}</span></p>
+                        <p>商品尺寸：<span>{{book.dimensions}}</span></p>
                         <p>
                             類別：
                             <span>
-                                <a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">中文書</a>>
-                                <a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">商業</a>>
-                                <a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">投資理財</a>
+                                <a v-if="book.languageName && book.languageName.length > 1" href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.languageName}}</a>>
+                                <a v-if="book.categoryName && book.categoryName.length > 1" href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.categoryName}}</a>>
+                                <a v-if="book.subCategoryName && book.subCategoryName.length > 1" href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.subCategoryName}}</a>
                             </span>
                         </p>
                     </div>
@@ -410,8 +410,10 @@
                 <el-header></el-header>
                 <el-tabs v-model="activeName" type="card" v-on:tab-click="handleClick">
                     <el-tab-pane label="內容簡介" name="contentIntro"></el-tab-pane>
-                    <el-tab-pane label="章節試閱" name="tryContent"></el-tab-pane>
-                    <el-tab-pane label="目錄" name="tableContainer"></el-tab-pane>
+                    <el-tab-pane v-if= "tryContentText && tryContentText.length > 1" label="章節試閱" name="tryContent"></el-tab-pane>
+                    <el-tab-pane v-if="endorsementsText && endorsementsText.length > 1" label="各界推薦" name="endorsements"></el-tab-pane>
+                    <el-tab-pane v-if="forewardText && forewardText.length > 1" label="作者序" name="foreward"></el-tab-pane>
+                    <el-tab-pane v-if="tableContainerText && tableContainerText.length > 1" label="目錄" name="tableContainer"></el-tab-pane>
                     <el-tab-pane label="購物須知" name="beforeBuy"></el-tab-pane>
                 </el-tabs>
                 <div>
@@ -423,99 +425,71 @@
                     </div>
                     <el-container :class="`container ${fontSize}`">
                         <el-main>
+                            <div id="text"></div>
                             <div id="content">
                                 <div id="contentIntro">
-                                    <p></p>
-                                    <center>
-                                        <font color="#FF0000">
-                                            聖經》讓每一個人服從上帝的安排，
-                                            <br>
-                                            但《塔木德》讓「財富」服從了我們的選擇。
-                                            <br>
-                                            ──哈默
-                                        </font>
-                                    </center>
-                                    <br>
-                                    <br>
-                                    世界富翁摩根、羅斯柴爾德、哈默、索羅斯等
-                                    <br>
-                                    猶太裔商業巨擘每日必讀的致富經典
-                                    <br>
-                                    <br>
-                                    <font color="#0040FF">
-                                        本書特色
-                                        <br>
-                                        世界富翁摩根、羅斯柴爾德、哈默、索羅斯等
-                                        <br>
-                                        猶太裔商業巨擘，每日必讀的致富經典──《塔木德》
-                                        <br>
-                                        本書將為你打開快速致富的神祕大門！
-                                    </font>
-                                    <br>
-                                    <br>
-                                    【特色一】
-                                    <br>
-                                    本書於2005年發行，直到2013年（最新年度）博客來網路書店結算年度百大暢銷書，本書仍為「商業理財類」前50大之暢銷書。暢銷熱賣的程度，歷經8年，不曾減退！
-                                    <br>
-                                    <br>
-                                    【特色二】
-                                    <br>
-                                    全書貫徹「我們需要什麼樣的觀念和態度，才能讓自己長久致富？」的中心思想，不僅告訴讀者，如何擁有財富，更重要的是，它告訴我們，如何才能讓財富緊緊相隨，不分離！
-                                    <br>
-                                    <br>
-                                    內容簡介
-                                    <br>
-                                    <br>
-                                    對於猶太人的財富，有一個非常經典的說法：「全世界的錢都在美國人的口袋裡，而美國人的錢卻在猶太人的口袋裡。」猶太人如此的優秀，讓世界為之震驚，尤其最讓世人折服的，是他們驚人的財富和超凡的賺錢能力。
-                                    <br>
-                                    <br>
-                                    1000多年以來，這個謎一般的民族，是世界上的「少數人」，但是卻掌握了世界上龐大的資產。他們如何擁有巨大的財富，始終是眾人非常關注的話題，相信，只要是想成為富人的人，任誰都會為此產生濃厚的興趣！
-                                    <br>
-                                    <br>
-                                    到底他們是如何致富的？而且是整個民族歷久不衰的富有，到底他們是怎麼辦到的？
-                                    <br>
-                                    <br>
-                                    《塔木德》提供了最好的答案！
-                                    <br>
-                                    <br>
-                                    《塔木德》是猶太人的致富聖經寶典，就是它，讓猶太人成為世界上最富有的民族，沒有它，猶太人在歷經了數千年的流亡迫害之下，一定早就被滅種或被其他民族同化了。
-                                    <br>
-                                    <br>
-                                    然而，到底《塔木德》中記載了什麼樣的大智慧，能讓這個經過數度迫害屠殺，又流離四散的民族，不但擁有了頑強的生存意志，更擁有了其他民族所沒有的賺錢和處世智慧？
-                                    <br>
-                                    <br>
-                                    千百年來，猶太人的致富祕笈一直無法被外人所破解，如今《塔木德》被世人發現，等於猶太人經商致富的神祕方程式和祕笈，終於公諸於世。
-                                    <br>
-                                    <br>
-                                    猶太人也是人，既然他們能因為這些祕笈而致富，相信只要你有心成為億萬富翁，這本《塔木德》也將是開啟你經商任督二脈的絕世祕笈。
-                                    <br>
-                                    <p></p>
-                                </div>
-                                <el-divider></el-divider>
-                                <div id="tryContent">
-                                    <span style="font-size: 20px; font-weight: bold;">章節試閱</span>
+                                    <span style="font-size: 20px; font-weight: bold;">內容簡介</span>
                                     <div>
-                                        <span v-for="(text, index) in tryContentText" :key="index"><br>{{ text }}</span>
-                                        <span v-if="!showAll && tryContentText.length > 1">...</span>
-                                        <div class="moreButton" style="margin-top: 10px;">
-                                            <div v-if="!showAll" viewall="0" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;" v-on:click="toggleShow">顯示全部內容</div>
-                                            <div v-else viewall="1" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;" v-on:click="changeMethod('tryContent')">顯示部分內容</div>
-                                        </div>
+                                        <span v-for="(text, index) in contentIntro" :key="index"><br>{{ text }}</span>
                                     </div>
                                 </div>
                                 <el-divider></el-divider>
-                                <div id="tableContainer">
-                                    <span style="font-size: 20px; font-weight: bold;">目錄</span>
-                                    <div>
-                                        <span v-for="(text, index) in tableContainerText" :key="index"><br>{{ text }}</span>
-                                        <span v-if="!showAll && tableContainerText.length > 1">...</span>
-                                        <div class="moreButton" style="margin-top: 10px;">
-                                            <div v-if="!showAll" viewall="0" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;" v-on:click="toggleShow">顯示全部內容</div>
-                                            <div v-else viewall="1" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;" v-on:click="changeMethod('tableContainer')">顯示部分內容</div>
+                                <div v-if="tryContentText && tryContentText.length > 1">
+                                    <div id="tryContent"> 
+                                        <span style="font-size: 20px; font-weight: bold;">章節試閱</span>
+                                        <div>
+                                            <span v-for="(text, index) in tryContentText" :key="index"><br>{{ text }}</span>
+                                            <span v-if="!showAll && tryContentText.length > 1">...</span>
+                                            <div class="moreButton" style="margin-top: 10px;">
+                                                <div v-if="!showAll" viewall="0" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;" v-on:click="toggleShow">顯示全部內容</div>
+                                                <div v-else viewall="1" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;" v-on:click="changeMethod('tryContent')">顯示部分內容</div>
+                                            </div>
                                         </div>
                                     </div>
+                                     <el-divider></el-divider>
                                 </div>
-                                <el-divider></el-divider>
+                                <div v-if="endorsementsText && endorsementsText.length > 1">
+                                    <div id="endorsements">
+                                        <span style="font-size: 20px; font-weight: bold;">各界推薦</span>
+                                        <div>
+                                            <span v-for="(text, index) in endorsementsText" :key="index"><br>{{ text }}</span>
+                                            <span v-if="!showAllEndorsements && endorsementsText.length > 1">...</span>
+                                            <div class="moreButton" style="margin-top: 10px;">
+                                                <div v-if="!showAllEndorsements" viewall="0" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;" v-on:click="toggleShowEndorsements">顯示全部內容</div>
+                                                <div v-else viewall="1" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;" v-on:click="changeMethod('endorsements')">顯示部分內容</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <el-divider></el-divider>
+                                </div>
+                                <div v-if="forewardText && forewardText.length > 1">
+                                    <div id="foreward">
+                                        <span style="font-size: 20px; font-weight: bold;">作者序</span>
+                                        <div>
+                                            <span v-for="(text, index) in forewardText" :key="index"><br>{{ text }}</span>
+                                            <span v-if="!showAllForeward && forewardText.length > 1">...</span>
+                                            <div class="moreButton" style="margin-top: 10px;">
+                                                <div v-if="!showAllForeward" viewall="0" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;" v-on:click="toggleShowForeward">顯示全部內容</div>
+                                                <div v-else viewall="1" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;" v-on:click="changeMethod('foreward')">顯示部分內容</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <el-divider></el-divider>
+                                </div>
+                                <div v-if="tableContainerText && tableContainerText.length > 1">
+                                    <div id="tableContainer">
+                                        <span style="font-size: 20px; font-weight: bold;">目錄</span>
+                                        <div>
+                                            <span v-for="(text, index) in tableContainerText" :key="index"><br>{{ text }}</span>
+                                            <span v-if="!showAllTableContainer && tableContainerText.length > 1">...</span>
+                                            <div class="moreButton" style="margin-top: 10px;">
+                                                <div v-if="!showAllTableContainer" viewall="0" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;" v-on:click="toggleShowTableContainer">顯示全部內容</div>
+                                                <div v-else viewall="1" style="width: 88px; padding: 2px 0;font-weight:bold; font-size: 10pt; text-align: center; cursor: pointer;" v-on:click="changeMethod('tableContainer')">顯示部分內容</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <el-divider></el-divider>
+                                </div>
                                 <div id="beforeBuy">
                                     <span style="font-size: 20px; font-weight: bold;">購物須知</span>
                                     <p style="font-weight: bold;">退換貨說明：</p>
@@ -539,17 +513,17 @@
                         <br>
                         <div style="margin-top: 20px; margin-bottom: 20px;">
                             <span class="demonstration"></span>
-                            <el-rate v-model="commentValueMyself"></el-rate>
+                            <el-rate v-model="stars"></el-rate>
                         </div>
                         <div style="display: flex; align-items: center;">
-                            <el-avatar :size="50" :src="circleUrl" style="margin-right: 20px;"></el-avatar>
+                            <el-avatar :size="50" :src="profile" style="margin-right: 20px;"></el-avatar>
                             <el-input type="textarea"
                                       placeholder="請輸入評論"
                                       v-model="commentArea"
-                                      maxlength="30"
+                                      maxlength="50"
                                       show-word-limit style="width: 400px;"
                                       ></el-input>
-                            <el-button type="primary" icon="el-icon-edit" style="margin-left: 20px;" v-on:click="writeComment" v-loading.fullscreen.lock="fullscreenLoading">確定</el-button>
+                            <el-button type="primary" icon="el-icon-edit" style="margin-left: 20px;" v-on:click="writeComment(book.bookID,@_userInforService.UserId,commentArea,stars)" v-loading.fullscreen.lock="fullscreenLoading">確定</el-button>
                         </div>
                     </div>
                 </div>
@@ -581,23 +555,6 @@
                     </div>
                 </el-container>
             </el-container>
-            <!-- <el-divider></el-divider> -->
-            <!-- <el-container>
-                <el-aside width="200px">Aside</el-aside>
-                <el-container>
-                    <el-header>Header</el-header>
-                    <el-main>Main</el-main>
-                </el-container>
-            </el-container>
-
-            <el-container>
-                <el-aside width="200px">Aside</el-aside>
-                <el-container>
-                    <el-header>Header</el-header>
-                    <el-main>Main</el-main>
-                    <el-footer>Footer</el-footer>
-                </el-container>
-            </el-container> -->
         </div>
     </div>
     <!-- import Vue before Element -->
@@ -605,524 +562,152 @@
     <!-- import JavaScript -->
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <script>
+        function decodeHTML(encodedString) {
+            let tempElement = document.createElement('div')
+            tempElement.innerHTML = encodedString
+            return tempElement.textContent
+        }
+        function replaceDoubleDollarSign(str) {
+          return str.replace(/\$\$/g, '\n');
+        }
 
-        let tryContentJS = `【緒論】天生會賺錢的民族
-            有一天，猶太教士胡里奧在河邊遇見了憂鬱的年輕人費列姆。費列姆唉聲嘆氣，愁眉苦臉。
-            「孩子你為何如此鬱鬱不樂呢？」胡里奧關心地問。
-            費列姆看了一眼胡里奧，嘆了口氣：「我是一個名副其實的窮光蛋。我沒有房子，沒有工作，沒有收入，整天饑一頓飽一頓度日。像我這樣一無所有的人，怎麼能高興得起來呢？」
-            「傻孩子！」胡里奧笑道：其實，你應該開懷大笑才對！」
-            「開懷大笑？為什麼？」費列姆不解地問。
-            「因為，你其實是一個百萬富翁呢！」胡里奧詭異地說。
-            「百萬富翁？您別拿我這窮光蛋尋開心了。」費列姆很不高興，轉身想走。
-            「我怎敢拿你尋開心？孩子，現在能回答幾個問題嗎？」
-            「什麼問題？」費列姆有點好奇。
-            「假如，現在我出二十萬金幣買你的健康，你願意嗎？」
-            「不願意。」費列姆搖搖頭。
-            「假如，現在我再出二十萬金幣，買你的青春，讓你從此變成一個小老頭，你願意嗎？」
-            「當然不願意！」費列姆乾脆地回答。
-            「假如，我現在出二十萬金幣，買走你的美貌，讓你從此變成一個醜八怪，你可願意？」
-            「不願意！當然不願意！」費列姆像吃搖頭丸般搖著頭。
-            「假如，我再出二十萬金幣，買走你的智慧，讓你從此渾渾噩噩，度此一生，你可願意？」
-            「傻瓜才願意！」費列姆一扭頭，又想走開。
-            「別慌，請回答完我最後一個問題：假如現在我再出二十萬金幣，讓你去殺人放火從此失去良心，你可願意？」
-            「天哪！幹這種缺德事，魔鬼才願意！」費列姆回答。
-            「好了，剛才我已經開價一百萬金幣了，仍然買不走你身上的任何東西，你說你不是百萬富翁，又是什麼呢？」胡里奧微笑著問。費列姆恍然大悟。他謝過胡里奧的指點，向遠方走去，從此，他不再怨天尤人，微笑著尋找他的新生活。
-            這就是猶太人，他們堅信可以憑藉自身的實力來獲得財富，改變自己的命運。
+        let encodedContentIntro = "@Model.book.ContentIntro"
+        let contentIntroJS = decodeHTML(encodedContentIntro)
 
-            世界上最偉大的商人
-            上帝給予光明，金錢散發溫暖。
-            ──《塔木德》
+        let encodedTryContent = "@Model.book.TryContent"
+        let tryContentJS = decodeHTML(encodedTryContent)
 
+        let encodedEndorsements = "@Model.book.Endorsements"
+        let endorsementsJS = decodeHTML(encodedEndorsements)
 
-            猶太教為世界上少數流傳幾千年的文明，它沒有給世人留下什麼值得驕傲的宮殿和建築，也沒有給人們留下美妙的音樂，他們唯一留下的就是智慧，智慧是一切財富的根源。到了最近一千年左右，猶太人就是憑藉著這些智慧登上了世界第一商人的寶座，他們在其他領域的成就也讓世人刮目相看。
-            「不了解猶太人，就等於不了解世界。」猶太人對世界產生了重大的影響。也有人說：「三個猶太人坐在一起，就可以決定世界的命運。」
-            對於猶太人的財富，有一個非常經典的說法：「全世界的錢都在美國人的口袋裡，而美國人的錢卻在猶太人的口袋裡。」猶太人的優秀，讓世界為之震驚，這樣一個偉大的民族，引起了世人對他們的好奇和興趣。當然，猶太人最讓世界折服的，是他們驚人的財富和超凡的賺錢能力。猶太人是個謎一般的民族，他們是世界上的少數人，但是卻掌握了世界上龐大的資產；他們遭受了千年的凌辱，處處受打壓，四處流浪，卻有驚人的財富。他們特立獨行，行為、思考模式詭祕，讓世人覺得神祕莫測；他們沒有什麼資本，但是卻始終立於金錢的頂峰、權力的中心。
-            一千年多年以來，猶太人的金錢是大家非常關注的話題，幾乎所有的人對於猶太人擁有的巨大財富都有濃厚的興趣。基督教的牧師對之詆毀，說猶太人是崇拜金錢的魔鬼，而世間的貴族和王侯們為了得到猶太人的錢，卻處心積慮地巴結猶太富人；反猶太主義者對於猶太人所掌握的龐大財富，氣得暴跳如雷，但也毫無辦法，而猶太人對自己所掌握的財富深深自豪，他們的發財祕密從來不傳於外人。世人對他們發財的祕訣，更是好奇與羨慕。
-            猶太人是世界最富有的的民族，是「世界的金礦」。猶太人口在世界所佔的比例僅有〇•三％，卻掌握著世界經濟的命脈。
-            在美國，猶太人所佔的比例僅有三％，但是根據《財富》雜誌所評選出來的超級富翁中，猶太裔企業家卻佔二〇至二五％，在全世界最有錢的企業中，猶太人竟然佔了一半。
-            如果做一合理猜測，猶太人約佔全美最富有者的二〇％。可以說，猶太人是名副其實的世界上最富有的民族。
-            如果說富有的商業大亨，猶太人就更是龐大，數不勝數了。例如企業界的一部分比較突出的猶太人或猶太血統的人中，就包括波拉勞埃德公司的埃德溫‧蘭德、西方石油的利昂‧赫斯、哥倫比亞廣播的威廉‧佩利、西北工業公司的本‧海涅曼、三角出版公司福沃特‧安尼伯格、聯合食品公司的內森‧卡明斯、杜邦公司新來的歐文‧夏皮羅、大陸古物公司的米歇爾‧弗里堡、ＭＯＡ的劉易斯‧沃瑟曼、迅捷公司的米蘇萊姆‧里克利斯、波絲納家族所有的公司的維克托‧波絲納、海灣和西方工業公司的查爾斯‧布盧德霍恩、勃勒斯公司財政部以及本迪克斯公司的Ｗ‧米歇爾‧布盧門切爾、西格萊姆斯公司的埃德加‧布朗夫曼，還有聯邦廣播公司的倫納德‧戈登森等。
-            在範圍最廣、最權威的猶太聯合會和福利基金聯合會所做的「美國猶太人口研究」中發現，在七〇年代猶太人家庭平均收入為一•二六三萬美元。而同期美國家庭平均收入為九八六七美元，比其他民族的人收入高出三八％以上。
-            事實上，猶太人的確佔了上流階級中不可忽視的地位。
-            在五千三百萬個美國家庭中，有一千三百萬個家庭可以歸入中產階級，而一百萬個猶太人家庭中，有近九十萬個家庭屬於中產階級。猶太人只佔美國人口的三％，但有四三％的猶太人家庭，收入超過了一萬六千美元，全美只有二五％的家庭收入超過了一萬五千美元。從這些數字來看，我們可以這樣說，猶太人中、上層階級的收入比例，高出美國其他人平均收入近一倍。他們中有一半過著資產階級的奢侈生活，這也引發世人對他們的極大嫉妒。
-            事實上，猶太人的富有和他們的宗教是分不開的，上帝特選子民的榮耀感激發著他們。他們改變了這個世界，猶太人是偉大的，他們的精神來源則是猶太教。人們都試圖從他們的神祕文化和引導他們賺錢的宗教，來深入解析他們的致富祕密。
-            猶太人沒有國家和政府，是依靠契約來生存的，維持他們生命的就是契約，其中最主要的是規定了許多的商業規則，讓人們在這完善規則裡去經營事業。猶太人通常被稱作「商人的民族」，許多時候，也常被稱為「律法的民族」。這兩個名稱，相互之間並沒有一點衝突，完全可以合二為一，即「商法的民族」。
-            對於猶太民族，律法的意義完全不同於其他任何一個民族。猶太民族從起源就是一個流動不定的部族，部落構成混雜，定居不久又被驅趕著湧入大混亂的洪流，造成猶太民族在民族邊界的標誌上，缺乏血緣和地域這兩個最基本的要素。事實上，就其內部組織而論，能使猶太民族在四散分居的狀態下留存下來的，便是上帝的律法。猶太民族在種族意義上是一個開放的民族，它以是否遵守上帝的律法來確定民族成員的身分。猶太民族的律法精神反映在經典《塔木德》中。
-            《塔木德》是兩千多位學者在一千多年間的討論和研究中寫成的，後人把這些學者的主要觀點和意見彙整出來，是大家集思廣益下的精華，其本身並沒有一個確定的答案。因此，嚴格地說他不是一部律法書，而是一部供自己研究探索的智慧書，每一個猶太人的研究者都有他自己的見解。猶太人在學習《塔木德》的時候，也是他們互相交流和學習成長的過程。
-            《塔木德》並非是律法問題唯一的權威性解釋。猶太教育鼓勵人們獨立思考。學生在猶太經學院中即使把《塔木德》背得滾瓜爛熟，也不能算是一個好學生，因為《塔木德》中都是別人的討論意見，你必須要融會貫通地發表自己的見解。《塔木德》是一部猶太律法的百科全書，內容包羅萬象，可以供你參考借鑒，但絕不是行動的指南。《塔木德》是許多猶太學者的智慧結晶，讀者可以同意這一位學者的看法，也可以不同意另一位學者的意見。
-            《塔木德》裡記錄了這樣的一個故事，來說明這個問題：
+        let encodedForeward = "@Model.book.Foreward"
+        let forewardJS = decodeHTML(encodedForeward)
 
-            米姆爾問他的朋友史耐依：「你在法學院學習，可以告訴我什麼是猶太法典嗎？」
-            史耐依說：「米姆爾，我可以給你舉個例子來解釋，我可以先向你提個問題嗎？如果有兩個猶太人從一個高大的煙囪裡掉了下來，其中一個身上滿是煙灰，而另一個人卻很乾淨，那麼，他們誰會去洗洗身子呢？」
-            「當然是那個身子髒了的人！」
-            「你錯了，那個人看著沒有弄髒身子的人想：我的身體一定也是乾淨的。而身上乾淨的人，看到滿是煙灰的人，就認為自己可能和他一樣髒。所以，他要去洗澡。」
-            「見鬼！」米姆爾嘀咕了一句。
-            「我再問第二個問題，他們兩個人後來又掉進高大的煙囪，誰會去洗澡？」史耐依問道。「這我就知道了，是那個乾淨的人！」「不！你又錯了，身上乾淨的人在洗澡時，發現自己並不太髒，而那個弄髒了的人則相反。他明白了那位乾淨的人為什麼要去洗澡？因此，這次他跑去洗了。」
-            我再問你第三個問題，他們兩個人第三次從煙囪裡掉下來，誰又會去洗澡呢？
-            「那當然還是那個弄髒了身子的人！」
-            「不！你還是錯了！你見過兩個人從同一個煙囪裡掉下來，其中一個人身子乾淨，另一個人卻骯髒的事情嗎？」
+        let encodedTableContainer = "@Model.book.TableContainer"
+        let tableContainerJS = decodeHTML(encodedTableContainer)
 
-            這就是《塔木德》！
-            塔木德想告訴你的，就是要你自己用心去領悟，才能獲得真正的智慧；而財富的追求，也是一個人在自己所遇到的機遇和環境中，不斷地調整自己的策略才得到的。靈活地掌握和運作《塔木德》的這些原則，才是最有效的致富方法。
+        let bookTitleJS = replaceDoubleDollarSign(decodeHTML("@Model.book.BookTitle"))
+        let bindingMethodJS = replaceDoubleDollarSign(decodeHTML("@Model.book.BindingMethod"))
+        let publicationDateJS = decodeHTML("@Model.book.PublicationDate").split(/[\s上午下午]/)[0];
+        let dimensionsJS = replaceDoubleDollarSign(decodeHTML("@Model.book.Dimensions"))
+        let pagesJS = replaceDoubleDollarSign(decodeHTML("@Model.book.Pages"))
+        let languageNameJS = replaceDoubleDollarSign(decodeHTML("@Model.language.LanguageName"))
+        let publisherNameJS = replaceDoubleDollarSign(decodeHTML("@Model.publisher.PublisherName"))
+        let authorNameJS = replaceDoubleDollarSign(decodeHTML("@Model.author.AuthorName"))
+        let translatorNameJS = replaceDoubleDollarSign(decodeHTML("@Model.translator.TranslatorName"))
+        let painterNameJS = replaceDoubleDollarSign(decodeHTML("@Model.painter.PainterName"))
+        let categoryNameJS = replaceDoubleDollarSign(decodeHTML("@Model.category.CategoryName"))
+        let subCategoryNameJS = replaceDoubleDollarSign(decodeHTML("@Model.subCategory.SubCategoryName"))
 
-            賺錢，是一種高貴的美德
-            身體依靠心而生存，心則依靠錢包而生存。
-            ──《塔木德》
+        let discountDateJS = replaceDoubleDollarSign(decodeHTML("@Model.bookDiscountDetail.BookDiscountEndDate")).split(/[\s上午下午]/)[0];
+        let discountNameJS = replaceDoubleDollarSign(decodeHTML("@Model.bookDiscount.BookDiscountName"))
 
 
-            在猶太民族中流傳著這樣一句話：「父母為了貧窮女孩的一份嫁妝，寧可在猶太教堂裡把《聖經》賣掉。但為了使這個女孩子一生富足，他的嫁妝裡必須要有一部《塔木德》。」
-            《塔木德》開啟了人們的思維，開啟了猶太人最早的商業智慧，很多人研究後崇拜得五體投地。對於經商的教育，猶太人這樣規定：五歲學習《聖經》；十歲學習《密西拿》；十五歲學習《塔木德》。這些經典充滿了猶太式的智慧，猶太人之所以能夠發財，和他們幾千年的燦爛文化密不可分。
-            在中世紀，基督教會是嚴禁放債收取利息的，他們認為這是一種罪行，然而猶太教卻不這樣規定。《塔木德》說：「無論誰研習《塔木德》，只要你用心去研習，均值得受到褒獎，而且整個世界都將受惠於他，他會被人當作朋友，當作一個可以尊敬的人，一個崇敬上帝的人，他將變得謙恭、變得公正、虔誠、正直、富有信仰，他將能遠離罪惡，接近美德。通過他整個世界就有了聰慧、忠告、智性和力量。賺錢吧！吃麵包吧！喝酒吧！和心愛的女人共浴愛河吧！你的行為已經得到上帝的恩准。」
-            作為一部宗教經典的《塔木德》它更像是猶太民族的一個智慧基因庫，它同樣也是猶太商業智慧的基因庫。整部著作通俗易懂、睿智雋永，成了猶太人行為的指南，同時也對處於流放狀態的猶太人，在維護民族統一性，及加強民族凝聚力上，也發揮了相當大的作用。
-            《塔木德》凝聚了十個世紀中兩千多位學者對自己民族智慧的探索、思考和提煉，是整個猶太民族行駛人生大海的羅盤，是滋養世世代代猶太人的土壤，也是其他民族了解猶太文化、接觸猶太智慧的必經之道。《聖經》已成為基督教的經典，而《塔木德》也成了猶太人真正的衣缽。到處流浪的猶太人，隨身攜帶著這本書，去尋求自己的夢想。
-            直到今天，猶太人仍孜孜不倦地研讀著《塔木德》。猶太人從小就受《塔木德》的薰陶，他們的父母在它們三歲時便在書上滴上幾滴蜜蜂，讓他們去舔，以此來形成對這本書良好的第一印象。
-            長大後，更是每天都要抽一段時間來研讀，他們會在安息日中特意安排幾個小時來潛心學習《塔木德》，其態度甚篤，有十幾小時才學了十幾句，它們也會高興地說：「只要理解了這十幾句，能把握其要義，就會使自己變得出名且能幹。」只要有客人來訪或聚會猶太人總會相互交流一下學習的心得，而學完一部《塔木德》，則被視為是一件人生大事，可以好好慶祝一番。
-            在猶太人的社會中，《塔木德》已經成為猶太人不可或缺的一部分，成為猶太人的靈魂和頭腦。正因為如此，猶太人被稱為「愛書的民族」，也就是「一本書的民族」，其含義就是說猶太人的生活被限定在《塔木德》這一本書的範圍之內。
-            猶太人確認自己是上帝的選民，才會有如神助似地以這樣一種「律法」的形式，早早劃定了民族的「邊界」，使得一個弱小而四散流亡的民族能以非地域、非總族的文化特徵，在和其他民族的相處時，都能如此突出。這樣的一本書作為一個民族的藩籬，其內容就必須是閉合的。因為藩籬必須是閉合的，神聖的經典也必須是閉合的。但本身是不閉合的，猶太人的生活更是不閉合的，歷史遭遇強加給猶太人的劇變，也許遠遠多於人類歷史上其他任何一個民族。他們一再被強行驅入混亂的洪流，去面對迥然不同的社會文化環境。
-            所以，在這個民族身上，幾乎同時存在著對閉合性和開發性兩種極端的特性。沒有閉合性，純粹開放的猶太民族必將走上完全同化的自行滅亡之路；沒有開放性，純粹閉合的猶太民族也只能走上一條自甘萎縮而被歷史淘汰的道路。回溯歷史，有多少民族已經分別消失在這兩條進化的歧路之上。
-            因此，《聖經》必須閉合但《聖經》又必須開放，這種閉合與開放同存的要求，只能用這本「準聖經」──《塔木德》來達到這個目的。
-            《塔木德》雖被稱為猶太教僅次《聖經》的法典，但絕對不具有一般法典那種「言不二價」的特徵，許多大相逕庭的觀點並列共存而沒有一個權威性結論，這種情況在《塔木德》中比比皆是。
-            就像每本介紹《塔木德》或者探討《塔木德》的書，都必須從第二頁才印上頁碼，以便讓讀者在那張空白的第一頁上，記下自己的觀感一樣，《塔木德》的作者們更願意讓種種意見留下一個爭論的餘地。因為，在比拉看來，《聖經》一旦閉合，上帝也就閉口了；即使上帝不閉口，人類也無須理會他完全可以「不顧一切」地堅持每個人自己的看法。
-            著名的猶太先知比賽亞說過：「如果《塔木德》是一些固定不變的公式的話，它就能存在下來。所以，摩西層向上帝懇求說：宇宙之主，請將關於教義和律法中每個問題的終極真理賜與我們。上帝的回答是：教義和律法中沒有終極真理，真理是每一代權威注視者經過思考得出的智慧……」
-            上帝才是真正的「百家爭鳴」的倡導者！人們在意見分歧之時，一個人的意見不可能全然凌駕於其他人的意見之上，何況上帝還自願將自己的最終裁決權懸置，放縱人們去「少數服從多數」而不搞獨裁的行徑。何等明智的上帝，何等明智的拉比（編注：拉比，Rabbi，是指獲得大眾認可的猶太教師或智者），何等明智的《塔木德》！
-            正因如此，《塔木德》才能兼收並蓄對《聖經》的各種解釋，才能在接受新思想、新觀念的同時，保存各種觀點，保存各種流派，保存它們所代表的各種發展可能性，和它們所蘊含的各種智慧基因。一個屢屢被人稱為頑固守舊的民族，卻屢屢為人類做出各種開創性的成就，貢獻出與其人數不成比例的世界級大師，其祕訣就在於猶太民族特別善於保存其智慧基因以適應新的環境、迎接新的挑戰。
-            由於猶太民族較早、較多地從事商業活動，所以他們很早就開始致力於使商業活動規範化的工作。《塔木德》中提出的一些觀念，被公認為現代商業法規的思想淵源，並對以契約關係為基礎的商業運作，提供了思想基礎與法律規範。
-            《塔木德》非常注重公平交易，為此還作了種種規定。例如，用來丈量商品的繩尺，冬天和夏天的應當有所區別，因為繩尺自身的長度會因熱漲冷縮而有變化；
-            作為量器的瓶子，底下不能有殘留；砝碼的底部必須經常進行清潔，以保持重量的準確性。在賣方劑量不準的情況下，買方有權要求重新計量。在廣告性質的事項上，有種種禁止弄虛作假的規定。比如禁止賣牛時塗上不同的顏色；禁止給各類工具塗上顏色以舊充新；把新鮮的水果放在就水果上一起出售，也屬被禁之列。在價格問題上，《塔木德》也有明確規定。當時雖然沒有客觀的統一價格，成交價一般都是在討價還價中達成的，但要是成交價高於一般價格的一六％以上的話，則這一買賣行為自動無效，買方可以退貨。而且買方買下的是自己不了解的物品，則有權利在一天或一星期（視所買物品而定）內，向別人徵求意見，最後決定視留下還是退貨。從中我們也難發現商品經濟必備的契約意識和法律意識，在猶太民族那裡的萌生和早熟，猶太商人能成為舉世公認的「世界商人」也就成了一種歷史和邏輯的必然。
-            《塔木德》反對不合理的競爭，規定在出售特定商品的店鋪隔壁，不能開同樣的商店賣完全相同的東西。對於降價競爭，大部分情況下，都是以是否有利於消費者為標準。
-            另外還規定，不能買別人已經要購買的東西，《塔木德》中有這樣一則案例：
-            有兩位拉比都想買某一塊地。第一位拉比已經和賣家就這塊地談好了價格，可是第二位拉比跑來，二話不說就買下來。
-            有一天，有人來見第二位拉比，對他說：「有人想買糖果，來到糖果店，看見已經有人在驗看糖果的質量，但後到的人卻搶先把糖果買了下來，這樣的人，你該如何稱呼他呢？」
-            第二位拉比回答說：「當然第二個是壞人了。」
-            於是，那人就告訴他說：「你剛剛買下的土地，就等於那個後者買下的糖果。那塊土地，事先已經有人報出了價格，正在交涉之中，你怎麼可以先買下來呢？」
-            事情最後是怎樣解決的呢？第二位拉比認為把剛買的東西立刻賣出去，有些不吉利，送給第一位拉比，他又捨不得，於是，就捐給了一所學校。
-            很明顯，從《塔木德》的這些具體規定中，很容易發掘出現代公平價格、正當利潤、公平競爭、如實說明等商業法規的基本思想和原始做法。
-            且這些法規在現代生活中，已被證明為合理有效的規定，對於商業史和法律史都具有重大意義。
+        let commentInformations = @Html.Raw(Json.Serialize(Model.commentInformations));
+        let commentsJS = [];
+        for (let i = 0; i < commentInformations.length; i++) {
+            let comment = {
+                content: commentInformations[i]._comment.commentText,
+                date: commentInformations[i]._comment.commentTime.split(/[\sT]/)[0],
+                value: commentInformations[i]._comment.stars,
+                author: commentInformations[i]._member.memberName,
+                profile: '../../image/Book/bookComment/' + commentInformations[i]._comment.memberId + '.jpg',
+            };
+            commentsJS.push(comment);
+        }
 
-            可以傳授的致富祕訣
-            殘害人們的東西有三樣：煩惱、爭吵、空錢包，
-            其中「空錢包」害人最甚。
-            ──《塔木德》
+        let preview1JS = "@Model.preview.PreviewImagePath1".length > 1 ? '../../image/Book/' + "@Model.preview.PreviewImagePath1": ""
+        let preview2JS = "@Model.preview.PreviewImagePath2".length > 1 ? '../../image/Book/' + "@Model.preview.PreviewImagePath2": ""
+        let preview3JS = "@Model.preview.PreviewImagePath3".length > 1 ? '../../image/Book/' + "@Model.preview.PreviewImagePath3": ""
+        let preview4JS = "@Model.preview.PreviewImagePath4".length > 1 ? '../../image/Book/' + "@Model.preview.PreviewImagePath4" : ""
 
+        let recommendBooks = @Html.Raw(Json.Serialize(Model.recommendBooks));
+        let recommendBooksJS = []
+        for (let i = 0; i < recommendBooks.length ; i++) {
+            let recommend = {
+                bookTitle: replaceDoubleDollarSign(recommendBooks[i].book.bookTitle),
+                bookID: recommendBooks[i].book.bookId,
+                coverPath: '../../Image/Book/' + recommendBooks[i].book.coverPath,
+                unitPrice: recommendBooks[i].book.unitPrice,
+                discount: recommendBooks[i].bookDiscount.bookDiscountAmount * 100,
+            };
+            recommendBooksJS.push(recommend);
+        }
 
-            從前有一個人想學《塔木德》，但是他覺得《塔木德》特別艱澀難懂，便有了想放棄的念頭，他找到拉比說自己不想學塔木德的決定。
-            拉比把他請到了一個房間，房間上面懸掛著一個裝有水果的籃子。於是拉比對他說：「你想吃水果嗎？如果想吃的話，把這個籃子摘下來就可以了。」
-            可是屋子裡沒有梯子，他根本拿不到這麼高的水果籃子。他惶惑地看著拉比。拉比看著他，問他：「如果這個籃子真的拿不到，那麼是誰把它掛上去的呢？」他還是不解，拉比只好對他直說：「《塔木德》並不是要人們不理解他，而是希望人們明白他，既然有人能寫出來，為什麼不能理解他呢？」
-            於是拉比又講了一個《塔木德》裡記載的故事：
-            有一個人想改信猶太教，但是對猶太教的教義不了解，他希望別人在「單腳可以站立的時間裡」，告訴他「猶太教的全部學問」。
-            著名的拉比希勒爾接見了他，他剛抬起一隻腳，希勒爾就已經把「全部猶太教的學問」告訴他：「不要對別人做連你自己都厭惡的事，這就是《塔木德》的全部學問，其他的都只是解釋和評注。」
+        let articalTitleJS = replaceDoubleDollarSign(decodeHTML("@Model.artical.ArticalTitle"))
 
-            其實很多東西是很簡單的，只是人們把它們複雜化了，只要你掌握其中的一些規則就可以了。創業並不是一件十分困難的事情，它是由一些大家需要共同遵守的規則組成的，只要熟練運用這些規則，創業就變得容易許多，而商業的精髓不過是一些簡單的規則，這些規則是商業運作的規則和準則。
-            世界上存在著許多個民族，為什麼唯獨猶太人成了財富的象徵呢？這就不能不提到他們的宗教──猶太教。
-            「猶太教」簡直是一個教人致富的宗教，在世界的早期就引領猶太人逐漸走上了商業的道路，那些對商業和社會行為的論述，培養了猶太人理財的頭腦和獨特的思維，還有千年的經商智慧，讓猶太人完全具備了成為一個商人的所有條件，因而一旦社會安定，他們變從一文不值倏地富有起來。
-            尤其是資本主義時代的到來，金錢成為社會主流力量的時候，他們的經典所帶來的經商智慧，為他們日後的商業成就，打下了堅固的基礎。
-            猶太教裡說，猶太人是上帝的特選之民，是上帝挑選出來的，因而具有極高的素質，擁有一般人所不具有的能力。他們對自己打從心裡有多高的期望，希望自己能夠超越其他民族的人。
-            「凡是胸懷大志的人，最後總是會有所成就的。」《塔木德》裡這樣勸告猶太人應該擁有抱負和雄心。
-            猶太人向來鼓勵人應該全力發展自己的能力，拒絕抹殺個性，他們主張用自己的力量去改變他們認為不合理的東西，甚至認為個人的力量是可以影響世界的。
-            《塔木德》裡就有這樣的故事：
-
-            有兩個人，一個是以家世為榮的青年，另一位則是貧窮的牧羊人。那位富有的年輕人非常自豪，把自己祖先的榮耀和富有像牧羊人狠狠吹噓了一番，然後得意地看著牧羊人。
-            牧羊人哈哈一笑：「那位偉大祖先的後代原來是你啊！不過你要知道，你已經是你們家族的最後一個人，我肯定是我們家族的偉大祖先。」
-
-            這個牧羊人就是不看重傳統，更不會被傳統的背景和勢力所嚇住，他相信自己的能力，相信自己可以改變自己的不利處境他要做的就是推翻前人帶給後人的影響，而創建一個由自己主宰的新天地。
-            這就是猶太人。他們思想開放，崇尚自由，反而一切守舊的東西，更不會為一些僵化的觀念和傳統的做法所拘束，年老的拉比總是鼓勵年輕人按自己的意願去做事，不要害怕去嘗試新鮮的事物，即使是也是值得的。猶太教鼓勵人們冒險，如著名的探險家哥倫布，他的祖輩就是猶太人。為了生存的需要，他不得不表面上信奉基督教，但骨子裡還是猶太人。
-            猶太人的思想是開放的，他們甚至沒有國家、種族和地域等等的限制。它們為了自己能夠生存和發展，走遍了世界的各個角落，這些便是現在商人的原型。
-            猶太商人處在這種自由的氣氛中，當機運到來的時候，他們就利用自己的技能，在沒有資本，沒有工具，也沒有錢的情況下，卻能運用經濟上的自由，沿著社會階梯向上攀登。
-            最會賺錢的民族
-            錢不是罪惡，也不是詛咒，它是給予人們的一種祝福。
-            ──《塔木德》
-
-            在猶太人的心目中，他們居住的地迦南，是上帝耶和華賜給他們的美麗富繞的土地，是「流著奶與蜜的地方」。它處於埃及、巴比倫、亞述等幾個大國之間，而且沒有一個穩定的、統一的中央集權，於是這裡成為各國的商賈往來的集中之地，四方的民族、軍隊、商旅和遺落都從這裡通過，而猶太人作為東道主，如魚得水地進入了市場。
-            在所羅門王統治希伯來王國的時候，猶太人的經商能力日漸提高。所羅門王認識到自己的王國處於國家貿易的黃金地區，他積極鼓勵臣民們經營對外貿易，大力發展航海業，從事海上貿易。他先後派船隻到達紅海和阿拉伯海從事貿易活動，每次都是滿載金銀、木材、珍珠、象牙等貴重物品而歸。
-            所羅門王的種種措施，使他的王國成為四方貿易的中轉站，商旅往來頻繁，也由此引導猶太人走上了經商之道，為日後猶太民族在上業上的成功奠定了良好的基礎。
-            此後的猶太人的民族遭遇，幾乎就是一部四處流浪，處處遭受凌辱的歷史。為了生存，他們練就了一套獨特的賺錢、理財的本領，這是其他民族所不具有的。
-            在十九世紀的時候，一些德國猶太移民來到了美國。他們資金微薄，也沒有什麼技能，它們不得已四處沿街叫賣，依靠小本經營。當時，來到北美的移民平均每人身上帶了十五美元，而猶太人身上卻只有九美元。即使最富有的一群猶太人，當時身上也不過只有三十美元。
-            歷史學家描繪了猶太人當時起家的狀況說：「一個裝備齊全的叫賣小販，需要十美元的總投資：五美元辦一個執照，一美元買個籃子，剩下的用來買貨。為數不少的人，往往為了逃避第一筆開銷，而儘管地壓縮最後一筆支出。」由此可以想像猶太人當年的窘狀。
-            在不過兩三年的時間裡，許多猶太人就從難民身分，變成了富有的中產階段。到了後來，這裡面竟然出現了富甲一方、聲名遠揚的戈德曼、古根海默、萊蔓、沃特海姆、羅森傑爾德、洛溫斯坦、斯特勞斯等家族已經在北美稱雄了一個世紀。他們是依靠自己推小車起家或者靠腳板起家的，這些成為了猶太人的自豪和驕傲。
-            然而，這個時候，其他民族卻還是和它們剛來的時候差不多。
-            在二十世紀的三〇年代，《幸福》雜誌這樣寫到：「當猶太人已經成為歐洲商人和金融家的時候，這些人還在揮劍扶鋤。」
-            歐洲曾流行這樣一個笑話：
-
-            一個猶太職員在一家保險公司裡做得很出色，公司的老闆打算提拔他擔任一個重要的職務，但是這個老闆是個天主教徒，他希望這個猶太職員能夠放棄猶太教而改信天主教。
-            於是，當地一個最著名的天主教神父被派去勸說這個猶太青年，會晤的地點，則安排在老闆的辦公室。
-            三個小時過去了，兩個終於走出了辦公室老闆迎上前去，問道：「尊敬的神父，在您感召下，我想我們又增加了一名天主教徒，你是怎麼說服他的呢？」
-            「很遺憾，我們沒有多得到一位天主教徒，相反地，他勸我買下了五萬元的保險。」
-
-            世界各國的人們，對於猶太人這種無人可及的賺錢能力，甚至對猶太人產生仇恨，進而紛紛譏諷猶太人。
-            西班牙人說：「真正的猶太人會從稻草裡找出金子來。」
-            德國人說：「猶太人和妓女的要價都很高。」
-            波蘭人說：「討價還價像猶太人，付起帳來像基督徒。」
-            俄國人說：「猶太吝嗇鬼最大的懊惱，莫過於不得不放棄自己的包皮。」
-            匈牙利人則說：「猶太人的上帝是財神。」
-
-            錢是給上帝的禮物
-            有一天，猶太富翁哈德走進紐約花旗銀行的貸款部，大模大樣地坐了下來。看到這位紳士很神氣，打扮得又很華貴，貸款部的經理不敢怠慢，趕緊招呼：「這位先生有什麼事，需要我幫忙嗎？」
-            「哦，我想借些錢。」
-            「好啊，你要借多少？」
-            「一美元。」
-            「只需要一美元？」
-            「不錯，只借一美元，可以嗎？」
-            「當然可以，像您這樣的紳士，只要有擔保品，就算要多借一點也可以。」
-            「那這些擔保可以嗎？」猶太人說著，從高級的名牌皮包裡取出一大把鈔票，堆在銀行櫃檯上。
-            「喏，這是五十萬美金，夠嗎？」
-            「當然夠！不過你只要借一美元？」
-            「是的。」猶太接過了一美元，就準備離開銀行。
-            在旁邊觀看的營行經理此時有點傻了，他怎麼也弄不明白，難道說，這個猶太人抵押五十萬美元，就只為了借一美元？他急忙追上前去，對猶太人說：「這位先生，請等一下，我想知道你有五十萬美元，為什麼只借一美元呢？如借三十萬、四十萬美元，我們也會考慮的。」
-            「啊！是這樣的：我來貴行之前，問過好幾家金庫，他們保險箱的租金都很昂貴。只有您這裡的利息，的確很便宜，一年才花六美分。」
-
-            這就是猶太人的精明之處。
-            銀行是存錢的地方，也是貸款的地方，而貸款需要抵押。別人是有大量的資金需求才來貸款的。而銀行為了保證資金可以正常的回收，就需要超出所借資金多一些的抵押金。
-            別人通常是希望借貸的資金愈多愈好，而必須的抵押愈少愈好，而他卻反其道而行之，他的抵押金很高，用了五十萬美元，而借貸的資金只是一美元。這完全超出了平常人的思維。而猶太人用很高的抵押金來換取區區一美元的貸款，卻是合法的，且節省了租用保險箱的費用，讓你不得不佩服他們的精明，為他們擊掌叫好。
-
-            沒有錢，就沒有上帝
-            金錢給人間光明，金錢給眾生溫暖。
-            金錢讓說壞話的人舌頭發直，金錢讓舉起屠刀的人呆立發愣；
-            金錢為神購買了禮物，敲開了神那緊閉的門。
-            ──《塔木德》
-
-
-            在很早的時候，猶太人就發現這樣的事實：金錢是現實生活的上帝。猶太人在歷史上，數次慘遭滅國之禍，他們被迫流放到世界各國。但是無論到了哪個國家，哪個國家的人就歧視他們。猶太人要想在當地生存，就必須要繳納各種高額和莫名其妙的捐稅，甚至他們日常生活中的一舉一動，都要受制於他們所納的捐稅。信奉同一宗教的人一起祈禱要納稅，結婚要納稅，生孩子要納稅，連給死者舉行葬禮也要納稅。他們稍有懷疑，別人就說他們是吝嗇鬼，假如他們少繳了什麼租金，立即就會遭到驅逐和屠殺。
-            猶太人所在國家的統治者們，更是時刻離不開他們的錢，他們建造豪華的宮殿，維持他們貴族的奢侈生活，顯示帝國的威嚴，和其他的國家進行戰爭，這些都需要猶太人為他們提供大量的金錢。於是出現了這樣可笑的事情，他們動輒棄猶太人的吝嗇，瞧不起他們賺錢的貪婪性格，因此就把猶太人驅逐出境，但是過不了多久又必須把他們召回來。
-            因為，對他們來說，猶太人等於是他們的現金卡或提款機，不需要的時候把它們丟在一邊，甚至進行驅趕和屠殺；需要的時候，就把他們召回來，並且對他們恩寵有加，盡力巴結。沒有國家、沒有政府，他們在世界各地流浪，沒有一種力量可以保護它們的安全。他們流浪到各地，可以說沒有權力，沒有地位，沒有尊嚴，但是他們有錢。有了錢，他們就在統治者眼中就是有價值的，也就得到了活下去的保障。
-            猶太人有了錢，但是也遭受了世人的妒忌，在世界的許多地方掀起了「反猶運動」。反猶太主義的原因固然有很多，但是十九世紀一位法國人說出了真諦：「反猶太主義，事實上是一場反猶太經濟勢力的戰爭。」猶太人明白自己是輸不起這場戰爭的，一旦失去經濟上的優勢，就是他們被遣散、驅逐和殺戮的時候。因此，為了自己的生存去獲取財富，已經成為猶太人無法逃避的宿命。
-            他們隨時都活在動盪中，各種災難和迫害隨時都會降臨，而只有錢可以為他們提供一點保障，讓他們感受到安全。當他們哪天遭受到各地統治者驅逐的時候，錢就可以換取別人的收留和保護；當地的人發起反猶暴亂的時候，他們可以用錢賄賂官員而求得一條生路；他們外出做生意的時候遭到盜匪的搶劫，錢可以贖回他們的生命。錢是他們須臾不可少的東西，錢對於猶太人來說，是他們能看得見的、摸得著的、實實在在的「上帝」，是可以永遠保護自己、讓自己平安的「上帝」。
-            金錢，讓世間的權勢們都匍匐在它的腳下，讓猶太人真正地能夠站立起來，重新獲得對他們的尊敬。在這種情況下，賺錢成了猶太人的一種原始本能，就像手還未碰到眼珠，眼睛就會自己闔上那樣的一種原始的本能。對猶太人來說，錢掌握他們的生死，在他們的生活當中，錢始終居於生活中心的地位，人生如果是〇，錢就是一。
-            猶太人因為有錢獲得了保護和安全，但也因為他們實在是富可敵國，遭到了世人的嫉妒和仇恨，他們只好再次拚命地賺錢來獲取更大的保護，為了賺更多的錢，他們不得不讓自己賺錢的能力越來越精湛，他們理財、生財、發財的本領越來越高，而他們也就變越來越富有。
-            於是，猶太人為了賺錢，幾乎變成了經濟的動物。
-            有這樣一則笑話：
-
-            一位銀行家的兒子取得博士學位後，改信了基督教。這件事深深地傷了這位猶太教徒老爸的心，儘管兩個孫子經常來看他，他仍然悶悶不樂。有一天，銀行家看到兩個孫子在玩紙牌，便問他們在玩什麼遊戲？
-            「我們在玩銀行家的遊戲。」孫子們不假思索地說。
-            老頭一聽，十分高興：「孫子身上仍然留著我的血統！」
-
-            這個故事告訴我們，為了自己的前途，有些猶太人加入了基督教，但是猶太人崇拜金錢的習慣，卻絲毫也沒有改變。對於猶太人來說，錢才是真正的上帝。
-
-            用創意和思考致富
-            有一次，兩個法國人和兩個猶太人搭火車旅行。
-            法國人很單純，每人買了一張票；而猶太人精打細算，兩個人只買了一張票。法國人見到這種情形，就問猶太人：
-            「你們只有一張票，那等列車長來查票，你們怎麼辦？」
-            猶太人神祕地笑著不答，上了火車不久後，便傳來列車長查票的聲音，只見兩個猶太人擠進一問廁所。
-            列車長查票，來到他們的車廂，敲了敲廁所的門，說：「查票！」門開了一條縫，一隻手拿著一張票伸出來。列車長怎麼也想不到，這樣窄窄的一間廁所內，竟會躲著兩徊人。列車長看過了票，說道：「嗯！好了，謝謝！」
-            列車長又把票從門縫中塞了回去。
-            到了目的地，他們四人玩得很盡興。踏上歸途買票時，兩個法國人心想；「早上來時，猶太人的方法真不錯……」
-            於是他們討論後，決定也買一張票，輪到猶太人時，只見他們搖搖手，說這次就不買票了。
-            上了火車，兩個法國人想：不知道猶太人又有什麼怪招？說時遲，那時快，列車長又來查票了。法國人顧不得看猶太人如何躲過列車長的查票，兩個人趕緊鑽進了廁所。過了一會兒，又是「叩、叩」兩聲，猶太人在廁所門外敲了門，門應聲而開，法國人拿著一張票，從門縫中伸出來。
-            猶太人說：「嗯！謝謝……」話沒說完，兩個猶太人拿了票，衝到前一節車廂的廁所裡面……
-
-
-            逆向思考：厚利才能賺大錢
-            薄利多銷就是往自己的脖子上套枷鎖，厚利才能永盛不衰。
-            ──《塔木德》
-
-
-            薄利多銷是商場上牢不可破的銷售策略。但是猶太人卻相反，他們的口號是「厚利才能賺錢」。
-            在猶太人的公司裡，老闆經常給自己的員工厚厚的一堆資料，對他說：「請用這些資料去說服消費者吧！我們的商品是最好的，因此絕不能降價。」假如你看看他們的價格，你會大吃一驚：「這麼貴，誰買？」但猶太老闆會很有信心地對你說高價出售是何等地合理，並且舉出無數例子讓你相信。
-            於是，各種各樣印刷精美的統計資料和小手冊、卡片就飛到各地的經營者的辦公室裡，他們辦公室幾乎每天都可以收到猶太人寄來的各種資料或型錄。
-            猶太人認為：壓低價格，說明你對自己的商品沒有信心。為什麼當其他的商家「要把降價進行到底」時，猶太人卻反其道而行之呢？他們說，同行之問展開削價戰爭，那商品利潤在哪呢？搞到最後大家都是輸家。薄利雖然多銷了一些，但市場的容量就是那麼一點，大量廉價商品進入市場，最後市場也飽和了，出來的商品怎麼辦？這些長久的經營呢？無法容納更多商品，那以後生產微薄的利潤，怎麼能維持廠商營運？薄利競爭的結果就是，廠商全倒閉，且日後大家的生存空問也愈來愈小。
-            對於削價策略，猶太人認為這是最下等的策略。因為薄利以後的結果就是：賣三件商品所得的利潤，只等於半件商品的利潤，這樣不是事倍功半嗎？行銷的最上策應該是賣出一件商品，就可以得到一件商品的利潤，甚至是兩三件的利潤，這樣可以節省營業費用，還可以保持市場的穩定性。
-            削價競爭，其實就是把繩索往自己的脖子上套，大家在比賽自殺，比賽誰死得快，
-            猶太人大聲疾呼：這是愚蠢的行為。猶太人堅絕不做薄利多銷的買賣，他們做的是厚利的生意。
-            在行業的選擇上，他們也選擇那些昂貴消費品來經營。世界上經營珠寶、鑽石等行業中，猶太人居多。看看猶太人發展的領域：金融證劵、信貸投資、媒體報紙……無一不是厚利乃至暴利的行業。
-            猶太人有三家最出色的銀行，萊曼公司是其中之一，許多人相信它是利潤最高的銀行，他們的利潤高達四〇％甚至一倍。萊曼家族的先人所信奉的基本原則是：「一便士買進的商品，要從中賺上一分利」，這也是猶太商業的箴言。
-            猶太商人的高價厚利策略，表面上是從富有者著眼，事實上是一種巧妙的生意經。現代人講究身分、愛慕虛榮的心理比比皆是，在上流社會流行的東西，很快就會在中下層社會流行起來。根據猶太商人的統計分析，上流社會的商品，一般在兩年左右，就會在中下層社會流行起來，而且屢試不爽。
-            道理很簡單，介於上流社會與下層社會之問的中產階級，他們總想進入富人的階層，由於虛榮心的驅使，為了滿足心理需求或為了面子，他們也會購買象徵富人階級的時髦商品。
-            而下層社會人士，往往力不從心，昂貴商品消費不起，但崇尚富有的心理，總會驅使愛慕虛榮的人不惜代價購買。這樣的連鎖反應，會使昂貴的商品也成為社會流行品，如金銀珠寶首飾，現在不是已成為各階層婦女的寵物嗎？彩電、音響等原來被認為是昂貴的商品，現在也進入了平民百姓家庭。可見，猶太商人的「厚利長銷」策略是「醉翁之意不在酒」，它是看著更遠更大的市場。
-
-            在逆境和危機中發現財富
-            蘇聯成功地發射了載人火箭之後，法國、德國、以色列等各國也著手擬訂了一系列的月球旅行計畫，一切設備都完成了，下一步就是挑選太空人了。
-            主考官先問來應徵的德國人，他要多少持過，才肯參加這次有風險的太空飛行。
-            德國人回答：「我要三千美元，一千美元給老婆，一千美元作為購屋基金，一千美元留著自己用。」
-            接著，法國人回答：「我要四千美元才行，一千美元給妻子，一千美元償還房屋貸款，一千美元給我的情人，還有一千美元留著自己用。」
-            輪到猶太面對主考官時，他說：「給我五千美元我才去，一千美元給你，一千美元給我，剩下的三千美元，我要用來聘請德國人去開太空船。」
-
-            德國人和法國人都是要自己去駕駛火箭，而猶太人卻不會親自去做這些事情，他們只是在自己的頭腦裡盤算一番，然後讓別人去做就可以了。
-            因為，猶太人擁有的是一個精明的商人頭腦，他們明白作為一個商人，關鍵是不需要自己去做那些苦活粗活，而是要動腦筋，懂得企劃和計算，其他那些辛苦的工作，還是留給那些精通它們的德國人和法國人吧！
-
-
-            敢與風險玩遊戲
-            風險往往和收穫是成正比的。
-            ──《塔木德》
-
-
-            勇於冒險，這是一個讚美詞，很多猶太人都是這樣的。在他們看來每一次風險，都隱藏著許多成功種子。風險愈大的生意，利潤的回報就愈高。
-            猶太商人歷來背著一個投機家的名聲。在相當長的一段時問裡，「投機」這個詞是貶義詞。現在不同了，經濟學家們給「投機」換上了一個恰如其分的雅稱，名之為「風險管理」
-            名稱一改，猶太商人也由原來的「投機家」成了「風險管理專家」。確實，猶太商人長期以來不僅懂得做生意，也懂得「管理風險」，尤其是面對商場上的未知數，更需要很強的「風險管理」意識。
-            猶太商人絕不允許消極坐著等「驅逐令」或「厄運」到來，也不可能毫無準備就面對風險，讓自己措手不及。所以在每次「山雨欲來風滿樓」時，他們都能準確把握「山雨」的來勢和大小。
-            這種攸關生死的風險管理一旦成為習慣，他們運用到生意場上去就遊刃有餘了。有不少時候，猶太商人正是靠準確測「風險」，反而可以發一筆財。
-            任何一件事都有成功和失敗兩種可能。當失敗的可能時，卻偏要去做，那自然就成了冒險。問題是，許多事很難分敗可能性的大小，那麼這時候也是冒險。
-            商戰的法則是風險愈大，利潤愈多。而猶太商人大多具有樂觀的風險意識，並常能發大財，猶太大亨哈默在亞的一次冒險的成功，就很能說明這個問題。
-
-            當時，利比亞的財政收入不高。在義大利人佔領期間索里尼為了尋找石油，在這裡大概花了一千萬美元，卻一無所獲。埃索石油公司也在發現效果不大準備撤退時，才在最後一口井裡挖出油來。
-            殼牌石油公司大約花了五千萬美元，但打出來的井；有商業價值。歐美石油公司到達利比亞的時候，正值利比府準備進行第二輪出讓租借地的招標，出租的地區大部分；原先一些大公司放棄了的利比亞租借地。利比亞法律，石油公司應盡快開發他們的租借地果開採不到石油，就必須把一部分租借地還給利比亞政府。
-            這次，有來自九個國家的四十多家公司參加了這次租借投標。參加投標的公司，有很多是「空頭公司」，他們希望拿：借地後再轉租。
-            另一些公司，包括歐美石油公司，雖財力不足至少有經營石油工業的經驗。利比亞政府允許一些規模較小的公司參加投標，因為要避免遭大石油公司和財團的控制，其次再去考慮資金有限等問題。
-            這次，哈默雖然充滿信心，而且儘管他和利比亞國王斯私人關係良好，仍存在許多變數。此外，他不僅這方面經驗不足，而且和那些一舉手就可以推山倒海的石油巨頭們相比，競爭實力懸殊太大，真可謂小巫見大巫。但是，決定成敗真正關鍵，絕不是取決於這些條件。
-            哈默的董事們都坐飛機趕了來，他們在四塊租借地投了標。他們的投標方式不同一般，投標書用羊皮證件的形式，捲成一卷後用代表利比亞國旗顏色的紅、綠、黑三色緞帶紮束。
-            在投標書的正文中，哈默加了一條：他願意從尚未和稅的毛利中，拿出一部分錢供利比亞簽展農業用。此外，還允諾在國王和王后的誕生地庫夫拉附近的沙漠綠洲中，尋找水源。另外，他還將進行一項可行性研究，一旦在利比亞找出水源，他們將和利比亞政府聯合興建一座氣氣廠。
-            最後，哈默終於得到了兩塊租借地，使那些強大的對手大吃一驚。這兩塊租借地都是其他公司耗鉅資後，一無所獲不得不放棄的。
-            這兩塊租借不久就成了哈默煩惱的源泉。他鑽出的頭三口井都是滴油不見的乾孔，光是打井費就花了近三百萬美元，另外還有兩百萬美元，用於地震探測和給利比亞政府官員，以進行不可告人的賄賂行為。於是，董事會裡有許多人閉始把這項雄心勃勃的計畫叫做「哈默的蠢事」，甚至連哈默的知己、公司的第二股束里德也失去了信心。
-            但哈默的直覺使他固執己見。在和股東分歧的幾天裡，第一口油井出油了，此後另外八口井也出油了。這下公司的人樂壞了，這塊油田的日產量是十萬桶，而且是品質要比一般石油好的高級原油。
-            更重要的是，油田位於蘇伊士運河以西，運輸方便。這時，哈默在另一塊租借地上，採用了最先進探測法，鑽出了一口日產七．三萬桶自動噴油的油井，這是利比亞當時規模最大的一口油井。
-            接著，哈默又投資一．五億美元修建了一條日輸油量一百萬桶的輸油管道。之後，哈默又大膽吞併了好幾家大公司，等到利比亞把油田實行「國有化」的時候，他已羽翼豐滿了
-            哈默的一系列事業成功，完全歸功於他的膽識和魄力，他不愧為一個猶太血統的大冒險家。
-
-            當然，另一個大冒險家洛克菲勒也同樣讓世人驚歎。
-
-            洛克菲勒踏入社會後的第一個工作，就是在一家名叫休威•泰德的公司做書記員，這是他精於計算的良好開端。
-            在休威公司的第三年，他已經對經營貿易的要訣掌握了十之八九，並且對這個行業躍躍欲試。在這一年，自作主張地做起了小麥粉和火腿生意。不久，英國發生飢荒了，使他的計畫得到實現的契機。
-            休威公司把囤積在倉庫裡的食品貨物，轉賣歐洲饑荒蔓延的地區，賺得高額利潤。因此，洛克菲勒要求公司為他加薪到八百美元，但老闆支支吾吾。於是，洛克菲勒辭掉工作，創辦自己的公司。
-            一八五九年三月十八日，洛克菲勒與人合夥經營的「穀物牧草經紀公司」開張了，當時洛克菲勒不過十九歲。在這個經紀行裡，他仍然主要幹老本行：經營各種與企業聯繫密切的資金等專案。
-            他的合作夥伴克拉克則當「外場」：應付顧客，處理商品的進貨和銷貨。克拉克對洛克菲勒的縝密心思十分欣賞。他形容說：「他有條不紊到極點，留心細節，不差分毫。如果有一分錢該給我們，他會爭取，如果少給客戶一分錢，他也要客戶取走。」
-            由於洛克菲勒的勤奮工作和精明頭腦，南北戰爭爆發時，再次成為他發財的契機。為了逃避兵役，洛克菲勒曾找過不止二十個替身，並且捐給北軍一大筆錢款，為多多少少的歉疚感在作祟吧！
-            儘管洛克菲勒逃過了兵役避免了在這場殘酷的戰爭中和六十萬年輕人一樣灰飛煙滅，但他也並不是不問天下事的人，相反地，他密切注意著戰爭形勢的發展。
-            在經紀公司的辦公室裡，他的牆上掛滿了戰況圖和各種從華盛頓傳來的政治新聞，以及前線的最新動態。公司的職員們常常看到洛克菲勒在他的「陸軍參謀部」裡走來走去，不時用筆在特殊的座標點點畫畫，或埋頭記錄著什麼。
-
-            洛克菲勒藉著對戰爭形勢的精確分析，因此，讓他的投機生意做得成功。
-            你看到有風險嗎？沒有看到？很抱歉，你可以先睡一覺，因麼沒有風險就沒有利潤，你唯一能做的就是睡覺和吃飯。
-            你遇到風險了嗎？遇到了？恭禧你，接下來，高額的利潤會獎勵你不畏風險的勇氣。
-            沒有人喜歡失敗，但人人也都沒把握一定能成功；但是，當財富敲響大門時，並不是所有的人都能抓住機會，把走到自己家門口的財富留下來。
-            人們常犯的錯誤是，千載難逢的機會已經倒貼上來時，他還在患得患失，猶豫不決，或是沒有信心，或是對突如其來的好機會麻木不仁，沒有反應，讓機會和財神在自己面前溜走。
-            不要一直盯著機率不大的風險，而猶豫不前，不敢擔風險的人，必將一事無成。
-
-            摩根家族的祖先是西元一六〇〇年左右從英國遷移到美洲來的，傳到約瑟夫‧摩根時，他賣掉了在麻塞諸塞州的農場，到哈特福定居下來。
-            約瑟夫最初以經營一家小咖啡店為生，同時還賣些旅行用的籃子。這樣苦心經營了一些時日，逐漸賺了些錢，就蓋了一座很氣派的大旅館，還買了運河的股票，成為汽船運輸業和地方鐵路的股東。
-            一八三五年，約瑟夫投資了一家叫做「紛特納火災險」的小型保險公司。所謂投資，也不要現金，出資者的信用就是一種資本，只要你在股東名冊上簽名即可。只要不發生火災，這無本生意就穩賺不賠。
-            然而不久，紐約發生了一場大火災。投資者聚集在約瑟夫的旅館裡，一個個面色蒼白，急得像熱鍋上的螞蟻。很顯然，不少投資者沒有經歷過這樣的事件。他們驚惶失措，願意自動放棄自己的股份。
-            約瑟夫便把他們的股份統統買下，他說：「為了付清保險費用，我願意把這旅館賣了，不過得有個條件，以後必須大幅度提高保費。」
-            約瑟夫把寶全押在這家火險公司。這真是一場賭注，成敗與否，全看此舉。同時，有一位朋友也想和約瑟夫一起冒這個險，於是，倆人湊了十萬美元，派代理人去紐約處理賠償事項。結果，從紐約回來的代理人帶回了大筆的現款，這些現款是新投保的客戶，出的比原先高一倍的手續費。
-            這個時候，「信用可靠的伊特納火災保險」已經在紐約名聲大振。這次火災後，約瑟夫淨賺了十五萬美元。
-
-            這個案例告訴我們，只要能夠把握住關鍵時刻，就可以把危機化為賺大錢的商機。
-            弱者等待機會，強者則創造機會。
-            猶太民族歷經磨難，但他們面對困境時，卻常抱著積極樂觀的態度，因為，樂觀者押中大獎的機會，永遠會多一些。`
-        let tableContainerJS = `【緒論】天生會賺錢的民族
-            世界上最偉大的商人
-            賺錢，是一種高貴的美德
-            可以傳授的致富祕訣
-            最會賺錢的民族
-
-            【第一章】錢是給上帝的禮物
-            沒有錢，就沒有上帝
-            錢是回饋神的禮物
-            貧窮，比任何苦難還恐怖
-            錢的「準神聖性」
-            錢，絕不分高低貴賤
-            賺錢是一種遊戲
-            吝嗇的有錢人
-            摳錢一生窮，花錢發大財
-            借別人的錢來賺大錢
-            借錢給別人，等於是花錢買敵人
-
-            【第二章】用創意和思考致富
-            逆向思考：厚利才能賺大錢
-            用利益讓對方為自己著想
-            女人和嘴巴
-            善用人者為之下
-            做生意不能用感情
-            活用數字替你賺錢
-            幽默是人生的良藥
-
-            【第三章】在逆境和危機中發現財富
-            敢與風險玩遊戲
-            在危機中發現希望
-            如何讓國王的馬飛上天？
-            在逆境中發財
-            成功者不怕犯錯
-            風險，其實是財富的代名詞
-            光明，總在黑暗之後
-            生命中出現鯰魚，是件好事
-            流下眼淚播種的，必歡呼收割
-            你可以掌握自己的命運
-            超越別人，不如超越自己
-
-            【第四章】智慧是搶不走的財富
-            擁有富人的氣質
-            賺錢靠智慧，不是靠學歷
-            智慧是別人搶不走的財富
-            智慧比知識更重要
-            商人也要學識淵博
-            不可思議的雜學博士
-            做事愈少，賺錢愈多
-            對所有的事都不信任
-            走向外面世界的鑰匙
-            猶太智慧的沃土
-
-            【第五章】要發財，從改變自己開始
-            不要浪費時間
-            時間就是商品
-            機遇：決定命運的瞬間裁判
-            藏在資訊裡的錢
-            成功，從改變自己開始
-            有遠見的人，財富自動送上門
-            別看到黑影就亂開槍
-            享用神賜的安息日
-            致富是可以後天教出來的
-            團結能讓散沙變成「金」
-
-            【第六章】契約可以創造財富
-            與上帝簽約的民族
-            信守契約的生命線
-            誠實的支柱
-            信任的價值
-            遊戲規則的魔力
-            鑽法律的金洞
-            讓年輕人先發言
-            每個人都是獨一無二的
-            走自己的路
-            生意場上沒有禁忌
-
-            【譯後記】`
         let app = new Vue({
             el: '#app',
             data: {
-                bookCover: '../image/Book/bookIcon/bookCover.jpg',
-                video: '../image/Book/bookIcon/video1.jpg',
+                book:{
+                    coverPath: '../../image/Book/' + "@Model.book.CoverPath",
+                    bookID: "@Model.book.BookId",
+                    bookTitle: bookTitleJS,
+                    unitPrice: parseInt("@Model.book.UnitPrice"),
+                    discount: "@Model.bookDiscount.BookDiscountAmount" * 100,
+                    discountDate: discountDateJS,
+                    discountName: discountNameJS,
+                    publicationDate: publicationDateJS,
+                    isbn: "@Model.book.Isbn",
+                    bindingMethod: bindingMethodJS,
+                    pages: pagesJS,
+                    dimensions: dimensionsJS,
+                    unitInStock: "@Model.book.UnitInStock",
+                    languageName: languageNameJS,
+                    publisherName: publisherNameJS,
+                    publisherID: "@Model.publisher.PublisherId",
+                    authorName: authorNameJS,
+                    authorID: "@Model.author.AuthorId",
+                    translatorName: translatorNameJS,
+                    translatorID: "@Model.translator.TranslatorId",
+                    painterName: painterNameJS,
+                    painterID: "@Model.painter.PainterId",
+                    categoryName: categoryNameJS,
+                    subCategoryName: subCategoryNameJS,
+                    preview: [preview1JS,preview2JS,preview3JS,preview4JS],
+                },
+                articalTitle: articalTitleJS,
+                articalID: "@Model.artical.ArticalId",
+                video: '../../image/Book/bookIcon/video1.jpg',
                 originalColor: '',
                 activeName: 'first',
                 fontSize: 'medium',
                 showDialog: false,
+                dialogIndex: 0,
                 isLogin: false,
                 fullscreenLoading: false,
-                commentValueMyself: null,
+                stars: 5,
+                showAllEndorsements: false,
+                showAllForeward: false,
+                showAllTableContainer: false,
                 showAll: false,
                 showAllComments: false,
-                displayCount: 15,
+                contentIntro: contentIntroJS.split("\n"),
+                endorsements: endorsementsJS.split("\n"),
+                foreward: forewardJS.split("\n"),
                 tableContainer: tableContainerJS.split("\n"),
                 tryContent: tryContentJS.split("\n"),
                 commentArea: '',
                 circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
-                recommend: [
-                    {
-                        bookTitle: '投資最重要的事：一本股神巴菲特讀了兩遍的書',
-                        coverPath: '../Image/Book/bookCover/1.jpg',
-                        unitPrice: 380,
-                        // 79折
-                        discount: 79,
-                    },
-                    {
-                        bookTitle: '有錢人想的和你不一樣',
-                        coverPath: '../Image/Book/bookCover/2.jpg',
-                        unitPrice: 250,
-                        discount: 79,
-                    },
-                    {
-                        bookTitle: '窮查理的普通常識（增修版）：巴菲特50年智慧合夥人查理．蒙格的人生哲學',
-                        coverPath: '../Image/Book/bookCover/3.jpg',
-                        unitPrice: 450,
-                        discount: 79,
-                    },
-                    {
-                        bookTitle: '灰階思考',
-                        coverPath: '../Image/Book/bookCover/4.jpg',
-                        unitPrice: 400,
-                        discount: 79,
-                    },
-                    {
-                        bookTitle: '股息Cover我每一天：600張存股達人絕活全公開',
-                        coverPath: '../Image/Book/bookCover/5.jpg',
-                        unitPrice: 320,
-                        discount: 79,
-                    },
-                    {
-                        bookTitle: '我畢業五年，用ETF賺到400萬：每月1,000元就能開始！不用兼差斜槓，兩檔ETF投資組合，年賺20％以上',
-                        coverPath: '../Image/Book/bookCover/6.jpg',
-                        unitPrice: 380,
-                        discount: 79,
-                    },
-                    {
-                        bookTitle: '投資金律：建立獲利投資組合的四大關鍵和十四個關卡（全新增訂版）',
-                        coverPath: '../Image/Book/bookCover/7.jpg',
-                        unitPrice: 460,
-                        discount: 79,
-                    },
-                    {
-                        bookTitle: '下班後賺更多：記帳、存錢、再投資，富朋友的「破窮理財法」提早20年退休不是夢！',
-                        coverPath: '../Image/Book/bookCover/8.jpg',
-                        unitPrice: 300,
-                        discount: 79,
-                    },
-                    {
-                        bookTitle: '你也可以成為股市天才',
-                        coverPath: '../Image/Book/bookCover/9.jpg',
-                        unitPrice: 350,
-                        discount: 79,
-                    },
-                    {
-                        bookTitle: '巴菲特寫給股東的信（全新增修版） The Essays of Warren Buffett: Lessons for Corporate America, Fourth Edition',
-                        coverPath: '../Image/Book/bookCover/10.jpg',
-                        unitPrice: 420,
-                        discount: 79,
-                    },
-
-                ],
-                comment: [
-                    {
-                        value: 4.0,
-                        author: 'Arthur Huang',
-                        date: '2022-07-15',
-                        content:
-                            '原子習慣：細微改變帶來巨大成就的實證法則\r\n不錯好看的一本書',
-                        profile: '../Image/Book/bookComment/anonymous.jpg'
-                    },
-                    {
-                        value: 5.0,
-                        author: '俐君',
-                        date: '2021-10-08',
-                        content:
-                            '很實用的一本書，有明確且直白的舉例，完全能理解且能夠拿來應用在生活之中！',
-                        profile: '../Image/Book/bookComment/p2.jpg'
-                    },
-                    {
-                        value: 5.0,
-                        author: 'Gary Kang',
-                        date: '2021-06-09',
-                        content: '大推！一本看完會令你想動起來做些改變的書！',
-                        profile: '../Image/Book/bookComment/p3.jpg'
-                    },
-                    {
-                        value: 5.0,
-                        author: 'RongChu',
-                        date: '2021-05-05',
-                        content: '書中提出很多的想法、做法，都是從小事情開始，不需要為自己設限，開始做就對了！',
-                        profile: '../Image/Book/bookComment/p4.jpg'
-                    },
-                    {
-                        value: 3.0,
-                        author: 'Angela Lu',
-                        date: '2021-01-21',
-                        content: '很紅的一本書',
-                        profile: '../Image/Book/bookComment/p5.jpg'
-                    },
-                    {
-                        value: 3.0,
-                        author: 'Liyu',
-                        date: '2020-09-15',
-                        content: '內容是大家普遍知道的道理，但做得到的人並不多。',
-                        profile: '../Image/Book/bookComment/p6.jpg'
-                    },
-                    {
-                        value: 5.0,
-                        author: 'Mercedes陽光在你身邊',
-                        date: '2020-03-14',
-                        content: '《原子習慣》主要是從作者的經驗出發、分享如何建立習慣，而《為什麼我們這樣生活、那樣工作》則是從學術研究來探討習慣的運作。',
-                        profile: '../Image/Book/bookComment/p7.jpg'
-                    },
-                    {
-                        value: 5.0,
-                        author: 'Dibby 遞筆',
-                        date: '2019-09-21',
-                        content: '這本書確讓我迫不急待地看完，也確實提起近來改變習慣!',
-                        profile: '../Image/Book/bookComment/p8.jpg'
-                    },
-                ],
+                recommend: recommendBooksJS,
+                comment: commentsJS,
+                loadThisPage: true,
+                profile: '../../image/Book/bookComment/' + @_userInforService.UserId + '.jpg',
             },
             computed: {
                 tableContainerText() {
-                    return this.showAll ? this.tableContainer : this.tableContainer.slice(0, this.displayCount);
+                    //displayCount
+                    return this.showAllTableContainer ? this.tableContainer : this.tableContainer.slice(0, 8);
                 },
                 tryContentText() {
-                    return this.showAll ? this.tryContent : this.tryContent.slice(0, this.displayCount);
+                    return this.showAll ? this.tryContent : this.tryContent.slice(0, 8);
                 },
+                endorsementsText(){
+                    return this.showAllEndorsements ? this.endorsements : this.endorsements.slice(0, 5);
+                },
+                forewardText(){
+                    return this.showAllForeward ? this.foreward : this.foreward.slice(0, 5);
+                }
             },
             methods: {
                 hoverStyle: function (event) {
@@ -1146,19 +731,136 @@
                 getDiscountPrice(item) {
                     return Math.floor(item.unitPrice * item.discount / 100);
                 },
-                storeTempList() {
+                collectAuthor(authorID,memberID){
+                    if(this.loginCheck()){
+                        let self = this;
+                        let url = '@Url.Action("CollectAuthor", "Collect")?memberID=' + memberID + '&authorID=' + authorID;
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (result) {
+                                if (result) {
+                                    self.$notify({
+                                        title: '收藏作者成功',
+                                        message: '作者已加入收藏清單',
+                                        type: 'success'
+                                    });
+                                }
+                                else {
+                                    self.$notify({
+                                        title: '收藏作者失敗',
+                                        message: '作者已加入過收藏清單',
+                                        type: 'warning'
+                                    });
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.log(error);
+                            }
+                        });
+                    }
+                },
+                collectPublisher(publisherID,memberID) {
                     if (this.loginCheck()) {
-                        this.$notify({
-                            title: '放入暫存清單成功',
-                            message: '本書已加入暫存清單',
+                        let self = this;
+                        let url = '@Url.Action("CollectPublisher", "Collect")?memberID=' + memberID + '&publisherID=' + publisherID;
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (result) {
+                                if (result) {
+                                    self.$notify({
+                                        title: '收藏出版社成功',
+                                        message: '出版社已加入收藏清單',
+                                        type: 'success'
+                                    });
+                                }
+                                else {
+                                    self.$notify({
+                                        title: '收藏出版社失敗',
+                                        message: '出版社已加入過收藏清單',
+                                        type: 'warning'
+                                    });
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.log(error);
+                            }
+                        });
+                    }
+                },
+                storeTempList(bookID,memberID) {
+                    if (this.loginCheck()) {
+                        let self = this;
+                        let url = '@Url.Action("ActionTo", "Action")?bookID=' + bookID + '&memberID=' + memberID + '&actionID=' + 4;
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (result) {
+                                if (result) {
+                                    self.$notify({
+                                        title: '放入暫存清單成功',
+                                        message: '本書已加入暫存清單',
+                                        type: 'success'
+                                    });
+                                }
+                                else {
+                                    self.$notify({
+                                        title: '放入暫存清單失敗',
+                                        message: '本書已加入過暫存清單',
+                                        type: 'warning'
+                                    });
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.log(error);
+                            }
+                        });
+                    }
+                },
+                addToCart(bookID,bookTitle,discountName,book,publisherName,unitInStock){
+                    var cartItems = localStorage.getItem("cartItems");
+                    if (cartItems === null) {
+                        cartItems = [];
+                    } else {
+                        cartItems = JSON.parse(cartItems);
+                    }
+                    var isExist = false;
+                    for (var i = 0; i < cartItems.length; i++) {
+                        if (cartItems[i].bookID === bookID) {
+                            isExist = true;
+                            break;
+                        }
+                    }
+                    if (isExist) {
+                        this.$message({
+                            message: '這本書已在購物車',
+                            type: 'warning'
+                        });
+                    } 
+                    else {
+                        // 如果購物車中沒有相同的書籍，則添加書籍到購物車中
+                        var newItem = {
+                            bookID: bookID,
+                            bookTitle: bookTitle,
+                            discountName: discountName,
+                            price: app.getDiscountPrice(book),
+                            publisherName: publisherName,
+                            unitInStock: unitInStock
+                        };
+                        cartItems.push(newItem);
+                        localStorage.setItem("cartItems", JSON.stringify(cartItems));
+                        this.$message({
+                            message: '已加入購物車',
                             type: 'success'
                         });
                     }
                 },
                 redirectToCart() {
-                    if (this.loginCheck()) {
-                        window.location.href = "../Order/ShoppingCart";
-                    }
+                    window.location.href = "../../Order/ShoppingCart";
                 },
                 loginCheck() {
                     if (!this.isLogin) {
@@ -1171,7 +873,7 @@
                                     this.fullscreenLoading = true;
                                     setTimeout(() => {
                                         this.fullscreenLoading = false;
-                                        window.location.href = "../Member/Login";
+                                        window.location.href = "../../Member/Login";
                                     }, 1000);
                                 }
                             }
@@ -1180,16 +882,45 @@
                     }
                     return true;
                 },
-                writeComment() {
+                writeComment(bookID,memberID,text,stars) {
                     if (this.loginCheck()) {
-                        this.$message({
-                            message: '評論成功',
-                            type: 'success'
+                        let self = this;
+                        let url = '@Url.Action("writeComment", "Comment")?memberID=' + memberID + '&bookID=' + bookID + '&stars=' + stars + '&text=' + text;
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (result) {
+                                if (result) {
+                                    self.$message({
+                                        message: '評價成功！請重載網頁',
+                                        type: 'success'
+                                    });
+                                }
+                                else {
+                                    self.$notify({
+                                        title: '已評價此書',
+                                        type: 'warning'
+                                    });
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.log(error);
+                            }
                         });
                     }
                 },
                 toggleShow: function () {
-                    this.showAll = !this.showAll;
+                    this.showAll = !this.showAll
+                },
+                toggleShowEndorsements: function(){
+                    this.showAllEndorsements = !this.showAllEndorsements
+                },
+                toggleShowForeward: function(){
+                    this.showAllForeward = !this.showAllForeward
+                },
+                toggleShowTableContainer: function(){
+                    this.showAllTableContainer = !this.showAllTableContainer
                 },
                 changeMethod: function (type) {
                     this.activeName = type
@@ -1197,13 +928,55 @@
                         this.handleClick();
                     }, 200);
                     setTimeout(() => {
-                        this.toggleShow();
+                        if(type == 'foreward'){
+                            this.toggleShowForeward();
+                        }
+                        else if(type == 'endorsements'){
+                            this.toggleShowEndorsements();
+                        }
+                        else if(type == 'tableContainer'){
+                            this.toggleShowTableContainer();
+                        }
+                        else{
+                            this.toggleShow();
+                        }
                     }, 1200);
                 },
-                openPreview() {
+                openPreview(index) {
+                    this.dialogIndex = index
                     this.showDialog = true
-                }
+                },
+                articalUrl(articalID){
+                    return "@Url.Action("Promotions活動文章Detail", "Promotions", new { id = "ARTICALID" })".replace("ARTICALID", articalID);
+                },
+                homeUrl(){
+                    return "@Url.Action("Home", "Home")"
+                },
+                bookUrl(bookID) {
+                    return "@Url.Action("BookInformation", "Book", new { id = "BOOKID" })".replace("BOOKID", bookID);
+                },
+                authorUrl(authorID){
+                    return "@Url.Action("authorInformation", "Book", new { id = "AUTHORID" })".replace("AUTHORID", authorID);
+                },
+                publisherUrl(publisherID){
+                    return "@Url.Action("publisherInformation", "Book", new { id = "PUBLISHERID" })".replace("PUBLISHERID", publisherID);
+                },
+                translatorUrl(translatorID){
+                    return "@Url.Action("translatorInformation", "Book", new { id = "TRANSLATORID" })".replace("TRANSLATORID", translatorID);
+                },
+                painterUrl(painterID){
+                    return "@Url.Action("painterInformation", "Book", new { id = "PAINTERID" })".replace("PAINTERID", painterID);
+                },
+                clearAllCookies() {
+                    localStorage.clear();
+                    alert('All cookie clear')
+                },
             },
+            mounted() {
+                setTimeout(() => {
+                    this.loadThisPage = false
+                }, 500)
+            }
         })
     let testLogin = @_userInforService.UserId !== 0
     app.isLogin = testLogin
