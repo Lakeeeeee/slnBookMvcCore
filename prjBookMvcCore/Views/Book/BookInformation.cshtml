@@ -641,7 +641,7 @@
                     coverPath: '../../image/Book/' + "@Model.book.CoverPath",
                     bookID: "@Model.book.BookId",
                     bookTitle: bookTitleJS,
-                    unitPrice: "@Model.book.UnitPrice",
+                    unitPrice: parseInt("@Model.book.UnitPrice"),
                     discount: "@Model.bookDiscount.BookDiscountAmount" * 100,
                     discountDate: discountDateJS,
                     discountName: discountNameJS,
