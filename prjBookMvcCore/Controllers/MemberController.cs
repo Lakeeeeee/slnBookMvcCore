@@ -22,6 +22,7 @@ using System.Text;
 using System.Reflection.Metadata;
 using Microsoft.CodeAnalysis.Scripting;
 using NuGet.Protocol;
+using System.Configuration;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -29,7 +30,7 @@ namespace prjBookMvcCore.Controllers
     {
         private readonly BookShopContext _bookShopContext ;
         private readonly IConfiguration _config;
-        private readonly ICaptchaValidator _captchaValidator ;
+        private readonly ICaptchaValidator _captchaValidator ; //un done
         public UserInforService _userInforService { get; set; }
         public MemberController(BookShopContext db, UserInforService userInforService, IConfiguration config,ICaptchaValidator captchaValidator)
         {
@@ -80,14 +81,14 @@ namespace prjBookMvcCore.Controllers
             }
         }
 
-        public IActionResult Login()
+        public IActionResult Login() //登入頁面
         {
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         
-        public IActionResult Login(CLoginViewModel vm)
+        public IActionResult Login(CLoginViewModel vm) //登入方法
         {
             Member user = _bookShopContext.Members.Include(x=>x.Level).Include(x=>x.Orders).Include(x=>x.MessageMemberDetails).FirstOrDefault(x=>x.MemberEmail==vm.Account_P)!;
             if (user != null)
@@ -111,18 +112,18 @@ namespace prjBookMvcCore.Controllers
         }
 
         
-        public IActionResult Find_password() //忘記密碼
+        public IActionResult Find_password() //忘記密碼頁面
         {
             return View();
         }
         //[HttpPost]  //用ajax方法請求回傳值跟form/submit是無相關的兩條路, 使用時要分清楚
         [Route("Member/find")]
-        public IActionResult Find_password(string target) //填完表單後發post然後寄出email
+        public IActionResult Find_password(string target) //忘記密碼方法
         {
             bool isEmailExist = _bookShopContext.Members.Any(x => x.MemberEmail == target);
             if (isEmailExist)
             {
-                Member member = _bookShopContext.Members.FirstOrDefault(x => x.MemberEmail == target);
+                Member member = _bookShopContext.Members.FirstOrDefault(x => x.MemberEmail == target)!;
                 string sVerify = member.MemberId + "|" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
                 sVerify = HttpUtility.UrlEncode(sVerify);
                 int portNumber = HttpContext.Connection.LocalPort;
@@ -152,7 +153,7 @@ namespace prjBookMvcCore.Controllers
             return Content(isEmailExist.ToString());
         }
 
-        public IActionResult ResetPwd(string verify)
+        public IActionResult ResetPwd(string verify)  //重設密碼頁面
         {
             string script = "<script>alert('驗證碼錯誤或逾期失效');window.close();</script>";
 
@@ -169,12 +170,13 @@ namespace prjBookMvcCore.Controllers
             {
                 return Content(script, "text/html", System.Text.Encoding.UTF8);
             }
-            Member member = _bookShopContext.Members.FirstOrDefault(x => x.MemberId == UserID);
+            Member member = _bookShopContext.Members.FirstOrDefault(x => x.MemberId == UserID)!;
             
             return View(member);
         }
         [HttpPost]
-        public IActionResult doResetPwd(Member target)  //修改密碼的方法
+        [ValidateAntiForgeryToken]
+        public IActionResult doResetPwd(Member target)  //修改密碼方法
         {
             
             if (_bookShopContext.Members.Any(x => x.MemberId == target.MemberId))
@@ -201,7 +203,7 @@ namespace prjBookMvcCore.Controllers
         //==========================================以下會員才能訪問
         [Authorize]
         [HttpGet]
-        public IActionResult LogOut()
+        public IActionResult LogOut() //登出方法
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Redirect("~/Home/Home");
@@ -220,12 +222,12 @@ namespace prjBookMvcCore.Controllers
             return RedirectToAction("Login");
         }
         [Authorize]
-        public IActionResult MemberCenter()
+        public IActionResult MemberCenter() //會員中心頁面
         {
             return View();
         }
         [Authorize]
-        public IActionResult gerMemberInfor(int id)
+        public IActionResult gerMemberInfor(int id) //取得會員狀態方法
         {
             var q = from user in _bookShopContext.Members
                     where user.MemberId == id
@@ -242,14 +244,14 @@ namespace prjBookMvcCore.Controllers
 
 
         [Authorize]
-        public IActionResult myMessage() //通知訊息
+        public IActionResult myMessage() //通知訊息頁面
         {
             IEnumerable<MessageMemberDetail> q =  _bookShopContext.MessageMemberDetails.Where(x=>x.MemberId== _userInforService.UserId).Include(x=>x.Message);
             return View(q);
         }
 
         [Authorize]
-        public IActionResult getMessage(int Inputid) //訊息細節
+        public IActionResult getMessage(int Inputid) //訊息細節方法
         {
             MessageMemberDetail target = _bookShopContext.MessageMemberDetails.Find(Inputid)!;
             target.ReadStatu = 1; _bookShopContext.SaveChanges();
@@ -268,14 +270,14 @@ namespace prjBookMvcCore.Controllers
             return Json(q.FirstOrDefault());
         }
         [Authorize]
-        public IActionResult myCoupons() //coupons
+        public IActionResult myCoupons() //coupons頁面
         {
             IEnumerable<OrderDiscountDetail> q = _bookShopContext.OrderDiscountDetails.Where(x => x.MemberId == _userInforService.UserId).Include(x=>x.OrderDiscount);
             return View(q);
         }
 
         [Authorize]
-        public IActionResult myPublisher() //關注的出版社
+        public IActionResult myPublisher() //關注的出版社方法
         {
             var q = (from cp in _bookShopContext.CollectedPublishers
                      join p in _bookShopContext.Publishers on cp.PublisherId equals p.PublisherId
@@ -288,7 +290,7 @@ namespace prjBookMvcCore.Controllers
             return Json(q);
         }
         [Authorize]
-        public IActionResult myAuthor() //關注的作者
+        public IActionResult myAuthor() //關注的作者方法
         {
             var q = (from ca in _bookShopContext.CollectedAuthors
                      join a in _bookShopContext.Authors on ca.AuthorId equals a.AuthorId
@@ -303,8 +305,6 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult myNotice() //可購買時通知我 空的
         {
-            //IEnumerable<Book> q = _bookShopContext.ActionDetials.Where(x => x.MemberId == _userInforService.UserId && x.ActionId == 1).
-            //     Include(x => x.Book.Publisher).Select(x => x.Book);
             var q = (from b in _bookShopContext.Books
                      join ac in _bookShopContext.ActionDetials on b.BookId equals ac.BookId
                      where ac.MemberId == _userInforService.UserId
@@ -318,7 +318,7 @@ namespace prjBookMvcCore.Controllers
             return Json(q);
         }
         [Authorize]
-        public IActionResult myCollect() //暫存清單
+        public IActionResult myCollect() //暫存清單頁面
         {
             IEnumerable<Book> q = _bookShopContext.ActionDetials.Where(x => x.MemberId == _userInforService.UserId && x.ActionId == 4).
             Include(x => x.Book.Publisher).Select(x => x.Book);
@@ -350,7 +350,7 @@ namespace prjBookMvcCore.Controllers
 
         #endregion //to do
         [Authorize]
-        public IActionResult myOrders()  //訂單查詢
+        public IActionResult myOrders()  //訂單頁面
         {
             var q = _bookShopContext.Orders.Where(x => x.MemberId == _userInforService.UserId).
                 Include(x => x.Payment).
@@ -360,7 +360,7 @@ namespace prjBookMvcCore.Controllers
             return View(q);
         }
         [Authorize]
-        public IActionResult alretProflie()
+        public IActionResult alretProflie() //修改資料頁面
         {
             Member member = _bookShopContext.Members.Where(x => x.MemberId == _userInforService.UserId).
                 Include(x=>x.Level).
@@ -370,8 +370,9 @@ namespace prjBookMvcCore.Controllers
         } //
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult alretProflie(Member member)
+        public IActionResult alretProflie(Member member) //修改資料方法
         {
+            bool isExsit = false;
             Member memberupdate = _bookShopContext.Members.FirstOrDefault(x => x.MemberId == member.MemberId)!;
             if (memberupdate != null)
             {
@@ -381,8 +382,10 @@ namespace prjBookMvcCore.Controllers
                 memberupdate.MemberAddress = member.MemberAddress;
                 memberupdate.PaymentId = member.PaymentId;
                 _bookShopContext.SaveChanges();
+                isExsit = true;
             };
-            return RedirectToAction("alretProflie");
+
+            return Content(isExsit.ToString());
         }
     }
 }

@@ -13,7 +13,6 @@ namespace prjBookMvcCore.Models
 {
     public class MemberManeger
     {
-
         public void writeWelcomeLetter(Member receiver, BookShopContext content)
         {
             Message welcomeLetter = new Message()
@@ -35,9 +34,7 @@ namespace prjBookMvcCore.Models
                 ReadStatu = 0
             };
             content.Add(welcomeNewMember); content.SaveChanges();
-
         }
-
     }
 
 }
