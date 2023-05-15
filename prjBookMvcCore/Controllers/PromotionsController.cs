@@ -33,6 +33,8 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult Promotions活動已結束() { return View(); }
 
+        public IActionResult Promotions限時登入領取優惠() {  return View(); }
+
         public IActionResult Index() { return View(); } //建置中
     }
 }
