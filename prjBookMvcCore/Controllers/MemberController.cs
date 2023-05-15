@@ -362,7 +362,7 @@ namespace prjBookMvcCore.Controllers
                 Include(x => x.Payment).
                 Include(x => x.Shipment).
                 Include(x => x.PayStatus).
-                Include(x => x.ShippingStatus).ToList();
+                Include(x => x.ShippingStatus).Include(x=>x.Member).ThenInclude(x=>x.Level).ToList();
             return View(q);
         }
         [Authorize]
