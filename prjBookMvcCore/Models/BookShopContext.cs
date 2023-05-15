@@ -518,9 +518,7 @@ namespace prjBookMvcCore.Models
             {
                 entity.ToTable("MessageSubscribe");
 
-                entity.Property(e => e.MessageSubscribeId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("MessageSubscribeID");
+                entity.Property(e => e.MessageSubscribeId).HasColumnName("MessageSubscribeID");
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
@@ -529,11 +527,13 @@ namespace prjBookMvcCore.Models
                 entity.HasOne(d => d.Member)
                     .WithMany(p => p.MessageSubscribes)
                     .HasForeignKey(d => d.MemberId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_MessageSubscribe_Member");
 
                 entity.HasOne(d => d.MessageType)
                     .WithMany(p => p.MessageSubscribes)
                     .HasForeignKey(d => d.MessageTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_MessageSubscribe_MessageType");
             });
 
