@@ -7,10 +7,15 @@
 }
 
 <style>
-    .bookCaption {
+    .twolines{
+        line-height: 1.2em;
+        height: 2.4em;
+    }
+
+    .bookCaption {        
         display: -webkit-box;
         -webkit-box-orient: vertical;
-        -webkit-line-clamp: 5;
+        -webkit-line-clamp: 2;
         overflow: hidden;
         text-overflow: ellipsis;
     }
@@ -221,8 +226,8 @@
                                 <img height="150" src="~/Image/Book/@item.book.CoverPath" />
                             </a>
                         </li>
-                        <li class="bookCaption">@item.book.BookTitle</li>
-                        <li class="bookCaption">@item.comment.CommentText</li>
+                        <li class="bookCaption twolines">@item.book.BookTitle</li>
+                        <li class="bookCaption twolines" style="color:grey">@item.comment.CommentText</li>
                         <li></li>
                     </ul>
                 </div>
