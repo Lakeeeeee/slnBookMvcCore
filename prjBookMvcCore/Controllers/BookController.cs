@@ -91,7 +91,6 @@ namespace prjBookMvcCore.Controllers
 
                 List<RecommendInformation> recommendBooks = getRecommendBooks(item.分類,bookId);
 
-
                 CInformation newBook = new CInformation
                 {
                     book = b,
@@ -120,6 +119,7 @@ namespace prjBookMvcCore.Controllers
             {
                 var comments = (from ct in db.Comments
                                 join m in db.Members on ct.MemberId equals m.MemberId
+                                orderby ct.CommentTime descending
                                 where ct.BookId == bookId
                                 select new
                                 {
