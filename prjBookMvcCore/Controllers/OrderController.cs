@@ -9,10 +9,12 @@ namespace prjBookMvcCore.Controllers
 {
     public class OrderController : Controller
     {
+        [Authorize]
         public IActionResult ListCart()
         {
             return View();
         }
+        [Authorize]
         public IActionResult ShoppingCart()
         {
             return View();
