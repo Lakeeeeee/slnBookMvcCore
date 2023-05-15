@@ -27,6 +27,8 @@ namespace prjBookMvcCore.Controllers
                             譯者 = b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault(),
                             繪者 = b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault(),
                             出版社ID = b.Publisher.PublisherId,
+                            譯者ID = b.TranslatorDetails.Select(x => x.TranslatorId).FirstOrDefault(),
+                            繪者ID = b.PainterDetails.Select(x => x.PainterId).FirstOrDefault(),
                             出版社 = b.Publisher.PublisherName,
                             出版日期 = b.PublicationDate,
                             語言 = b.Language.LanguageName,
@@ -79,8 +81,8 @@ namespace prjBookMvcCore.Controllers
                 Language l = new Language { LanguageName = item.語言 };
                 Category c = new Category { CategoryName = item.分類 };
                 SubCategory sc = new SubCategory { SubCategoryName = item.子分類 };
-                Translator t = new Translator { TranslatorName = item.譯者 };
-                Painter pt = new Painter { PainterName = item.繪者 };
+                Translator t = new Translator { TranslatorName = item.譯者, TranslatorId = item.譯者ID};
+                Painter pt = new Painter { PainterName = item.繪者, PainterId = item.繪者ID };
                 Author a = new Author { AuthorName = item.作者, AuthorId = item.作者ID};
                 Preview pv = new Preview { PreviewImagePath1 = item.試讀1, PreviewImagePath2 = item.試讀2, PreviewImagePath3 = item.試讀3, PreviewImagePath4 = item.試讀4 };
                 BookDiscount bd = new BookDiscount { BookDiscountAmount = item.折扣, BookDiscountName = item.折扣名稱};
@@ -194,6 +196,26 @@ namespace prjBookMvcCore.Controllers
 
                 return View(q.ToList());
 
+            }
+        }
+        public IActionResult translatorInformation(int id)
+        {
+            using (var db = new BookShopContext())
+            {
+                var q = from b in db.Books.Include("TranslatorDetails.Translator")
+                        where b.TranslatorDetails.Any(td => td.TranslatorId == id)
+                        select b;
+                return View(q.ToList());
+            }
+        }
+        public IActionResult painterInformation(int id)
+        {
+            using (var db = new BookShopContext())
+            {
+                var q = from b in db.Books.Include("PainterDetails.Painter")
+                        where b.PainterDetails.Any(pd => pd.PainterId == id)
+                        select b;
+                return View(q.ToList());
             }
         }
         public IActionResult publisherInformation(int id)
