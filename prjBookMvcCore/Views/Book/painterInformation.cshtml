@@ -1,29 +1,33 @@
 ﻿@inject UserInforService _userInforService
 @model List<Book>
 @{
-    string name = ""; int publisherID = 0;
+    string name = ""; int painterID = 1;
     foreach (var item in Model)
     {
-        name = item.Publisher.PublisherName;
-        publisherID = (int)item.PublisherId;
+        name = item.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault();
+        painterID = item.PainterDetails.Select(x => x.PainterId).FirstOrDefault();
     }
+
     ViewData["Title"] = name;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<style>
-    .as1 {
-        text-decoration: none;
-        color: inherit;
-    }
-</style>
-<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<head>
+    <style>
+        .as1 {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+    @*    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    *@
+</head>
 
 <div>
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#" class="as1" onclick="window.history.back()">回上頁</a></li>
-            <li class="breadcrumb-item active" aria-current="page">出版社資訊</li>
+            <li class="breadcrumb-item active" aria-current="page">繪者資訊</li>
             <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
         </ol>
     </nav>
@@ -33,9 +37,6 @@
     <div class="row">
         <div class="col-10">
             <h5>@name</h5>
-        </div>
-        <div class="col-2">
-            <button id="collect" onclick="collectPublisher(@publisherID,@_userInforService.UserId)" class="btn btn-outline-secondary">收藏出版社</button>
         </div>
     </div>
     <div class="row">
@@ -73,10 +74,10 @@
         </table>
     </div>
 </div>
-<!-- import Vue before Element -->
+@*<!-- import Vue before Element -->
 <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
 <!-- import JavaScript -->
-<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>*@
 <script>
     let isLogin = false;
     window.onload = () => {
@@ -90,22 +91,19 @@
     @foreach (var item in Model)
     {
         <text>
-            var b = document.getElementById('text-@item.BookId');
+                    var b = document.getElementById('text-@item.BookId');
             b.innerText = replaceDoubleDollarSign(b.innerText);
         </text>
-    };
-        if (@_userInforService.UserId !== 0) {
-            isLogin = true;
+    }
         };
-    };
 
     function replaceDoubleDollarSign(str) {
         return str.replace(/\$\$/g, '\n');
     };
 
-    function collectPublisher(publisherID, memberID) {
+    function collectAuthor(authorID, memberID) {
         if (loginCheck()) {
-            let url = '/Collect/CollectPublisher?memberID=' + memberID + '&publisherID=' + publisherID;
+            let url = '/Collect/CollectAuthor?memberID=' + memberID + '&authorID=' + authorID;
             fetch(url, {
                 method: 'POST',
                 headers: {
@@ -115,9 +113,9 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data) {
-                        alert('收藏出版社成功');
+                        alert('收藏作者成功');
                     } else {
-                        alert('已收藏出版社');
+                        alert('收藏作者失敗');
                     }
                 })
                 .catch(error => {
@@ -127,7 +125,7 @@
     }
 
     function loginCheck() {
-        if (isLogin === false) {
+        if (!isLogin) {
             alert('尚未登入');
             if (confirm('前往登入')) {
                 window.location.href = "../../Member/Login";
@@ -136,5 +134,7 @@
             return false;
         }
         return true;
-    }
+    };
+
+
 </script>

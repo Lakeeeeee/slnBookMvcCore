@@ -386,8 +386,8 @@
                     <div class="information">
                         <span style="font-size: 20px; font-weight: bold;">商品資料</span>
                         <p>作者：<span><a :href="authorUrl(book.authorID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.authorName}}</a></span></p>
-                        <p v-if="book.translatorName && book.translatorName.length > 1">譯者：<span><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.translatorName}}</a></span></p>
-                        <p v-if="book.painterName && book.painterName.length > 1">繪者：<span><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.painterName}}</a></span></p>
+                        <p v-if="book.translatorName && book.translatorName.length > 1">譯者：<span><a :href="translatorUrl(book.translatorID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.translatorName}}</a></span></p>
+                        <p v-if="book.painterName && book.painterName.length > 1">繪者：<span><a :href="painterUrl(book.painterID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.painterName}}</a></span></p>
                         <p>出版社：<span><a :href="publisherUrl(book.publisherID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.publisherName}}</a></span></p>
                         <p>出版日期：<span>{{book.publicationDate}}</span></p>
                         <p>ISBN/ISSN：<span>{{book.isbn}}</span></p>
@@ -659,7 +659,9 @@
                     authorName: authorNameJS,
                     authorID: "@Model.author.AuthorId",
                     translatorName: translatorNameJS,
+                    translatorID: "@Model.translator.TranslatorId",
                     painterName: painterNameJS,
+                    painterID: "@Model.painter.PainterId",
                     categoryName: categoryNameJS,
                     subCategoryName: subCategoryNameJS,
                     preview: [preview1JS,preview2JS,preview3JS,preview4JS],
@@ -958,6 +960,12 @@
                 },
                 publisherUrl(publisherID){
                     return "@Url.Action("publisherInformation", "Book", new { id = "PUBLISHERID" })".replace("PUBLISHERID", publisherID);
+                },
+                translatorUrl(translatorID){
+                    return "@Url.Action("translatorInformation", "Book", new { id = "TRANSLATORID" })".replace("TRANSLATORID", translatorID);
+                },
+                painterUrl(painterID){
+                    return "@Url.Action("painterInformation", "Book", new { id = "PAINTERID" })".replace("PAINTERID", painterID);
                 },
                 clearAllCookies() {
                     localStorage.clear();

@@ -84,8 +84,10 @@ namespace prjBookMvcCore.Controllers
                     };
                     _bookShopContext.MessageSubscribes.Add(subscribe);
                 }
-                _bookShopContext.SaveChanges();
+                _bookShopContext.SaveChanges(); 
+                _cm.write註冊會員禮Letter(newmember, _bookShopContext);
                 _cm.writeWelcomeLetter(newmember, _bookShopContext);
+               
                 return Content("notexist");
             }
         }
@@ -218,33 +220,53 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult alretPassword()  //會員專區的重設密碼頁面
         {
-            return View();
+            var member = _bookShopContext.Members.Where(x => x.MemberId == _userInforService.UserId).FirstOrDefault();
+            return View(member);
         }
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult alretPasswordMethod() //todo  //會員專區的重設密碼方法
+        public IActionResult alretPasswordMethod(IFormCollection form) //todo  //會員專區的重設密碼方法
         {
-            return RedirectToAction("Login");
+            bool isSuccess = false;
+            int memId = Convert.ToInt32(form["memId"]);
+            string oldPwd = form["oldPwd"].ToString();
+            var newPwd = form["newPwd"];
+
+            Member updateTool = _bookShopContext.Members.Find(_userInforService.UserId)!;
+            if (memId == _userInforService.UserId && oldPwd == updateTool.MemberPassword)
+            {
+                updateTool.MemberPassword = newPwd;
+                _bookShopContext.SaveChanges();
+                isSuccess = true;
+                return Json(new
+                {
+                    success = isSuccess.ToString(),
+                    message = "修改密碼成功"
+                });
+            }
+            return Json(new
+            {
+                success = isSuccess.ToString(),
+                message = "更新失敗"
+            });
+
         }
         [Authorize]
         public IActionResult MemberCenter() //會員中心頁面
         {
-            return View();
+            var q = _bookShopContext.Members.Where(x => x.MemberId == _userInforService.UserId).Include(x=>x.Level).FirstOrDefault();
+            return View(q);
         }
         [Authorize]
         public IActionResult gerMemberInfor(int id) //取得會員狀態方法
         {
-            var q = from user in _bookShopContext.Members
-                    where user.MemberId == id
-                    select new
-                    {
-                        user_leverl = user.Level.LevelName,
-                        user_msCount = user.MessageMemberDetails.Count(x=>x.ReadStatu==0),
-                        user_odCount = user.Orders.Count,
-                        user_points = user.Points,
-                        user_coupons = user.OrderDiscountDetails.Count,
-                    };
+            var q = _bookShopContext.Members.Where(x => x.MemberId == id).Select(x => new
+            {
+                user_msCount = x.MessageMemberDetails.Count(x => x.ReadStatu == 0),
+                user_odCount = x.Orders.Count,
+                user_coupons = x.OrderDiscountDetails.Count,
+            });
             return Json(q.FirstOrDefault());
         }
 
@@ -257,17 +279,17 @@ namespace prjBookMvcCore.Controllers
         }
 
         [Authorize]
-        public IActionResult getMessage(int Inputid) //訊息細節方法
+        public IActionResult getMessage(int id) //訊息細節方法
         {
-            MessageMemberDetail target = _bookShopContext.MessageMemberDetails.Find(Inputid)!;
+            MessageMemberDetail target = _bookShopContext.MessageMemberDetails.Find(id)!;
             target.ReadStatu = 1; _bookShopContext.SaveChanges();
             var q = from x in _bookShopContext.MessageMemberDetails
                     join y in _bookShopContext.Messages on x.MessageId equals y.MessageId
                     join z in _bookShopContext.MessageTypes on y.MessageTypeId equals z.MessageTypeId
-                    where x.MessageMemberDetailId == Inputid
+                    where x.MessageMemberDetailId == id
                     select new
                     {
-                         time = x.UpdateTime,
+                         time = x.UpdateTime.Value.ToShortDateString(),
                          read_a = (x.ReadStatu==1)?"已讀":"未讀",
                          content_a = y.MessageContent,
                          type_a = z.MessageTypeName
@@ -309,7 +331,7 @@ namespace prjBookMvcCore.Controllers
             return Json(q);
         }
         [Authorize]
-        public IActionResult myNotice() //可購買時通知我 空的
+        public IActionResult myNotice() //可購買時通知我
         {
             var q = (from b in _bookShopContext.Books
                      join ac in _bookShopContext.ActionDetials on b.BookId equals ac.BookId
@@ -362,7 +384,7 @@ namespace prjBookMvcCore.Controllers
                 Include(x => x.Payment).
                 Include(x => x.Shipment).
                 Include(x => x.PayStatus).
-                Include(x => x.ShippingStatus).ToList();
+                Include(x => x.ShippingStatus).Include(x=>x.Member).ThenInclude(x=>x.Level).ToList();
             return View(q);
         }
         [Authorize]
@@ -393,5 +415,12 @@ namespace prjBookMvcCore.Controllers
 
             return Content(isExsit.ToString());
         }
+        
+        public IActionResult PartailOrderDetail(int id)
+        {
+            var q = _bookShopContext.OrderDetails.Include(x => x.Book).ThenInclude(x => x.BookDiscountDetails).ThenInclude(x => x.BookDiscount).Where(x => x.OrderId == id);
+            return PartialView("PartailOrderDetail", q);
+        }
+
     }
 }

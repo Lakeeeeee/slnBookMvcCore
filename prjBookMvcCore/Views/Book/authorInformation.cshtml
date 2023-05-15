@@ -54,22 +54,22 @@
                 @{
                     foreach (var item in Model)
                     {
-                        <tr>
-                            <td>
-                                <a class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
-                                    <img src="~/Image/Book/@item.CoverPath" alt="@item.BookTitle" style="margin-bottom:15px; width:200px" />
-                                    <br />
-                                    <p id="text-@item.BookId">
-                                        @item.BookTitle
-                                    </p>
-                                </a>
-                            </td>
-                            <td>
-                                <a style="" class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
-                                    @(item.ContentIntro.Length > 200 ? item.ContentIntro.Substring(0, 200) + "..." : item.ContentIntro)
-                                </a>
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td>
+                                        <a class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
+                                            <img src="~/Image/Book/@item.CoverPath" alt="@item.BookTitle" style="margin-bottom:15px; width:200px" />
+                                            <br />
+                                            <p id="text-@item.BookId">
+                                                @item.BookTitle
+                                            </p>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a style="" class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
+                                            @(item.ContentIntro.Length > 200 ? item.ContentIntro.Substring(0, 200) + "..." : item.ContentIntro)
+                                        </a>
+                                    </td>
+                                </tr>
                     }
                 }
 
@@ -86,7 +86,7 @@
     window.onload = () => {
         if (@_userInforService.UserId !== 0) {
             isLogin = true;
-        }
+        };
         console.log(isLogin);
     };
 
@@ -97,7 +97,11 @@
             var b = document.getElementById('text-@item.BookId');
             b.innerText = replaceDoubleDollarSign(b.innerText);
         </text>
-    }
+    };
+            if (@_userInforService.UserId !== 0) {
+            isLogin = true;
+        };
+
     };
 
     function replaceDoubleDollarSign(str) {
@@ -118,7 +122,7 @@
                     if (data) {
                         alert('收藏作者成功');
                     } else {
-                        alert('收藏作者失敗');
+                        alert('已收藏作者');
                     }
                 })
                 .catch(error => {
@@ -128,7 +132,7 @@
     }
 
     function loginCheck() {
-        if (!isLogin) {
+        if (isLogin === false) {
             alert('尚未登入');
             if (confirm('前往登入')) {
                 window.location.href = "../../Member/Login";
@@ -138,6 +142,4 @@
         }
         return true;
     };
-
-
 </script>
