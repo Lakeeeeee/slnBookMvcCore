@@ -20,5 +20,7 @@
 
         public List<RecommendInformation> ?recommendBooks { get; set; }
 
+        public Artical ?artical { get; set; }
+
     }
 }

@@ -328,7 +328,7 @@
                     <el-row>
                         <div>
                             <p class="ad1">
-                                <a href="#" class="ad1" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">【哲學宗教】參展書籍5折起</a>
+                                <a :href="articalUrl(articalID)" class="ad1" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">活動文宣--{{articalTitle}}</a>
                             </p>
                         </div>
                         <div class="buttonRight">
@@ -634,6 +634,8 @@
             recommendBooksJS.push(recommend);
         }
 
+        let articalTitleJS = replaceDoubleDollarSign(decodeHTML("@Model.artical.ArticalTitle"))
+
         let app = new Vue({
             el: '#app',
             data: {
@@ -662,6 +664,8 @@
                     subCategoryName: subCategoryNameJS,
                     preview: [preview1JS,preview2JS,preview3JS,preview4JS],
                 },
+                articalTitle: articalTitleJS,
+                articalID: "@Model.artical.ArticalId",
                 video: '../../image/Book/bookIcon/video1.jpg',
                 originalColor: '',
                 activeName: 'first',
@@ -939,6 +943,9 @@
                 openPreview(index) {
                     this.dialogIndex = index
                     this.showDialog = true
+                },
+                articalUrl(articalID){
+                    return "@Url.Action("Promotions活動文章Detail", "Promotions", new { id = "ARTICALID" })".replace("ARTICALID", articalID);
                 },
                 homeUrl(){
                     return "@Url.Action("Home", "Home")"
