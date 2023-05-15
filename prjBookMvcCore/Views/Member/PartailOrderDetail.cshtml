@@ -29,8 +29,8 @@
             foreach (var item in Model)
             {
                 count++;
-                var bookDiscount = item.Book.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault();
-                var price = item.UnitPrice * bookDiscount;
+                var bookDiscount = item.Book.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountName).FirstOrDefault();
+                var price = item.UnitPrice * (item.Book.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault()) ;
                 <tr>
                     <td>
                         @count
@@ -42,13 +42,13 @@
                         @Html.DisplayFor(modelItem => item.Quantity)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.UnitPrice)
+                        @Convert.ToInt32(@item.UnitPrice)
                     </td>
                     <td>
                         @bookDiscount
                     </td>
                     <td>
-                        @price
+                        @Convert.ToInt32(@price)
                     </td>
                 </tr>
             }

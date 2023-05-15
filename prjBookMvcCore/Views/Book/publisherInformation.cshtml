@@ -93,8 +93,11 @@
             var b = document.getElementById('text-@item.BookId');
             b.innerText = replaceDoubleDollarSign(b.innerText);
         </text>
-    }
-                    };
+    };
+        if (@_userInforService.UserId !== 0) {
+            isLogin = true;
+        };
+    };
 
     function replaceDoubleDollarSign(str) {
         return str.replace(/\$\$/g, '\n');
@@ -114,7 +117,7 @@
                     if (data) {
                         alert('收藏出版社成功');
                     } else {
-                        alert('收藏出版社失敗');
+                        alert('已收藏出版社');
                     }
                 })
                 .catch(error => {
@@ -124,7 +127,7 @@
     }
 
     function loginCheck() {
-        if (!isLogin) {
+        if (isLogin === false) {
             alert('尚未登入');
             if (confirm('前往登入')) {
                 window.location.href = "../../Member/Login";

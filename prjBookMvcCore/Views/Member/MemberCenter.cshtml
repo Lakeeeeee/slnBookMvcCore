@@ -1,7 +1,12 @@
 ﻿@inject UserInforService user
+@model Member
 @{
     ViewBag.Title = "會員中心首頁";
     Layout = "~/Views/Shared/_Layout_Member.cshtml";
+    var time = DateTime.Now.Year;
+    var nextLevel =  user._db.MemberLevels.Where(x => x.LevelId == (Model.LevelId + 1)).Select(x => x.LevelName).FirstOrDefault();
+    var nextAmount = user._db.MemberLevels.Where(x => x.LevelId == (Model.LevelId + 1)).Select(x => x.MinCost).FirstOrDefault();
+    var ex = Model.CostAmount - nextAmount;
 }
 
 <style>
@@ -21,8 +26,8 @@
         <div class="col-4">
                 <div class="card" style="height:100%">
                     <a class="card-header small" style="display:block;width:100%;" href="~/Member/alretProflie">
-                        <h5 class="display-6" id="memberLevel">新皮</h5>
-                        <p>等級期限 2023/08/31 止<br />尚差 4058 元即可升等為 <br />金皮 </p>
+                        <h5 class="display-6" id="memberLevel">@Model.Level.LevelName</h5>
+                        <p>等級期限 @time 年 8月 31日 止<br />尚差 @ex 元即可升等為 <br />@nextLevel</p>
                     </a>
                     <ul class="list-group list-group-flush" >
                         <li class="list-group-item small">了解詳細<a href="~/Home/QA#card2" style="color:GrayText"> 會員分級 </a></li>
@@ -57,7 +62,7 @@
                         <div class="card-body">
                             <p class="card-text">
                                 您的回饋金餘額：
-                            </p><span class="display-6" id="points">0  </span>點
+                            </p><span class="display-6" id="points">@Model.Points  </span>點
                         </div>
                     </div>
                 </div>
@@ -65,7 +70,7 @@
                     <div class="card">
                                 <a class="card-body" style="display:block;width:100%;" href="~/Member/myCoupons">
                             <p class="card-text">
-                                您的E-Coupon尚有：
+                                您的Coupon尚有：
                              </p><span class="display-6" id="coupons">0  </span>張
                             </a>
                     </div>
@@ -78,21 +83,16 @@
 
 @section Scripts{
     <script>
-        const level = document.querySelector('#memberLevel');
         const messageCount = document.querySelector('#messageCount');
         const orders = document.querySelector('#orders');
-        const points = document.querySelector('#points');
         const coupons = document.querySelector('#coupons');
-        const test = document.querySelector('#test');
 
         window.onload = async () => {
             const response = await fetch('@Url.Content("~/Member/gerMemberInfor")?id=' + @user.UserId);
             const datas = await response.json();
             console.log(datas);
-            level.innerHTML = `${datas.user_leverl}`
             messageCount.innerHTML = `${datas.user_msCount}  `
             orders.innerHTML = `${datas.user_odCount}  `
-            points.innerHTML = `${datas.user_points}  `
             coupons.innerHTML = `${datas.user_coupons}  ` 
         };
     </script>
