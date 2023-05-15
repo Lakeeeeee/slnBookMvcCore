@@ -18,9 +18,11 @@ namespace prjBookMvcCore.Models
         public int PayStatusId { get; set; }
         public int ShippingStatusId { get; set; }
         public string ShipAddr { get; set; } = null!;
-        public decimal? DiscountAmount { get; set; }
+        public int? DiscountTypeId { get; set; }
+        public decimal? PointAmount { get; set; }
         public decimal? TotalPay { get; set; }
 
+        public virtual DiscountType? DiscountType { get; set; }
         public virtual Member Member { get; set; } = null!;
         public virtual PayStatus PayStatus { get; set; } = null!;
         public virtual Payment Payment { get; set; } = null!;

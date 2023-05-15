@@ -28,6 +28,11 @@ namespace prjBookMvcCore.Models
         public int? LanguageId { get; set; }
         public decimal UnitPrice { get; set; }
         public string? Introduction { get; set; }
+        public string? ContentIntro { get; set; }
+        public string? TryContent { get; set; }
+        public string? Endorsements { get; set; }
+        public string? Foreward { get; set; }
+        public string? TableContainer { get; set; }
         public string Isbn { get; set; } = null!;
         public string BindingMethod { get; set; } = null!;
         public string Pages { get; set; } = null!;
