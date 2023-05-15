@@ -6,13 +6,15 @@
     Layout = "~/Views/Shared/_Layout_Homepage.cshtml";
 }
 
-@*<h2>Home</h2>
-<a  role="button" class="btn btn-outline-success" href="~/Home/MemberCenter" >會員中心</a>*@
-
-@*<div>
-    <img src="~/image/demo-pic.jpg" width="100%" height="150" />
-    活動or推播
-</div>*@
+<style>
+    .bookCaption {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
 
 <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
     @* 活動輪播圖 *@
@@ -171,87 +173,68 @@
     @* 商品展示二區 *@
     <div class="row">
         <p>注目新品</p>
-        @*<div class="col">
+        @{
+            int count = 0;
+            foreach (var item in Model.publicationDate)
             {
-                int count = 0;
-                foreach(var item in Model.recommendInformation)
+                <div class="col">
+                    <ul style="list-style:none">
+                        <li class="text-center">
+                            <a asp-controller="Book" asp-action="BookInformation" asp-route-id="@item.book.BookId">
+                                <img height="150" src="~/Image/Book/@item.book.CoverPath" />
+                            </a>
+                        </li>
+                        <li class="bookCaption">@item.book.BookTitle</li>
+                        <li>銷售價格：@item.book.UnitPrice 元</li>
+                        <li>出版日期：@item.book.PublicationDate.ToString("yyyy-MM-dd")</li>
+                    </ul>
+                </div>
+                count++;
+                if (count % 5 == 0)
                 {
-                    <p>Book Title @item.book.BookTitle</p>
-                    <p>Book UnitPrice @item.book.UnitPrice</p>
-                    <p>Book Publication Date:  @item.book.PublicationDate</p>
+                    <div class="row"></div>
                 }
             }
-        </div>*@
-        <div class="col">
-            @Html.Partial("_ProductPartialView")
-        </div>
-        @*<div class="col">
-            @Html.Partial("_ProductPartialView")
-        </div>
-        <div class="col">
-            @Html.Partial("_ProductPartialView")
-        </div>
-        <div class="col">
-            @Html.Partial("_ProductPartialView")
-        </div>*@
-
+        }
     </div>
     <br />
-    <div class="row">
-       @* <div class="col">
-            @Html.Partial("_ProductPartialView")
-        </div>
-        <div class="col">
-            @Html.Partial("_ProductPartialView")
-        </div>
-        <div class="col">
-            @Html.Partial("_ProductPartialView")
-        </div>
-        <div class="col">
-            @Html.Partial("_ProductPartialView")
-        </div>
-        <div class="col">
-            @Html.Partial("_ProductPartialView")
-        </div>
-    </div>*@
-</div>
 
-<br />
-<hr />
-<div class="container">
-    @* 商品展示三區 *@
-    <div class="row">
-        <div class="col align-items-start">書評區</div>
-        <div class="col justify-content-end" style="display: flex; padding:10px">
-            <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Home/commentList">看更多</a>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div class="caption bookCaption text-center">
-                <a href="~/Book/BookInformation#comment"><img src="~/image/Book/bookCover/10.jpg" height="150" /></a>
-                <ul style="list-style:none; margin:0; padding:0;" class="text-start">
-                    <li class='prod_TitleMain'><a>餘生是你 晚點沒關係</a></li>
-                    <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>坂本一男</a></li>
-                    <li class="prod_comment"><span>評論：</span><span>productshow productshow productshow productshow</span></li>
-                </ul>
+    <br />
+    <hr />
+    <div class="container">
+        @* 商品展示三區 *@
+        <div class="row">
+            <div class="col align-items-start">書評區</div>
+            <div class="col justify-content-end" style="display: flex; padding:10px">
+                <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Home/commentList">看更多</a>
             </div>
         </div>
-        <div class="col">
-            <a href="~/Book/BookInformation/#comment"><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
-        </div>
-        <div class="col">
-            <a href="~/Book/BookInformation/#comment"><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
-        </div>
-        <div class="col">
-            <a href="~/Book/BookInformation/#comment"><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
-        </div>
-        <div class="col">
-            <a href="~/Book/BookInformation/#comment"><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
+        <div class="row">
+            <div class="col">
+                <div class="text-center">
+                    <a href="~/Book/BookInformation#comment"><img src="~/image/Book/bookCover/10.jpg" height="150" /></a>
+                    <ul style="list-style:none; margin:0; padding:0;" class="text-start">
+                        <li class='prod_TitleMain bookCaption'><a>餘生是你 晚點沒關係</a></li>
+                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>坂本一男</a></li>
+                        <li class="prod_comment"><span>評論：</span><span>productshow productshow productshow productshow</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col">
+                <a href="~/Book/BookInformation/#comment"><img src="~/image/demo-pic.jpg" width="100%" /></a>
+                productshow productshow productshow productshow productshow productshow productshow productshow
+            </div>
+            <div class="col">
+                <a href="~/Book/BookInformation/#comment"><img src="~/image/demo-pic.jpg" width="100%" /></a>
+                productshow productshow productshow productshow productshow productshow productshow productshow
+            </div>
+            <div class="col">
+                <a href="~/Book/BookInformation/#comment"><img src="~/image/demo-pic.jpg" width="100%" /></a>
+                productshow productshow productshow productshow productshow productshow productshow productshow
+            </div>
+            <div class="col">
+                <a href="~/Book/BookInformation/#comment"><img src="~/image/demo-pic.jpg" width="100%" /></a>
+                productshow productshow productshow productshow productshow productshow productshow productshow
+            </div>
         </div>
     </div>
-</div>
