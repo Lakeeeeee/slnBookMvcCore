@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -17,22 +16,16 @@ namespace prjBookMvcCore.Controllers
         {
             return View();
         }
-        [Authorize]
-        public IActionResult ShoppingCartInformation()
-        {
-            return View();
-        }
-        [Authorize]
+
         public IActionResult checkOutInfo()
         {
             return View();
         }
-        [Authorize]
+
         public IActionResult checkOutConfirm()
         {
             return View();
         }
-        [Authorize]
         public IActionResult checkOutFinal()
         {
             return View();
