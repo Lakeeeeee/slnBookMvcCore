@@ -230,7 +230,7 @@
         <div v-loading.fullscreen.lock="loadThisPage">
             <el-container>
                 <el-breadcrumb separator-class="el-icon-arrow-right">
-                    <el-breadcrumb-item ><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">首頁</a></el-breadcrumb-item>
+                    <el-breadcrumb-item><a :href="homeUrl()" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">首頁</a></el-breadcrumb-item>
                     <el-breadcrumb-item v-if="book.languageName && book.languageName.length > 1"><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.languageName}}</a></el-breadcrumb-item>
                     <el-breadcrumb-item v-if="book.categoryName && book.categoryName.length > 1"><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.categoryName}}</a></el-breadcrumb-item>
                     <el-breadcrumb-item v-if="book.subCategoryName && book.subCategoryName.length > 1"><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.subCategoryName}}</a></el-breadcrumb-item>
@@ -385,10 +385,10 @@
                 <el-main>
                     <div class="information">
                         <span style="font-size: 20px; font-weight: bold;">商品資料</span>
-                        <p>作者：<span><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.authorName}}</a></span></p>
+                        <p>作者：<span><a :href="authorUrl(book.authorID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.authorName}}</a></span></p>
                         <p v-if="book.translatorName && book.translatorName.length > 1">譯者：<span><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.translatorName}}</a></span></p>
                         <p v-if="book.painterName && book.painterName.length > 1">繪者：<span><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.painterName}}</a></span></p>
-                        <p>出版社：<span><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.publisherName}}</a></span></p>
+                        <p>出版社：<span><a :href="publisherUrl(book.publisherID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.publisherName}}</a></span></p>
                         <p>出版日期：<span>{{book.publicationDate}}</span></p>
                         <p>ISBN/ISSN：<span>{{book.isbn}}</span></p>
                         <p>語言：<span>{{book.languageName}}</span></p>
@@ -641,7 +641,7 @@
                     coverPath: '../../image/Book/' + "@Model.book.CoverPath",
                     bookID: "@Model.book.BookId",
                     bookTitle: bookTitleJS,
-                    unitPrice: "@Model.book.UnitPrice",
+                    unitPrice: parseInt("@Model.book.UnitPrice"),
                     discount: "@Model.bookDiscount.BookDiscountAmount" * 100,
                     discountDate: discountDateJS,
                     discountName: discountNameJS,
@@ -940,11 +940,17 @@
                     this.dialogIndex = index
                     this.showDialog = true
                 },
+                homeUrl(){
+                    return "@Url.Action("Home", "Home")"
+                },
                 bookUrl(bookID) {
                     return "@Url.Action("BookInformation", "Book", new { id = "BOOKID" })".replace("BOOKID", bookID);
                 },
                 authorUrl(authorID){
                     return "@Url.Action("authorInformation", "Book", new { id = "AUTHORID" })".replace("AUTHORID", authorID);
+                },
+                publisherUrl(publisherID){
+                    return "@Url.Action("publisherInformation", "Book", new { id = "PUBLISHERID" })".replace("PUBLISHERID", publisherID);
                 },
                 clearAllCookies() {
                     localStorage.clear();
