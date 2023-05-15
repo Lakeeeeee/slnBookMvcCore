@@ -70,7 +70,7 @@ namespace prjBookMvcCore.Controllers
                             子分類 = b.CategoryDetails.Select(x => x.SubCategory.SubCategoryName).FirstOrDefault(),
                             子分類ID = b.CategoryDetails.Select(x => x.SubCategory.SubCategoryId).FirstOrDefault(),
                             折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
-                            截止日 = b.BookDiscountDetails.Select(x => x.BookDiscountEndDate).FirstOrDefault(),
+                            出版日期=b.PublicationDate,
                         };
             List<MenuItem> menuItems = new List<MenuItem>();
             foreach(var item in books)
@@ -81,16 +81,15 @@ namespace prjBookMvcCore.Controllers
                     BookId = item.書本ID,
                     UnitPrice = item.定價,
                     CoverPath = item.路徑,
+                    PublicationDate=item.出版日期,
                 };
                 BookDiscount bd = new BookDiscount { BookDiscountAmount = item.折扣 };
-                BookDiscountDetail bdd = new BookDiscountDetail { BookDiscountEndDate = item.截止日 };
                 Author a = new Author { AuthorName = item.作者 };
                 Category c = new Category { CategoryName = item.分類,CategoryId = item.分類ID};
                 SubCategory sc = new SubCategory { SubCategoryName = item.子分類, SubCategoryId = item.子分類ID};
                 MenuItem tmp = new MenuItem();
                 tmp.book = b;
                 tmp.bookDiscount = bd;
-                tmp.bookDiscountDetail = bdd;
                 tmp.category = c;
                 tmp.subCategory = sc;
                 tmp.author = a;
