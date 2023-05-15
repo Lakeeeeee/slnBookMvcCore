@@ -54,8 +54,10 @@
                             <td>
                                 <a class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
                                     <img src="~/Image/Book/@item.CoverPath" alt="@item.BookTitle" style="margin-bottom:15px; width:200px" />
-                                    <br/>
-                                    @item.BookTitle
+                                    <br />
+                                    <p id="text-@item.BookId">
+                                        @item.BookTitle
+                                    </p>
                                 </a>
                             </td>
                             <td>
@@ -82,6 +84,20 @@
             isLogin = true;
         }
         console.log(isLogin);
+    };
+
+    window.onload = function () {
+    @foreach (var item in Model)
+    {
+        <text>
+            var b = document.getElementById('text-@item.BookId');
+            b.innerText = replaceDoubleDollarSign(b.innerText);
+        </text>
+    }
+                    };
+
+    function replaceDoubleDollarSign(str) {
+        return str.replace(/\$\$/g, '\n');
     };
 
     function collectPublisher(publisherID, memberID) {

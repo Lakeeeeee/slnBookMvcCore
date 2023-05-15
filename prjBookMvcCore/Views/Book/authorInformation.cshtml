@@ -11,6 +11,7 @@
     ViewData["Title"] = name;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <head>
     <style>
         .as1 {
@@ -25,7 +26,7 @@
 <div>
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href ="#" class="as1" onclick="window.history.back()">回上頁</a></li>
+            <li class="breadcrumb-item"><a href="#" class="as1" onclick="window.history.back()">回上頁</a></li>
             <li class="breadcrumb-item active" aria-current="page">作者資訊</li>
             <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
         </ol>
@@ -53,24 +54,22 @@
                 @{
                     foreach (var item in Model)
                     {
-                        string bookName = item.BookTitle;
-                                        <tr>
-                                            <td>
-                                                <a class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
-                                                    <img src="~/Image/Book/@item.CoverPath" alt="@item.BookTitle" style="margin-bottom:15px; width:200px" />
-                                                    <br />
-                                                    <p id="text1">
-                                                        @bookName
-                                                    </p>
-                                                </a>
-                                            </td>
-                                            <td><button type="submit" id="btn1">按我</button></td>
-                                            <td>
-                                                <a style="" class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
-                                                    @(item.ContentIntro.Length > 200 ? item.ContentIntro.Substring(0, 200) + "..." : item.ContentIntro)
-                                                </a>
-                                            </td>
-                                        </tr>
+                        <tr>
+                            <td>
+                                <a class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
+                                    <img src="~/Image/Book/@item.CoverPath" alt="@item.BookTitle" style="margin-bottom:15px; width:200px" />
+                                    <br />
+                                    <p id="text-@item.BookId">
+                                        @item.BookTitle
+                                    </p>
+                                </a>
+                            </td>
+                            <td>
+                                <a style="" class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
+                                    @(item.ContentIntro.Length > 200 ? item.ContentIntro.Substring(0, 200) + "..." : item.ContentIntro)
+                                </a>
+                            </td>
+                        </tr>
                     }
                 }
 
@@ -83,57 +82,62 @@
 <!-- import JavaScript -->
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>*@
 <script>
-      let isLogin = false;
-      window.onload = () => {
-          if (@_userInforService.UserId !== 0) {
-              isLogin = true;
-          }
-          console.log(isLogin);
-      };
+    let isLogin = false;
+    window.onload = () => {
+        if (@_userInforService.UserId !== 0) {
+            isLogin = true;
+        }
+        console.log(isLogin);
+    };
 
-      function collectAuthor(authorID, memberID) {
-          if (loginCheck()) {
-              let url = '/Collect/CollectAuthor?memberID=' + memberID + '&authorID=' + authorID;
-              fetch(url, {
-                  method: 'POST',
-                  headers: {
-                      'Content-Type': 'application/json'
-                  }
-              })
-                  .then(response => response.json())
-                  .then(data => {
-                      if (data) {
-                          alert('收藏作者成功');
-                      } else {
-                          alert('收藏作者失敗');
-                      }
-                  })
-                  .catch(error => {
-                      console.error(error);
-                  });
-          }
-      }
+    window.onload = function () {
+    @foreach (var item in Model)
+    {
+        <text>
+            var b = document.getElementById('text-@item.BookId');
+            b.innerText = replaceDoubleDollarSign(b.innerText);
+        </text>
+    }
+    };
 
-      function loginCheck() {
-          if (!isLogin) {
-              alert('尚未登入');
-              if (confirm('前往登入')) {
-                  window.location.href = "../../Member/Login";
-              } else {
-              }
-              return false;
-          }
-          return true;
-      };
-
-    const a = document.getElementById('btn1')
-    const b = document.getElementById('text1')
-    a.addEventListener('click', function(){
-        b.innerText = replaceDoubleDollarSign(b.innerText);
-});
     function replaceDoubleDollarSign(str) {
         return str.replace(/\$\$/g, '\n');
-        console.log(str);
+    };
+
+    function collectAuthor(authorID, memberID) {
+        if (loginCheck()) {
+            let url = '/Collect/CollectAuthor?memberID=' + memberID + '&authorID=' + authorID;
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data) {
+                        alert('收藏作者成功');
+                    } else {
+                        alert('收藏作者失敗');
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
     }
+
+    function loginCheck() {
+        if (!isLogin) {
+            alert('尚未登入');
+            if (confirm('前往登入')) {
+                window.location.href = "../../Member/Login";
+            } else {
+            }
+            return false;
+        }
+        return true;
+    };
+
 
 </script>
