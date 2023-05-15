@@ -115,23 +115,24 @@
                             </div>
                             <div class="row">
                                 @{
-                                    var bookDiscountDetail = db.BookDiscountDetails.Where(d => d.BookDiscountId == g.BookDiscountId & d.BookDiscountStartDate < DateTime.Now & d.BookDiscountEndDate > DateTime.Now).Select(d => new { d.Book.BookTitle,  d.Book.UnitPrice, d.Book.CoverPath,  d.Book.BookId, d.Book.PublicationDate  }).Take(8).ToList();
+                                    var bookDiscountDetail = db.BookDiscountDetails.Where(d => d.BookDiscountId == g.BookDiscountId & d.BookDiscountStartDate < DateTime.Now & d.BookDiscountEndDate > DateTime.Now).Select(d => new { d.Book.BookTitle,  d.Book.UnitPrice, d.Book.CoverPath,  d.Book.BookId, d.Book.PublicationDate ,d.BookDiscountEndDate }).Take(8).ToList();
                                     foreach (var book in bookDiscountDetail)
                                     {
                                         string title中 = book.BookTitle.Split("$")[0];
-                                        var q作者 = db.AuthorDetails.Where(a => a.BookId == book.BookId).Select(a => new  {       a.Author.AuthorName  }).ToList();
-                                        string s作者 = "";
-                                        foreach (var item in q作者) { s作者 += item.AuthorName + " "; }
+                                        var q作者 = db.AuthorDetails.Where(a => a.BookId == book.BookId).Select(a => new  { a.AuthorId, a.Author.AuthorName  }).ToList();
                                         string price原價 = $"{book.UnitPrice:c0}";
                                         var price優惠價 = $"{(g.BookDiscountAmount * book.UnitPrice):0}";
+                                        var 優惠截止日 = book.BookDiscountEndDate.AddDays(-1).ToString("yyyy/MM/dd");
                                         <div class="col-3 ">
                                             <a id="@book.BookId" href="~/Book/BookInformation/@book.BookId"> <img src="~/Image//Book/@book.CoverPath" class="d-block w-100 img-with-border" alt="..." title="@title中" /></a>
                                             <ul style="list-style:none; margin:0; padding:0;" class="text-start">
-                                                <li class='prod_TitleMain '><div class="clamp two-lines"><a id="@book.BookId" href="~/Book/BookInformation/@book.BookId" title="@title中">@title中</a></div></li>
-                                                <li class="discAuthor">作者：@s作者</li>
-                                                <li class="discPrice原價">原價：<del style="color:red;font-style:oblique">@price原價</del></li>
-                                                <li class="discPrice優惠價">優惠價：@g.BookDiscountName @price優惠價 元</li>
-                                                <li class="publicationDate">出版日期：<span>@book.PublicationDate.ToString("yyyy/MM/dd")</span></li>
+                                                <li ><div class="clamp two-lines"><a id="@book.BookId" href="~/Book/BookInformation/@book.BookId" title="@title中">@title中</a></div></li>
+                                                @*<li >作者：<br>
+                                                @foreach (var item in q作者) { <a href="~/Book/authorInformation/@item.AuthorId"> <p style=" text-indent: 2em;line-height: 1em; ">@item.AuthorName</p> </a> }
+                                                </li>*@
+                                                <li >原價：<del style="color:red;font-style:oblique">@price原價</del></li>
+                                                <li >優惠價：@g.BookDiscountName @price優惠價 元</li>
+                                                <li>優惠截止日：@優惠截止日</li>
                                             </ul>
                                         </div>
                                     }
