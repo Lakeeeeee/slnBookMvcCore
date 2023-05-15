@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using GoogleReCaptcha.V3.Interface;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using prjBookMvcCore.Models;
+using System.Diagnostics.Metrics;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -33,8 +36,39 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult Promotions活動已結束() { return View(); }
 
-        public IActionResult Promotions限時登入領取優惠() {  return View(); }
-
+        private readonly BookShopContext _bookShopContext;
+        private readonly IConfiguration _config;
+        private readonly ICaptchaValidator _captchaValidator; //un done
+        public UserInforService _userInforService { get; set; }
+        public PromotionsController(BookShopContext db, UserInforService userInforService, IConfiguration config, ICaptchaValidator captchaValidator)
+        {
+            _bookShopContext = db;
+            _userInforService = userInforService;
+            _captchaValidator = captchaValidator;
+            _config = config;
+        }
+      
+        [Authorize]
+        public IActionResult Promotions限時登入領取優惠()
+        {
+            if (_bookShopContext.OrderDiscountDetails.Where(d=>d.MemberId==_userInforService.UserId).Any(d=>d.OrderDiscountId==4))
+            {
+                return Content("exist");
+            }
+            else
+            {
+                OrderDiscountDetail newmemberdiscount = new OrderDiscountDetail()
+                {
+                    OrderDiscountId = 4,
+                    MemberId = _userInforService.UserId,
+                    OrderDiscountStartDate = DateTime.Now,
+                    OrderDiscountEndDate = DateTime.Now.AddDays(3),
+                };
+                _bookShopContext.OrderDiscountDetails.Add(newmemberdiscount);
+                _bookShopContext.SaveChanges();
+                return Content("notexist");
+            }
+        }
         public IActionResult Index() { return View(); } //建置中
     }
 }
