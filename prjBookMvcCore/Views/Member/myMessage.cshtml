@@ -4,9 +4,28 @@
     ViewData["Title"] = "myMessage";
     Layout = "~/Views/Shared/_Layout_Member.cshtml";
 }
+@section Scripts{
+    <script>
+        const content = document.querySelector('#content');
+        const messagetype = document.querySelector('#messagetype');
+        const createtime = document.querySelector('#createtime');
+        const isRead = document.querySelector('#isRead');
+
+        async function getMessage(id) {
+            var response = await fetch('@Url.Content("~/Member/getMessage")?id=' + id);
+            var data = await response.json();
+            content.innerHTML = `${data.content_a}`;
+            messagetype.innerHTML = `${data.type_a}`;
+            createtime.innerHTML = `${data.time}`;
+            isRead.innerHTML = `${data.read_a}`;
+        };
+    </script>
+}
 
 <style>
-    div{border:none}
+    div {
+        border: none
+    }
 
     a {
         color: black;
@@ -32,62 +51,46 @@
         </div>
         <div class="col-9">
             <div class="row">
-            <div class="col">
+                <div class="col">
                     <button type="button" class="btn btn-outline-secondary disabled" aria-current="true">
-                     訊息類型:</button>
-                    <span id="messagetype" class="btn btn-outline-secondary "> 系統訊息</span>
-            </div>
-            <div class="col">
-                    <button type="button" class="btn btn-outline-secondary disabled" aria-current="true">
-                    訊息發送時間:
+                        訊息類型:
                     </button>
-                    <span id="createtime" class="btn btn-outline-secondary " > 發送時間</span>
+                    <span id="messagetype" class="btn btn-outline-secondary "> 系統訊息</span>
+                </div>
+                <div class="col">
+                    <button type="button" class="btn btn-outline-secondary disabled" aria-current="true">
+                        訊息發送時間:
+                    </button>
+                    <span id="createtime" class="btn btn-outline-secondary "> 發送時間</span>
+                </div>
             </div>
-        </div>
         </div>
     </div>
     <div class="row">
         <div class="col-3">
-        <div class="list-group">
+            <div class="list-group">
                 @{
-                    foreach(var item in Model)
+                    foreach (var item in Model)
                     {
-                        <button id="Inputid" value="@item.MessageMemberDetailId" type="button" class="list-group-item list-group-item-action" aria-current="true">
+                        <button id="@item.MessageMemberDetailId" value="@item.MessageMemberDetailId" type="button" class="list-group-item list-group-item-action" aria-current="true" onclick="getMessage(@item.MessageMemberDetailId)">
                             @Html.DisplayFor(x=>item.Message!.MessageTitle)
-                        <span class="badge bg-primary rounded-pill" id="isRead">
-                            @{
-                                string readstatu = (item.ReadStatu == 0) ? "未讀" : "已讀";
-                            @readstatu}
+                            <span class="badge bg-primary rounded-pill" id="isRead">
+                                @{
+                                    string readstatu = (item.ReadStatu == 0) ? "未讀" : "已讀";
+                                    @readstatu
+                                }
                             </span>
                         </button>
-                    }}
-        </div>
+                    }
+                }
+            </div>
         </div>
         <div class="col-9">
-            <div class="container" >
+            <div class="container">
                 <div id="content" class="mt-3">
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-@section Scripts{
-    <script>
-        const message = document.querySelector('#Inputid');
-        const content = document.querySelector('#content');
-        const messagetype = document.querySelector('#messagetype');
-        const createtime = document.querySelector('#createtime');
-        const isRead = document.querySelector('#isRead');
-
-        message.addEventListener('click', async()=>{
-            const response = await fetch('@Url.Content("~/Member/getMessage")?Inputid=' + message.value);
-            const data = await response.json();
-            content.innerHTML = `${data.content_a}`;
-            messagetype.innerHTML = `${data.type_a}`;
-            createtime.innerHTML = `${data.time}`;
-            isRead.innerHTML = `${data.read_a}`;
-        })
-    </script>
-}
 

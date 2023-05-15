@@ -259,14 +259,14 @@ namespace prjBookMvcCore.Controllers
         }
 
         [Authorize]
-        public IActionResult getMessage(int Inputid) //訊息細節方法
+        public IActionResult getMessage(int id) //訊息細節方法
         {
-            MessageMemberDetail target = _bookShopContext.MessageMemberDetails.Find(Inputid)!;
+            MessageMemberDetail target = _bookShopContext.MessageMemberDetails.Find(id)!;
             target.ReadStatu = 1; _bookShopContext.SaveChanges();
             var q = from x in _bookShopContext.MessageMemberDetails
                     join y in _bookShopContext.Messages on x.MessageId equals y.MessageId
                     join z in _bookShopContext.MessageTypes on y.MessageTypeId equals z.MessageTypeId
-                    where x.MessageMemberDetailId == Inputid
+                    where x.MessageMemberDetailId == id
                     select new
                     {
                          time = x.UpdateTime,
