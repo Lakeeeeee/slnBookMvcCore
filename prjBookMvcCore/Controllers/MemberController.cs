@@ -66,6 +66,15 @@ namespace prjBookMvcCore.Controllers
                 };
                 _bookShopContext.Add(newmember);
                 _bookShopContext.SaveChanges();
+                OrderDiscountDetail newmemberdiscount = new OrderDiscountDetail()
+                {
+                    OrderDiscountId = 6,
+                    MemberId = newmember.MemberId,
+                    OrderDiscountStartDate = DateTime.Now,
+                    OrderDiscountEndDate = DateTime.Now.AddMonths(1),
+                };
+                _bookShopContext.Add(newmemberdiscount);
+                _bookShopContext.SaveChanges();
                 if (member.isSubscribe)
                 {
                     MessageSubscribe subscribe = new MessageSubscribe()
