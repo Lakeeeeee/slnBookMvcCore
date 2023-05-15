@@ -84,8 +84,10 @@ namespace prjBookMvcCore.Controllers
                     };
                     _bookShopContext.MessageSubscribes.Add(subscribe);
                 }
-                _bookShopContext.SaveChanges();
+                _bookShopContext.SaveChanges(); 
+                _cm.write註冊會員禮Letter(newmember, _bookShopContext);
                 _cm.writeWelcomeLetter(newmember, _bookShopContext);
+               
                 return Content("notexist");
             }
         }
