@@ -6,7 +6,7 @@
     var time = DateTime.Now.Year;
     var nextLevel = user._db.MemberLevels.Where(x => x.LevelId == (Model.LevelId + 1)).Select(x => x.LevelName).FirstOrDefault();
     var nextAmount = user._db.MemberLevels.Where(x => x.LevelId == (Model.LevelId + 1)).Select(x => x.MinCost).FirstOrDefault();
-    var ex = Model.CostAmount - nextAmount;
+    var ex = nextAmount-Model.CostAmount;
 }
 
 <style>
