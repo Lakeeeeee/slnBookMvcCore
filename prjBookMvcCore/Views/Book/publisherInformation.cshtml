@@ -1,12 +1,9 @@
 ﻿@inject UserInforService _userInforService
 @model List<Book>
 @{
-    string name = ""; int publisherID = 0;
-    foreach (var item in Model)
-    {
-        name = item.Publisher.PublisherName;
-        publisherID = (int)item.PublisherId;
-    }
+    BookShopContext db = new BookShopContext();
+    int publisherID = ViewBag.publisherID;
+    string name = db.Publishers.Where(x => x.PublisherId == publisherID).Select(x => x.PublisherName).FirstOrDefault();
     ViewData["Title"] = name;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }

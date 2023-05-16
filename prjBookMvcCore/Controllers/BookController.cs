@@ -205,6 +205,7 @@ namespace prjBookMvcCore.Controllers
                 var q = from b in db.Books.Include("TranslatorDetails.Translator")
                         where b.TranslatorDetails.Any(td => td.TranslatorId == id)
                         select b;
+                ViewData["translatorID"] = id;
                 return View(q.ToList());
             }
         }
@@ -215,6 +216,7 @@ namespace prjBookMvcCore.Controllers
                 var q = from b in db.Books.Include("PainterDetails.Painter")
                         where b.PainterDetails.Any(pd => pd.PainterId == id)
                         select b;
+                ViewData["painterID"] = id;
                 return View(q.ToList());
             }
         }
@@ -225,7 +227,7 @@ namespace prjBookMvcCore.Controllers
                 var q = from b in db.Books.Include("Publisher")
                         where b.PublisherId == id
                         select b;
-
+                ViewData["publisherID"] = id;
                 return View(q.ToList());
 
             }
