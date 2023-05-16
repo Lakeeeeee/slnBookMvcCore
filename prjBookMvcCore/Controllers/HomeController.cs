@@ -123,7 +123,7 @@ namespace prjBookMvcCore.Controllers
                                     join c in db.Comments
                                     on b.BookId equals c.BookId
 
-                                     orderby c.CommentTime descending
+                                     orderby c.CommentTime ascending
                                     
                                      select new
                                      {
