@@ -353,6 +353,15 @@ namespace prjBookMvcCore.Controllers
             return View(q);
         }
         [Authorize]
+        public IActionResult myComment() //我的評論頁面
+        {
+
+            var q = _bookShopContext.Comments.Where(x => x.MemberId == _userInforService.UserId).Include(x => x.Book); 
+            
+            return View(q);
+        }
+
+        [Authorize]
         #region(訂單修改/取消, todo)
 
         //public IActionResult editOrders(Order id)

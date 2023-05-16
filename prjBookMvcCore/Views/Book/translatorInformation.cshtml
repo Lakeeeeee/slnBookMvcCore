@@ -1,13 +1,9 @@
 ﻿@inject UserInforService _userInforService
 @model List<Book>
 @{
-    string name = ""; int translatorID = 1;
-    foreach (var item in Model)
-    {
-        name = item.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault();
-        translatorID = item.TranslatorDetails.Select(x => x.TranslatorId).FirstOrDefault();
-    }
-
+    BookShopContext db = new BookShopContext();
+    int translatorID = ViewBag.translatorID;
+    string name = db.Translators.Where(x => x.TranslatorId == translatorID).Select(x => x.TranslatorName).FirstOrDefault();
     ViewData["Title"] = name;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
