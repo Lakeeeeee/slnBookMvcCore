@@ -47,7 +47,7 @@ namespace prjBookMvcCore.Controllers
             _captchaValidator = captchaValidator;
             _config = config;
         }
-      
+        [HttpPost]
         [Authorize]
         public IActionResult Promotions限時登入領取優惠()
         {

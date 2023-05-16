@@ -38,13 +38,13 @@
         }
 
         p {
-            font-family: 標楷體;
+   
             text-align: justify;
             text-indent: 2em;
         }
 
         h1 {
-            font-family: 標楷體;
+    
             color: #28004D;
             text-align: center;
             font-weight: 900;
@@ -79,10 +79,10 @@
         foreach (var g in Artical)
         {
             string path = g.ArticalTitle + ".jpg";
-            <h1 style="text-align:center">@g.ArticalTitle</h1>
-            <p class="date">更新日期：@g.ArticalDate</p>
-            <div style="text-align:center"><img src="~/Image/ArticalPicture/@path" class="imgT" title="@g.ArticalTitle" /></div>
-            <p style="font-size:larger;">@g.ArticalDescription</p>
+                    <h1 style="text-align:center">@g.ArticalTitle</h1>
+                    <p class="date">更新日期：@g.ArticalDate</p>
+                    <div style="text-align:center"><img src="~/Image/ArticalPicture/@path" class="imgT" title="@g.ArticalTitle" /></div>
+                    <p style="font-size:larger;">@g.ArticalDescription</p>
         }
         var detail = db.ArticalToBookDetails.Where(d => d.ArticalId == ArticalId).Select(d => new { d.Book.BookTitle,d.Book.Isbn,d.Book.UnitPrice,d.Book.ContentIntro,d.Book.CoverPath,d.Book.BookId,d.Book.PublicationDate, d.Book.PublisherId,d.Book.Publisher.PublisherName}).ToList();
         foreach (var g in detail)
@@ -94,32 +94,32 @@
             string price優惠價="";
             foreach(var dis in bookDiscountDetail){ price優惠價 =dis.BookDiscountName +" "+$"{ (dis.BookDiscountAmount * g.UnitPrice):0}";}
 
-            <div class="row box">
-                <div class="col-3">
-                    <a href="~/Book/BookInformation/@g.BookId">
-                        <figure class="fig1">
-                            <img class="imgB" src="~/Image/Book/@g.CoverPath" title="@title中" />
-                            <figcaption>@title中</figcaption>
-                        </figure>
-                    </a>
-                </div>
-                <div class="col-3">
-                    <p>作者：</p>
-                        @foreach (var item in q作者)
+                    <div class="row box p-3 mb-4" >
+                        <div class="col-3">
+                            <a href="~/Book/BookInformation/@g.BookId">
+                                <figure class="fig1 mt-4">
+                                    <img class="imgB" src="~/Image/Book/@g.CoverPath" title="@title中" />
+                                    <figcaption class="mt-4">@title中</figcaption>
+                                </figure>
+                            </a>
+                        </div>
+                        <div class="col-3">
+                            <p>作者：</p>
+                                @foreach (var item in q作者)
                         {
-                            <a href="~/Book/authorInformation/@item.AuthorId"> <p style=" text-indent: 4em;line-height: 1em; ">@item.AuthorName</p> </a>
+                                <a href="~/Book/authorInformation?id=@item.AuthorId"> <p style=" text-indent: 4em;line-height: 1em; " id="Author">@item.AuthorName</p> </a>
                         }  
-                    <p>出版日期：@g.PublicationDate.ToString("yyyy/MM/dd")</p>
-                    <p>出版社：<a href="~/Book/publisherInformation/@g.PublisherId">@g.PublisherName </a></p>
-                    <p>ISBN：@g.Isbn</p>
-                    <p>原價：<del style="color:red;font-style:oblique">@price原價</del> 元</p>
-                    <p>優惠價： @price優惠價 元</p>
-                </div>
-                <div class="col-6">
-                    <a href="~/Book/BookInformation/@g.BookId#contentIntro" title="移至完整內容簡介">簡介：</a>
-                    <p class="clamp"> <br>@g.ContentIntro </p>
-                </div>
-            </div>
+                            <p>出版日期：@g.PublicationDate.ToString("yyyy/MM/dd")</p>
+                            <p>出版社：<a href="~/Book/publisherInformation/@g.PublisherId">@g.PublisherName </a></p>
+                            <p>ISBN：@g.Isbn</p>
+                            <p>原價：<del style="color:red;font-style:oblique">@price原價</del> 元</p>
+                            <p>優惠價： @price優惠價 元</p>
+                        </div>
+                        <div class="col-6">
+                            <a href="~/Book/BookInformation/@g.BookId#contentIntro" title="移至完整內容簡介">簡介：</a>
+                            <p class="clamp"> <br>@g.ContentIntro </p>
+                        </div>
+                    </div>
         }
     }
 </body>
