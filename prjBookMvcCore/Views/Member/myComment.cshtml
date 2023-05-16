@@ -1,0 +1,49 @@
+﻿@inject UserInforService user
+@model IEnumerable<prjBookMvcCore.Models.Comment>
+
+@{
+    ViewData["Title"] = "我的評論";
+    Layout = "~/Views/Shared/_Layout_Member.cshtml";
+}
+
+<h6>我的評論</h6>
+
+<div class="container">
+    <table class="table table-hover">
+        <tr>
+            <td style="width:200px"></td>
+            <td></td>
+        </tr>
+        @{
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
+                            <img src="~/Image/Book/@item.Book.CoverPath" alt="@item.Book.BookTitle" style="margin-bottom:15px; width:200px" />
+                            <br />
+                        </a>
+                    </td>
+                    <td class="p-3" style="vertical-align:top; max-height:180px; overflow:hidden">
+                        <a class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
+                            <p style="color:brown; font-weight:bold" id="text-@item.BookId">
+                                @item.Book.BookTitle
+                            </p>
+                        </a>
+                        <p>
+                            給星數：
+                            @for (int x = 0; x < item.Stars; x++)
+                            {
+                                <img style="width:20px; height:auto" src="~/image/icons8-star.gif" />
+                            }
+                        </p>
+                        <p>評論日期：@item.CommentTime</p>
+                        <p>
+                            @(item.CommentText.Length > 200 ? item.CommentText.Substring(0, 200) + "..." : item.CommentText)
+                        </p>
+                    </td>
+                </tr>
+            };
+        }
+    </table>
+</div>

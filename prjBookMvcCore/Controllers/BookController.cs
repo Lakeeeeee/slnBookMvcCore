@@ -193,7 +193,7 @@ namespace prjBookMvcCore.Controllers
                 var q = from b in db.Books.Include("AuthorDetails.Author")
                         where b.AuthorDetails.Any(ad => ad.AuthorId == id)
                         select b;
-
+                ViewData["authorID"] = id;
                 return View(q.ToList());
 
             }
