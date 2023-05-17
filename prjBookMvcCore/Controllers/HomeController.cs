@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient.Server;
 using prjBookMvcCore.Models;
 using System.Diagnostics;
 
@@ -25,7 +26,12 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult commentList()
         {
-            return View();
+            List<RecommendInformation> commentTimeDate = getCommentTimeDateForList();
+            CForHomePage c = new CForHomePage()
+            {
+                commentTimeDate = commentTimeDate,
+            };
+            return View(c);
         }
 
         public IActionResult QA()
@@ -83,11 +89,9 @@ namespace prjBookMvcCore.Controllers
             List<RecommendInformation> normal = new List<RecommendInformation>();
 
             var query = from b in db.Books
-                        join sd in db.CategoryDetails
-                        on b.BookId equals sd.BookId
-                        join sc in db.SubCategories
-                        on sd.SubCategoryId equals sc.SubCategoryId
-                        where b.BookId == randomList[0] //random contain
+                        join sd in db.CategoryDetails on b.BookId equals sd.BookId
+                        join sc in db.SubCategories on sd.SubCategoryId equals sc.SubCategoryId
+                        where randomList.Contains(b.BookId)
                         select new
                         {
                             書本ID = b.BookId,
@@ -99,8 +103,17 @@ namespace prjBookMvcCore.Controllers
 
             foreach (var recommendBook in query)
             {
-                Book b = new Book { BookTitle = recommendBook.書名, BookId = recommendBook.書本ID, UnitPrice = recommendBook.定價, CoverPath = recommendBook.路徑 };
-                BookDiscount bd = new BookDiscount { BookDiscountAmount = recommendBook.折扣 };
+                Book b = new Book
+                {
+                    BookTitle = recommendBook.書名,
+                    BookId = recommendBook.書本ID,
+                    UnitPrice = recommendBook.定價,
+                    CoverPath = recommendBook.路徑
+                };
+                BookDiscount bd = new BookDiscount
+                {
+                    BookDiscountAmount = recommendBook.折扣
+                };
                 RecommendInformation tmp = new RecommendInformation()
                 {
                     book = b,
@@ -108,7 +121,54 @@ namespace prjBookMvcCore.Controllers
                 };
                 normal.Add(tmp);
             }
+
             return normal;
+        }
+
+        public List<RecommendInformation> getCommentTimeDateForList()
+        {
+            using (var db = new BookShopContext())
+            {
+                var recommendBooks = (from b in db.Books
+                                      join sd in db.CategoryDetails
+                                      on b.BookId equals sd.BookId
+                                      join sc in db.SubCategories
+                                      on sd.SubCategoryId equals sc.SubCategoryId
+                                      join c in db.Comments
+                                      on b.BookId equals c.BookId
+
+                                      orderby c.CommentTime ascending
+                                      orderby c.Stars descending
+                                      select new
+                                      {
+                                          書本ID = b.BookId,
+                                          書名 = b.BookTitle,
+                                          定價 = b.UnitPrice,
+                                          路徑 = b.CoverPath,
+                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                          出版日期 = b.PublicationDate,
+                                          最新評論 = c.CommentText,
+                                          評分 = c.Stars,
+                                      }).Take(20);
+                List<RecommendInformation> ris = new List<RecommendInformation>();
+                int count = 0;
+                foreach (var recommendBook in recommendBooks)
+                {
+                    count++;
+
+                    Book b = new Book { BookTitle = recommendBook.書名, BookId = recommendBook.書本ID, UnitPrice = recommendBook.定價, CoverPath = recommendBook.路徑, PublicationDate = recommendBook.出版日期 };
+                    BookDiscount bd = new BookDiscount { BookDiscountAmount = recommendBook.折扣 };
+                    Comment c = new Comment { CommentText = recommendBook.最新評論, Stars = recommendBook.評分 };
+                    RecommendInformation tmp = new RecommendInformation()
+                    {
+                        book = b,
+                        bookDiscount = bd,
+                        comment = c,
+                    };
+                    ris.Add(tmp);
+                }
+                return ris;
+            }
         }
 
         public List<RecommendInformation> getCommentTimeDate()
