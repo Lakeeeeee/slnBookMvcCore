@@ -1,104 +1,67 @@
-﻿@{
+﻿@using prjBookMvcCore.Models
+@model CForHomePage
+
+@{
     ViewBag.Title = "commentList";
     Layout = "~/Views/Shared/_Layout_Comment.cshtml";
 }
 
-<h2>commentList</h2>
+<style>
+    .twolines {
+        line-height: 1.2em;
+        height: 2.4em;
+    }
 
-<div class="container">
-    <div class="row">
-        @*一組*@ <div class="col">
-            <div class="row">
-                <div class="col text-center">
-                    <a href="~/Book/BookInformation#comment"><img src="~/image/Book/bookCover/1.jpg" height="150" /></a>
-                </div>
-                <div class="col">
-                    productshow productshow productshow productshow productshow
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    productshow productshow productshow productshow productshow productshow productshow productshow
-                </div>
-            </div>
+    .bookCaption {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }</style>
+
+<body>
+
+    <h2>好書推薦</h2>
+    <br />
+    <div class="container">
+        <div class="row">
+            @{
+                int countcommentTimeDate = 0;
+                foreach (var item in Model.commentTimeDate)
+                {@*一組*@ <div class="col">
+                        <div class="row">
+                            <div class="col text-center mb-3">
+                                <a href="/Book/BookInformation/@item.book.BookId#comment"><img height="150" src="~/Image/Book/@item.book.CoverPath" /></a>
+                            </div>
+                            <div class="col">
+                                <ul style="list-style:none; margin:0; padding:0;">
+                                    <li class="bookCaption twolines mb-2">@item.book.BookTitle</li>
+                                    <li>評論等級：<span class="star star-s">@item.comment.Stars</span></li>
+                                    <li>評論日期：@item.comment.CommentTime.ToString("yyyy-MM-dd")</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <p class="col twolines bookCaption" style="color:gray">
+                                @item.comment.CommentText
+                            </p>
+                        </div>
+                    </div>
+                    countcommentTimeDate++;
+                    if (countcommentTimeDate % 2 == 0)
+                    {
+                        <div class="row"></div>
+                        <hr />
+
+                        <br />
+                    }
+                }
+            }
+
         </div>
-        @*一組*@<div class="col">
-            <div class="row">
-                <div class="col text-center">
-                    <a href="~/Book/BookInformation#comment"><img src="~/image/Book/bookCover/2.jpg" height="150" /></a>
-                </div>
-                <div class="col">
-                    productshow productshow productshow productshow productshow
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    productshow productshow productshow productshow productshow productshow productshow productshow
-                </div>
-            </div>
-        </div>
-        @*一組*@<div class="col">
-            <div class="row">
-                <div class="col text-center">
-                    <a href="~/Book/BookInformation#comment"><img src="~/image/Book/bookCover/3.jpg" height="150" /></a>
-                </div>
-                <div class="col">
-                    productshow productshow productshow productshow productshow
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    productshow productshow productshow productshow productshow productshow productshow productshow
-                </div>
-            </div>
-        </div>
+        <br /><br />
+
     </div>
-    <br /><br />
-    <div class="row">
-        @*一組*@ <div class="col">
-            <div class="row">
-                <div class="col text-center">
-                    <a href="~/Book/BookInformation#comment"><img src="~/image/Book/bookCover/4.jpg" height="150" /></a>
-                </div>
-                <div class="col">
-                    productshow productshow productshow productshow productshow
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    productshow productshow productshow productshow productshow productshow productshow productshow
-                </div>
-            </div>
-        </div>
-        @*一組*@<div class="col">
-            <div class="row">
-                <div class="col text-center">
-                    <a href="~/Book/BookInformation#comment"><img src="~/image/Book/bookCover/5.jpg" height="150" /></a>
-                </div>
-                <div class="col">
-                    productshow productshow productshow productshow productshow
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    productshow productshow productshow productshow productshow productshow productshow productshow
-                </div>
-            </div>
-        </div>
-        @*一組*@<div class="col">
-            <div class="row">
-                <div class="col text-center">
-                    <a href="~/Book/BookInformation#comment"><img src="~/image/Book/bookCover/6.jpg" height="150" /></a>
-                </div>
-                <div class="col">
-                    productshow productshow productshow productshow productshow
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    productshow productshow productshow productshow productshow productshow productshow productshow
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
+</body>

@@ -1,13 +1,9 @@
 ﻿@inject UserInforService _userInforService
 @model List<Book>
 @{
-    string name = ""; int painterID = 1;
-    foreach (var item in Model)
-    {
-        name = item.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault();
-        painterID = item.PainterDetails.Select(x => x.PainterId).FirstOrDefault();
-    }
-
+    BookShopContext db = new BookShopContext();
+    int painterID = ViewBag.painterID;
+    string name = db.Painters.Where(x => x.PainterId == painterID).Select(x => x.PainterName).FirstOrDefault();
     ViewData["Title"] = name;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -56,14 +52,17 @@
                                 <a class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
                                     <img src="~/Image/Book/@item.CoverPath" alt="@item.BookTitle" style="margin-bottom:15px; width:200px" />
                                     <br />
-                                    <p id="text-@item.BookId">
-                                        @item.BookTitle
-                                    </p>
                                 </a>
                             </td>
-                            <td>
-                                <a style="" class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
-                                    @(item.ContentIntro.Length > 200 ? item.ContentIntro.Substring(0, 200) + "..." : item.ContentIntro)
+                            <td class="p-3" style="vertical-align:top; max-height:180px; overflow:hidden">
+                                <a class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
+                                    <p style="color:brown; font-weight:bold" id="text-@item.BookId">
+                                        @item.BookTitle
+                                    </p>
+                                    <p>出版日期：@item.PublicationDate.ToShortDateString()</p>
+                                    <p>
+                                        @(item.ContentIntro.Length > 210 ? item.ContentIntro.Substring(0, 210) + "..." : item.ContentIntro)
+                                    </p>
                                 </a>
                             </td>
                         </tr>

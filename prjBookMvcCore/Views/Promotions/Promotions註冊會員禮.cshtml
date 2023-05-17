@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Promotions註冊會員禮";
 }
 
@@ -13,7 +12,7 @@
             right: -300px;
             transform: translate(0, -50%);
             width: 300px;
-            background-color: #f2f2f2;
+            background-color:  rgb(245, 225, 250);
             padding: 20px;
             transition: right 0.3s;
             z-index: 9999;
@@ -32,31 +31,42 @@
 
 </head>
 <body>
-    <div style="border:1px dashed rgb(200, 150, 250)">
-        <form asp-action="Promotions限時登入領取優惠" id="takecoupon_form">
-        測試區塊
-        <div id="popup" class="popup-container">
-            <h2>領取優惠券</h2>
-                <p><a href="~/Promotions/Promotions限時登入領取優惠" role="button" id="takecoupon" type="submit">現在領取優惠券，立即享受折扣優惠！</a></p>
-               
-            <p class="countdown" id="countdown">倒數計時: <span id="timer">5</span> 秒</p>
-            <button onclick="hidePopup()">關閉</button>
-        </div>
+
+        <form asp-action="Promotions限時登入領取優惠" id="takecoupon_form" asp-controller="Promotions">
+            <div id="popup" class="popup-container">
+                <h2>領取優惠券</h2>
+                <button class="btn btn-outline-info" id="takecoupon" type="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gift" viewBox="0 0 16 16">
+                        <path d="M3 2.5a2.5 2.5 0 0 1 5 0 2.5 2.5 0 0 1 5 0v.006c0 .07 0 .27-.038.494H15a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 1 14.5V7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h2.038A2.968 2.968 0 0 1 3 2.506V2.5zm1.068.5H7v-.5a1.5 1.5 0 1 0-3 0c0 .085.002.274.045.43a.522.522 0 0 0 .023.07zM9 3h2.932a.56.56 0 0 0 .023-.07c.043-.156.045-.345.045-.43a1.5 1.5 0 0 0-3 0V3zM1 4v2h6V4H1zm8 0v2h6V4H9zm5 3H9v8h4.5a.5.5 0 0 0 .5-.5V7zm-7 8V7H2v7.5a.5.5 0 0 0 .5.5H7z" />
+                    </svg>
+                    現在領取優惠券，立即享受折扣優惠！
+                </button>
+            <p class="countdown" id="countdown">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-alarm" viewBox="0 0 16 16">
+  <path d="M8.5 5.5a.5.5 0 0 0-1 0v3.362l-1.429 2.38a.5.5 0 1 0 .858.515l1.5-2.5A.5.5 0 0 0 8.5 9V5.5z"/>
+  <path d="M6.5 0a.5.5 0 0 0 0 1H7v1.07a7.001 7.001 0 0 0-3.273 12.474l-.602.602a.5.5 0 0 0 .707.708l.746-.746A6.97 6.97 0 0 0 8 16a6.97 6.97 0 0 0 3.422-.892l.746.746a.5.5 0 0 0 .707-.708l-.601-.602A7.001 7.001 0 0 0 9 2.07V1h.5a.5.5 0 0 0 0-1h-3zm1.038 3.018a6.093 6.093 0 0 1 .924 0 6 6 0 1 1-.924 0zM0 3.5c0 .753.333 1.429.86 1.887A8.035 8.035 0 0 1 4.387 1.86 2.5 2.5 0 0 0 0 3.5zM13.5 1c-.753 0-1.429.333-1.887.86a8.035 8.035 0 0 1 3.527 3.527A2.5 2.5 0 0 0 13.5 1z"/>
+</svg>
+              倒數計時: <span id="timer">5</span> 秒
+            </p>
+                <button onclick="hidePopup()">關閉</button>
+            </div>
         </form>
-    </div>
-<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-    <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a class="text-decoration-none" href="~/Home/Home" style="color:black">首頁</a></li>
+
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a class="text-decoration-none" href="~/Home/Home" style="color:black">首頁</a></li>
             <li class="breadcrumb-item"><a class="text-decoration-none" href="~/Promotions/Promotions活動總覽圖" style="color:black">活動</a></li>
             <li class="breadcrumb-item active" aria-current="page" style="color:gray">註冊會員禮</li>
-    </ol>
-</nav>
+        </ol>
+    </nav>
     <div>
         <img src="~/Image/Promotions/註冊會員_上.png" class="d-block w-100" alt="page1" width="80%">
     </div>
     <div class="d-block w-100" style="background-image: url('/Image/Promotions/註冊會員_下.png'); background-size: cover; padding:50px;border:unset ;text-align:center">
         <a role="button" class="btn btn-outline-info fs-2" href="~/Member/Signin" style="font-size:large">立即加入會員!!</a>
     </div>
+</body>
+</html>
 
 <script>
     window.addEventListener('DOMContentLoaded', function () {
@@ -68,7 +78,7 @@
         var countdown = document.getElementById("countdown");
         popup.classList.add("show-popup");
 
-        var seconds = 5;
+        var seconds = 10;
         countdown.innerHTML = "倒數計時: <span id='timer'>" + seconds + "</span> 秒";
 
         var timer = setInterval(function () {
@@ -92,8 +102,7 @@
     coupon.addEventListener('submit', async (event) => {
         event.preventDefault();
         const response = await fetch('@Url.ActionLink("Promotions限時登入領取優惠")', {
-            method: 'POST',
-            body: new FormData(coupon)
+            method: 'POST'
         });
         const confirmtext = await response.text();
         if (confirmtext === "exist") {
@@ -101,9 +110,8 @@
         }
         if (confirmtext === "notexist") {
             alert('領取成功，系統將自動轉向會員中心');
-            window.location.href = '@Url.Action("MemberCenter", "Member")'; 
+            window.location.href = '@Url.Action("MemberCenter", "Member")';
+        }
     });
 </script>
 
-</body>
-</html>
