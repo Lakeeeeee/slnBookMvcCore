@@ -177,7 +177,7 @@
     btn4.addEventListener('click', async () => {
         const response = await fetch('@Url.Action("myNotice")');
         const dataobj = await response.json();
-        const datas = JSON.parse(dataobj).map(({ bookId, bookStock, bookName }) => ({ id: bookId, stock: bookStock, name: bookName }));
+        const datas = JSON.parse(dataobj).map(({ actionDetailId, bookId, bookStock, bookName }) => ({ acdid: actionDetailId, id: bookId, stock: bookStock, name: bookName }));
         let count = 0;
         const table = document.querySelector('#table3');
         table.innerHTML = '';
@@ -193,9 +193,9 @@
             row.insertCell().innerText = count;
             row.insertCell().innerText = data.name;
             row.insertCell().innerText = data.stock;
-            const btnHtml = `<button type="submit" name="id" value="${data.id}" class="btn btn-outline-secondary" onclick="redirectToAction(${data.id})">來去購買</button>`;
+            const btnHtml = `<button type="submit" name="id" value="${data.id}" class="btn btn-outline-secondary btn-sm" onclick="redirectToAction(${data.id})">來去購買</button>`;
             row.insertCell().innerHTML = btnHtml;
-            const btnHtm2 = `<button class="btn btn-outline-secondary" name="id" value="${data.id}" onclick="cancleAction(${data.id})">取消追蹤</button>`
+            const btnHtm2 = `<button class="btn btn-outline-secondary btn-sm" name="id" value="${data.id}" onclick="cancleAction(${data.acdid})">取消追蹤</button>`
             row.insertCell().innerHTML = btnHtm2;
         });
         table.appendChild(thead, tbody);

@@ -28,7 +28,7 @@ namespace prjBookMvcCore.Controllers
 {
     public class MemberController : Controller
     {
-        private readonly BookShopContext _bookShopContext ;
+        private readonly BookShopContext _bookShopContext;
         private readonly IConfiguration _config;
         private readonly ICaptchaValidator _captchaValidator ; //un done
         public UserInforService _userInforService { get; set; }
@@ -384,15 +384,6 @@ namespace prjBookMvcCore.Controllers
                          bookStock = (b.UnitInStock>0)?"可購買":"缺貨中",
                          bookName = b.BookTitle
                      }).ToJson();
-
-            //var q = from b in _bookShopContext.Books.Include(x => x.BookDiscountDetails).ThenInclude(x => x.BookDiscount).Include(x => x.ActionDetials).Include(x => x.Publisher)
-            //        join acd in _bookShopContext.ActionDetials on b.BookId equals acd.BookId
-            //        where (acd.MemberId == _userInforService.UserId && acd.ActionId == 4)
-            //        select b;
-
-            return View(q);
-
-
 
             return Json(q);
         }

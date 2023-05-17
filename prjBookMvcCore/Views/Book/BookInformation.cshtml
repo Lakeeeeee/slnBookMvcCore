@@ -332,10 +332,10 @@
                             </p>
                         </div>
                         <div class="buttonRight">
-                            <el-button round class="rightButton" v-on:click="addToCart(book.bookID,book.bookTitle,book.discountName,book,book.publisherName,book.unitInStock)">加入購物車</el-button>
+                            <el-button round class="rightButton" v-on:click="addToCart(book.bookID,@_userInforService.UserId)">加入購物車</el-button>
                         </div>
                         <div class="buttonRight">
-                            <el-button round class="rightButton" v-on:click="redirectToCart">直接購買</el-button>
+                            <el-button round class="rightButton" v-on:click="redirectToCart(@_userInforService.UserId)">直接購買</el-button>
                         </div>
                         <div class="buttonRight">
                             <el-button round class="rightButton" v-on:click="storeTempList(book.bookID,@_userInforService.UserId)">放入暫存清單</el-button>
@@ -821,46 +821,40 @@
                         });
                     }
                 },
-                addToCart(bookID,bookTitle,discountName,book,publisherName,unitInStock){
-                    var cartItems = localStorage.getItem("cartItems");
-                    if (cartItems === null) {
-                        cartItems = [];
-                    } else {
-                        cartItems = JSON.parse(cartItems);
-                    }
-                    var isExist = false;
-                    for (var i = 0; i < cartItems.length; i++) {
-                        if (cartItems[i].bookID === bookID) {
-                            isExist = true;
-                            break;
-                        }
-                    }
-                    if (isExist) {
-                        this.$message({
-                            message: '這本書已在購物車',
-                            type: 'warning'
-                        });
-                    } 
-                    else {
-                        // 如果購物車中沒有相同的書籍，則添加書籍到購物車中
-                        var newItem = {
-                            bookID: bookID,
-                            bookTitle: bookTitle,
-                            discountName: discountName,
-                            price: app.getDiscountPrice(book),
-                            publisherName: publisherName,
-                            unitInStock: unitInStock
-                        };
-                        cartItems.push(newItem);
-                        localStorage.setItem("cartItems", JSON.stringify(cartItems));
-                        this.$message({
-                            message: '已加入購物車',
-                            type: 'success'
+                addToCart(bookID,memberID){
+                    if (this.loginCheck()) {
+                        let self = this;
+                        let url = '@Url.Action("ActionTo", "Action")?bookID=' + bookID + '&memberID=' + memberID + '&actionID=' + 7;
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (result) {
+                                if (result) {
+                                    self.$notify({
+                                        title: '加入購物車成功',
+                                        message: '本書已加入購物車',
+                                        type: 'success'
+                                    });
+                                }
+                                else {
+                                    self.$notify({
+                                        title: '加入購物車失敗',
+                                        message: '本書已在購物車內',
+                                        type: 'warning'
+                                    });
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.log(error);
+                            }
                         });
                     }
                 },
-                redirectToCart() {
-                    window.location.href = "../../Order/ShoppingCart";
+                redirectToCart(memberID) {
+                    if (this.loginCheck()) {
+                        window.location.href = '@Url.Action("ShoppingCart", "Order")' + '?memberID=' + memberID;
+                    }
                 },
                 loginCheck() {
                     if (!this.isLogin) {
