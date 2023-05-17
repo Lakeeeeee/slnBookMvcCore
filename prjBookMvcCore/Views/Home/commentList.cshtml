@@ -37,7 +37,14 @@
                             <div class="col">
                                 <ul style="list-style:none; margin:0; padding:0;">
                                     <li class="bookCaption twolines mb-2">@item.book.BookTitle</li>
-                                    <li>評論等級：<span class="star star-s">@item.comment.Stars</span></li>
+                                    <li>
+                                        評論等級：<span class="star star-s">
+                                            @for (int x = 0; x < item.comment.Stars; x++)
+                                            {
+                                                <img style="width:20px; height:auto" src="~/image/icons8-star.gif" />
+                                            }
+                                        </span>
+                                    </li>
                                     <li>評論日期：@item.comment.CommentTime.ToString("yyyy-MM-dd")</li>
                                 </ul>
                             </div>
