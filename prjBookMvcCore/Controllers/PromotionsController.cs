@@ -69,6 +69,7 @@ namespace prjBookMvcCore.Controllers
                 return Content("notexist");
             }
         }
+
         public IActionResult Index() { return View(); } //建置中
     }
 }
