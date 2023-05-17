@@ -50,27 +50,15 @@
             </ol>
         </nav>
     </div>
-    <div>
-        <div>
-            <ul class="nav nav-tabs sp-tabs">
-                <li>
-                    <a class="btn btn-secondary" disabled> 購物車清單</a>
-                </li>
-                <li>
-                    <a href="~/Order/ListCart" class="btn btn-primary">暫存清單</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
+   </div>
 
 <div>
     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="pills-a-tab" data-bs-toggle="pill" data-bs-target="#pills-a" type="button" role="tab" aria-controls="pills-a" aria-selected="true">Home</button>
+            <button class="nav-link active" id="pills-a-tab" data-bs-toggle="pill" data-bs-target="#pills-a" type="button" role="tab" aria-controls="pills-a" aria-selected="true">購物車</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-b-tab" data-bs-toggle="pill" data-bs-target="#pills-b" type="button" role="tab" aria-controls="pills-b" aria-selected="false">Profile</button>
+            <button class="nav-link" id="pills-b-tab" data-bs-toggle="pill" data-bs-target="#pills-b" type="button" role="tab" aria-controls="pills-b" aria-selected="false">暫存清單</button>
         </li>
     </ul>
 </div>
@@ -79,8 +67,9 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>序號</th>
-                    <th>書名</th>
+                    <th style="width:50px;"><input type="checkbox"></th>
+                    <th style="width:50px;">序號</th>
+                    <th style ="width:500px;">書名</th>
                     <th>優惠</th>
                     <th>優惠價</th>
                     <th>出版社</th>
@@ -90,6 +79,7 @@
             <tbody>
                 @{
                     int count = 1;
+                   decimal totalAmount = 0;
                     foreach (var item in Model)
                     {
                         if (item.ActionDetial.ActionId == 7)
@@ -105,6 +95,7 @@
                                 <td>@item.CInformation.publisher.PublisherName</td>
                                 <td>@item.CInformation.book.UnitInStock</td>
                             </tr>
+                            totalAmount += discount;
                             count++;
                         };
                     };
@@ -113,11 +104,12 @@
         </table>
     </div>
     <div class="tab-pane fade" id="pills-b" role="tabpanel" aria-labelledby="pills-b-tab">
-        <table>
+        <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>序號</th>
-                    <th>書名</th>
+                    <th style="width:50px;"><input type="checkbox"></th>
+                    <th style ="width:50px;">序號</th>
+                    <th style="width:500px;">書名</th>
                     <th>優惠</th>
                     <th>優惠價</th>
                     <th>出版社</th>
@@ -135,7 +127,7 @@
                             string bookTitle = item.CInformation.book.BookTitle.Replace("$$", "\n");
                             <tr>
                                 <td><input type="checkbox"></td>
-                                <td>@count</td>
+                                <td>@Tcount</td>
                                 <td>@bookTitle</td>
                                 <td>@item.CInformation.bookDiscount.BookDiscountName</td>
                                 <td>@discount</td>
@@ -178,29 +170,23 @@
 </div>
 
 
-<div>
-    @*結帳資訊區*@
-    <ul class="form_01 prodetail">
-        <li>
-            <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
+<div style="margin-top:30px; margin-bottom:30px;">
+    @* 結帳資訊區 *@
+    
+            <div class="d-grid gap-5 c d-md-flex justify-content-md-end">
                 <table>
                     <tbody>
                         <tr>
-                            <td>
-                                共
-                                __項
-                                __元
+                          <td style="font-size:20px; color:#0072E3;">
+                        本次購物 共 @count 項<br>
+                        總金額 共 @totalAmount 元
                             </td>
                         </tr>
                     </tbody>
                 </table>
-            </div>
-
-        </li>
-
-    </ul>
-
+            </div>       
 </div>
+
 
 <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
     <button class="btn btn-primary col-4 me-md-2" type="button" onclick="addToList()">加入暫存</button>

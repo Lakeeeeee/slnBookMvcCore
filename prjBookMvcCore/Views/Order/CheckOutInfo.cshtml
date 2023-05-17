@@ -1,4 +1,6 @@
-﻿﻿@{
+﻿@using prjBookMvcCore.Models
+@model Member
+﻿@{
     ViewBag.Title = "訂單資訊";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -170,7 +172,7 @@
                         回饋金折抵
                     </label>
                     <div id="rebateAmount" style="display:none">
-                        <label for="rebateAmountInput" class="form-label">輸入金額：</label>
+                        <label for="rebateAmountInput" class="form-label">輸入金額：(目前持有回饋金：</label>
                         <input type="number" class="form-control" id="rebateAmountInput" name="rebateAmountInput" placeholder="請輸入回饋金金額" min="0">
                     </div>
                 </div>

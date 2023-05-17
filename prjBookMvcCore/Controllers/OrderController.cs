@@ -112,6 +112,20 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult checkOutInfo()
         {
+            Member member = new Member();
+            var query = from m in db.Members
+                        join discount in db.OrderDiscountDetails
+                        on m.MemberId equals discount.MemberId
+                        select new
+                        {
+                            回饋金 = m.Points,
+                            會員優惠 = m.Level,
+                            酷碰劵 = discount.OrderDiscount.OrderDiscountId
+                        };               
+                       
+
+                               
+
             return View();
         }
 
