@@ -8,6 +8,13 @@ namespace prjBookMvcCore.Controllers
 {
     public class OrderController : Controller
     {
+        public UserInforService _user { get; set; }
+        public OrderController(UserInforService user, BookShopContext db)
+        {
+            _user = user;
+            this.db = db;
+        }
+
         BookShopContext db = new();
         public IActionResult ListCart()
         {
@@ -19,7 +26,7 @@ namespace prjBookMvcCore.Controllers
             var query = from b in db.Books
                         join ad in db.ActionDetials
                         on b.BookId equals ad.BookId
-                        where ad.MemberId == memberID && ad.ActionId == 7
+                        where ad.MemberId == _user.UserId && ad.ActionId == 7
                         orderby ad.ActionToBookId descending
                         select new
                         {
