@@ -3,11 +3,15 @@ using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using prjBookMvcCore.Models;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
+using GoogleReCaptcha.V3.Interface;
+
 namespace prjBookMvcCore.Controllers
 {
     public class ActionController : Controller
     {
         BookShopContext db = new();
+
         public string ActionTo(int bookID, int memberID, int actionID)
         {
             bool isSuccess = true;
