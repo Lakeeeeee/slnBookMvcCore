@@ -1,6 +1,7 @@
-﻿@model IEnumerable<prjBookMvcCore.Models.Book>
+﻿@inject UserInforService user
+@model IEnumerable<prjBookMvcCore.Models.Book>
 @{
-    ViewData["Title"] = "myCollect";
+    ViewData["Title"] = "收藏清單";
     Layout = "~/Views/Shared/_Layout_Member.cshtml";
 }
 
@@ -24,56 +25,47 @@
         <div class="tab-pane fade show active" id="pills-1" role="tabpanel" aria-labelledby="pills-1-tab">
             <table class="table table-hover">
                 <tr>
-                    <th>序號</th>
-                    <th>書名</th>
+                    <th style="width:50px">序號</th>
+                    <th style="width:350px">書名</th>
                     <th>優惠</th>
                     <th>優惠價</th>
                     <th>出版社</th>
-                    <th>庫存</th>
                 </tr>
-
                 @{
                     int count = 0;
                     foreach (var item in Model)
                     {
                         count++;
+                        string 活動 = item.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountName).FirstOrDefault();
+                        decimal 折扣 = item.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault();
+                        decimal 活動價 = item.UnitPrice * 折扣;
+                        string 供貨狀況 = item.UnitInStock > 0 ? "可供貨" : "缺貨";
+                        int adcId = item.ActionDetials.Where(x => x.MemberId == user.UserId && x.BookId == item.BookId).Select(x => x.ActionToBookId).FirstOrDefault();
                         <tr>
                             <td>
                                 @count
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.BookTitle)
+                            <td id="text-@item.BookId">
+                                @item.BookTitle
                             </td>
                             <td>
-                                @{
-                                    string 活動 = "無優惠活動";
-                                }
-                                @Html.DisplayFor(modelItem => 活動)
+                                @活動
                             </td>
                             <td>
-                                @{
-                                    decimal 折扣 = 1;
-                                    var 活動價 = item.UnitPrice * 折扣;
-                                }
-
-                                @Html.DisplayFor(modelItem => 活動價)
+                                @活動價
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Publisher!.PublisherName)
+                                @item.Publisher!.PublisherName
                             </td>
                             <td>
-                                @{
-                                    string 供貨狀況 = item.UnitInStock > 0 ? "可供貨" : "缺貨";
-                                }
-                                @Html.DisplayFor(modelItem => 供貨狀況)
+                                @供貨狀況
                             </td>
                             <td>
                                 @Html.ActionLink("來去購買", "BookInformation", "Book", new{id=item.BookId}, new{@class="btn btn-outline-secondary"})
                             </td>
                             <td>
-                                @Html.ActionLink("刪除", "Delete", new { id = item.BookId }, new { onclick = "return confirm('確定要刪除嗎?')" })
+                                <button class="btn btn-outline-secondary" name="id" value="@adcId" id="followCancle" onclick="confirm('確定要取消嗎?')">取消暫存</button>
                             </td>
-
                         </tr>
                     }
                 }
@@ -95,6 +87,21 @@
     </div>
 </div>
 <script>
+    window.onload = function () {
+    @foreach (var item in Model)
+    {
+        <text>
+            var b = document.getElementById('text-@item.BookId');
+            b.innerText = replaceDoubleDollarSign(b.innerText);
+        </text>
+    };
+    };
+
+    function replaceDoubleDollarSign(str) {
+        return str.replace(/\$\$/g, '\n');
+    };
+</script>
+<script>
     const btn2 = document.querySelector('#pills-2-tab');
     btn2.addEventListener('click', async () => {
         const response = await fetch('@Url.Action("myAuthor")');
@@ -115,6 +122,8 @@
             row.insertCell().innerText = count;
             row.insertCell().innerText = data.name;
             const btnHtml = `<button type="submit" name="id" value="${data.id}" class="btn btn-outline-secondary" onclick="redirectToAuthor(${data.id})">最近的書目</button>`;
+            row.insertCell().innerHTML = btnHtml;
+            const btnHtml2 = `<button type="submit" name="id" value="${data.id}" class="btn btn-outline-secondary" onclick="redirectToAuthor(${data.id})">取消追蹤</button>`;
             row.insertCell().innerHTML = btnHtml;
         });
         table.appendChild(thead, tbody);
@@ -184,5 +193,17 @@
         const url = '@Url.Action("BookInformation", "Book")' + "?id=" + id;
         window.location.href = url
     };
-
+</script>
+<script>
+    const cancleBtn = document.getElementById('followCancle');
+    cancleBtn.addEventListener('click', async () => {
+        const response = await fetch('@Url.Content("~/Member/FollowCancle")?id=' + cancleBtn.value);
+        const confirmText = await response.text();
+        if (confirmText === "True") {
+            alert('已取消追蹤');
+        } else {
+            alert('不明錯誤, 你再試試');
+        };
+        window.location.href = window.location.href;
+    });
 </script>
