@@ -40,29 +40,29 @@
                         decimal 折扣 = item.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault();
                         int 活動價 = Convert.ToInt32(item.UnitPrice * 折扣);
                         int adcId = item.ActionDetials.Where(x => x.MemberId == user.UserId && x.BookId == item.BookId).Select(x => x.ActionToBookId).FirstOrDefault();
-                                        <tr>
-                                            <td>
-                                                @count
-                                            </td>
-                                            <td id="text-@item.BookId">
-                                                @item.BookTitle
-                                            </td>
-                                            <td>
-                                                @活動
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(item=>活動價) 元
-                                            </td>
-                                            <td>
-                                                @item.Publisher!.PublisherName
-                                            </td>
-                                            <td>
+                        <tr>
+                            <td>
+                                @count
+                            </td>
+                            <td id="text-@item.BookId">
+                                @item.BookTitle
+                            </td>
+                            <td>
+                                @活動
+                            </td>
+                            <td>
+                                @Html.DisplayFor(item=>活動價) 元
+                            </td>
+                            <td>
+                                @item.Publisher!.PublisherName
+                            </td>
+                            <td>
                                 @Html.ActionLink("來去購買", "BookInformation", "Book", new{id=item.BookId}, new{@class="btn btn-outline-secondary btn-sm"})
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-outline-secondary btn-sm" name="id" value="@adcId" id="followCancle">取消追蹤</button>
-                                            </td>
-                                        </tr>
+                            </td>
+                            <td>
+                                <button class="btn btn-outline-secondary btn-sm" name="id" value="@adcId" id="followCancle">取消追蹤</button>
+                            </td>
+                        </tr>
                     }
                 }
             </table> @*//暫存清單*@
@@ -87,7 +87,7 @@
     @foreach (var item in Model)
     {
         <text>
-                            var b = document.getElementById('text-@item.BookId');
+                                    var b = document.getElementById('text-@item.BookId');
             b.innerText = replaceDoubleDollarSign(b.innerText);
         </text>
     };
@@ -207,7 +207,7 @@
 </script>
 <script>
     const cancleBtn = document.getElementById('followCancle');
-    cancleBtn.addEventListener('click', function(){
+    cancleBtn.addEventListener('click', function () {
         cancleAction(cancleBtn.value);
     });
 
