@@ -44,7 +44,7 @@ namespace prjBookMvcCore.Controllers
             var query = from b in db.Books
                         join ad in db.ActionDetials
                         on b.BookId equals ad.BookId
-                        where memberID == memberID && ad.ActionId == 3
+                        where ad.MemberId == memberID && ad.ActionId == 7
                         orderby ad.ActionToBookId descending
                         select new
                         {

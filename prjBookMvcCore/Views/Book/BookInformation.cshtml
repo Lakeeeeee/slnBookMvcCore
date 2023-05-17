@@ -824,7 +824,7 @@
                 addToCart(bookID,memberID){
                     if (this.loginCheck()) {
                         let self = this;
-                        let url = '@Url.Action("StoreShoppingCart", "Order")?bookID=' + bookID + '&memberID=' + memberID + '&actionID=' + 3;
+                        let url = '@Url.Action("StoreShoppingCart", "Order")?bookID=' + bookID + '&memberID=' + memberID + '&actionID=' + 7;
                         $.ajax({
                             url: url,
                             type: 'POST',
