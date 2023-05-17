@@ -303,6 +303,12 @@ namespace prjBookMvcCore.Controllers
             IEnumerable<OrderDiscountDetail> q = _bookShopContext.OrderDiscountDetails.Where(x => x.MemberId == _userInforService.UserId).Include(x=>x.OrderDiscount);
             return View(q);
         }
+        [Authorize]
+        public IActionResult FollowCancle(int id) //取消追蹤
+        {
+
+
+        }
 
         [Authorize]
         public IActionResult myPublisher() //關注的出版社方法
@@ -335,9 +341,10 @@ namespace prjBookMvcCore.Controllers
         {
             var q = (from b in _bookShopContext.Books
                      join ac in _bookShopContext.ActionDetials on b.BookId equals ac.BookId
-                     where ac.MemberId == _userInforService.UserId
+                     where ac.MemberId == _userInforService.UserId && ac.ActionId == 1
                      select new
                      {
+                         actionDetailId = ac.ActionToBookId,
                          bookId = b.BookId,
                          bookStock = (b.UnitInStock>0)?"可購買":"缺貨中",
                          bookName = b.BookTitle
@@ -348,44 +355,20 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult myCollect() //暫存清單頁面
         {
-            IEnumerable<Book> q = _bookShopContext.ActionDetials.Where(x => x.MemberId == _userInforService.UserId && x.ActionId == 4).
-            Include(x => x.Book.Publisher).Select(x => x.Book);
+            var q = from b in _bookShopContext.Books.Include(x => x.BookDiscountDetails).ThenInclude(x => x.BookDiscount).Include(x => x.ActionDetials)
+                    join acd in _bookShopContext.ActionDetials on b.BookId equals acd.BookId
+                    where (acd.MemberId == _userInforService.UserId && acd.ActionId == 4)
+                    select b;
+
             return View(q);
         }
         [Authorize]
         public IActionResult myComment() //我的評論頁面
         {
-
             var q = _bookShopContext.Comments.Where(x => x.MemberId == _userInforService.UserId).Include(x => x.Book); 
-            
             return View(q);
         }
 
-        [Authorize]
-        #region(訂單修改/取消, todo)
-
-        //public IActionResult editOrders(Order id)
-        //{
-        //    if (id != null)
-        //    {
-        //        Order order = db.Orders.FirstOrDefault(x=>x.OrderId==id);
-        //        if(order != null)
-        //        {
-
-
-        //        }
-        //    }
-        //    return RedirectToAction("myOrders");
-        //}
-
-        //[HttpPost]
-        //public ActionResult editOrders()
-        //{
-        //    var q = db.Orders.Where(x => x.Member.MemberID == testMemID).ToList();
-        //    return View(q);
-        //}
-
-        #endregion //to do
         [Authorize]
         public IActionResult myOrders()  //訂單頁面
         {
@@ -426,6 +409,12 @@ namespace prjBookMvcCore.Controllers
         }
         
         public IActionResult PartailOrderDetail(int id)
+        {
+            var q = _bookShopContext.OrderDetails.Include(x => x.Book).ThenInclude(x => x.BookDiscountDetails).ThenInclude(x => x.BookDiscount).Where(x => x.OrderId == id);
+            return PartialView("PartailOrderDetail", q);
+        }
+
+        public IActionResult FollowCancle(int id)
         {
             var q = _bookShopContext.OrderDetails.Include(x => x.Book).ThenInclude(x => x.BookDiscountDetails).ThenInclude(x => x.BookDiscount).Where(x => x.OrderId == id);
             return PartialView("PartailOrderDetail", q);

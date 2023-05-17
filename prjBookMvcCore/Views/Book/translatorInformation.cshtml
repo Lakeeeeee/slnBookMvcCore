@@ -15,8 +15,6 @@
             color: inherit;
         }
     </style>
-    @*    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    *@
 </head>
 
 <div>
@@ -52,13 +50,14 @@
                                 <a class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
                                     <img src="~/Image/Book/@item.CoverPath" alt="@item.BookTitle" style="margin-bottom:15px; width:200px" />
                                     <br />
-                                    <p id="text-@item.BookId">
-                                        @item.BookTitle
-                                    </p>
                                 </a>
                             </td>
-                            <td>
+                            <td class="p-3" style="vertical-align:top; max-height:180px; overflow:hidden">
                                 <a style="" class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
+                                    <p style="color:brown; font-weight:bold" id="text-@item.BookId">
+                                        @item.BookTitle
+                                    </p>
+                                    <p>出版日期：@item.PublicationDate.ToShortDateString()</p>
                                     @(item.ContentIntro.Length > 200 ? item.ContentIntro.Substring(0, 200) + "..." : item.ContentIntro)
                                 </a>
                             </td>
@@ -70,10 +69,6 @@
         </table>
     </div>
 </div>
-@*<!-- import Vue before Element -->
-<script src="https://unpkg.com/vue@2/dist/vue.js"></script>
-<!-- import JavaScript -->
-<script src="https://unpkg.com/element-ui/lib/index.js"></script>*@
 <script>
     let isLogin = false;
     window.onload = () => {
@@ -87,11 +82,11 @@
     @foreach (var item in Model)
     {
         <text>
-                    var b = document.getElementById('text-@item.BookId');
+                            var b = document.getElementById('text-@item.BookId');
             b.innerText = replaceDoubleDollarSign(b.innerText);
         </text>
     }
-        };
+            };
 
     function replaceDoubleDollarSign(str) {
         return str.replace(/\$\$/g, '\n');

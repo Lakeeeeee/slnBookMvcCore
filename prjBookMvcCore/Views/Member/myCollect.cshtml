@@ -29,52 +29,45 @@
                     <th>優惠</th>
                     <th>優惠價</th>
                     <th>出版社</th>
-                    <th>庫存</th>
                 </tr>
-
                 @{
                     int count = 0;
                     foreach (var item in Model)
                     {
                         count++;
-                        <tr>
-                            <td>
-                                @count
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.BookTitle)
-                            </td>
-                            <td>
-                                @{
-                                    string 活動 = "無優惠活動";
-                                }
-                                @Html.DisplayFor(modelItem => 活動)
-                            </td>
-                            <td>
-                                @{
-                                    decimal 折扣 = 1;
-                                    var 活動價 = item.UnitPrice * 折扣;
-                                }
+                        string 活動 = item.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountName).FirstOrDefault();
+                        decimal 折扣 = item.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault();
+                        decimal 活動價 = item.UnitPrice * 折扣;
+                        string 供貨狀況 = item.UnitInStock > 0 ? "可供貨" : "缺貨";
+                        int adcId = item.ActionDetials.Select(x => x.ActionToBookId).FirstOrDefault();
+                                                        <tr>
+                                                            <td>
+                                                                @count
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.BookTitle)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => 活動)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => 活動價)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Publisher!.PublisherName)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => 供貨狀況)
+                                                            </td>
+                                                            <td>
+                                                                @Html.ActionLink("來去購買", "BookInformation", "Book", new{id=item.BookId}, new{@class="btn btn-outline-secondary"})
+                                                            </td>
+                                                            <td>
+                                                                <button class="btn btn-outline-secondary" name="id" value="adcId" id="followCancle" onclick="confirm('確定要取消嗎?')">取消暫存</button>
+                                                                @Html.ActionLink("取消暫存", "FollowCancle", new { }, new { onclick = "return confirm('確定要取消嗎?')" })
+                                                            </td>
 
-                                @Html.DisplayFor(modelItem => 活動價)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Publisher!.PublisherName)
-                            </td>
-                            <td>
-                                @{
-                                    string 供貨狀況 = item.UnitInStock > 0 ? "可供貨" : "缺貨";
-                                }
-                                @Html.DisplayFor(modelItem => 供貨狀況)
-                            </td>
-                            <td>
-                                @Html.ActionLink("來去購買", "BookInformation", "Book", new{id=item.BookId}, new{@class="btn btn-outline-secondary"})
-                            </td>
-                            <td>
-                                @Html.ActionLink("刪除", "Delete", new { id = item.BookId }, new { onclick = "return confirm('確定要刪除嗎?')" })
-                            </td>
-
-                        </tr>
+                                                        </tr>
                     }
                 }
             </table> @*//暫存清單*@
@@ -94,6 +87,7 @@
 
     </div>
 </div>
+
 <script>
     const btn2 = document.querySelector('#pills-2-tab');
     btn2.addEventListener('click', async () => {
@@ -184,5 +178,23 @@
         const url = '@Url.Action("BookInformation", "Book")' + "?id=" + id;
         window.location.href = url
     };
+
+</script>
+<script>
+    const cancleBtn = document.getElementById('followCancle');
+    cancleBtn.addEventListener('click', async (event)=>{
+        const response = await fetch('@Url.Content("~/Member/FollowCancle")?id=' + event.value);
+        console.log(event.value);
+        const confirmText = response.text();
+        if (confirmText === "True"){
+            alert('');
+
+        }
+
+
+    });
+
+
+
 
 </script>
