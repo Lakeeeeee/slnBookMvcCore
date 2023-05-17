@@ -28,7 +28,7 @@ namespace prjBookMvcCore.Controllers
 {
     public class MemberController : Controller
     {
-        private readonly BookShopContext _bookShopContext ;
+        private readonly BookShopContext _bookShopContext;
         private readonly IConfiguration _config;
         private readonly ICaptchaValidator _captchaValidator ; //un done
         public UserInforService _userInforService { get; set; }
