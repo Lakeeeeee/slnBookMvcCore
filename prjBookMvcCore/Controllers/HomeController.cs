@@ -4,6 +4,7 @@ using Microsoft.Data.SqlClient.Server;
 using prjBookMvcCore.Models;
 using System.Diagnostics;
 using System.Net;
+using NuGet.Protocol;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -184,6 +185,7 @@ namespace prjBookMvcCore.Controllers
                             書名 = b.BookTitle,
                             定價 = b.UnitPrice,
                             路徑 = b.CoverPath,
+                            出版日期 = b.PublicationDate,
                             折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                         };
 
@@ -194,6 +196,7 @@ namespace prjBookMvcCore.Controllers
                     BookTitle = recommendBook.書名,
                     BookId = recommendBook.書本ID,
                     UnitPrice = recommendBook.定價,
+                    PublicationDate = recommendBook.出版日期,
                     CoverPath = recommendBook.路徑
                 };
                 BookDiscount bd = new BookDiscount
@@ -233,6 +236,7 @@ namespace prjBookMvcCore.Controllers
                                           路徑 = b.CoverPath,
                                           折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                                           出版日期 = b.PublicationDate,
+                                          評論時間 = c.CommentTime,
                                           最新評論 = c.CommentText,
                                           評分 = c.Stars,
                                       }).Take(20);
@@ -244,7 +248,7 @@ namespace prjBookMvcCore.Controllers
 
                     Book b = new Book { BookTitle = recommendBook.書名, BookId = recommendBook.書本ID, UnitPrice = recommendBook.定價, CoverPath = recommendBook.路徑, PublicationDate = recommendBook.出版日期 };
                     BookDiscount bd = new BookDiscount { BookDiscountAmount = recommendBook.折扣 };
-                    Comment c = new Comment { CommentText = recommendBook.最新評論, Stars = recommendBook.評分 };
+                    Comment c = new Comment { CommentText = recommendBook.最新評論, Stars = recommendBook.評分, CommentTime=recommendBook.評論時間 };
                     RecommendInformation tmp = new RecommendInformation()
                     {
                         book = b,
@@ -279,6 +283,7 @@ namespace prjBookMvcCore.Controllers
                                          路徑 = b.CoverPath,
                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                                          出版日期 = b.PublicationDate,
+                                         評論時間 = c.CommentTime,
                                          最新評論 = c.CommentText,
                                          評分 = c.Stars,
                                      }).Take(5);
@@ -290,7 +295,7 @@ namespace prjBookMvcCore.Controllers
                    
                     Book b = new Book { BookTitle = recommendBook.書名, BookId = recommendBook.書本ID, UnitPrice = recommendBook.定價, CoverPath = recommendBook.路徑, PublicationDate = recommendBook.出版日期 };
                     BookDiscount bd = new BookDiscount { BookDiscountAmount = recommendBook.折扣 };
-                    Comment c = new Comment { CommentText = recommendBook.最新評論 , Stars = recommendBook.評分};
+                    Comment c = new Comment { CommentText = recommendBook.最新評論 , Stars = recommendBook.評分, CommentTime = recommendBook.評論時間 };
                     RecommendInformation tmp = new RecommendInformation()
                     {
                         book = b,
