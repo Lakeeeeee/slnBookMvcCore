@@ -42,7 +42,7 @@
 </script>
 
 <div class="container-sp">
-    <div >
+    <div>
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="~/Home/Home">首頁</a></li>
@@ -52,65 +52,103 @@
     </div>
     <div>
         <div>
-        <ul class="nav nav-tabs sp-tabs">
-            <li>
+            <ul class="nav nav-tabs sp-tabs">
+                <li>
                     <a class="btn btn-secondary" disabled> 購物車清單</a>
-            </li>
-            <li>
+                </li>
+                <li>
                     <a href="~/Order/ListCart" class="btn btn-primary">暫存清單</a>
-            </li>
-        </ul>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
-   
+
 <div>
-    <table class="table table-striped">
-        <tr>
-            <td></td>
-            <th>序號</th>
-            <th>書名</th>
-            <th>優惠</th>
-            <th>優惠價</th>
-            <th>出版社</th>
-            <th>庫存</th>
-        </tr>
-        @{
-            int count = 1;
-            foreach(var item in Model){
-                Decimal discount = Math.Floor(@item.book.UnitPrice * @item.bookDiscount.BookDiscountAmount);
-                string bookTitle = item.book.BookTitle.Replace("$$", "\n");
+    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="pills-a-tab" data-bs-toggle="pill" data-bs-target="#pills-a" type="button" role="tab" aria-controls="pills-a" aria-selected="true">Home</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-b-tab" data-bs-toggle="pill" data-bs-target="#pills-b" type="button" role="tab" aria-controls="pills-b" aria-selected="false">Profile</button>
+        </li>
+    </ul>
+</div>
+<div class="tab-content" id="pills-tabContent">
+    <div class="tab-pane fade show active" id="pills-a" role="tabpanel" aria-labelledby="pills-a-tab">
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td><input type="checkbox"></td>
-                    <th>@count</th>
-                    <th>@bookTitle</th>
-                    <th>@item.bookDiscount.BookDiscountName</th>
-                    <th>@discount</th>
-                    <th>@item.publisher.PublisherName</th>
-                    <th>@item.book.UnitInStock</th>
+                    <th>序號</th>
+                    <th>書名</th>
+                    <th>優惠</th>
+                    <th>優惠價</th>
+                    <th>出版社</th>
+                    <th>庫存</th>
                 </tr>
-                count++;
-            }    
-        }
-       @* <tr>
-            <td><input type="checkbox"></td>
-            <th>1</th>
-            <th>測試</th>
-            <th>每日精選66折</th>
-            <th>88</th>
-            <th>哩賀</th>
-            <th>10</th>
-        </tr>
-        <tr>
-            <td><input type="checkbox"></td>
-            <th>2</th>
-            <th>測試2</th>
-            <th>每日精選66折</th>
-            <th>199</th>
-            <th>遠見</th>
-            <th>10</th>
-        </tr>*@
-    </table>
+            </thead>
+            <tbody>
+                @{
+                    int count = 1;
+                    foreach (var item in Model)
+                    {
+                        if (item.ActionDetial.ActionId == 7)
+                        {
+                            Decimal discount = Math.Floor(@item.CInformation.book.UnitPrice * @item.CInformation.bookDiscount.BookDiscountAmount);
+                            string bookTitle = item.CInformation.book.BookTitle.Replace("$$", "\n");
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>@count</td>
+                                <td>@bookTitle</td>
+                                <td>@item.CInformation.bookDiscount.BookDiscountName</td>
+                                <td>@discount</td>
+                                <td>@item.CInformation.publisher.PublisherName</td>
+                                <td>@item.CInformation.book.UnitInStock</td>
+                            </tr>
+                            count++;
+                        };
+                    };
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane fade" id="pills-b" role="tabpanel" aria-labelledby="pills-b-tab">
+        <table>
+            <thead>
+                <tr>
+                    <th>序號</th>
+                    <th>書名</th>
+                    <th>優惠</th>
+                    <th>優惠價</th>
+                    <th>出版社</th>
+                    <th>庫存</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int Tcount = 1;
+                    foreach (var item in Model)
+                    {
+                        if (item.ActionDetial.ActionId == 4)
+                        {
+                            Decimal discount = Math.Floor(@item.CInformation.book.UnitPrice * @item.CInformation.bookDiscount.BookDiscountAmount);
+                            string bookTitle = item.CInformation.book.BookTitle.Replace("$$", "\n");
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>@count</td>
+                                <td>@bookTitle</td>
+                                <td>@item.CInformation.bookDiscount.BookDiscountName</td>
+                                <td>@discount</td>
+                                <td>@item.CInformation.publisher.PublisherName</td>
+                                <td>@item.CInformation.book.UnitInStock</td>
+                            </tr>
+                            Tcount++;
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div class="container">
@@ -138,13 +176,13 @@
         </div>
     </div>
 </div>
-         
+
 
 <div>
     @*結帳資訊區*@
-    <ul class ="form_01 prodetail">
+    <ul class="form_01 prodetail">
         <li>
-            <div class ="d-grid gap-2 c d-md-flex justify-content-md-end">
+            <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
                 <table>
                     <tbody>
                         <tr>
@@ -157,16 +195,16 @@
                     </tbody>
                 </table>
             </div>
-            
+
         </li>
-        
+
     </ul>
-    
+
 </div>
 
 <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
     <button class="btn btn-primary col-4 me-md-2" type="button" onclick="addToList()">加入暫存</button>
     <a href="~/Order/CheckOutInfo" class=" btn btn-primary col-4 me-md-2" type="button">來去結帳</a>
-    </div>
+</div>
 <script>
 </script>
