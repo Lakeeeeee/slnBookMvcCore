@@ -122,21 +122,22 @@
                     <label class="form-check-label" for="shippingMethod2">
                         超商取貨
                     </label>
-                </div>
-                <div id="storeOptions" style="display:none">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="storeOption" id="storeOption1" value="7-11">
-                        <label class="form-check-label" for="storeOption1">
-                            7-11
-                        </label>
+                    <div id="storeOptions" style="display:none">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="storeOption" id="storeOption1" value="7-11">
+                            <label class="form-check-label" for="storeOption1">
+                                7-11
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="storeOption" id="storeOption2" value="FamilyMart">
+                            <label class="form-check-label" for="storeOption2">
+                                全家
+                            </label>
+                        </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="storeOption" id="storeOption2" value="FamilyMart">
-                        <label class="form-check-label" for="storeOption2">
-                            全家
-                        </label>
-                    </div>
                 </div>
+                
             </form>
         </div>
     </div>
@@ -151,39 +152,33 @@
                         會員優惠
                     </label>
                 </div>
-                <div id="discountOptions1" style="display:none" class="ml-3">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="discountOptions" id="discountOptions1" value="回饋金">
-                        <label class="form-check-label" for="discountOptions1">
-                            回饋金折抵
-                        </label>
-                        <div id="rebateAmount" style="display:none">
-                            <label for="rebateAmountInput" class="form-label">輸入金額：</label>
-                            <input type="number" class="form-control" id="rebateAmountInput" name="rebateAmountInput" placeholder="請輸入回饋金金額" min="0">
-                        </div>
-                    </div>
-
-                </div>
+                
 
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="discountMethod" id="discountMethod2" value="活動優惠">
                     <label class="form-check-label" for="discountMethod2">
-                        活動優惠
+                        酷碰券
                     </label>
                 </div>
-                <div id="discountOptions2" style="display:none" class="ml-3">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="discountOptions" id="discountOptions1" value="酷碰">
-                        <label class="form-check-label" for="discountOptions1">
-                            酷碰券
-                        </label>
-                    </div>
-                  </div>
+               
             </form>
+            <h2>回饋金</h2>
+            <div id="" style="" class="ml-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="discountOptions" id="" value="回饋金">
+                    <label class="form-check-label" for="discountOptions1">
+                        回饋金折抵
+                    </label>
+                    <div id="rebateAmount" style="display:none">
+                        <label for="rebateAmountInput" class="form-label">輸入金額：</label>
+                        <input type="number" class="form-control" id="rebateAmountInput" name="rebateAmountInput" placeholder="請輸入回饋金金額" min="0">
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
-    </div>
-    </div>
+    
             <div class="d-grid gap-2 c d-md-flex justify-content-md-end"> 
              <a href="~/Order/ShoppingCart" class="btn btn-primary col-4 me-md-2" type="button">返回購物車</a> 
              <a href="~/Order/CheckOutConfirm" class=" btn btn-primary col-4 me-md-2" type="button">下一步</a>
