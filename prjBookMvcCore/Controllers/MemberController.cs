@@ -385,15 +385,6 @@ namespace prjBookMvcCore.Controllers
                          bookName = b.BookTitle
                      }).ToJson();
 
-            //var q = from b in _bookShopContext.Books.Include(x => x.BookDiscountDetails).ThenInclude(x => x.BookDiscount).Include(x => x.ActionDetials).Include(x => x.Publisher)
-            //        join acd in _bookShopContext.ActionDetials on b.BookId equals acd.BookId
-            //        where (acd.MemberId == _userInforService.UserId && acd.ActionId == 4)
-            //        select b;
-
-            return View(q);
-
-
-
             return Json(q);
         }
         [Authorize]
