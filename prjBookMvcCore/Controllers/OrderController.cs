@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -20,6 +21,7 @@ namespace prjBookMvcCore.Controllers
         {
             return View();
         }
+        [Authorize]
         public IActionResult ShoppingCart(int memberID)
         {
             List<CInformation> cartItems = new List<CInformation>();
