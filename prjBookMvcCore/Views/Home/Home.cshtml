@@ -19,14 +19,6 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
-
-    .star {
-        display: inline-block;
-        width: 20px; /* 星星的寬度 */
-        height: 20px; /* 星星的高度 */
-        background-image: url('/image/star_icon.png'); /* 星星的圖片 */
-        background-repeat: no-repeat;
-    }
 </style>
 
 <body>
@@ -147,7 +139,14 @@
                                 </a>
                             </li>
                             <li class="bookCaption twolines mb-2">@item.book.BookTitle</li>
-                            <li>評論等級：<span class="star">@item.comment.Stars</span></li>
+                            <li>
+                                評論等級：<span>
+                                    @for (int x = 0; x < item.comment.Stars; x++)
+                                    {
+                                        <img style="width:20px; height:auto" src="~/image/icons8-star.gif" />
+                                    }
+                                </span>
+                            </li>
                             <li>評論日期：@item.comment.CommentTime.ToString("yyyy-MM-dd")</li>
                             <li class="bookCaption twolines" style="color:grey">@item.comment.CommentText</li>
                             <li></li>
@@ -164,15 +163,5 @@
         </div>
     </div>
 
-    <script>//調整star為星星，製作中
-        // 假設等級為3
-        var rating = 3;
-
-        var stars = document.querySelectorAll('.star');
-
-        for (var i = 0; i < rating; i++) {
-            stars[i].classList.add('filled');
-        }
-
-    </script>
+    <script></script>
 </body>
