@@ -346,26 +346,22 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult cancleAuthor(int id) //取消關注的作者方法
         {
-            bool isSuccesse = false;
             var tool = _bookShopContext.CollectedAuthors.Where(x => x.MemberId == _userInforService.UserId && x.AuthorId == id).FirstOrDefault();
             if(tool != null)
             {
                 _bookShopContext.CollectedAuthors.Remove(tool);
                 _bookShopContext.SaveChanges();
-                isSuccesse = true;
             }
             return RedirectToAction("myCollect");
         }
         [Authorize]
         public IActionResult canclePublisher(int id) //取消關注的作者方法
         {
-            bool isSuccesse = false;
             var tool = _bookShopContext.CollectedPublishers.Where(x => x.MemberId == _userInforService.UserId && x.PublisherId == id).FirstOrDefault();
             if(tool != null)
             {
                 _bookShopContext.CollectedPublishers.Remove(tool);
                 _bookShopContext.SaveChanges();
-                isSuccesse = true;
             }
             return RedirectToAction("myCollect");
         }

@@ -36,7 +36,7 @@
                     foreach (var item in Model)
                     {
                         count++;
-                        string 活動 = item.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountName).FirstOrDefault();
+                        string 活動 = item.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountName).FirstOrDefault()!;
                         decimal 折扣 = item.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault();
                         int 活動價 = Convert.ToInt32(item.UnitPrice * 折扣);
                         int adcId = item.ActionDetials.Where(x => x.MemberId == user.UserId && x.BookId == item.BookId).Select(x => x.ActionToBookId).FirstOrDefault();
