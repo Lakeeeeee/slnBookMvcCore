@@ -306,8 +306,15 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult FollowCancle(int id) //取消追蹤
         {
-
-
+            bool isSuccess = false;
+            var tool =_bookShopContext.ActionDetials.Where(x => x.ActionToBookId == id).FirstOrDefault();
+            if(tool != null)
+            {
+                _bookShopContext.ActionDetials.Remove(tool);
+                _bookShopContext.SaveChanges();
+                isSuccess = true;
+            }
+            return Content(isSuccess.ToString());
         }
 
         [Authorize]
@@ -355,7 +362,7 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult myCollect() //暫存清單頁面
         {
-            var q = from b in _bookShopContext.Books.Include(x => x.BookDiscountDetails).ThenInclude(x => x.BookDiscount).Include(x => x.ActionDetials)
+            var q = from b in _bookShopContext.Books.Include(x => x.BookDiscountDetails).ThenInclude(x => x.BookDiscount).Include(x => x.ActionDetials).Include(x=>x.Publisher)
                     join acd in _bookShopContext.ActionDetials on b.BookId equals acd.BookId
                     where (acd.MemberId == _userInforService.UserId && acd.ActionId == 4)
                     select b;
@@ -409,12 +416,6 @@ namespace prjBookMvcCore.Controllers
         }
         
         public IActionResult PartailOrderDetail(int id)
-        {
-            var q = _bookShopContext.OrderDetails.Include(x => x.Book).ThenInclude(x => x.BookDiscountDetails).ThenInclude(x => x.BookDiscount).Where(x => x.OrderId == id);
-            return PartialView("PartailOrderDetail", q);
-        }
-
-        public IActionResult FollowCancle(int id)
         {
             var q = _bookShopContext.OrderDetails.Include(x => x.Book).ThenInclude(x => x.BookDiscountDetails).ThenInclude(x => x.BookDiscount).Where(x => x.OrderId == id);
             return PartialView("PartailOrderDetail", q);
