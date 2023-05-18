@@ -8,8 +8,9 @@ namespace prjBookMvcCore.Controllers
     {
         BookShopContext db = new();
         //TODO:(書玉)分頁controller發法改寫
-        public IActionResult 分類頁面(int categoryID)
+        public IActionResult 分類頁面(int id)
         {
+            int categoryID = id;
             if(categoryID == 0)
             {
                 var books = from b in db.Books
