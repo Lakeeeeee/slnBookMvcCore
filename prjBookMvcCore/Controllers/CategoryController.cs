@@ -13,7 +13,7 @@ namespace prjBookMvcCore.Controllers
         public IActionResult 分類頁面(int id, int page = 1)
         {
             int categoryID = id;
-            int itemsPerPage = 28;
+            int itemsPerPage = 28;//每頁只顯示28個
 
             var query = from b in db.Books
                         join sd in db.CategoryDetails
@@ -34,12 +34,12 @@ namespace prjBookMvcCore.Controllers
                             折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                             出版日期 = b.PublicationDate,
                         };
-
+            //書籍取得分類ID
             if (categoryID != 0)
             {
                 query = query.Where(sc => sc.分類ID == categoryID);
             }
-
+            //頁面顯示控制
             int totalItems = query.Count();
             int totalPages = (int)Math.Ceiling((double)totalItems / itemsPerPage);
             int offset = (page - 1) * itemsPerPage;
@@ -72,7 +72,7 @@ namespace prjBookMvcCore.Controllers
             List<Category> categories = getCategories();
             List<SubCategory> subCategories = getSubCategories();
 
-        MenuInformation menuInformation = new MenuInformation
+            MenuInformation menuInformation = new MenuInformation
             {
                 categories = categories,
                 subCategories = subCategories,
@@ -81,7 +81,6 @@ namespace prjBookMvcCore.Controllers
                 TotalPages = totalPages,
                 categoryId = categoryID // Add this line to pass the category ID to the view
             };
-
             return View(menuInformation);
         }
 
@@ -119,5 +118,5 @@ namespace prjBookMvcCore.Controllers
                 return subCategories;
             }
         }
-     }
- }
+    }
+}
