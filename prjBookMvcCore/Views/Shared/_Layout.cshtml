@@ -59,7 +59,7 @@
         </button>
         <span class="translate-middle badge rounded-pill bg-secondary" id="timer"></span>
     </div>
-    <form asp-action="Promotions限時登入領取優惠" id="takecoupon_form" asp-controller="Promotions">
+  
         <div id="popup" class="popup-container">
             <h2>領取優惠券</h2>
             <p style="text-align:center">滿999扣77元</p>
@@ -68,14 +68,14 @@
                     <path d="M11.46.146A.5.5 0 0 0 11.107 0H4.893a.5.5 0 0 0-.353.146L.146 4.54A.5.5 0 0 0 0 4.893v6.214a.5.5 0 0 0 .146.353l4.394 4.394a.5.5 0 0 0 .353.146h6.214a.5.5 0 0 0 .353-.146l4.394-4.394a.5.5 0 0 0 .146-.353V4.893a.5.5 0 0 0-.146-.353L11.46.146zm-6.106 4.5L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z" />
                 </svg>
             </button>
-            <button class="btn btn-outline-info" type="submit">
+            <button class="btn btn-outline-info" onclick="takeCoupon(@_userInforService.UserId)">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-ticket-perforated-fill" viewBox="0 0 16 16">
                     <path d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6V4.5Zm4-1v1h1v-1H4Zm1 3v-1H4v1h1Zm7 0v-1h-1v1h1Zm-1-2h1v-1h-1v1Zm-6 3H4v1h1v-1Zm7 1v-1h-1v1h1Zm-7 1H4v1h1v-1Zm7 1v-1h-1v1h1Zm-8 1v1h1v-1H4Zm7 1h1v-1h-1v1Z" />
                 </svg>
                 現在領取優惠券，立即享受折扣優惠！
             </button>
         </div>
-    </form>
+
 
 
     <div style="background-image:url('');background-size:100%;">
@@ -231,7 +231,8 @@
 </body>
 </html>
 
-<script>//視窗
+<script>
+    //視窗
     window.addEventListener('DOMContentLoaded', function () {
         startCountdown();//showPopup();
         var close隱藏浮動視窗 = document.querySelector('#close');
@@ -250,7 +251,8 @@
         popup.classList.remove("show-popup");
     }
 </script>
-<script>//計時
+<script>
+    //計時
     const countdownEl = document.getElementById("timer");
     let countdownId = null;
 
@@ -279,12 +281,13 @@
             remainingTime = 0;
             localStorage.removeItem("countdownStartTime");
         }
-        else {remainingTime--;}
+        else { remainingTime--; }
     }
-    function startCountdown() { countdownId = setInterval(showRemainingTime, 999);}
+    function startCountdown() { countdownId = setInterval(showRemainingTime, 999); }
     function padZero(num) { return num.toString().padStart(2, '0'); }
 </script>
-<script>//click
+<script>
+    //click
     let isLogin = false;
     window.onload = () => {
         if (@_userInforService.UserId !== 0) {
@@ -305,22 +308,25 @@
         return true;
     };
 
-    const coupon = document.querySelector('#takecoupon_form');
-    coupon.addEventListener('submit', async (event) => {
-        if (loginCheck()) {
-            event.preventDefault();
-            const response = await fetch('@Url.ActionLink("Promotions限時登入領取優惠")', {
-                method: 'POST'
+    function takeCoupon(memberID) {
+        if (loginCheck()) 
+        {
+            let self = this;
+            let url = '@Url.Action("Promotions限時登入領取優惠","Promotions")';
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (result) {
+                    let isSuccess = result;
+                    if (isSuccess === "false") {
+                        alert('已領取');hidePopup();
+                    }
+                    else {
+                        alert('領取成功，系統將自動轉向會員中心');
+                        window.location.href = '@Url.Action("MemberCenter", "Member")';
+                    }
+                },
             });
-            const confirmtext = await response.text();
-            if (confirmtext === "exist") {
-                alert('已領取');
-                hidePopup();
-            }
-            if (confirmtext === "notexist") {
-                alert('領取成功，系統將自動轉向會員中心');
-                window.location.href = '@Url.Action("MemberCenter", "Member")';
-            }
         }
-    });
+    };
 </script>
