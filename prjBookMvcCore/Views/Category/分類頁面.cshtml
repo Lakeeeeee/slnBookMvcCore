@@ -3,11 +3,13 @@
 @{
     ViewData["Title"] = "分類頁面";
 }
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
         a:link, a:visited {
             text-decoration: none;
@@ -27,7 +29,7 @@
             text-overflow: ellipsis;
         }
 
-        .authorCaption {
+        .authorCaption{
             display: -webkit-box;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 1;
@@ -94,42 +96,45 @@
                 </div>
                 <br />
                 @*書籍顯示欄*@
-                <div class="row" id="booksview">
-                    @{
-                        foreach (var item in Model.menuItems)
-                        {
-                            <div class="col-3 " style="padding:0">
-                                <div class="card book-item" data-publication-date="@item.book.PublicationDate.ToString("yyyy/MM/dd")" data-price="@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))">
-                                    <br />
-                                    <div class="headshot">
-                                        <a><img src="~/Image/Book/@item.book.CoverPath" alt="@item.book.CoverPath" height="240px"></a>
-                                    </div>
-                                    <div class="card-body">
-                                        <ul style="list-style:none; margin:0; padding:0;">
-                                            <li> <a class="bookCaption two-lines" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle</a></li>
-                                            <li class="prod_author authorCaption">
-                                                作者：
-                                                @if (item.author != null)
-                                                {
-                                                    <a href="~/Book/authorInformation/@item.author.AuthorId">@item.author.AuthorName</a>
-                                                }
-                                            </li>
-                                            <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))</span>元</li>
-                                            <li class="discPrice">
-                                                優惠價：<span>@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
-                                                <span>@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
-                                            </li>
-                                            <li class="publicationDate">
-                                                出版日期：<span>@item.book.PublicationDate.ToString("yyyy/MM/dd")</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    }
+                <div class="row">
+                    <div class="col" id="bookList" style='padding:0'>
+                        <div class="row" id="booksview">
+                            @{
+                                foreach (var item in Model.menuItems)
+                                {
+                                        <div class="col ">
+                                            <div class="card book-item" data-publication-date="@item.book.PublicationDate.ToString("yyyy/MM/dd")" data-price="@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))">
+                                                <div class="headshot">
+                                                    <a><img src="~/Image/Book/@item.book.CoverPath" alt="@item.book.CoverPath" height="240px"></a>
+                                                </div>
+                                                <div class="card-body">
+                                                    <ul style="list-style:none; margin:0; padding:0;">
+                                                        <li> <a class="bookCaption two-lines" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle</a></li>
+                                                        <li class="prod_author authorCaption">
+                                                            作者：
+                                                            @if (item.author != null)
+                                                        {
+                                                                <a  href="~/Book/authorInformation/@item.author.AuthorId">@item.author.AuthorName</a>
+                                                        }
+                                                        </li>
+                                                        <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))</span>元</li>
+                                                        <li class="discPrice">
+                                                            優惠價：<span>@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
+                                                            <span>@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
+                                                        </li>
+                                                        <li class="publicationDate">
+                                                            出版日期：<span>@item.book.PublicationDate.ToString("yyyy/MM/dd")</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                }
+                            }
+                        </div>
+                    </div>
                 </div>
-                <!-- 分頁欄控制按鈕 -->
+                <!-- 分頁欄 -->
                 <div class="row">
                     <div class="col">
                         <nav aria-label="Page navigation">
