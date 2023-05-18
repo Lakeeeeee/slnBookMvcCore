@@ -1,6 +1,7 @@
 ﻿using GoogleReCaptcha.V3.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using prjBookMvcCore.Models;
 using System.Diagnostics.Metrics;
 
@@ -9,6 +10,11 @@ namespace prjBookMvcCore.Controllers
     public class PromotionsController : Controller
     {
         BookShopContext db = new();
+        public UserInforService _userInforService { get; set; }
+        public PromotionsController( UserInforService userInforService)
+        {
+            _userInforService = userInforService;
+        }
         public IActionResult Promotions註冊會員禮() { return View(); }
 
         public IActionResult Promotions會員() { return View(); }
@@ -36,24 +42,16 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult Promotions活動已結束() { return View(); }
 
-        private readonly BookShopContext _bookShopContext;
-        private readonly IConfiguration _config;
-        private readonly ICaptchaValidator _captchaValidator; //un done
-        public UserInforService _userInforService { get; set; }
-        public PromotionsController(BookShopContext db, UserInforService userInforService, IConfiguration config, ICaptchaValidator captchaValidator)
+
+       
+        public string Promotions限時登入領取優惠()
         {
-            _bookShopContext = db;
-            _userInforService = userInforService;
-            _captchaValidator = captchaValidator;
-            _config = config;
-        }
-        [HttpPost]
-        [Authorize]
-        public IActionResult Promotions限時登入領取優惠()
-        {
-            if (_bookShopContext.OrderDiscountDetails.Where(d=>d.MemberId==_userInforService.UserId&d.OrderDiscountEndDate>DateTime.Now).Any(d=>d.OrderDiscountId==4))
+            string isSuccess;
+            var q = db.OrderDiscountDetails.Where(d =>d.MemberId== _userInforService.UserId & d.OrderDiscountId==4).Select(d => d);
+            if (q.Count() != 0)
             {
-                return Content("exist");
+                isSuccess = "false";
+                return isSuccess;
             }
             else
             {
@@ -64,9 +62,10 @@ namespace prjBookMvcCore.Controllers
                     OrderDiscountStartDate = DateTime.Now,
                     OrderDiscountEndDate = DateTime.Now.AddDays(3),
                 };
-                _bookShopContext.OrderDiscountDetails.Add(newmemberdiscount);
-                _bookShopContext.SaveChanges();
-                return Content("notexist");
+                db.OrderDiscountDetails.Add(newmemberdiscount);
+                db.SaveChanges();
+                isSuccess = "true";
+                return isSuccess;
             }
         }
 
