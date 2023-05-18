@@ -16,6 +16,7 @@ namespace prjBookMvcCore.ViewModel
         }
 
         [Required(ErrorMessage ="必填欄位")]
+        [EmailAddress]
         public string MemberEmail_P { get { return member.MemberEmail; } set { member.MemberEmail = value; } }
         [Required]
         public string MemberPassword_P { get { return member.MemberPassword; } set { member.MemberPassword= value; } }
