@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using prjBookMvcCore.Models;
+using prjBookMvcCore.ViewModel;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -119,19 +120,46 @@ namespace prjBookMvcCore.Controllers
                         select new
                         {
                             回饋金 = m.Points,
-                            會員優惠 = m.Level,
-                            酷碰劵 = discount.OrderDiscount.OrderDiscountId
-                        };               
-                       
-
-                               
-
+                            會員等級 = m.Level.LevelName,
+                            等級優惠 = m.Level.LevelDiscount,
+                            酷碰劵 = discount.OrderDiscount.OrderDiscountDescprtion,
+                            酷碰券內容 = discount.OrderDiscount.OrderDiscountAmount
+                        };
+            foreach (var item in query)
+            {
+                Member m = new Member()
+                {
+                     Points = item.回饋金,
+                };
+                MemberLevel ml = new MemberLevel()
+                {
+                    LevelDiscount = item.等級優惠,
+                    LevelName = item.會員等級
+                };
+                OrderDiscount od = new OrderDiscount()
+                {
+                    OrderDiscountDescprtion = item.酷碰劵,
+                    OrderDiscountAmount = item.酷碰券內容,
+                };
+                checkoutInformation ci = new checkoutInformation()
+                {
+                    member = m,
+                    memberlevel = ml,
+                    orderdiscount = od,
+                };
+                return View(ci);
+            }
             return View();
         }
 
         public IActionResult checkOutConfirm()
         {
             return View();
+        }
+        [HttpPost]
+        public IActionResult checkOutConfirm(CheckOutConfirmViewModel model)
+        {
+            return View(model);
         }
         public IActionResult checkOutFinal()
         {
@@ -143,64 +171,7 @@ namespace prjBookMvcCore.Controllers
             return View();
         }
 
-        //API 測試中=====
-
-   //     const request = Require('request');
-   //     const cheerio = require('cheerio');
-   //     const async = require('async');
-
-   //     [HttpGet]
-   //     [Route("api/ibon-stores")]
-   //     public IActionResult GetIbonStores()
-   //     {
-   //         var result = new List<Dictionary<string, string>>();
-
-   //         getCities((cities) => {
-   //             async.map(cities, (city, callback) => {
-   //                 getStories(city, (stores) => {
-   //                     callback(null, stores);
-   //                 })
-   //             }, (err, results) => {result = [].concat.apply([], results);
-   //         });
-   //     });
-
-   // return Ok(result);
-   // }
-
-   //async function getCities(callback)
-   // {
-   //     request('http://www.ibon.com.tw/retail_inquiry.aspx#gsc.tab=0', (err, res, body) => {
-   //         var $ = cheerio.load(body)
-   //         var cities = $('#Class1 option').map((index, obj) => {
-   //         return $(obj).text()
-   //     }).get()
-   //         callback(cities)
-   //     })
-   // }
-
-   // function getStories(city, callback)
-   // {
-   //     var options = {
-   //     url: 'http://www.ibon.com.tw/retail_inquiry_ajax.aspx',
-   //     method: 'POST',
-   //     form:
-   //     {
-   //     strTargetField: 'COUNTY',
-   //         strKeyWords: city,
-   //     }
-   // }
-   // request(options, (err, res, body) => {
-   //     var $ = cheerio.load(body)
-   //     var stores = $('tr').map((index, obj) => {
-   //         return new Dictionary<string, string>{
-   //             {"id", $(obj).find('td').eq(0).text().trim()},
-   //             {"store", $(obj).find('td').eq(1).text().trim()},
-   //             {"address", $(obj).find('td').eq(2).text().trim()}
-   //         };
-   //     }).get()
-   //     stores.shift()
-   //     callback(stores)
-   // })
+        
 }
 
     }
