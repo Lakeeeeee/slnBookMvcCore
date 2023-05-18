@@ -303,11 +303,11 @@
                     </div>
                     <ul class="list-group list-group-flush">
                         @{
-                            @foreach (var item in Model.categories)
+                            @foreach (var category in Model.categories)
                             {
-                                @if (item.CategoryId < 1 || item.CategoryId > 14)
+                                @if (category.CategoryId > 14)
                                 {
-                                    <li class="list-group-item"><span><a href="~/Category/@item.CategoryId">@item.CategoryName</a></span></li>
+                                    <li class="list-group-item"><span><a asp-controller="Category" asp-action="分類頁面" asp-route-id="@category.CategoryId">@category.CategoryName</a></span></li>
                                 }
                             }
                             }

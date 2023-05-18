@@ -124,7 +124,6 @@ namespace prjBookMvcCore.Controllers
                 };
                 return View(menuInformation);
             }
-           
         }
 
         public List<Category> getCategories()
@@ -161,6 +160,5 @@ namespace prjBookMvcCore.Controllers
                 return subCategories;
             }
         }
-
     }
 }
