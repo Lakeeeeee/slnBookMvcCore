@@ -1,4 +1,6 @@
-﻿@{
+﻿@using prjBookMvcCore.Models
+@model List<ShoppingcartInformation>
+@{
     ViewBag.Title = "購物車";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -73,7 +75,24 @@
             <th>出版社</th>
             <th>庫存</th>
         </tr>
-        <tr>
+        @{
+            int count = 1;
+            foreach(var item in Model){
+                Decimal discount = Math.Floor(@item.CInformation.book.UnitPrice * @item.CInformation.bookDiscount.BookDiscountAmount);
+                string bookTitle = item.CInformation.book.BookTitle.Replace("$$", "\n");
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <th>@count</th>
+                    <th>@bookTitle</th>
+                    <th>@item.CInformation.bookDiscount.BookDiscountName</th>
+                    <th>@discount</th>
+                    <th>@item.CInformation.publisher.PublisherName</th>
+                    <th>@item.CInformation.book.UnitInStock</th>
+                </tr>
+                count++;
+            }    
+        }
+       @* <tr>
             <td><input type="checkbox"></td>
             <th>1</th>
             <th>測試</th>
@@ -90,7 +109,7 @@
             <th>199</th>
             <th>遠見</th>
             <th>10</th>
-        </tr>
+        </tr>*@
     </table>
 </div>
 
@@ -145,17 +164,9 @@
     
 </div>
 
-<button onclick="clearAllCookies()">清除購物車Cookie</button>
-
 <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
     <button class="btn btn-primary col-4 me-md-2" type="button" onclick="addToList()">加入暫存</button>
     <a href="~/Order/CheckOutInfo" class=" btn btn-primary col-4 me-md-2" type="button">來去結帳</a>
     </div>
 <script>
-    function clearAllCookies() {
-        localStorage.clear();
-        alert('All cookie clear')
-    }
-    let cartItems = JSON.parse(localStorage.getItem("cartItems"));
-    console.log(cartItems)
 </script>

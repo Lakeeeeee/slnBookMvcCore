@@ -7,6 +7,7 @@
     var nextLevel = user._db.MemberLevels.Where(x => x.LevelId == (Model.LevelId + 1)).Select(x => x.LevelName).FirstOrDefault();
     var nextAmount = user._db.MemberLevels.Where(x => x.LevelId == (Model.LevelId + 1)).Select(x => x.MinCost).FirstOrDefault();
     var ex = nextAmount-Model.CostAmount;
+    var q = user._db.MessageMemberDetails.Where(x => x.MemberId == user.UserId && x.ReadStatu == 0).Count();
 }
 
 <style>
@@ -57,7 +58,7 @@
                             <a class="card-body" style="display:block;width:100%;" href="~/Member/myMessage">
                                 <p class="card-text">
                                     您有
-                                </p><span class="display-6" id="messageCount">0  </span>封訊息未讀
+                                </p><span class="display-6" id="messageCount">@q </span>封訊息未讀
                             </a>
                         </div>
                     </div>

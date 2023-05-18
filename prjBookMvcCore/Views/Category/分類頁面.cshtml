@@ -52,10 +52,10 @@
                         <ul class="list-group list-group-flush">
                             @foreach (var category in Model.categories)
                             {
-                                @if (category.CategoryId < 1 || category.CategoryId > 14)
+                                @if (category.CategoryId > 14)
                                 {
                                     <li class="list-group-item">
-                                        <span><a href="~/Category/@category.CategoryId">@category.CategoryName</a></span>
+                                        <span><a asp-controller="Category" asp-action="分類頁面" asp-route-id="@category.CategoryId">@category.CategoryName</a></span>
                                         <ul>
                                             @foreach (var subcategory in category.SubCategories)
                                             {
@@ -93,33 +93,33 @@
                             @{
                                 foreach (var item in Model.menuItems)
                                 {
-                                    <div class="col ">
-                                        <div class="card book-item" data-publication-date="@item.book.PublicationDate.ToString("yyyy/MM/dd")" data-price="@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))">
-                                            <div class="headshot">
-                                                <a><img src="~/Image/Book/@item.book.CoverPath" alt="@item.book.CoverPath" height="200px"></a>
-                                            </div>
-                                            <div class="card-body">
-                                                <ul style="list-style:none; margin:0; padding:0;">
-                                                    <li> <a class="bookCaption two-lines" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle</a></li>
-                                                    <li class='prod_author'>
-                                                        作者：
-                                                        @if (item.author != null)
-                                                        {
-                                                            <a href="~/Book/authorInformation/@item.author.AuthorId">@item.author.AuthorName</a>
-                                                        }
-                                                    </li>
-                                                    <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))</span>元</li>
-                                                    <li class="discPrice">
-                                                        優惠價：<span>@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
-                                                        <span>@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
-                                                    </li>
-                                                    <li class="publicationDate">
-                                                        出版日期：<span>@item.book.PublicationDate.ToString("yyyy/MM/dd")</span>
-                                                    </li>
-                                                </ul>
+                                        <div class="col ">
+                                            <div class="card book-item" data-publication-date="@item.book.PublicationDate.ToString("yyyy/MM/dd")" data-price="@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))">
+                                                <div class="headshot">
+                                                    <a><img src="~/Image/Book/@item.book.CoverPath" alt="@item.book.CoverPath" height="200px"></a>
+                                                </div>
+                                                <div class="card-body">
+                                                    <ul style="list-style:none; margin:0; padding:0;">
+                                                        <li> <a class="bookCaption two-lines" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle</a></li>
+                                                        <li class='prod_author'>
+                                                            作者：
+                                                            @if (item.author != null)
+                                                             {
+                                                                <a href="~/Book/authorInformation/@item.author.AuthorId">@item.author.AuthorName</a>
+                                                             }
+                                                        </li>
+                                                        <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))</span>元</li>
+                                                        <li class="discPrice">
+                                                            優惠價：<span>@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
+                                                            <span>@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
+                                                        </li>
+                                                        <li class="publicationDate">
+                                                            出版日期：<span>@item.book.PublicationDate.ToString("yyyy/MM/dd")</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
                                 }
                             }
                         </div>
@@ -131,4 +131,3 @@
     <script src="~/js/booksview.js"></script>  @*選單排序判斷*@
 </body>
 </html>
-

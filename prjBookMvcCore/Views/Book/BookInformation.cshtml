@@ -332,19 +332,13 @@
                             </p>
                         </div>
                         <div class="buttonRight">
-                            <el-button round class="rightButton" v-on:click="addToCart(book.bookID,book.bookTitle,book.discountName,book,book.publisherName,book.unitInStock)">加入購物車</el-button>
+                            <el-button round class="rightButton" v-on:click="addToCart(book.bookID,@_userInforService.UserId)">加入購物車</el-button>
                         </div>
                         <div class="buttonRight">
-                            <el-button round class="rightButton" v-on:click="redirectToCart">直接購買</el-button>
+                            <el-button round class="rightButton" v-on:click="redirectToCart(@_userInforService.UserId)">直接購買</el-button>
                         </div>
                         <div class="buttonRight">
                             <el-button round class="rightButton" v-on:click="storeTempList(book.bookID,@_userInforService.UserId)">放入暫存清單</el-button>
-                        </div>
-                        <div class="buttonRight">
-                            <el-button round class="rightButton" v-on:click="collectPublisher(book.publisherID,@_userInforService.UserId)">收藏出版社</el-button>
-                        </div>
-                        <div class="buttonRight">
-                            <el-button round class="rightButton" v-on:click="clearAllCookies">Clear cookie</el-button>
                         </div>
                     </el-row>
                 </el-aside>
@@ -731,66 +725,6 @@
                 getDiscountPrice(item) {
                     return Math.floor(item.unitPrice * item.discount / 100);
                 },
-                collectAuthor(authorID,memberID){
-                    if(this.loginCheck()){
-                        let self = this;
-                        let url = '@Url.Action("CollectAuthor", "Collect")?memberID=' + memberID + '&authorID=' + authorID;
-                        $.ajax({
-                            url: url,
-                            type: 'POST',
-                            dataType: 'json',
-                            success: function (result) {
-                                if (result) {
-                                    self.$notify({
-                                        title: '收藏作者成功',
-                                        message: '作者已加入收藏清單',
-                                        type: 'success'
-                                    });
-                                }
-                                else {
-                                    self.$notify({
-                                        title: '收藏作者失敗',
-                                        message: '作者已加入過收藏清單',
-                                        type: 'warning'
-                                    });
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                console.log(error);
-                            }
-                        });
-                    }
-                },
-                collectPublisher(publisherID,memberID) {
-                    if (this.loginCheck()) {
-                        let self = this;
-                        let url = '@Url.Action("CollectPublisher", "Collect")?memberID=' + memberID + '&publisherID=' + publisherID;
-                        $.ajax({
-                            url: url,
-                            type: 'POST',
-                            dataType: 'json',
-                            success: function (result) {
-                                if (result) {
-                                    self.$notify({
-                                        title: '收藏出版社成功',
-                                        message: '出版社已加入收藏清單',
-                                        type: 'success'
-                                    });
-                                }
-                                else {
-                                    self.$notify({
-                                        title: '收藏出版社失敗',
-                                        message: '出版社已加入過收藏清單',
-                                        type: 'warning'
-                                    });
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                console.log(error);
-                            }
-                        });
-                    }
-                },
                 storeTempList(bookID,memberID) {
                     if (this.loginCheck()) {
                         let self = this;
@@ -821,46 +755,40 @@
                         });
                     }
                 },
-                addToCart(bookID,bookTitle,discountName,book,publisherName,unitInStock){
-                    var cartItems = localStorage.getItem("cartItems");
-                    if (cartItems === null) {
-                        cartItems = [];
-                    } else {
-                        cartItems = JSON.parse(cartItems);
-                    }
-                    var isExist = false;
-                    for (var i = 0; i < cartItems.length; i++) {
-                        if (cartItems[i].bookID === bookID) {
-                            isExist = true;
-                            break;
-                        }
-                    }
-                    if (isExist) {
-                        this.$message({
-                            message: '這本書已在購物車',
-                            type: 'warning'
-                        });
-                    } 
-                    else {
-                        // 如果購物車中沒有相同的書籍，則添加書籍到購物車中
-                        var newItem = {
-                            bookID: bookID,
-                            bookTitle: bookTitle,
-                            discountName: discountName,
-                            price: app.getDiscountPrice(book),
-                            publisherName: publisherName,
-                            unitInStock: unitInStock
-                        };
-                        cartItems.push(newItem);
-                        localStorage.setItem("cartItems", JSON.stringify(cartItems));
-                        this.$message({
-                            message: '已加入購物車',
-                            type: 'success'
+                addToCart(bookID,memberID){
+                    if (this.loginCheck()) {
+                        let self = this;
+                        let url = '@Url.Action("ActionTo", "Action")?bookID=' + bookID + '&memberID=' + memberID + '&actionID=' + 7;
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (result) {
+                                if (result) {
+                                    self.$notify({
+                                        title: '加入購物車成功',
+                                        message: '本書已加入購物車',
+                                        type: 'success'
+                                    });
+                                }
+                                else {
+                                    self.$notify({
+                                        title: '加入購物車失敗',
+                                        message: '本書已在購物車內',
+                                        type: 'warning'
+                                    });
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.log(error);
+                            }
                         });
                     }
                 },
-                redirectToCart() {
-                    window.location.href = "../../Order/ShoppingCart";
+                redirectToCart(memberID) {
+                    if (this.loginCheck()) {
+                        window.location.href = '@Url.Action("ShoppingCart", "Order")' + '?memberID=' + memberID;
+                    }
                 },
                 loginCheck() {
                     if (!this.isLogin) {
@@ -966,10 +894,6 @@
                 },
                 painterUrl(painterID){
                     return "@Url.Action("painterInformation", "Book", new { id = "PAINTERID" })".replace("PAINTERID", painterID);
-                },
-                clearAllCookies() {
-                    localStorage.clear();
-                    alert('All cookie clear')
                 },
             },
             mounted() {

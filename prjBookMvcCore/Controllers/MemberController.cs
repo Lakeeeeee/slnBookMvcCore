@@ -28,7 +28,7 @@ namespace prjBookMvcCore.Controllers
 {
     public class MemberController : Controller
     {
-        private readonly BookShopContext _bookShopContext ;
+        private readonly BookShopContext _bookShopContext;
         private readonly IConfiguration _config;
         private readonly ICaptchaValidator _captchaValidator ; //un done
         public UserInforService _userInforService { get; set; }
@@ -343,6 +343,30 @@ namespace prjBookMvcCore.Controllers
                      }).ToJson();
             return Json(q);
         }
+        [Authorize]
+        public IActionResult cancleAuthor(int id) //取消關注的作者方法
+        {
+            var tool = _bookShopContext.CollectedAuthors.Where(x => x.MemberId == _userInforService.UserId && x.AuthorId == id).FirstOrDefault();
+            if(tool != null)
+            {
+                _bookShopContext.CollectedAuthors.Remove(tool);
+                _bookShopContext.SaveChanges();
+            }
+            return RedirectToAction("myCollect");
+        }
+        [Authorize]
+        public IActionResult canclePublisher(int id) //取消關注的作者方法
+        {
+            var tool = _bookShopContext.CollectedPublishers.Where(x => x.MemberId == _userInforService.UserId && x.PublisherId == id).FirstOrDefault();
+            if(tool != null)
+            {
+                _bookShopContext.CollectedPublishers.Remove(tool);
+                _bookShopContext.SaveChanges();
+            }
+            return RedirectToAction("myCollect");
+        }
+
+
         [Authorize]
         public IActionResult myNotice() //可購買時通知我
         {
