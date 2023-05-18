@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
 using prjBookMvcCore.Models;
 using X.PagedList;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -9,11 +10,10 @@ namespace prjBookMvcCore.Controllers
     public class CategoryController : Controller
     {
         BookShopContext db = new();
-        //TODO:(書玉)分頁controller發法改寫
         public IActionResult 分類頁面(int id, int page = 1)
         {
             int categoryID = id;
-            int itemsPerPage = 28;
+            int itemsPerPage = 28;//每頁只顯示28個
 
             var query = from b in db.Books
                         join sd in db.CategoryDetails
@@ -34,12 +34,12 @@ namespace prjBookMvcCore.Controllers
                             折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                             出版日期 = b.PublicationDate,
                         };
-
+            //頁面書籍取得分類ID判斷
             if (categoryID != 0)
             {
                 query = query.Where(sc => sc.分類ID == categoryID);
             }
-
+            //分頁控制項
             int totalItems = query.Count();
             int totalPages = (int)Math.Ceiling((double)totalItems / itemsPerPage);
             int offset = (page - 1) * itemsPerPage;
@@ -72,7 +72,7 @@ namespace prjBookMvcCore.Controllers
             List<Category> categories = getCategories();
             List<SubCategory> subCategories = getSubCategories();
 
-        MenuInformation menuInformation = new MenuInformation
+            MenuInformation menuInformation = new MenuInformation
             {
                 categories = categories,
                 subCategories = subCategories,
@@ -81,10 +81,9 @@ namespace prjBookMvcCore.Controllers
                 TotalPages = totalPages,
                 categoryId = categoryID // Add this line to pass the category ID to the view
             };
-
             return View(menuInformation);
         }
-
+        //主類別
         public List<Category> getCategories()
         {
             using (var db = new BookShopContext())
@@ -99,7 +98,7 @@ namespace prjBookMvcCore.Controllers
                 return categories;
             }
         }
-
+        //子類別
         public List<SubCategory> getSubCategories()
         {
             using (var db = new BookShopContext())
@@ -119,5 +118,5 @@ namespace prjBookMvcCore.Controllers
                 return subCategories;
             }
         }
-     }
- }
+    }
+}
