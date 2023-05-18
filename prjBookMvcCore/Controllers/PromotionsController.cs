@@ -51,7 +51,7 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult Promotions限時登入領取優惠()
         {
-            if (_bookShopContext.OrderDiscountDetails.Where(d=>d.MemberId==_userInforService.UserId).Any(d=>d.OrderDiscountId==4))
+            if (_bookShopContext.OrderDiscountDetails.Where(d=>d.MemberId==_userInforService.UserId&d.OrderDiscountEndDate>DateTime.Now).Any(d=>d.OrderDiscountId==4))
             {
                 return Content("exist");
             }
@@ -69,6 +69,7 @@ namespace prjBookMvcCore.Controllers
                 return Content("notexist");
             }
         }
+
         public IActionResult Index() { return View(); } //建置中
     }
 }

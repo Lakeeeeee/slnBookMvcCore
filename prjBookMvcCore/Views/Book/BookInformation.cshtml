@@ -340,12 +340,6 @@
                         <div class="buttonRight">
                             <el-button round class="rightButton" v-on:click="storeTempList(book.bookID,@_userInforService.UserId)">放入暫存清單</el-button>
                         </div>
-                        <div class="buttonRight">
-                            <el-button round class="rightButton" v-on:click="collectPublisher(book.publisherID,@_userInforService.UserId)">收藏出版社</el-button>
-                        </div>
-                        <div class="buttonRight">
-                            <el-button round class="rightButton" v-on:click="clearAllCookies">Clear cookie</el-button>
-                        </div>
                     </el-row>
                 </el-aside>
             </el-container>
@@ -731,66 +725,6 @@
                 getDiscountPrice(item) {
                     return Math.floor(item.unitPrice * item.discount / 100);
                 },
-                collectAuthor(authorID,memberID){
-                    if(this.loginCheck()){
-                        let self = this;
-                        let url = '@Url.Action("CollectAuthor", "Collect")?memberID=' + memberID + '&authorID=' + authorID;
-                        $.ajax({
-                            url: url,
-                            type: 'POST',
-                            dataType: 'json',
-                            success: function (result) {
-                                if (result) {
-                                    self.$notify({
-                                        title: '收藏作者成功',
-                                        message: '作者已加入收藏清單',
-                                        type: 'success'
-                                    });
-                                }
-                                else {
-                                    self.$notify({
-                                        title: '收藏作者失敗',
-                                        message: '作者已加入過收藏清單',
-                                        type: 'warning'
-                                    });
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                console.log(error);
-                            }
-                        });
-                    }
-                },
-                collectPublisher(publisherID,memberID) {
-                    if (this.loginCheck()) {
-                        let self = this;
-                        let url = '@Url.Action("CollectPublisher", "Collect")?memberID=' + memberID + '&publisherID=' + publisherID;
-                        $.ajax({
-                            url: url,
-                            type: 'POST',
-                            dataType: 'json',
-                            success: function (result) {
-                                if (result) {
-                                    self.$notify({
-                                        title: '收藏出版社成功',
-                                        message: '出版社已加入收藏清單',
-                                        type: 'success'
-                                    });
-                                }
-                                else {
-                                    self.$notify({
-                                        title: '收藏出版社失敗',
-                                        message: '出版社已加入過收藏清單',
-                                        type: 'warning'
-                                    });
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                console.log(error);
-                            }
-                        });
-                    }
-                },
                 storeTempList(bookID,memberID) {
                     if (this.loginCheck()) {
                         let self = this;
@@ -960,10 +894,6 @@
                 },
                 painterUrl(painterID){
                     return "@Url.Action("painterInformation", "Book", new { id = "PAINTERID" })".replace("PAINTERID", painterID);
-                },
-                clearAllCookies() {
-                    localStorage.clear();
-                    alert('All cookie clear')
                 },
             },
             mounted() {

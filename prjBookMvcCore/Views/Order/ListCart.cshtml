@@ -1,4 +1,6 @@
-﻿@{
+﻿@using prjBookMvcCore.Models
+@model List<ShoppingcartInformation>
+@{
     ViewBag.Title = "收藏清單";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -58,15 +60,24 @@
             <th>出版社</th>
             <th>庫存</th>
         </tr>
-        <tr>
-            <td><input type="checkbox"></td>
-            <th>10</th>
-            <th>測試暫存</th>
-            <th>每日88折</th>
-            <th>168</th>
-            <th>HIHI</th>
-            <th>10</th>
-        </tr>
+        @{
+            int count = 1;
+            foreach (var item in Model)
+            {
+                Decimal discount = Math.Floor(@item.CInformation.book.UnitPrice * @item.CInformation.bookDiscount.BookDiscountAmount);
+                string bookTitle = item.CInformation.book.BookTitle.Replace("$$", "\n");
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <th>@count</th>
+                    <th>@bookTitle</th>
+                    <th>@item.CInformation.bookDiscount.BookDiscountName</th>
+                    <th>@discount</th>
+                    <th>@item.CInformation.publisher.PublisherName</th>
+                    <th>@item.CInformation.book.UnitInStock</th>
+                </tr>
+                count++;
+            }
+        }
     </table>
 </div>
 

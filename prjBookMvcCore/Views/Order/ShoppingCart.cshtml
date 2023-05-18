@@ -1,5 +1,5 @@
 ﻿@using prjBookMvcCore.Models
-@model List<CInformation>
+@model List<ShoppingcartInformation>
 @{
     ViewBag.Title = "購物車";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -78,16 +78,16 @@
         @{
             int count = 1;
             foreach(var item in Model){
-                Decimal discount = Math.Floor(@item.book.UnitPrice * @item.bookDiscount.BookDiscountAmount);
-                string bookTitle = item.book.BookTitle.Replace("$$", "\n");
+                Decimal discount = Math.Floor(@item.CInformation.book.UnitPrice * @item.CInformation.bookDiscount.BookDiscountAmount);
+                string bookTitle = item.CInformation.book.BookTitle.Replace("$$", "\n");
                 <tr>
                     <td><input type="checkbox"></td>
                     <th>@count</th>
                     <th>@bookTitle</th>
-                    <th>@item.bookDiscount.BookDiscountName</th>
+                    <th>@item.CInformation.bookDiscount.BookDiscountName</th>
                     <th>@discount</th>
-                    <th>@item.publisher.PublisherName</th>
-                    <th>@item.book.UnitInStock</th>
+                    <th>@item.CInformation.publisher.PublisherName</th>
+                    <th>@item.CInformation.book.UnitInStock</th>
                 </tr>
                 count++;
             }    

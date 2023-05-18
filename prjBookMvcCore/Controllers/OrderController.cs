@@ -19,12 +19,54 @@ namespace prjBookMvcCore.Controllers
         BookShopContext db = new();
         public IActionResult ListCart()
         {
-            return View();
+            List<ShoppingcartInformation> cartItems = new List<ShoppingcartInformation>();
+            var query = from b in db.Books
+                        join ad in db.ActionDetials
+                        on b.BookId equals ad.BookId
+                        where ad.MemberId == _user.UserId && ad.ActionId == 4
+                        orderby ad.ActionToBookId descending
+                        select new
+                        {
+                            書名 = b.BookTitle,
+                            書本ID = b.BookId,
+                            定價 = b.UnitPrice,
+                            出版社 = b.Publisher.PublisherName,
+                            折扣名 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountName).FirstOrDefault(),
+                            折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                            庫存 = b.UnitInStock,
+                            ActionID = ad.ActionId,
+                        };
+            foreach (var item in query)
+            {
+                Book b = new Book()
+                {
+                    BookId = item.書本ID,
+                    BookTitle = item.書名,
+                    UnitInStock = item.庫存,
+                    UnitPrice = item.定價,
+                };
+                ActionDetial ad = new ActionDetial { ActionId = item.ActionID };
+                Publisher p = new Publisher { PublisherName = item.出版社 };
+                BookDiscount bd = new BookDiscount { BookDiscountAmount = item.折扣, BookDiscountName = item.折扣名 };
+                CInformation tmp = new CInformation()
+                {
+                    book = b,
+                    bookDiscount = bd,
+                    publisher = p,
+                };
+                ShoppingcartInformation shoppingcartInformation = new ShoppingcartInformation()
+                {
+                    CInformation = tmp,
+                    ActionDetial = ad,
+                };
+                cartItems.Add(shoppingcartInformation);
+            }
+            return View(cartItems);
         }
         [Authorize]
         public IActionResult ShoppingCart(int memberID)
         {
-            List<CInformation> cartItems = new List<CInformation>();
+            List<ShoppingcartInformation> cartItems = new List<ShoppingcartInformation>();
             var query = from b in db.Books
                         join ad in db.ActionDetials
                         on b.BookId equals ad.BookId
@@ -39,6 +81,7 @@ namespace prjBookMvcCore.Controllers
                             折扣名 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountName).FirstOrDefault(),
                             折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                             庫存 = b.UnitInStock,
+                            ActionID = ad.ActionId,
                         };
             foreach (var item in query)
             {
@@ -49,6 +92,7 @@ namespace prjBookMvcCore.Controllers
                     UnitInStock = item.庫存,
                     UnitPrice = item.定價,
                 };
+                ActionDetial ad = new ActionDetial { ActionId = item.ActionID };
                 Publisher p = new Publisher { PublisherName = item.出版社};
                 BookDiscount bd = new BookDiscount { BookDiscountAmount = item.折扣, BookDiscountName = item.折扣名 };
                 CInformation tmp = new CInformation(){
@@ -56,7 +100,12 @@ namespace prjBookMvcCore.Controllers
                     bookDiscount = bd,
                     publisher = p,
                 };
-                cartItems.Add(tmp);
+                ShoppingcartInformation shoppingcartInformation = new ShoppingcartInformation()
+                {
+                    CInformation = tmp,
+                    ActionDetial = ad,
+                };
+                cartItems.Add(shoppingcartInformation);
             }
             return View(cartItems);
         }
