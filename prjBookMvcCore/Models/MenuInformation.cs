@@ -7,5 +7,8 @@
         public List<Category>? categories { get; set; }
 
         public List<SubCategory>? subCategories { get; set; }
+        public int CurrentPage { get; set; } // Add this property
+        public int TotalPages { get; set; }
+        public int categoryId { get; set; }
     }
 }
