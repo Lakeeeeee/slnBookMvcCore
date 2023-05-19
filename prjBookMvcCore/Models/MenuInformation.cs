@@ -9,6 +9,7 @@
         public int CurrentPage { get; set; } // Add this property
         public int TotalPages { get; set; }
         public int categoryId { get; set; }
+        public int bookDiscountId { get; set; }
         public int subcategoryId { get; set; }
     }
 }
