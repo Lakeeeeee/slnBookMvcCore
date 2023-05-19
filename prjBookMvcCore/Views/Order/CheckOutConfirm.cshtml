@@ -1,4 +1,7 @@
-﻿@{
+﻿@using prjBookMvcCore.ViewModel
+@model CheckOutConfirmViewModel
+
+@{
     ViewBag.Title = "訂單確認";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -69,16 +72,16 @@
 		<div class="col-md-12">
 			<h2>訂購資訊確認</h2>
 			<div class="row">
-				<div class="col-md-6">
-					<p>姓名：</p>
-					<p>電話：</p>
-					<p>Email：</p>
-					<p>地址：</p>
+				@*<div class="col-md-6">
+					<p>@request.Form["Name"]</p>
+					<p>@Request.Form["Phone"]</p>
+					<p>@Request.Form["Email"]</p>
+					<p>@Request.Form["Address"]</p>
 				</div>
 				<div class="col-md-6">
-					<p>付款方式：</p>
-					<p>配送方式：</p>
-				</div>
+					<p>@Model.PaymentMethod</p>
+					<p>@Model.ShippingMethod</p>
+				</div>*@
 			</div>
 		</div>
 	</div>
