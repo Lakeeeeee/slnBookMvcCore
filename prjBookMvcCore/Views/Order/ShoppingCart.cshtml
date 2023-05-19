@@ -1,8 +1,11 @@
 ﻿@using prjBookMvcCore.Models
 @model List<ShoppingcartInformation>
+@inject UserInforService _user
 @{
     ViewBag.Title = "購物車";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    BookShopContext db = new BookShopContext();
+    Member user = db.Members.Find(_user.UserId);
 }
 <style>
     .container-sp {
@@ -32,6 +35,7 @@
         border-radius: 4px;
         border: 1px solid #e6e6e6;
     }
+
 </style>
 <script>
     function addToList() {
@@ -40,7 +44,30 @@
     }
 
 </script>
+<script src="https://www.paypal.com/sdk/js?client-id=AQD2E8XndV3uPoaErR5zdfjhgeHdVhOzTyhRmf7oA3F-Ta2sfVTU4uMrC3sfqmT-j7FnauXqXXBSvqsw"></script>
+<script>
+    // Render the PayPal button into #paypal-button-container
+    paypal.Buttons({
+        // Set up the transaction
+        createOrder: function (data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: '88.44'
+                    }
+                }]
+            });
+        },
 
+        // Finalize the transaction
+        onApprove: function (data, actions) {
+            return actions.order.capture().then(function (orderData) {
+                console.log('Capture result', orderData,
+                    JSON.stringify(orderData, null, 2));
+            });
+        }
+    }).render('#payment-button');
+</script>
 <div class="container-sp">
     <div>
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -50,146 +77,499 @@
             </ol>
         </nav>
     </div>
-   </div>
-
-<div>
-    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="pills-a-tab" data-bs-toggle="pill" data-bs-target="#pills-a" type="button" role="tab" aria-controls="pills-a" aria-selected="true">購物車</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-b-tab" data-bs-toggle="pill" data-bs-target="#pills-b" type="button" role="tab" aria-controls="pills-b" aria-selected="false">暫存清單</button>
-        </li>
-    </ul>
 </div>
-<div class="tab-content" id="pills-tabContent">
-    <div class="tab-pane fade show active" id="pills-a" role="tabpanel" aria-labelledby="pills-a-tab">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th style="width:50px;"><input type="checkbox"></th>
-                    <th style="width:50px;">序號</th>
-                    <th style ="width:500px;">書名</th>
-                    <th>優惠</th>
-                    <th>優惠價</th>
-                    <th>出版社</th>
-                    <th>庫存</th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    int count = 1;
-                   decimal totalAmount = 0;
-                    foreach (var item in Model)
-                    {
-                        if (item.ActionDetial.ActionId == 7)
-                        {
-                            Decimal discount = Math.Floor(@item.CInformation.book.UnitPrice * @item.CInformation.bookDiscount.BookDiscountAmount);
-                            string bookTitle = item.CInformation.book.BookTitle.Replace("$$", "\n");
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td>@count</td>
-                                <td>@bookTitle</td>
-                                <td>@item.CInformation.bookDiscount.BookDiscountName</td>
-                                <td>@discount</td>
-                                <td>@item.CInformation.publisher.PublisherName</td>
-                                <td>@item.CInformation.book.UnitInStock</td>
-                            </tr>
-                            totalAmount += discount;
-                            count++;
-                        };
-                    };
-                }
-            </tbody>
-        </table>
+
+
+
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button class="nav-link active" id="nav-cart-tab" data-bs-toggle="tab" data-bs-target="#nav-cart" type="button" role="tab" aria-controls="nav-cart" aria-selected="true">Home</button>
+        <button class="nav-link" id="nav-checkOutInfo-tab" data-bs-toggle="tab" data-bs-target="#nav-checkOutInfo" type="button" role="tab" aria-controls="nav-checkOutInfo" aria-selected="false">Profile</button>
+        <button class="nav-link" id="nav-checkOutConfirm-tab" data-bs-toggle="tab" data-bs-target="#nav-checkOutConfirm" type="button" role="tab" aria-controls="nav-checkOutConfirm" aria-selected="false">Contact</button>
+        <button class="nav-link" id="nav-checkOutFinal-tab" data-bs-toggle="tab" data-bs-target="#nav-checkOutFinal" type="button" role="tab" aria-controls="nav-checkOutFinal" aria-selected="false">Contact</button>
     </div>
-    <div class="tab-pane fade" id="pills-b" role="tabpanel" aria-labelledby="pills-b-tab">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th style="width:50px;"><input type="checkbox"></th>
-                    <th style ="width:50px;">序號</th>
-                    <th style="width:500px;">書名</th>
-                    <th>優惠</th>
-                    <th>優惠價</th>
-                    <th>出版社</th>
-                    <th>庫存</th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    int Tcount = 1;
-                    foreach (var item in Model)
-                    {
-                        if (item.ActionDetial.ActionId == 4)
-                        {
-                            Decimal discount = Math.Floor(@item.CInformation.book.UnitPrice * @item.CInformation.bookDiscount.BookDiscountAmount);
-                            string bookTitle = item.CInformation.book.BookTitle.Replace("$$", "\n");
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td>@Tcount</td>
-                                <td>@bookTitle</td>
-                                <td>@item.CInformation.bookDiscount.BookDiscountName</td>
-                                <td>@discount</td>
-                                <td>@item.CInformation.publisher.PublisherName</td>
-                                <td>@item.CInformation.book.UnitInStock</td>
-                            </tr>
-                            Tcount++;
+</nav>
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-cart" role="tabpanel" aria-labelledby="nav-cart-tab">
+        <div id="cart_tab">
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-a-tab" data-bs-toggle="pill" data-bs-target="#pills-a" type="button" role="tab" aria-controls="pills-a" aria-selected="true">購物車</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-b-tab" data-bs-toggle="pill" data-bs-target="#pills-b" type="button" role="tab" aria-controls="pills-b" aria-selected="false">暫存清單</button>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-a" role="tabpanel" aria-labelledby="pills-a-tab">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width:50px;"><input type="checkbox"></th>
+                            <th style="width:50px;">序號</th>
+                            <th style="width:500px;">書名</th>
+                            <th>優惠</th>
+                            <th>優惠價</th>
+                            <th>出版社</th>
+                            <th>庫存</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int count = 1;
+                            decimal totalAmount = 0;
+                            foreach (var item in Model)
+                            {
+                                BookDiscount x = item.Book.BookDiscountDetails.Select(x => x.BookDiscount).FirstOrDefault();
+                                Decimal discount = Math.Floor(@item.Book.UnitPrice * x.BookDiscountAmount);
+                                string bookTitle = item.Book.BookTitle.Replace("$$", "\n");
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <td>@count</td>
+                                    <td>@bookTitle</td>
+                                    <td>@x.BookDiscountName</td>
+                                    <td>@discount</td>
+                                    <td>@item.Book.Publisher.PublisherName</td>
+                                    <td>@item.Book.UnitInStock</td>
+                                </tr>
+                                totalAmount += discount;
+                                count++;
+                            };
                         }
-                    }
-                }
-            </tbody>
-        </table>
-    </div>
-</div>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="pills-b" role="tabpanel" aria-labelledby="pills-b-tab">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width:50px;"><input type="checkbox"></th>
+                            <th style="width:50px;">序號</th>
+                            <th style="width:500px;">書名</th>
+                            <th>優惠</th>
+                            <th>優惠價</th>
+                            <th>出版社</th>
+                            <th>庫存</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int Tcount = 1;
+                            foreach (var item in Model)
+                            {
+                                if (item.ActionDetial.ActionId == 4)
+                                {
+                                    //Decimal discount = Math.Floor(@item.CInformation.book.UnitPrice * @item.CInformation.bookDiscount.BookDiscountAmount);
+                                    //string bookTitle = item.CInformation.book.BookTitle.Replace("$$", "\n");
+                                    //<tr>
+                                    //    <td><input type="checkbox"></td>
+                                    //    <td>@Tcount</td>
+                                    //    <td>@bookTitle</td>
+                                    //    <td>@item.CInformation.bookDiscount.BookDiscountName</td>
+                                    //    <td>@discount</td>
+                                    //    <td>@item.CInformation.publisher.PublisherName</td>
+                                    //    <td>@item.CInformation.book.UnitInStock</td>
+                                    //</tr>
+                                    //Tcount++;
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="container">
+            為你推薦
+            <div class="row">
+                <div class="col">
+                    <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
+                    productshow productshow productshow productshow productshow productshow productshow productshow
+                </div>
+                <div class="col">
+                    <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
+                    productshow productshow productshow productshow productshow productshow productshow productshow
+                </div>
+                <div class="col">
+                    <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
+                    productshow productshow productshow productshow productshow productshow productshow productshow
+                </div>
+                <div class="col">
+                    <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
+                    productshow productshow productshow productshow productshow productshow productshow productshow
+                </div>
+                <div class="col">
+                    <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
+                    productshow productshow productshow productshow productshow productshow productshow productshow
+                </div>
+            </div>
+        </div>@*為你推薦*@
+        <div>
+            @*結帳資訊區*@
+            <ul class="form_01 prodetail">
+                <li>
+                    <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td style="font-size:30px; color:	#F75000;">
+                                        本次購物 共 @(count - 1)項<br>
+                                        總金額 共 @totalAmount 元
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-<div class="container">
-    為你推薦
-    <div class="row">
-        <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
         </div>
-        <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
-        </div>
-        <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
-        </div>
-        <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
-        </div>
-        <div class="col">
-            <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-            productshow productshow productshow productshow productshow productshow productshow productshow
+        <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
+            <button class="btn btn-primary col-4 me-md-2" type="button" onclick="addToList()">加入暫存</button>
+            <a href="~/Order/CheckOutInfo" class=" btn btn-primary col-4 me-md-2" type="button">來去結帳</a>
         </div>
     </div>
-</div>@*為你推薦*@
-<div>
-    @*結帳資訊區*@
-    <ul class="form_01 prodetail">
-        <li>
-            <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
-                <table>
+
+    <div class="tab-pane fade" id="nav-checkOutInfo" role="tabpanel" aria-labelledby="nav-checkOutInfo-tab">
+        <div class="container-sp">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>訂購人資訊</h4>
+                    <form id="checkoutForm" asp-action="CheckOutConfirm" method="post">
+                        <div class="form-group">
+                            <label for="inputName">姓名</label>
+                            <input type="text" class="form-control" id="inputName" name="Name" placeholder="請輸入收件人姓名">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPhone">電話</label>
+                            <input type="text" class="form-control" id="inputPhone" name="Phone" placeholder="請輸入電話">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail">電子郵件</label>
+                            <input type="email" class="form-control" id="inputEmail" name="Email" placeholder="請輸入電子郵件">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputAddress">地址</label>
+                            <input type="text" class="form-control" id="inputAddress" name="Address" placeholder="請輸入配送地址">
+                        </div>
+
+                        <div class="row container-sp">
+                            <div class="col-md-6">
+                                <h2>選擇付款方式</h2>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" id="paymentMethod1" value="creditCard" checked>
+                                    <label class="form-check-label" for="paymentMethod1">
+                                        信用卡
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" id="paymentMethod2" value="ATM">
+                                    <label class="form-check-label" for="paymentMethod2">
+                                        貨到付款
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" id="paymentMethod3" value="ThirdParty">
+                                    <label class="form-check-label" for="paymentMethod3">
+                                        第三方支付
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row container-sp">
+                            <div class="col-md-6">
+                                <h2>選擇配送方式</h2>
+
+                                <div id="homeDelivery" class="form-check">
+                                    <input class="form-check-input" type="radio" name="shippingMethod" id="shippingMethod1" value="homeDelivery" checked>
+                                    <label class="form-check-label" for="shippingMethod1">
+                                        宅配到府
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="shippingMethod" id="shippingMethod2" value="storePickup">
+                                    <label class="form-check-label" for="shippingMethod2">
+                                        超商取貨
+                                    </label>
+                                    <div id="storeOptions" style="display:none">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="storeOption" id="storeOption1" value="7-11">
+                                            <label class="form-check-label" for="storeOption1">
+                                                7-11
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="storeOption" id="storeOption2" value="FamilyMart">
+                                            <label class="form-check-label" for="storeOption2">
+                                                全家
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row container-sp">
+                            <div class="col-md-6">
+                                <h2>選擇優惠項目</h2>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="discountMethod" id="discountMethod1" value="會員優惠" checked>
+                                    <label class="form-check-label" for="discountMethod1">
+                                        會員優惠
+                                        (@user..LevelName 會員)
+
+                                    </label>
+                                </div>
+
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="discountMethod" id="discountMethod2" value="活動優惠">
+                                    <label class="form-check-label" for="discountMethod2">
+                                        酷碰券
+                                        @{
+                                            var q = user.OrderDiscountDetails;
+                                            foreach (var coupon in q)
+                                            {
+                                                <p> @coupon.OrderDiscount.OrderDiscountnName</p>
+                                            }
+                                        }
+                                    </label>
+                                </div>
+
+                                <h2>回饋金</h2>
+                                <div id="" style="" class="ml-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="discountOptions" id="" value="回饋金">
+                                        <label class="form-check-label" for="discountOptions1">
+                                            回饋金折抵
+                                        </label>
+                                        <div id="rebateAmount" style="display:none">
+                                            <label for="rebateAmountInput" class="form-label">輸入金額：(目前持有回饋金：@user.Points 元)</label>
+                                            <input type="number" class="form-control" id="rebateAmountInput" name="rebateAmountInput" placeholder="請輸入回饋金金額" min="0" max="@user.Points">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
+                            <a href="~/Order/ShoppingCart" class="btn btn-primary col-4 me-md-2" type="button">返回購物車</a>
+                            <a href="~/Order/CheckOutConfirm" class="btn btn-primary col-4 me-md-2" type="button">下一步</a>
+                            @*<input class=" btn btn-primary col-4 me-md-2" value="下一步">*@
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <div class="tab-pane fade" id="nav-checkOutConfirm" role="tabpanel" aria-labelledby="nav-checkOutConfirm-tab">
+        <div class="container">
+            <h2>確認結帳</h2>
+
+            <div class="table">
+                <h4>書籍清單</h4>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>書籍名稱</th>
+                            <th>訂購數量</th>
+                            <th>金額</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         <tr>
-                    <td style="font-size:30px; color:	#F75000;">
-                        本次購物 共 @(count-1)項<br>
-                        總金額 共 @totalAmount 元
-                            </td>
+                            <td>商品 1</td>
+                            <td>1</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td>商品 2</td>
+                            <td>2</td>
+                            <td>200</td>
+                        </tr>
+                        <tr>
+                            <td>商品 3</td>
+                            <td>3</td>
+                            <td>300</td>
                         </tr>
                     </tbody>
                 </table>
-            </div>       
-</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h2>訂購資訊確認</h2>
+                <div class="row">
+                    @*<div class="col-md-6">
+                    <p>@request.Form["Name"]</p>
+                    <p>@Request.Form["Phone"]</p>
+                    <p>@Request.Form["Email"]</p>
+                    <p>@Request.Form["Address"]</p>
+                    </div>
+                    <div class="col-md-6">
+                    <p>@Model.PaymentMethod</p>
+                    <p>@Model.ShippingMethod</p>
+                    </div>*@
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h2>結帳金額</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>總共_____件</p>
+                        <p>總金額：</p>
+                        <p>優惠折扣：</p>
+                        <p>運費：</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>結帳金額：</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
+            <a href="~/Order/CheckOutInfo" class=" btn btn-primary col-4 me-md-2" type="button">返回修改</a>
+            <button class="btn btn-primary col-4 me-md-2" type="button" data-bs-toggle="modal" data-bs-target="#successModal">
+                確定送出
+            </button>
+        </div>
+
+        <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
+        </div>
+
+        <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="successModalLabel">訂單完成</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        您的訂單已完成！
+                    </div>
+                    <div class="modal-footer">
+                        <a href="~/Order/CheckOutFinal" class=" btn btn-primary col-4 me-md-2" type="button">確定</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tab-pane fade" id="nav-checkOutFinal" role="tabpanel" aria-labelledby="nav-checkOutFinal-tab">
+        <div class="container">
+            <h1>以下是您的訂單內容</h1>
+            <h2>書籍清單</h2>
+            <div class="table">
+                <h4>書籍清單</h4>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>書籍名稱</th>
+                            <th>訂購數量</th>
+                            <th>金額</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>商品 1</td>
+                            <td>1</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td>商品 2</td>
+                            <td>2</td>
+                            <td>200</td>
+                        </tr>
+                        <tr>
+                            <td>商品 3</td>
+                            <td>3</td>
+                            <td>300</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>結帳資訊</h2>
+            <div class="checkout-info">
+                <div class="checkout-section">
+                    <h3>訂購人</h3>
+                    <div class="col-md-6">
+                        <p>姓名：</p>
+                        <p>電話：</p>
+                        <p>Email：</p>
+                        <p>地址：</p>
+                    </div>
+                </div>
+                <div class="checkout-section">
+                    <h3>金額明細</h3>
+                    <div class="col-md-6">
+                        <p>總金額：</p>
+                        <p>優惠折扣：</p>
+                        <p>運費：</p>
+                        <P>結帳金額：</P>
+                    </div>
+                </div>
+            </div>
+            <div class="checkout-info">
+                <div class="checkout-section">
+                    <h3>訂單狀態</h3>
+                    <spin id="PayStatus">未付款</spin>
+                    <br>
+                    <div><p>立即付款：</p><div id="payment-button"></div></div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
+            <a href="~/Home/Home" class=" btn btn-primary col-4 me-md-2" type="button">返回首頁</a>
+        </div>
 
 
-<div class="d-grid gap-2 c d-md-flex justify-content-md-end">
-    <button class="btn btn-primary col-4 me-md-2" type="button" onclick="addToList()">加入暫存</button>
-    <a href="~/Order/CheckOutInfo" class=" btn btn-primary col-4 me-md-2" type="button">來去結帳</a>
+    </div>
 </div>
+
 <script>
+    $(document).ready(function () {
+        // 宅配到府的選項被選中時，隱藏超商取貨選項
+        $('#shippingMethod1').click(function () {
+            $('#storeOptions').hide();
+        });
+
+        // 超商取貨的選項被選中時，顯示超商取貨選項
+        $('#shippingMethod2').click(function () {
+            $('#storeOptions').show();
+        });
+
+        // 優惠的選項被選中時，顯示可用的優惠項目
+        $('#discountMethod1').click(function () {
+            $('#discountOptions1').show();
+            $('#discountOptions2').hide();
+        });
+
+        $('#discountMethod2').click(function () {
+            $('#discountOptions2').show();
+            $('#discountOptions1').hide();
+        });
+    });
+
+    $(document).ready(function () {
+        $('input[name=discountOptions]').click(function () {
+            //if ($(this).val() == '回饋金') {
+            $('#rebateAmount').show();
+            //} else {
+            //    $('#rebateAmount').hide();
+            //}
+        });
+    });
 </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
