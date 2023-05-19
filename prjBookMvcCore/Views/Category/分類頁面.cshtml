@@ -45,10 +45,15 @@
             <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Home">首頁</a></li>
             <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Menu">書籍</a></li>
             <li class="breadcrumb-item"><a class="linkaFormat" href="@Url.Action("分類頁面", new { id = 0 })">繁中</a></li>
-            @if (Model.categoryId > 0)
+               @if (Model.categoryId > 0)
+                {
+                    <li class="breadcrumb-item active" aria-current="page"><a class="linkaFormat" href="@Url.Action("分類頁面", new { id = Model.categoryId })">@Model.categories.FirstOrDefault(c => c.CategoryId == Model.categoryId)?.CategoryName</a></li>
+                }
+            @*@if (Model.subCategoyId > 0)
             {
-                <li class="breadcrumb-item active" aria-current="page"><a class="linkaFormat" href="@Url.Action("分類頁面", new { id = Model.categoryId })">@Model.categories.FirstOrDefault(c => c.CategoryId == Model.categoryId)?.CategoryName</a></li>
-            }
+
+                <li class="breadcrumb-item active" aria-current="page"><a class="linkaFormat" href="@Url.Action("分類頁面", new { id = Model.subCategories })">@Model.categories.FirstOrDefault(c => c.SubCategories == Model.subCategories)?.SubCategories</a></li>
+            }*@
         </ol>
     </nav>
     <div class="container" style="margin-top: 20px">
@@ -80,9 +85,13 @@
                                         </div>
                                         <div class="collapse" id="card1">
                                             <div class="card card-body">
-                                                @foreach (var subcategory in category.SubCategories)
-                                                {
-                                                    <span><a href="~/Category/@category.CategoryId/@subcategory.SubCategoryId">@subcategory.SubCategoryName (@count)</a></span>
+                                                @{
+                                                    var query = db.SubCategories.Where(c => c.SubCategoryId == category.CategoryId).Select(c => new { c.SubCategoryId, c.SubCategoryName }).ToList();
+                                                    foreach (var subcategory in query)
+                                                    {
+                                                        int subcount = query.Count;
+                                                        <div><a asp-controller="Category" asp-action="分類頁面" asp-route-id="@subcategory.SubCategoryId">@subcategory.SubCategoryName (@subcount)</a></div>
+                                                    }
                                                 }
                                             </div>
                                         </div>
