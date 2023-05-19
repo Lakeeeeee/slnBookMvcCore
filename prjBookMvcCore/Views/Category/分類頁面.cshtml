@@ -40,11 +40,15 @@
 </head>
 <body>
     @*頁面位置*@
-    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Home">首頁</a></li>
             <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Menu">書籍</a></li>
-            <li class="breadcrumb-item active" aria-current="page">繁中</li>
+            <li class="breadcrumb-item"><a class="linkaFormat" href="@Url.Action("分類頁面", new { id = 0 })">繁中</a></li>
+            @if (Model.categoryId > 0)
+            {
+                <li class="breadcrumb-item active" aria-current="page"><a class="linkaFormat" href="@Url.Action("分類頁面", new { id = Model.categoryId })">@Model.categories.FirstOrDefault(c => c.CategoryId == Model.categoryId)?.CategoryName</a></li>
+            }
         </ol>
     </nav>
     <div class="container" style="margin-top: 20px">
@@ -54,7 +58,12 @@
                 <div class="card">
                     @*分類選單*@
                     <div class="card-header">
-                        中文書
+                        @{
+                            BookShopContext db = new BookShopContext();
+                                    var s = db.Books.Where(c => c.LanguageId == 1 ).Select(c => c.BookId).ToList();
+                                    int countAll = s.Count;
+                            <span>繁中 (@countAll)</span>
+                        }
                     </div>
                     <div>
                         <ul class="list-group list-group-flush">
@@ -62,17 +71,19 @@
                             {
                                 @if (category.CategoryId > 14)
                                 {
+                                    var q = db.CategoryDetails.Where(c => c.SubCategory.CategoryId == category.CategoryId).Select(c => c).ToList();
+                                    int count = q.Count;
                                     <li class="list-group-item">
-                                        <span><a asp-controller="Category" asp-action="分類頁面" asp-route-id="@category.CategoryId">@category.CategoryName</a></span>
-                                        <ul>
-                                            @foreach (var subcategory in category.SubCategories)
-                                            {
-                                                <li><a href="~/Category/@category.CategoryId/@subcategory.SubCategoryId">@subcategory.SubCategoryName</a></li>
-                                            }
-                                        </ul>
+                                        <span><a asp-controller="Category" asp-action="分類頁面" asp-route-id="@category.CategoryId">@category.CategoryName (@count)</a></span>
                                     </li>
-                                }
-                            }
+                                   @* <li class="">
+                                        @foreach (var subcategory in category.SubCategories)
+                                        {
+                                            <li><a href="~/Category/@category.CategoryId/@subcategory.SubCategoryId">@subcategory.SubCategoryName (@count)</a></li>
+                                        }
+                                    </li>*@
+                                  }
+                              }
                         </ul>
                     </div>
                 </div>
@@ -100,33 +111,33 @@
                     @{
                         foreach (var item in Model.menuItems)
                         {
-                            <div class="col-3 " style="padding:0">
-                                <div class="card book-item" data-publication-date="@item.book.PublicationDate.ToString("yyyy/MM/dd")" data-price="@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))">
-                                    <div class="headshot">
-                                        <a><img src="~/Image/Book/@item.book.CoverPath" alt="@item.book.CoverPath" height="240px"></a>
-                                    </div>
-                                    <div class="card-body">
-                                        <ul style="list-style:none; margin:0; padding:0;">
-                                            <li> <a class="bookCaption two-lines" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle</a></li>
-                                            <li class="prod_author authorCaption">
-                                                作者：
-                                                @if (item.author != null)
+                                <div class="col-3 " style="padding:0">
+                                    <div class="card book-item" data-publication-date="@item.book.PublicationDate.ToString("yyyy/MM/dd")" data-price="@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))">
+                                        <div class="headshot">
+                                            <a><img src="~/Image/Book/@item.book.CoverPath" alt="@item.book.CoverPath" height="240px"></a>
+                                        </div>
+                                        <div class="card-body">
+                                            <ul style="list-style:none; margin:0; padding:0;">
+                                                <li> <a class="bookCaption two-lines" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle</a></li>
+                                                <li class="prod_author authorCaption">
+                                                    作者：
+                                                    @if (item.author != null)
                                                 {
-                                                    <a href="~/Book/authorInformation/@item.author.AuthorId">@item.author.AuthorName</a>
+                                                        <a href="~/Book/authorInformation/@item.author.AuthorId">@item.author.AuthorName</a>
                                                 }
-                                            </li>
-                                            <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))</span>元</li>
-                                            <li class="discPrice">
-                                                優惠價：<span>@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
-                                                <span>@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
-                                            </li>
-                                            <li class="publicationDate">
-                                                出版日期：<span>@item.book.PublicationDate.ToString("yyyy/MM/dd")</span>
-                                            </li>
-                                        </ul>
+                                                </li>
+                                                <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))</span>元</li>
+                                                <li class="discPrice">
+                                                    優惠價：<span>@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
+                                                    <span>@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
+                                                </li>
+                                                <li class="publicationDate">
+                                                    出版日期：<span>@item.book.PublicationDate.ToString("yyyy/MM/dd")</span>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                         }
                     }
                 </div>

@@ -289,7 +289,7 @@ namespace prjBookMvcCore.Controllers
                     where x.MessageMemberDetailId == id
                     select new
                     {
-                         time = x.UpdateTime.Value.ToShortDateString(),
+                         time = x.UpdateTime!.Value.ToShortDateString(),
                          read_a = (x.ReadStatu==1)?"已讀":"未讀",
                          content_a = y.MessageContent,
                          type_a = z.MessageTypeName
