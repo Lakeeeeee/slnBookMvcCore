@@ -19,7 +19,7 @@
 
     .inputS {
         width: 100%;
-        max-width: 250px
+        
     }
 </style>
 
@@ -34,15 +34,16 @@
         <div class="col">
             <label>廣告圖</label>
         </div>
-        <div class="col-4">
+        <div class="col-6">
             <form asp-action="Create" id="signin_form">
                 <div class="container justify-content-center bg-light" style="border-radius:10px;  padding-block:15px">
                     <p><label class="">會員註冊</label></p>
                     <p><input asp-for="MemberEmail_P" placeholder="輸入您的Email" class="inputS" required /><br /></p>
-                    <p><input asp-for="MemberPassword_P" placeholder="您的密碼" id="pwd" class="inputS" required /></p>
-                    <p><label id="passwordError" style="font-size:xx-small">請設定8-10位英數字密碼，須包含至少一個大寫字母</label> </p>
-                    <span asp-validation-for="MemberPassword_P" class="text-danger"></span>
-                    <p><input id="pwdCheck" placeholder="再次輸入密碼" class="inputS" required /></p>
+                    <p>
+                        <input asp-for="MemberPassword_P" placeholder="您的密碼" id="pwd" class="inputS" pattern="[a-zA-Z0-9]{7,}" required />
+                        <br /><label id="passwordError" style="font-size:xx-small">請設定8-10位英數字密碼，須包含至少一個大寫字母</label>
+                    </p>
+                    <p><input id="pwdCheck" placeholder="確認輸入密碼" class="inputS" required /><label id="passwordError2" style="font-size:xx-small"></label></p>
                     <p><input asp-for="MemberName_P" placeholder="姓名" class="inputS" required /></p>
                     <p><input asp-for="MemberBrithDate_P" value="1995-01-01" type="date" class="inputS" required /></p>
                     <p><input asp-for="Memberphone_P" placeholder="電話" class="inputS" required /></p>
@@ -118,22 +119,32 @@
 </script>
 <script>
     const signin = document.querySelector('#signin_form');
-
+    // 驗證密碼格式
     function pwdCheck(inputpwd) {
         var passwordPattern = /^(?=.*[A-Z])[A-Za-z0-9]{8,}$/;
-        // 驗證密碼是否符合規則
         if (!passwordPattern.test(inputpwd)) {
             var passwordError = document.getElementById("passwordError");
             passwordError.innerText = "密碼必須為8到10位的英文字母和數字組合，並至少包含一個大寫字母";
-            return false; // 阻止表單提交
+            return false;
         }
-        return true; // 允許表單提交
-    }
+        return true;
+    };
+    // 驗證兩次輸入的密碼是否相同
+    function pwd2Check() {
+        var password = document.getElementById("pwd").value;
+        var passwordCheck = document.getElementById("pwdCheck").value;
+        if (password !== passwordCheck) {
+            var passwordError2 = document.getElementById("passwordError2");
+            passwordError2.innerText = "兩次輸入的密碼不相同";
+            return false;
+        }
+        return true;
+    };
 
     signin.addEventListener('submit', async (event) => {
         event.preventDefault();
         const pwd = document.getElementById('pwd').value;
-        if (pwdCheck(pwd)) {
+        if (pwdCheck(pwd) && pwd2Check()) {
             const response = await fetch('@Url.ActionLink("Create")', {
                 method: 'POST',
                 body: new FormData(signin)
@@ -148,14 +159,7 @@
             }
         }
         else {
-            alert('請確認密碼格式是否有誤');
-
+            alert('請確認密碼格式和兩次輸入的密碼是否正確');
         };
     });
-</script>
-<script>
-
-
-
-
 </script>
