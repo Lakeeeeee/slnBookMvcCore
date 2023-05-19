@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
 using prjBookMvcCore.Models;
 using prjBookMvcCore.ViewModel;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -12,7 +13,7 @@ namespace prjBookMvcCore.Controllers
     public class OrderController : Controller
     {
         public UserInforService _user { get; set; }
-        BookShopContext _db = new();
+        BookShopContext _db = new BookShopContext();
 
         public OrderController(UserInforService user, BookShopContext db)
         {
@@ -71,7 +72,7 @@ namespace prjBookMvcCore.Controllers
         {
             List<ShoppingcartInformation> cartItems = new List<ShoppingcartInformation>();
 
-            IEnumerable<ActionDetial> q = _db.ActionDetials.Where(x => x.MemberId == _user.UserId && x.ActionId==7);
+            IEnumerable<ActionDetial> q = _db.ActionDetials.Where(x => x.MemberId == _user.UserId && x.ActionId == 7);
 
             foreach (var item in q)
             {
@@ -90,7 +91,7 @@ namespace prjBookMvcCore.Controllers
         {
             bool isSuccesse = false;
             var tool = _db.ActionDetials.Find(id);
-            if(tool != null)
+            if (tool != null)
             {
                 _db.ActionDetials.Remove(tool);
                 _db.SaveChanges();
@@ -101,7 +102,7 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult testMethod()
         {
-            
+
             List<ShoppingcartInformation> cartItems = new List<ShoppingcartInformation>();
 
             IEnumerable<ActionDetial> q = _db.ActionDetials.Where(x => x.MemberId == _user.UserId && x.ActionId == 7);
@@ -109,46 +110,28 @@ namespace prjBookMvcCore.Controllers
             return View(q);
 
         }
-
-        public IActionResult checkOutInfo()
+        [Authorize]
+        public IActionResult searchDiscount(int total)
         {
-            Member member = new Member();
-            var query = from m in _db.Members
-                        join discount in _db.OrderDiscountDetails
-                        on m.MemberId equals discount.MemberId
-                        select new
-                        {
-                            回饋金 = m.Points,
-                            會員等級 = m.Level.LevelName,
-                            等級優惠 = m.Level.LevelDiscount,
-                            酷碰劵 = discount.OrderDiscount.OrderDiscountDescprtion,
-                            酷碰券內容 = discount.OrderDiscount.OrderDiscountAmount
-                        };
-            foreach (var item in query)
+            List<DiscountType> discountTypes = new List<DiscountType>();
+            Member x = _db.Members.Where(x=>x.MemberId==_user.UserId).FirstOrDefault();
+            if (total > 1000)
             {
-                Member m = new Member()
-                {
-                     Points = item.回饋金,
-                };
-                MemberLevel ml = new MemberLevel()
-                {
-                    LevelDiscount = item.等級優惠,
-                    LevelName = item.會員等級
-                };
-                OrderDiscount od = new OrderDiscount()
-                {
-                    OrderDiscountDescprtion = item.酷碰劵,
-                    OrderDiscountAmount = item.酷碰券內容,
-                };
-                checkoutInformation ci = new checkoutInformation()
-                {
-                    member = m,
-                    memberlevel = ml,
-                    orderdiscount = od,
-                };
-                return View(ci);
-            }
-            return View();
+
+                DiscountType memberDiscountType = _db.DiscountTypes.Where(x=>x.DiscountTypeId == 1).FirstOrDefault();                //回傳會員優惠
+                discountTypes.Add(memberDiscountType);
+            };
+
+            var q = _db.OrderDiscountDetails.Where(x=>x.MemberId==_user.UserId && x.IsOrderDiscountUse=="N").ToList();
+
+            if (q.Count() > 0)
+            {
+
+                DiscountType couponDiscountType = _db.DiscountTypes.Where(x => x.DiscountTypeId == 2).FirstOrDefault(); 
+                discountTypes.Add(couponDiscountType);
+            };
+
+            return Json(discountTypes);
         }
 
         public IActionResult checkOutConfirm()
@@ -170,9 +153,7 @@ namespace prjBookMvcCore.Controllers
         {
             return View();
         }
-
-        
-}
-
     }
+
+}
 

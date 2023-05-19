@@ -478,18 +478,18 @@ namespace prjBookMvcCore.Models
 
                 entity.Property(e => e.LevelId).HasColumnName("LevelID");
 
-                entity.Property(e => e.DiscountTypeId).HasColumnName("DiscountTypeID");
-
                 entity.Property(e => e.LevelDescription).HasMaxLength(50);
 
                 entity.Property(e => e.LevelDiscount).HasColumnType("decimal(10, 2)");
 
                 entity.Property(e => e.LevelName).HasMaxLength(10);
 
-                entity.HasOne(d => d.DiscountType)
+                entity.Property(e => e.OrderDiscountId).HasColumnName("OrderDiscountID");
+
+                entity.HasOne(d => d.OrderDiscount)
                     .WithMany(p => p.MemberLevels)
-                    .HasForeignKey(d => d.DiscountTypeId)
-                    .HasConstraintName("FK_MemberLevel_DiscountType");
+                    .HasForeignKey(d => d.OrderDiscountId)
+                    .HasConstraintName("FK_MemberLevel_OrderDiscount");
             });
 
             modelBuilder.Entity<Message>(entity =>
@@ -571,11 +571,11 @@ namespace prjBookMvcCore.Models
                     .ValueGeneratedNever()
                     .HasColumnName("OrderID");
 
-                entity.Property(e => e.DiscountTypeId).HasColumnName("DiscountTypeID");
-
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
                 entity.Property(e => e.OrderDate).HasColumnType("date");
+
+                entity.Property(e => e.OrderDiscountId).HasColumnName("OrderDiscountID");
 
                 entity.Property(e => e.PayStatusId).HasColumnName("PayStatusID");
 
@@ -591,16 +591,16 @@ namespace prjBookMvcCore.Models
 
                 entity.Property(e => e.TotalPay).HasColumnType("money");
 
-                entity.HasOne(d => d.DiscountType)
-                    .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.DiscountTypeId)
-                    .HasConstraintName("FK_Order_DiscountType");
-
                 entity.HasOne(d => d.Member)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.MemberId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_Member1");
+
+                entity.HasOne(d => d.OrderDiscount)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.OrderDiscountId)
+                    .HasConstraintName("FK_Order_OrderDiscount");
 
                 entity.HasOne(d => d.PayStatus)
                     .WithMany(p => p.Orders)

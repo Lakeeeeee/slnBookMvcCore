@@ -7,7 +7,9 @@ namespace prjBookMvcCore.Models
     {
         public OrderDiscount()
         {
+            MemberLevels = new HashSet<MemberLevel>();
             OrderDiscountDetails = new HashSet<OrderDiscountDetail>();
+            Orders = new HashSet<Order>();
         }
 
         public int OrderDiscountId { get; set; }
@@ -19,6 +21,8 @@ namespace prjBookMvcCore.Models
         public string? OrderDiscountCode { get; set; }
 
         public virtual DiscountType DiscountType { get; set; } = null!;
+        public virtual ICollection<MemberLevel> MemberLevels { get; set; }
         public virtual ICollection<OrderDiscountDetail> OrderDiscountDetails { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

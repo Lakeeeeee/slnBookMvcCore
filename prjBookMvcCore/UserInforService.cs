@@ -19,6 +19,14 @@ public class UserInforService
             return Convert.ToInt32(varCliams.Where(x => x.Type == "Id").FirstOrDefault()?.Value);
         }
     }
+    public int UserLevelId
+    {
+        get
+        {
+            var varCliams = _contextAccessor.HttpContext!.User.Claims.ToList();
+            return Convert.ToInt32(varCliams.Where(x => x.Type == "UserLevelId").FirstOrDefault()?.Value);
+        }
+    }
     public string UserName
     {
         get

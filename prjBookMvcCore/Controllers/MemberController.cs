@@ -108,6 +108,7 @@ namespace prjBookMvcCore.Controllers
                     var useClain = new List<Claim>
                     {
                         new Claim("Id", user.MemberId.ToString()),
+                        new Claim("UserLevelId", user.LevelId.ToString()),
                         new Claim(ClaimTypes.Name, user.MemberName),
                     };
 

@@ -96,9 +96,9 @@
                                     @{
                                         foreach (var item in db.Payments.Select(x => x))
                                         {
-                                                                                <option class="btn btn-light" value="@item.PaymentId">
-                                                                                    @item.PaymentName
-                                                                                </option>
+                                            <option class="btn btn-light" value="@item.PaymentId">
+                                                @item.PaymentName
+                                            </option>
                                         }
                                     }
                                 </select>
@@ -121,18 +121,18 @@
 <script>
     const form = document.querySelector('#form');
 
-    form.addEventListener('submit', async ()=> {
+    form.addEventListener('submit', async () => {
         const response = await fetch('@Url.ActionLink("alretProflie")', {
-            method:'Post',
+            method: 'Post',
             body: new FormData(form)
         })
-        
+
         const confirm = await response.text();
-        if(confirm){
+        if (confirm) {
             alert('修改成功');
             location.reload();
         }
-        else{
+        else {
             location.reload();
         }
     });

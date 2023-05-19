@@ -160,20 +160,14 @@
                 <div>
                     @*結帳資訊區*@
                     <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td style="font-size:20px; color:	#F75000;">
-                                        總金額 共 <sapn id="totalAmount">@totalAmount </sapn> 元
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="col-3" style="font-size:20px; color:	#F75000;">
+                            總金額 共 <sapn id="totalAmount">@totalAmount </sapn> 元
+                        </div>
                     </div>
                 </div>
                 <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
                     <button class="btn btn-primary col-4 me-md-2" type="button" onclick="addToList()">加入暫存</button>
-                    <button class=" btn btn-primary col-4 me-md-2" onclick="nextPage('nav-checkOutInfo-tab')">來去結帳</button>
+                    <button class=" btn btn-primary col-4 me-md-2" id="nextForm">來去結帳</button>
                 </div>
             </div>
             <div class="tab-pane fade" id="pills-b" role="tabpanel" aria-labelledby="pills-b-tab">
@@ -243,7 +237,10 @@
     </div>
     <div class="tab-pane fade" id="nav-checkOutInfo" role="tabpanel" aria-labelledby="nav-checkOutInfo-tab">
         <div class="container-sp">
-            <div class="row">
+            <div class="col-3" style="font-size:20px; color:	#F75000;">
+                總金額 共 <label id="totalAmount2"> </label> 元
+            </div>
+            <div class="row mt-2">
                 <h4>訂購人資訊</h4>
                 <div class="form-group">
                     <label for="inputName">姓名</label>
@@ -258,7 +255,7 @@
                     <input type="text" class="form-control" id="inputAddress" name="Address" placeholder="請輸入配送地址">
                 </div>
             </div>
-            <div class="row mt-5">
+            <div class="row mt-4">
                 <h2>選擇付款方式</h2>
                 @{
                     foreach (var item in db.Payments.Take(4))
@@ -272,7 +269,7 @@
                     };
                 }
             </div>
-            <div class="row mt-5">
+            <div class="row mt-4">
                 <h2>選擇配送方式</h2>
                 @{
                     foreach (var item in db.Shipments)
@@ -286,41 +283,16 @@
                     };
                 }
             </div>
-            <div class="row mt-5">
+            <div class="row mt-4">
                 <h2>選擇優惠項目</h2>
-                <div>
-                    <input class="form-check-input" type="radio" name="shipmentId" id="memberDiscount" value="1" checked>
-                    <label class="form-check-label" for="shipmentId">
-                        會員折扣
-                    </label>
-                </div>
-                <div>
-                    <input class="form-check-input" type="radio" name="shipmentId" id="couponDiscount" value="2" checked>
-                    <label class="form-check-label" for="shipmentId">
-                        Coupon
-                    </label>
-                </div>
-
-                <div>
-                    @{
-                        <p>
-
-                        </p>
-                    }
-                </div>
-
-                <div style="display:none">
-                    酷碰券
-                    @{
-                    }
-
-                </div>
+                <table id="discountArea">
+                </table>
 
             </div>
 
 
 
-            <div class="row mt-5">
+            <div class="row mt-4">
                 <h2>回饋金</h2>
                 <div class="ml-3">
                     <div class="form-check">
@@ -342,7 +314,6 @@
             <button class=" btn btn-primary col-4 me-md-2" id="check_btn">下一步</button>
         </div>
     </div>
-
     <div class="tab-pane fade" id="nav-checkOutConfirm" role="tabpanel" aria-labelledby="nav-checkOutConfirm-tab">
         <div class="container">
             <h2>確認結帳</h2>
@@ -400,7 +371,7 @@
             </div>
         </div>
         <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
-            <a href="~/Order/CheckOutInfo" class=" btn btn-primary col-4 me-md-2" type="button">返回修改</a>
+            <button class=" btn btn-primary col-4 me-md-2" type="" onclick="nextPage('nav-cart-tab')">返回修改</button>
             <button class="btn btn-primary col-4 me-md-2" type="button" data-bs-toggle="modal" data-bs-target="#successModal">
                 確定送出
             </button>
@@ -427,7 +398,6 @@
         </div>
 
     </div>
-
     <div class="tab-pane fade" id="nav-checkOutFinal" role="tabpanel" aria-labelledby="nav-checkOutFinal-tab">
         <div class="container">
             <h1>以下是您的訂單內容</h1>
@@ -510,7 +480,7 @@
             const response = await fetch('@Url.Content("~/Order/itemDelete")?id=' + id);
             const confirmText = await response.text();
             if (confirmText === "True") {
-                alert('已取消追蹤');
+                alert('已取消');
             } else {
                 alert('不明錯誤, 你再試試');
             }
@@ -571,14 +541,14 @@
         const table2Header = document.createElement('thead');
         const headerRow = document.createElement('tr');
         headerRow.innerHTML = `
-                                                                                <th style="width:50px;"><input type="checkbox"></th>
-                                                                                <th style="width:50px;">序號</th>
-                                                                                <th style="width:500px;">書名</th>
-                                                                                <th>優惠</th>
-                                                                                <th>優惠價</th>
-                                                                                <th>數量</th>
-                                                                                <th>小計</th>
-                                                                            `;
+                        <th style="width:50px;"><input type="checkbox"></th>
+                        <th style="width:50px;">序號</th>
+                        <th style="width:500px;">書名</th>
+                        <th>優惠</th>
+                        <th>優惠價</th>
+                        <th>數量</th>
+                        <th>小計</th>
+                        `;
         table2Header.appendChild(headerRow);
         table2.appendChild(table2Header);
 
@@ -604,4 +574,41 @@
         tabbtn.click();
     };
 </script>
+<script>
+    function updateTotalAmount2() {
+        var totalAmountElement = document.getElementById("totalAmount");
+        var totalAmount2Element = document.getElementById("totalAmount2");
+        totalAmount2Element.innerText = totalAmountElement.innerText;
+    }
+    const nextForm = document.getElementById('nextForm');
+    nextForm.addEventListener('click', function () {
+        updateTotalAmount2();
+        returnOd();
+        nextPage('nav-checkOutInfo-tab');
+    });
 
+</script>
+<script>
+
+    async function returnOd() {
+        const discountArea = document.getElementById('discountArea');
+        var totalAmount2 = document.getElementById('totalAmount2');
+        var total = parseInt(totalAmount2.innerText);
+        console.log(total);
+        const response = await fetch('@Url.Content("~/Order/searchDiscount")?total=' + total);
+        const datas = await response.json();
+        console.log(datas);
+
+        datas.forEach(discountType => {
+            const discountTypeName = discountType.DiscountTypeName;
+
+            // 創建一個新的 <div> 元素來顯示折扣類型名稱
+            const div = document.createElement('div');
+            div.textContent = discountTypeName;
+
+            // 將新建的 <div> 元素新增到 discountArea 元素中
+            discountArea.appendChild(div);
+        });
+    }
+
+</script>
