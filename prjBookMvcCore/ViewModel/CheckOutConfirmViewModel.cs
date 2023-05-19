@@ -1,6 +1,6 @@
 ﻿namespace prjBookMvcCore.ViewModel
 {
-	public class CheckOutConfirmViewModel
+	public class OrderViewModel
 	{
 		public string Name { get; set; }
 		public string Phone { get; set; }

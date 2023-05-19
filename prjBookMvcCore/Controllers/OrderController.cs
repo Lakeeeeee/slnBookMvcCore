@@ -67,7 +67,7 @@ namespace prjBookMvcCore.Controllers
         //    return View(cartItems);
         //}
         [Authorize]
-        public IActionResult ShoppingCart(int memberID)
+        public IActionResult ShoppingCart()
         {
             List<ShoppingcartInformation> cartItems = new List<ShoppingcartInformation>();
 
@@ -84,20 +84,29 @@ namespace prjBookMvcCore.Controllers
             }
             return View(cartItems);
 
+        }
 
-            //var query = from b in db.Books
-            //            join ad in db.ActionDetials
-            //            on b.BookId equals ad.BookId
-            //            where ad.MemberId == _user.UserId
-            //            orderby ad.ActionToBookId descending
-            //            select new
-            //            {
-            //                書本ID = b.BookId,
-            //                ActionID = ad.ActionId,
-            //                book = b,
-            //                折扣名 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountName).FirstOrDefault(),
-            //                折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
-            //            };
+        public IActionResult itemDelete(int id)
+        {
+            bool isSuccesse = false;
+            var tool = _db.ActionDetials.Find(id);
+            if(tool != null)
+            {
+                _db.ActionDetials.Remove(tool);
+                _db.SaveChanges();
+                isSuccesse = true;
+            };
+            return View(isSuccesse.ToString());
+        }
+
+        public IActionResult testMethod()
+        {
+            
+            List<ShoppingcartInformation> cartItems = new List<ShoppingcartInformation>();
+
+            IEnumerable<ActionDetial> q = _db.ActionDetials.Where(x => x.MemberId == _user.UserId && x.ActionId == 7);
+
+            return View(q);
 
         }
 
@@ -147,8 +156,9 @@ namespace prjBookMvcCore.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult checkOutConfirm(CheckOutConfirmViewModel model)
+        public IActionResult checkOutConfirm(OrderViewModel model)
         {
+
             return View(model);
         }
         public IActionResult checkOutFinal()

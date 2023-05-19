@@ -5,7 +5,8 @@
     ViewBag.Title = "購物車";
     Layout = "~/Views/Shared/_Layout.cshtml";
     BookShopContext db = new BookShopContext();
-    Member user = db.Members.Find(_user.UserId);
+    string level = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.Level).Select(x => x.LevelName).FirstOrDefault();
+    int points = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.Points).FirstOrDefault();
 }
 <style>
     .container-sp {
@@ -35,14 +36,29 @@
         border-radius: 4px;
         border: 1px solid #e6e6e6;
     }
-
 </style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        // 優惠的選項被選中時，顯示可用的優惠項目
+        $('#discountMethod1').click(function () {
+            $('#discountOptions1').show();
+            $('#discountOptions2').hide();
+        });
+
+        $('#discountMethod2').click(function () {
+            $('#discountOptions2').show();
+            $('#discountOptions1').hide();
+        });
+    });
+</script>
+
 <script>
     function addToList() {
         /*待補，加入暫存的程式碼 */
         alert("已放入暫存清單!");
     }
-
 </script>
 <script src="https://www.paypal.com/sdk/js?client-id=AQD2E8XndV3uPoaErR5zdfjhgeHdVhOzTyhRmf7oA3F-Ta2sfVTU4uMrC3sfqmT-j7FnauXqXXBSvqsw"></script>
 <script>
@@ -79,8 +95,6 @@
     </div>
 </div>
 
-
-
 <nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
         <button class="nav-link active" id="nav-cart-tab" data-bs-toggle="tab" data-bs-target="#nav-cart" type="button" role="tab" aria-controls="nav-cart" aria-selected="true">Home</button>
@@ -103,7 +117,7 @@
         </div>
         <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-a" role="tabpanel" aria-labelledby="pills-a-tab">
-                <table class="table table-striped">
+                <table class="table table-striped" id="table1">
                     <thead>
                         <tr>
                             <th style="width:50px;"><input type="checkbox"></th>
@@ -111,34 +125,56 @@
                             <th style="width:500px;">書名</th>
                             <th>優惠</th>
                             <th>優惠價</th>
-                            <th>出版社</th>
-                            <th>庫存</th>
+                            <th>數量</th>
+                            <th>小計</th>
                         </tr>
                     </thead>
                     <tbody>
                         @{
                             int count = 1;
                             decimal totalAmount = 0;
+
                             foreach (var item in Model)
                             {
-                                BookDiscount x = item.Book.BookDiscountDetails.Select(x => x.BookDiscount).FirstOrDefault();
-                                Decimal discount = Math.Floor(@item.Book.UnitPrice * x.BookDiscountAmount);
+                                int 優惠價 = Convert.ToInt32(item.Book.UnitPrice * item.discountAmount);
                                 string bookTitle = item.Book.BookTitle.Replace("$$", "\n");
+                                decimal 小計 = 優惠價 * item.Quantity;
                                 <tr>
                                     <td><input type="checkbox"></td>
                                     <td>@count</td>
                                     <td>@bookTitle</td>
-                                    <td>@x.BookDiscountName</td>
-                                    <td>@discount</td>
-                                    <td>@item.Book.Publisher.PublisherName</td>
-                                    <td>@item.Book.UnitInStock</td>
+                                    <td>@item.discountName</td>
+                                    <td>@優惠價</td>
+                                    <td><input id="quantity" type="number" asp-for="@item.Quantity" min="1" max="@item.Book.UnitInStock"></td>
+                                    <td id="subtotal">@小計</td>
+                                    <td>
+                                        <button name="id" class="btn btn-outline-secondary" onclick="cancle(@item.ActionDetial.ActionToBookId)">取消</button>
+                                    </td>
                                 </tr>
-                                totalAmount += discount;
                                 count++;
+                                totalAmount += 小計;
                             };
                         }
                     </tbody>
                 </table>
+                <div>
+                    @*結帳資訊區*@
+                    <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td style="font-size:20px; color:	#F75000;">
+                                        總金額 共 <sapn id="totalAmount">@totalAmount </sapn> 元
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
+                    <button class="btn btn-primary col-4 me-md-2" type="button" onclick="addToList()">加入暫存</button>
+                    <button class=" btn btn-primary col-4 me-md-2" onclick="nextPage('nav-checkOutInfo-tab')">來去結帳</button>
+                </div>
             </div>
             <div class="tab-pane fade" id="pills-b" role="tabpanel" aria-labelledby="pills-b-tab">
                 <table class="table table-striped">
@@ -204,199 +240,127 @@
                 </div>
             </div>
         </div>@*為你推薦*@
-        <div>
-            @*結帳資訊區*@
-            <ul class="form_01 prodetail">
-                <li>
-                    <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td style="font-size:30px; color:	#F75000;">
-                                        本次購物 共 @(count - 1)項<br>
-                                        總金額 共 @totalAmount 元
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-        </div>
-        <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
-            <button class="btn btn-primary col-4 me-md-2" type="button" onclick="addToList()">加入暫存</button>
-            <a href="~/Order/CheckOutInfo" class=" btn btn-primary col-4 me-md-2" type="button">來去結帳</a>
-        </div>
     </div>
-
     <div class="tab-pane fade" id="nav-checkOutInfo" role="tabpanel" aria-labelledby="nav-checkOutInfo-tab">
         <div class="container-sp">
             <div class="row">
-                <div class="col-md-12">
-                    <h4>訂購人資訊</h4>
-                    <form id="checkoutForm" asp-action="CheckOutConfirm" method="post">
-                        <div class="form-group">
-                            <label for="inputName">姓名</label>
-                            <input type="text" class="form-control" id="inputName" name="Name" placeholder="請輸入收件人姓名">
+                <h4>訂購人資訊</h4>
+                <div class="form-group">
+                    <label for="inputName">姓名</label>
+                    <input type="text" class="form-control" id="inputName" name="Name" placeholder="請輸入收件人姓名">
+                </div>
+                <div class="form-group">
+                    <label for="inputPhone">電話</label>
+                    <input type="text" class="form-control" id="inputPhone" name="Phone" placeholder="請輸入電話">
+                </div>
+                <div class="form-group">
+                    <label for="inputAddress">地址</label>
+                    <input type="text" class="form-control" id="inputAddress" name="Address" placeholder="請輸入配送地址">
+                </div>
+            </div>
+            <div class="row mt-5">
+                <h2>選擇付款方式</h2>
+                @{
+                    foreach (var item in db.Payments.Take(4))
+                    {
+                        <div>
+                            <input class="form-check-input" type="radio" name="paymentId" value="@item.PaymentId" checked>
+                            <label class="form-check-label" for="paymentId">
+                                @item.PaymentName
+                            </label>
                         </div>
-                        <div class="form-group">
-                            <label for="inputPhone">電話</label>
-                            <input type="text" class="form-control" id="inputPhone" name="Phone" placeholder="請輸入電話">
+                    };
+                }
+            </div>
+            <div class="row mt-5">
+                <h2>選擇配送方式</h2>
+                @{
+                    foreach (var item in db.Shipments)
+                    {
+                        <div>
+                            <input class="form-check-input" type="radio" name="shipmentId" id="text-@item.ShipmentId" value="@item.ShipmentId" checked>
+                            <label class="form-check-label" for="shipmentId">
+                                @item.ShipmentName
+                            </label>
                         </div>
-                        <div class="form-group">
-                            <label for="inputEmail">電子郵件</label>
-                            <input type="email" class="form-control" id="inputEmail" name="Email" placeholder="請輸入電子郵件">
+                    };
+                }
+            </div>
+            <div class="row mt-5">
+                <h2>選擇優惠項目</h2>
+                <div>
+                    <input class="form-check-input" type="radio" name="shipmentId" id="memberDiscount" value="1" checked>
+                    <label class="form-check-label" for="shipmentId">
+                        會員折扣
+                    </label>
+                </div>
+                <div>
+                    <input class="form-check-input" type="radio" name="shipmentId" id="couponDiscount" value="2" checked>
+                    <label class="form-check-label" for="shipmentId">
+                        Coupon
+                    </label>
+                </div>
+
+                <div>
+                    @{
+                        <p>
+
+                        </p>
+                    }
+                </div>
+
+                <div style="display:none">
+                    酷碰券
+                    @{
+                    }
+
+                </div>
+
+            </div>
+
+
+
+            <div class="row mt-5">
+                <h2>回饋金</h2>
+                <div class="ml-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="discountOptions" id="" value="回饋金">
+                        <label class="form-check-label" for="discountOptions1">
+                            回饋金折抵
+                        </label>
+                        <div id="rebateAmount">
+                            <label for="rebateAmountInput" class="form-label">輸入金額：(目前持有回饋金：@points 元)</label>
+                            <input type="number" class="form-control" id="rebateAmountInput" name="rebateAmountInput" placeholder="請輸入回饋金金額" min="0" max="100">
                         </div>
-                        <div class="form-group">
-                            <label for="inputAddress">地址</label>
-                            <input type="text" class="form-control" id="inputAddress" name="Address" placeholder="請輸入配送地址">
-                        </div>
-
-                        <div class="row container-sp">
-                            <div class="col-md-6">
-                                <h2>選擇付款方式</h2>
-
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="paymentMethod" id="paymentMethod1" value="creditCard" checked>
-                                    <label class="form-check-label" for="paymentMethod1">
-                                        信用卡
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="paymentMethod" id="paymentMethod2" value="ATM">
-                                    <label class="form-check-label" for="paymentMethod2">
-                                        貨到付款
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="paymentMethod" id="paymentMethod3" value="ThirdParty">
-                                    <label class="form-check-label" for="paymentMethod3">
-                                        第三方支付
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row container-sp">
-                            <div class="col-md-6">
-                                <h2>選擇配送方式</h2>
-
-                                <div id="homeDelivery" class="form-check">
-                                    <input class="form-check-input" type="radio" name="shippingMethod" id="shippingMethod1" value="homeDelivery" checked>
-                                    <label class="form-check-label" for="shippingMethod1">
-                                        宅配到府
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="shippingMethod" id="shippingMethod2" value="storePickup">
-                                    <label class="form-check-label" for="shippingMethod2">
-                                        超商取貨
-                                    </label>
-                                    <div id="storeOptions" style="display:none">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="storeOption" id="storeOption1" value="7-11">
-                                            <label class="form-check-label" for="storeOption1">
-                                                7-11
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="storeOption" id="storeOption2" value="FamilyMart">
-                                            <label class="form-check-label" for="storeOption2">
-                                                全家
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="row container-sp">
-                            <div class="col-md-6">
-                                <h2>選擇優惠項目</h2>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="discountMethod" id="discountMethod1" value="會員優惠" checked>
-                                    <label class="form-check-label" for="discountMethod1">
-                                        會員優惠
-                                        (@user..LevelName 會員)
-
-                                    </label>
-                                </div>
-
-
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="discountMethod" id="discountMethod2" value="活動優惠">
-                                    <label class="form-check-label" for="discountMethod2">
-                                        酷碰券
-                                        @{
-                                            var q = user.OrderDiscountDetails;
-                                            foreach (var coupon in q)
-                                            {
-                                                <p> @coupon.OrderDiscount.OrderDiscountnName</p>
-                                            }
-                                        }
-                                    </label>
-                                </div>
-
-                                <h2>回饋金</h2>
-                                <div id="" style="" class="ml-3">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="discountOptions" id="" value="回饋金">
-                                        <label class="form-check-label" for="discountOptions1">
-                                            回饋金折抵
-                                        </label>
-                                        <div id="rebateAmount" style="display:none">
-                                            <label for="rebateAmountInput" class="form-label">輸入金額：(目前持有回饋金：@user.Points 元)</label>
-                                            <input type="number" class="form-control" id="rebateAmountInput" name="rebateAmountInput" placeholder="請輸入回饋金金額" min="0" max="@user.Points">
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
-                            <a href="~/Order/ShoppingCart" class="btn btn-primary col-4 me-md-2" type="button">返回購物車</a>
-                            <a href="~/Order/CheckOutConfirm" class="btn btn-primary col-4 me-md-2" type="button">下一步</a>
-                            @*<input class=" btn btn-primary col-4 me-md-2" value="下一步">*@
-                        </div>
-                    </form>
+                    </div>
 
                 </div>
             </div>
         </div>
-
-
-
+        <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
+            <button class=" btn btn-primary col-4 me-md-2" onclick="nextPage('nav-cart-tab')">返回購物車</button>
+            <button class=" btn btn-primary col-4 me-md-2" id="check_btn">下一步</button>
+        </div>
     </div>
 
     <div class="tab-pane fade" id="nav-checkOutConfirm" role="tabpanel" aria-labelledby="nav-checkOutConfirm-tab">
         <div class="container">
             <h2>確認結帳</h2>
-
             <div class="table">
                 <h4>書籍清單</h4>
-                <table class="table table-striped">
+                <table class="table table-striped" id="table2">
                     <thead>
                         <tr>
-                            <th>書籍名稱</th>
-                            <th>訂購數量</th>
-                            <th>金額</th>
+                            <th style="width:50px;"><input type="checkbox"></th>
+                            <th style="width:50px;">序號</th>
+                            <th style="width:500px;">書名</th>
+                            <th>優惠</th>
+                            <th>優惠價</th>
+                            <th>出版社</th>
+                            <th>庫存</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>商品 1</td>
-                            <td>1</td>
-                            <td>100</td>
-                        </tr>
-                        <tr>
-                            <td>商品 2</td>
-                            <td>2</td>
-                            <td>200</td>
-                        </tr>
-                        <tr>
-                            <td>商品 3</td>
-                            <td>3</td>
-                            <td>300</td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -538,38 +502,106 @@
     </div>
 </div>
 
+
 <script>
-    $(document).ready(function () {
-        // 宅配到府的選項被選中時，隱藏超商取貨選項
-        $('#shippingMethod1').click(function () {
-            $('#storeOptions').hide();
-        });
+    async function cancle(id) {
+        const confirmed = confirm('確定要取消嗎?');
+        if (confirmed) {
+            const response = await fetch('@Url.Content("~/Order/itemDelete")?id=' + id);
+            const confirmText = await response.text();
+            if (confirmText === "True") {
+                alert('已取消追蹤');
+            } else {
+                alert('不明錯誤, 你再試試');
+            }
+            window.location.href = window.location.href;
+        }
+    };
+</script>
+<script>
+    const table1 = document.getElementById('table1');
+    const totalAmountElement = document.querySelector('#totalAmount');
 
-        // 超商取貨的選項被選中時，顯示超商取貨選項
-        $('#shippingMethod2').click(function () {
-            $('#storeOptions').show();
-        });
+    // 初始化 totalAmount 的值
+    let totalAmount = 0;
 
-        // 優惠的選項被選中時，顯示可用的優惠項目
-        $('#discountMethod1').click(function () {
-            $('#discountOptions1').show();
-            $('#discountOptions2').hide();
-        });
+    table1.addEventListener('input', function (event) {
+        const target = event.target;
+        if (target.matches('#quantity')) {
+            const row = target.closest('tr');
+            const quantityInput = row.querySelector('#quantity');
+            const subtotalCell = row.querySelector('#subtotal');
+            const priceCell = row.querySelector('td:nth-child(5)'); // 優惠價列的单元格
 
-        $('#discountMethod2').click(function () {
-            $('#discountOptions2').show();
-            $('#discountOptions1').hide();
-        });
+            const quantity = parseInt(quantityInput.value, 10);
+            const price = parseInt(priceCell.textContent, 10);
+            const subtotal = quantity * price;
+
+            subtotalCell.textContent = subtotal;
+
+            // 更新 totalAmount 的值
+            totalAmount = calculateTotalAmount();
+            totalAmountElement.textContent = totalAmount;
+        }
     });
 
-    $(document).ready(function () {
-        $('input[name=discountOptions]').click(function () {
-            //if ($(this).val() == '回饋金') {
-            $('#rebateAmount').show();
-            //} else {
-            //    $('#rebateAmount').hide();
-            //}
+    function calculateTotalAmount() {
+        const rows = table1.querySelectorAll('tbody tr');
+        let total = 0;
+
+        rows.forEach(function (row) {
+            const subtotalCell = row.querySelector('#subtotal');
+            const subtotal = parseInt(subtotalCell.textContent, 10);
+            total += subtotal;
         });
+
+        return total;
+    };
+</script>
+<script>
+    const check_btn = document.getElementById('check_btn');
+    const table2 = document.getElementById('table2');
+
+    check_btn.addEventListener('click', function () {
+        const table1Rows = table1.querySelectorAll('tbody tr');
+        // 清空 table2
+        table2.innerHTML = '';
+
+        // 创建 table2 的表头
+        const table2Header = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        headerRow.innerHTML = `
+                                                                                <th style="width:50px;"><input type="checkbox"></th>
+                                                                                <th style="width:50px;">序號</th>
+                                                                                <th style="width:500px;">書名</th>
+                                                                                <th>優惠</th>
+                                                                                <th>優惠價</th>
+                                                                                <th>數量</th>
+                                                                                <th>小計</th>
+                                                                            `;
+        table2Header.appendChild(headerRow);
+        table2.appendChild(table2Header);
+
+        // 复制 table1 的行到 table2
+        table1Rows.forEach(function (row) {
+            const quantityInput = row.querySelector('input[type="number"]');
+            const clonedRow = row.cloneNode(true);
+
+            // 更新复制的行的数量为调整后的值
+            const clonedQuantityInput = clonedRow.querySelector('input[type="number"]');
+            const clonedQuantityLabel = document.createElement('label');
+            clonedQuantityLabel.textContent = quantityInput.value;
+            clonedQuantityInput.parentNode.replaceChild(clonedQuantityLabel, clonedQuantityInput);
+
+            table2.appendChild(clonedRow);
+        });
+        nextPage('nav-checkOutConfirm-tab');
     });
 </script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    function nextPage(inputTab) {
+        const tabbtn = document.getElementById(inputTab);
+        tabbtn.click();
+    };
+</script>
+
