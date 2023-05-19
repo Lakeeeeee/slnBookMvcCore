@@ -315,12 +315,14 @@
                                     </div>
                                     <div class="collapse" id="card1">
                                         <div class="card card-body">
-                                            <ul>
-                                            @foreach (var subcategory in category.SubCategories)
-                                            {
-                                                    <li><a asp-controller="Category" asp-action="分類頁面" asp-route-id="@subcategory.SubCategoryId">@subcategory.SubCategoryName</a></li>
-                                            }
-                                            </ul>
+                                                @{
+                                                    BookShopContext db = new BookShopContext();
+                                                    var query = db.SubCategories.Where(c => c.SubCategoryId == category.CategoryId).Select(c => c).ToList();
+                                                    foreach (var subcategory in query)
+                                                    {
+                                                        <div><a asp-controller="Category" asp-action="分類頁面" asp-route-id="@subcategory.SubCategoryId">@subcategory.SubCategoryName</a></div>
+                                                    }
+                                                }
                                         </div>
                                     </div>
                                 </div>
