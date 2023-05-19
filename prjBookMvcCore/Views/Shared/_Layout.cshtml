@@ -47,6 +47,23 @@
             left: 8%;
             transform: translate(0, -50%);
         }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end; /* 內容區塊往下對齊 */
+            align-items: center; /* 內容區塊水平置中 */
+        }
+
+        .fontsize {
+            font-size: 20px;
+        }
+
+        a:link, a:visited {
+            text-decoration: none;
+            color: inherit;
+        }
     </style>
 </head>
 <body>
@@ -59,32 +76,32 @@
         </button>
         <span class="translate-middle badge rounded-pill bg-secondary" id="timer"></span>
     </div>
-  
-        <div id="popup" class="popup-container">
-            <h2>領取優惠券</h2>
-            <p style="text-align:center">滿999扣77元</p>
-            <button id="close" class="position-absolute top-0 start-100 translate-middle  rounded-pill  btn-outline-dark">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-octagon-fill" viewBox="0 0 16 16">
-                    <path d="M11.46.146A.5.5 0 0 0 11.107 0H4.893a.5.5 0 0 0-.353.146L.146 4.54A.5.5 0 0 0 0 4.893v6.214a.5.5 0 0 0 .146.353l4.394 4.394a.5.5 0 0 0 .353.146h6.214a.5.5 0 0 0 .353-.146l4.394-4.394a.5.5 0 0 0 .146-.353V4.893a.5.5 0 0 0-.146-.353L11.46.146zm-6.106 4.5L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z" />
-                </svg>
-            </button>
-            <button class="btn btn-outline-info" onclick="takeCoupon(@_userInforService.UserId)">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-ticket-perforated-fill" viewBox="0 0 16 16">
-                    <path d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6V4.5Zm4-1v1h1v-1H4Zm1 3v-1H4v1h1Zm7 0v-1h-1v1h1Zm-1-2h1v-1h-1v1Zm-6 3H4v1h1v-1Zm7 1v-1h-1v1h1Zm-7 1H4v1h1v-1Zm7 1v-1h-1v1h1Zm-8 1v1h1v-1H4Zm7 1h1v-1h-1v1Z" />
-                </svg>
-                現在領取優惠券，立即享受折扣優惠！
-            </button>
-        </div>
+
+    <div id="popup" class="popup-container">
+        <h2>領取優惠券</h2>
+        <p style="text-align:center">滿999扣77元</p>
+        <button id="close" class="position-absolute top-0 start-100 translate-middle  rounded-pill  btn-outline-dark">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-octagon-fill" viewBox="0 0 16 16">
+                <path d="M11.46.146A.5.5 0 0 0 11.107 0H4.893a.5.5 0 0 0-.353.146L.146 4.54A.5.5 0 0 0 0 4.893v6.214a.5.5 0 0 0 .146.353l4.394 4.394a.5.5 0 0 0 .353.146h6.214a.5.5 0 0 0 .353-.146l4.394-4.394a.5.5 0 0 0 .146-.353V4.893a.5.5 0 0 0-.146-.353L11.46.146zm-6.106 4.5L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z" />
+            </svg>
+        </button>
+        <button class="btn btn-outline-info" onclick="takeCoupon(@_userInforService.UserId)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-ticket-perforated-fill" viewBox="0 0 16 16">
+                <path d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6V4.5Zm4-1v1h1v-1H4Zm1 3v-1H4v1h1Zm7 0v-1h-1v1h1Zm-1-2h1v-1h-1v1Zm-6 3H4v1h1v-1Zm7 1v-1h-1v1h1Zm-7 1H4v1h1v-1Zm7 1v-1h-1v1h1Zm-8 1v1h1v-1H4Zm7 1h1v-1h-1v1Z" />
+            </svg>
+            現在領取優惠券，立即享受折扣優惠！
+        </button>
+    </div>
 
 
 
-    <div style="background-image:url('');background-size:100%;">
+    <div class="" style="background-image:url('');background-size:100%;">
         @*導覽開始*@
         <nav class="navbar navbar-expand-sm navbar-light bg-light border-bottom navbar-toggleable-sm  box-shadow mb-3 ">
             <div class="container">
                 @*LOGO開始*@
-                <div class="align-items-start">
-                    @Html.ActionLink("讀本", "Home", "Home", new { area = "" }, new { @class = "navbar-brand" })  @*須換圖*@
+                <div class="align-items-start" style="font-weight:900">
+                    @Html.ActionLink("讀本", "Home", "Home", new { area = "" }, new { @class = "fontsize navbar-brand" })  @*須換圖*@
                 </div>
                 @*登入選項開始*@
                 <div class="justify-content-end menu">
@@ -93,16 +110,16 @@
                             if (_userInforService.UserId != 0)
                             {
                                 <li> Hi! @_userInforService.UserName </li>
-                                <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/LogOut">登出</a></li>
+                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/LogOut">登出</a></li>
                             }
                             else
                             {
-                                <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/Login">登入</a></li>
-                                <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/Signin">註冊</a></li>
+                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/Login">登入</a></li>
+                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/Signin">註冊</a></li>
                             }
                         }
-                        <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Member/MemberCenter">會員中心</a></li>
-                        <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Order/ShoppingCart"><img src="~/Image/shoppingCartIcon20px.png" style="width:20" /></a></li>
+                        <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/MemberCenter">會員中心</a></li>
+                        <li><a role="button" class="btn btn-outline-secondary mx-3" href="~/Order/ShoppingCart"><img src="~/Image/shoppingCartIcon20px.png" /></a></li>
                     </ul>
                 </div>
             </div>
@@ -115,7 +132,7 @@
                 <form class="justify-content-start">
                     <div class="menu">
                         <ul class="zero">
-                            <li><a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Home/Menu">書籍</a></li>
+                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Home/Menu">書籍</a></li>
                             <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Promotions/Promotions活動總覽圖">活動文宣</a></li>
                         </ul>
                     </div>
@@ -125,30 +142,25 @@
                     <div class="input-group navbar navbar-light bg-light menu">
                         <input id="search_input" style="border-right: #C4C4C4 2px solid;" placeholder="搜尋" type="search" class="mx-1 form-control inputForSearch ui-autocomplete-input" maxlength="40" value="" autocomplete="off">
                         <div class="dropdown">
-                            <button class="btn btn-sm btn-outline-success mx-1 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-sm btn-outline-secondary mx-1 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                 進階搜尋
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="width:500px">
                                 <li>
                                     <div class="m-1 p-1">
                                         <span class="mx-2">搜尋欄位</span>
-                                        <button class="btn btn-sm btn-outline-success mx-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            全文
-                                        </button>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="m-1 p-1">
-                                        <span class="mx-2">商品類型</span>
-                                        <button class="btn btn-sm btn-outline-success mx-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            選擇類型
-                                        </button>
+                                        <select id="搜尋欄位" name="搜尋欄位" style="width:100px">
+                                            <option value="ALL" selected>全文 </option>
+                                            <option value="BookTitle">書名</option>
+                                            <option value="Author">作者</option>
+                                            <option value="ELSE">...</option>
+                                        </select>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="m-1 p-1">
                                         <span class="mx-2">售價</span>
-                                        <input style="border-right: #C4C4C4 2px solid;width:100px" placeholder="金額" type="search" maxlength="20" value="" autocomplete="off" />
+                                        <input style="margin-left:2em; border-right: #C4C4C4 2px solid;width:100px" placeholder="金額" type="search" maxlength="20" value="" autocomplete="off" />
                                         <span class="mx-2">至</span>
                                         <input style="border-right: #C4C4C4 2px solid;width:100px" placeholder="金額" type="search" maxlength="20" value="" autocomplete="off" />
                                         <span class="mx-2">之間</span>
@@ -157,13 +169,28 @@
                                 <li>
                                     <div class="m-1 p-1">
                                         <span class="mx-2">折扣</span>
-                                        <button class="btn btn-sm btn-outline-success mx-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            請選擇
-                                        </button>
+                                        <select id="折扣1" name="折扣1" style="margin-left:2em; width:100px">
+                                            <option value="0" selected>請選擇 </option>
+                                            @{
+                                                BookShopContext db = new BookShopContext();
+                                                var bookDiscount = db.BookDiscounts.Select(dis => new { dis.BookDiscountId, dis.BookDiscountName }).ToList();
+                                                foreach (var dis in bookDiscount)
+                                                {
+                                                    <option value="@dis.BookDiscountId">@dis.BookDiscountName</option>
+                                                }
+                                            }
+                                        </select>
                                         <span class="mx-2">至</span>
-                                        <button class="btn btn-sm btn-outline-success mx-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            請選擇
-                                        </button>
+                                        <select id="折扣2" name="折扣2" style="width:100px">
+                                            <option value="0" selected>請選擇 </option>
+                                            @{
+                                                foreach (var dis in bookDiscount)
+                                                {
+                                                    <option value="@dis.BookDiscountId">@dis.BookDiscountName</option>
+                                                }
+                                            }
+                                        </select>
+
                                         <span class="mx-2">之間</span>
                                     </div>
                                 </li>
@@ -178,7 +205,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <button class="btn btn-sm btn-outline-success mx-1">搜尋</button>
+                        <button class="btn btn-sm btn-outline-secondary mx-1">搜尋</button>
                     </div>
                 </form>
             </div>
@@ -309,8 +336,7 @@
     };
 
     function takeCoupon(memberID) {
-        if (loginCheck()) 
-        {
+        if (loginCheck()) {
             let self = this;
             let url = '@Url.Action("Promotions限時登入領取優惠","Promotions")';
             $.ajax({
@@ -319,7 +345,7 @@
                 success: function (result) {
                     let isSuccess = result;
                     if (isSuccess === "false") {
-                        alert('已領取');hidePopup();
+                        alert('已領取'); hidePopup();
                     }
                     else {
                         alert('領取成功，系統將自動轉向會員中心');
