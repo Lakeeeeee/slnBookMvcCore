@@ -37,23 +37,6 @@
         border: 1px solid #e6e6e6;
     }
 </style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-    $(document).ready(function () {
-
-        // 優惠的選項被選中時，顯示可用的優惠項目
-        $('#discountMethod1').click(function () {
-            $('#discountOptions1').show();
-            $('#discountOptions2').hide();
-        });
-
-        $('#discountMethod2').click(function () {
-            $('#discountOptions2').show();
-            $('#discountOptions1').hide();
-        });
-    });
-</script>
-
 <script>
     function addToList() {
         /*待補，加入暫存的程式碼 */
@@ -285,8 +268,8 @@
             </div>
             <div class="row mt-4">
                 <h2>選擇優惠項目</h2>
-                <table id="discountArea">
-                </table>
+                <div id="discountArea">
+                </div>
 
             </div>
 
@@ -541,14 +524,14 @@
         const table2Header = document.createElement('thead');
         const headerRow = document.createElement('tr');
         headerRow.innerHTML = `
-                        <th style="width:50px;"><input type="checkbox"></th>
-                        <th style="width:50px;">序號</th>
-                        <th style="width:500px;">書名</th>
-                        <th>優惠</th>
-                        <th>優惠價</th>
-                        <th>數量</th>
-                        <th>小計</th>
-                        `;
+                            <th style="width:50px;"><input type="checkbox"></th>
+                            <th style="width:50px;">序號</th>
+                            <th style="width:500px;">書名</th>
+                            <th>優惠</th>
+                            <th>優惠價</th>
+                            <th>數量</th>
+                            <th>小計</th>
+                            `;
         table2Header.appendChild(headerRow);
         table2.appendChild(table2Header);
 
@@ -598,16 +581,29 @@
         const response = await fetch('@Url.Content("~/Order/searchDiscount")?total=' + total);
         const datas = await response.json();
         console.log(datas);
+        discountArea.innerHTML="";
+        datas.forEach(item => {
+            // Create the container div
+            const containerDiv = document.createElement('div');
 
-        datas.forEach(discountType => {
-            const discountTypeName = discountType.DiscountTypeName;
+            // Create the radio input element
+            const radioInput = document.createElement('input');
+            radioInput.setAttribute('type', 'radio');
+            radioInput.setAttribute('name', 'dTy');
+            radioInput.setAttribute('id', `text-${item.discountTypeId}`);
+            radioInput.setAttribute('value', item.discountTypeId);
+            radioInput.classList.add('form-check-input');
+            containerDiv.appendChild(radioInput);
 
-            // 創建一個新的 <div> 元素來顯示折扣類型名稱
-            const div = document.createElement('div');
-            div.textContent = discountTypeName;
+            // Create the label element
+            const label = document.createElement('label');
+            label.classList.add('form-check-label');
+            label.setAttribute('for', 'dTy');
+            label.textContent = item.discountTypeName;
+            containerDiv.appendChild(label);
 
-            // 將新建的 <div> 元素新增到 discountArea 元素中
-            discountArea.appendChild(div);
+            // Add the container div to the discountArea
+            discountArea.appendChild(containerDiv);
         });
     }
 

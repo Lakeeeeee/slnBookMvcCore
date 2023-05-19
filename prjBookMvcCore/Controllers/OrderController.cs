@@ -100,16 +100,6 @@ namespace prjBookMvcCore.Controllers
             return View(isSuccesse.ToString());
         }
 
-        public IActionResult testMethod()
-        {
-
-            List<ShoppingcartInformation> cartItems = new List<ShoppingcartInformation>();
-
-            IEnumerable<ActionDetial> q = _db.ActionDetials.Where(x => x.MemberId == _user.UserId && x.ActionId == 7);
-
-            return View(q);
-
-        }
         [Authorize]
         public IActionResult searchDiscount(int total)
         {
@@ -133,6 +123,9 @@ namespace prjBookMvcCore.Controllers
 
             return Json(discountTypes);
         }
+
+
+
 
         public IActionResult checkOutConfirm()
         {
