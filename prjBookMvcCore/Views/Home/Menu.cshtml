@@ -18,6 +18,7 @@
         line-height: 1.2em; /* 調整需要的行高 */
         height: 2.5em; /* 行高的兩倍 */
     }
+
     .bookCaption {
         display: -webkit-box;
         -webkit-box-orient: vertical;
@@ -182,7 +183,7 @@
         <br />
         <div class="row">
             <div class="col align-content-start" style="display: flex">
-                <h3>中文書籍</h3>
+                <h3>繁中書籍</h3>
             </div>
             <div class="col justify-content-end" style="display: flex; padding:5px">
                 <a asp-controller="Category" asp-action="分類頁面" asp-route-id="0">看更多</a>
@@ -212,7 +213,7 @@
                                                             <a href="~/Book/authorInformation/@item.author.AuthorId">@item.author.AuthorName</a>
                                                         }
                                                     </li>
-                                                    <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))</span>元</li>
+                                                    <li class="Price">原    價：<del style="color:red;font-style:oblique">@((int)Math.Round(item.book.UnitPrice))</del>元</li>
                                                     <li class="discPrice">
                                                         優惠價：<span>@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
                                                         <span>@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
