@@ -61,7 +61,7 @@
             <li class="breadcrumb-item active" aria-current="page" style="color:gray">促銷</li>
         </ol>
     </nav>
-    <h1>Promotions促銷活動</h1>
+    <h1>促銷活動</h1>
 
     <div class="container-fluid justify-content-center2" style="margin-top: 20px">
         <div class="row">
@@ -78,7 +78,7 @@
                                     var bookDiscount = db.BookDiscounts.Where(b => b.BookDiscountId == i).Select(b => b).ToList();
                                     foreach (var g in bookDiscount)
                                     {
-                                            <li class="list-group-item"><a href="#@g.BookDiscountName">@g.BookDiscountName</a></li>
+                                        <li class="list-group-item"><a href="#@g.BookDiscountName" title="移至 @g.BookDiscountName ">@g.BookDiscountName</a></li>
                                     }
                                 }
                             }
@@ -113,7 +113,7 @@
                                         <h3>@g.BookDiscountName</h3>
                                     </div>
                                     <div class="col justify-content-end" style="display: flex; padding:5px">
-                                        <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Promotions/Index">看更多</a>
+                                    <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Promotions/Promotions促銷/@i" >看更多</a>
                                     </div>
                                 </div>
                                 <div class="row">
