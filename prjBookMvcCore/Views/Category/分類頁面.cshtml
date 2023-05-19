@@ -40,11 +40,15 @@
 </head>
 <body>
     @*頁面位置*@
-    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Home">首頁</a></li>
             <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Menu">書籍</a></li>
-            <li class="breadcrumb-item active" aria-current="page">繁中</li>
+            <li class="breadcrumb-item"><a class="linkaFormat" href="@Url.Action("分類頁面", new { id = 0 })">繁中</a></li>
+            @if (Model.categoryId > 0)
+            {
+                <li class="breadcrumb-item active" aria-current="page"><a class="linkaFormat" href="@Url.Action("分類頁面", new { id = Model.categoryId })">@Model.categories.FirstOrDefault(c => c.CategoryId == Model.categoryId)?.CategoryName</a></li>
+            }
         </ol>
     </nav>
     <div class="container" style="margin-top: 20px">
