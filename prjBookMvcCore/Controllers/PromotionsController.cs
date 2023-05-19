@@ -1,19 +1,72 @@
 ﻿using GoogleReCaptcha.V3.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using prjBookMvcCore.Models;
 using System.Diagnostics.Metrics;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace prjBookMvcCore.Controllers
 {
     public class PromotionsController : Controller
     {
         BookShopContext db = new();
+        public UserInforService _userInforService { get; set; }
+        public PromotionsController(UserInforService userInforService)
+        {
+            _userInforService = userInforService;
+        }
         public IActionResult Promotions註冊會員禮() { return View(); }
 
         public IActionResult Promotions會員() { return View(); }
 
         public IActionResult Promotions促銷活動() { return View(); }
+
+        public IActionResult Promotions促銷(int id, int page = 1)
+        {
+            if (id != 0)
+            {
+                int discountId = id;
+                ViewBag.DiscountId = discountId;
+                int itemsPerPage = 28;//每頁只顯示28個                   
+                var bookDiscountDetail = db.BookDiscountDetails.Where(d => d.BookDiscountId == discountId & d.BookDiscountStartDate < DateTime.Now & d.BookDiscountEndDate > DateTime.Now).Select(d => new { d.BookDiscount.BookDiscountName, d.BookDiscount.BookDiscountAmount, d.Book.BookTitle, d.Book.UnitPrice, d.Book.CoverPath, d.Book.BookId, d.BookDiscountEndDate });
+
+                //頁面顯示控制
+                int totalItems = bookDiscountDetail.Count();
+                int totalPages = (int)Math.Ceiling((double)totalItems / itemsPerPage);
+                int offset = (page - 1) * itemsPerPage;
+                var books = bookDiscountDetail.Skip(offset).Take(itemsPerPage);
+
+                List<MenuItem> menuItems = new List<MenuItem>();
+                foreach (var item in books)
+                {
+                    Book b = new Book
+                    {
+                        BookTitle = item.BookTitle,
+                        BookId = item.BookId,
+                        UnitPrice = item.UnitPrice,
+                        CoverPath = item.CoverPath,
+                    };
+                    BookDiscount bd = new BookDiscount { BookDiscountAmount = item.BookDiscountAmount, BookDiscountName=item.BookDiscountName,};
+                    BookDiscountDetail bdd = new BookDiscountDetail{ BookDiscountEndDate = item.BookDiscountEndDate,};
+                    MenuItem tmp = new MenuItem();
+                    tmp.book = b;
+                    tmp.bookDiscount = bd;
+                    tmp.bookDiscountDetail = bdd;
+                    menuItems.Add(tmp);
+                }
+
+                MenuInformation menuInformation = new MenuInformation
+                {
+                    menuItems = menuItems,
+                    CurrentPage = page,
+                    TotalPages = totalPages,
+                    bookDiscountId= discountId
+                };
+                return View(menuInformation);
+            }
+            else { return RedirectToAction("Promotions促銷活動"); }
+        }
 
         public IActionResult Promotions活動總覽圖()
         {
@@ -25,7 +78,7 @@ namespace prjBookMvcCore.Controllers
         {
             var datas = db.Articals.OrderByDescending(a => a.ArticalId).Select(a => a);
             return View(datas);
-         }
+        }
 
         public IActionResult Promotions活動文章Detail(int? id)
         {
@@ -36,24 +89,14 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult Promotions活動已結束() { return View(); }
 
-        private readonly BookShopContext _bookShopContext;
-        private readonly IConfiguration _config;
-        private readonly ICaptchaValidator _captchaValidator; //un done
-        public UserInforService _userInforService { get; set; }
-        public PromotionsController(BookShopContext db, UserInforService userInforService, IConfiguration config, ICaptchaValidator captchaValidator)
+        public string Promotions限時登入領取優惠()
         {
-            _bookShopContext = db;
-            _userInforService = userInforService;
-            _captchaValidator = captchaValidator;
-            _config = config;
-        }
-        [HttpPost]
-        [Authorize]
-        public IActionResult Promotions限時登入領取優惠()
-        {
-            if (_bookShopContext.OrderDiscountDetails.Where(d=>d.MemberId==_userInforService.UserId).Any(d=>d.OrderDiscountId==4))
+            string isSuccess;
+            var q = db.OrderDiscountDetails.Where(d => d.MemberId == _userInforService.UserId & d.OrderDiscountId == 4).Select(d => d);
+            if (q.Count() != 0)
             {
-                return Content("exist");
+                isSuccess = "false";
+                return isSuccess;
             }
             else
             {
@@ -64,9 +107,10 @@ namespace prjBookMvcCore.Controllers
                     OrderDiscountStartDate = DateTime.Now,
                     OrderDiscountEndDate = DateTime.Now.AddDays(3),
                 };
-                _bookShopContext.OrderDiscountDetails.Add(newmemberdiscount);
-                _bookShopContext.SaveChanges();
-                return Content("notexist");
+                db.OrderDiscountDetails.Add(newmemberdiscount);
+                db.SaveChanges();
+                isSuccess = "true";
+                return isSuccess;
             }
         }
 

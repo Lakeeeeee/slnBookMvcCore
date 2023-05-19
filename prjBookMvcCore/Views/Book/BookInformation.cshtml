@@ -231,8 +231,8 @@
             <el-container>
                 <el-breadcrumb separator-class="el-icon-arrow-right">
                     <el-breadcrumb-item><a :href="homeUrl()" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">首頁</a></el-breadcrumb-item>
-                    <el-breadcrumb-item v-if="book.languageName && book.languageName.length > 1"><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.languageName}}</a></el-breadcrumb-item>
-                    <el-breadcrumb-item v-if="book.categoryName && book.categoryName.length > 1"><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.categoryName}}</a></el-breadcrumb-item>
+                    <el-breadcrumb-item v-if="book.languageName && book.languageName.length > 1"><a :href="menuUrl()" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.languageName}}</a></el-breadcrumb-item>
+                    <el-breadcrumb-item v-if="book.categoryName && book.categoryName.length > 1"><a :href="categoryUrl(@Model.category.CategoryId)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.categoryName}}</a></el-breadcrumb-item>
                     <el-breadcrumb-item v-if="book.subCategoryName && book.subCategoryName.length > 1"><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.subCategoryName}}</a></el-breadcrumb-item>
                     <el-breadcrumb-item><div style="color: #E3007F;">{{book.bookTitle}}</div></el-breadcrumb-item>
                 </el-breadcrumb>
@@ -880,6 +880,12 @@
                 homeUrl(){
                     return "@Url.Action("Home", "Home")"
                 },
+                menuUrl(){
+                    return "@Url.Action("Menu", "Home")"
+                },
+                categoryUrl(categoryID){
+                    return "@Url.Action("分類頁面", "Category", new { id = "ID" })".replace("ID", categoryID);
+                },
                 bookUrl(bookID) {
                     return "@Url.Action("BookInformation", "Book", new { id = "BOOKID" })".replace("BOOKID", bookID);
                 },
@@ -895,6 +901,7 @@
                 painterUrl(painterID){
                     return "@Url.Action("painterInformation", "Book", new { id = "PAINTERID" })".replace("PAINTERID", painterID);
                 },
+             
             },
             mounted() {
                 setTimeout(() => {
