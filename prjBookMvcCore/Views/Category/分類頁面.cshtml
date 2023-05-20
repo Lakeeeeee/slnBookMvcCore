@@ -29,12 +29,17 @@
             text-overflow: ellipsis;
         }
 
-        .authorCaption{
+        .authorCaption {
             display: -webkit-box;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 1;
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+
+        img {
+            width: 85%;
+            margin: 10px;
         }
     </style>
 </head>
@@ -44,7 +49,15 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Home">首頁</a></li>
             <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Menu">書籍</a></li>
-            <li class="breadcrumb-item active" aria-current="page">繁中</li>
+            <li class="breadcrumb-item"><a class="linkaFormat" href="@Url.Action("分類頁面", new { id = 0 })">繁中</a></li>
+            @if (Model.categoryId > 0)
+            {
+                <li class="breadcrumb-item active" aria-current="page"><a class="linkaFormat" href="@Url.Action("分類頁面", new { id = Model.categoryId })">@Model.categories.FirstOrDefault(c => c.CategoryId == Model.categoryId)?.CategoryName</a></li>
+                @if (Model.subcategoryId > 0)
+                {
+                    <li class="breadcrumb-item active" aria-current="page"><a class="linkaFormat" href="@Url.Action("分類頁面", new { id = Model.subcategoryId })">@Model.subCategories.FirstOrDefault(c => c.SubCategoryId == Model.subcategoryId)?.SubCategoryName</a></li>
+                }
+            }
         </ol>
     </nav>
     <div class="container" style="margin-top: 20px">
@@ -54,27 +67,40 @@
                 <div class="card">
                     @*分類選單*@
                     <div class="card-header">
-                        中文書
+                        @{
+                            BookShopContext db = new BookShopContext();
+                            var s = db.Books.Where(c => c.LanguageId == 1).Select(c => c.BookId).ToList();
+                            int countAll = s.Count;
+                            <div class="row"><span>繁中 (@countAll)</span></div>
+                        }
                     </div>
-                    <div>
-                        <ul class="list-group list-group-flush">
-                            @foreach (var category in Model.categories)
-                            {
-                                @if (category.CategoryId > 14)
-                                {
-                                    <li class="list-group-item">
-                                        <span><a asp-controller="Category" asp-action="分類頁面" asp-route-id="@category.CategoryId">@category.CategoryName</a></span>
-                                        <ul>
-                                            @foreach (var subcategory in category.SubCategories)
-                                            {
-                                                <li><a href="~/Category/@category.CategoryId/@subcategory.SubCategoryId">@subcategory.SubCategoryName</a></li>
-                                            }
-                                        </ul>
-                                    </li>
+                    @foreach (var category in Model.categories)
+                    {
+                        @if (category.CategoryId > 14)
+                        {
+                            var q = db.CategoryDetails.Where(c => c.SubCategory.CategoryId == category.CategoryId).Select(c => c).ToList();
+                            int count = q.Count;
+                            <div class="row">
+                                <div class="card-body" data-bs-toggle="collapse" href="#card-@category.CategoryId" role="button" aria-expanded="false" aria-controls="card-@category.CategoryId" onclick="changePath(@category.CategoryId)">
+                                    <span asp-controller="Category" asp-action="分類頁面" asp-route-id="@category.CategoryId">@category.CategoryName (@count)</span>
+                                </div>
+                            </div>
+                            <div class="collapse @(Model.categoryId == category.CategoryId ? "show" : "")" id="card-@category.CategoryId">
+                                @{
+                                    var query = db.SubCategories.Where(c => c.CategoryId == category.CategoryId).Select(c => new { c.SubCategoryId, c.SubCategoryName }).ToList();
+
+                                    foreach (var subcategory in query)
+                                    {
+                                        var su=db.CategoryDetails.Where(s=>s.SubCategory.SubCategoryId==subcategory.SubCategoryId).Select(s=>new{s.Book}).ToList();
+                                        int subcount = su.Count;
+                                        <div class="card card-body" onclick="changePath(@subcategory.SubCategoryId)">
+                                            <a asp-controller="Category" asp-action="分類頁面" asp-route-subid="@subcategory.SubCategoryId">@subcategory.SubCategoryName (@subcount)</a>
+                                        </div>
+                                    }
                                 }
-                            }
-                        </ul>
-                    </div>
+                            </div>
+                        }
+                    }
                 </div>
             </div>
             @*右邊書籍欄*@
@@ -100,13 +126,13 @@
                     @{
                         foreach (var item in Model.menuItems)
                         {
-                            <div class="col-3 " style="padding:0">
-                                <div class="card book-item" data-publication-date="@item.book.PublicationDate.ToString("yyyy/MM/dd")" data-price="@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))">
+                            <div class="col-3 " style="margin:0; padding:0;">
+                                <div class="row card book-item border-0" data-publication-date="@item.book.PublicationDate.ToString("yyyy/MM/dd")" data-price="@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))">
                                     <div class="headshot">
-                                        <a><img src="~/Image/Book/@item.book.CoverPath" alt="@item.book.CoverPath" height="240px"></a>
+                                        <a href="~/Book/BookInformation/@item.book.BookId"><img src="~/Image/Book/@item.book.CoverPath" title="@item.book.BookTitle"></a>
                                     </div>
                                     <div class="card-body">
-                                        <ul style="list-style:none; margin:0; padding:0;">
+                                        <ul style="list-style:none; ">
                                             <li> <a class="bookCaption two-lines" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle</a></li>
                                             <li class="prod_author authorCaption">
                                                 作者：
@@ -115,10 +141,10 @@
                                                     <a href="~/Book/authorInformation/@item.author.AuthorId">@item.author.AuthorName</a>
                                                 }
                                             </li>
-                                            <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))</span>元</li>
+                                            <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))元</span></li>
                                             <li class="discPrice">
-                                                優惠價：<span>@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
-                                                <span>@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
+                                                優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
+                                                <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
                                             </li>
                                             <li class="publicationDate">
                                                 出版日期：<span>@item.book.PublicationDate.ToString("yyyy/MM/dd")</span>
@@ -166,6 +192,59 @@
             </div>
         </div>
     </div>
-    <script src="~/js/booksview.js"></script>  @*選單排序判斷*@
 </body>
 </html>
+
+<script>
+    /* 排序判斷動作*/
+    function booksview() {
+        var sortBy = document.getElementById("sort-Select").value;
+        // Get the book list container element
+        var bookList = document.getElementById("booksview");
+        // Get all the book items inside the book list
+        var bookItems = bookList.getElementsByClassName("book-item");
+        // Convert the book items into an array
+        var bookItemsArray = Array.from(bookItems);
+        // Sort the book items based on the selected sorting method
+        if (sortBy === "PublicationDate") {
+            bookItemsArray.sort(function (a, b) {
+                var dateA = new Date(a.getAttribute("data-publication-date"));
+                var dateB = new Date(b.getAttribute("data-publication-date"));
+                return dateB - dateA;
+            });
+        } else if (sortBy === "discountedPrice") {
+            bookItemsArray.sort(function (a, b) {
+                var priceA = parseInt(a.getAttribute("data-price"));
+                var priceB = parseInt(b.getAttribute("data-price"));
+                return priceA - priceB;
+            });
+        }
+        // Clear the book list
+        bookList.innerHTML = "";
+        // Append the sorted book items back to the book list
+        bookItemsArray.forEach(function (item) {
+            bookList.appendChild(item);
+        });
+    }
+
+    //分類欄位click事件
+    function changePath(inputid) {
+        const path = '@Url.Action("分類頁面", new { id = "" })' + '/' + inputid;
+        window.location.href = path;
+
+        // Add the 'show' class to the corresponding card-body element
+        const cardBody = document.getElementById("card-" + inputid);
+        if (cardBody) {
+            cardBody.classList.add("show");
+        }
+
+        // Remove the 'show' class from other card-body elements
+        const cardBodies = document.getElementsByClassName("collapse");
+        for (let i = 0; i < cardBodies.length; i++) {
+            const body = cardBodies[i];
+            if (body.id !== "card-" + inputid) {
+                body.classList.remove("show");
+            }
+        }
+    }
+</script>

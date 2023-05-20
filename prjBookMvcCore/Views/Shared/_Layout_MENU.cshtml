@@ -9,16 +9,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - 讀本｜Menu</title>
-
     <style>
         a:link, a:visited {
             text-decoration: none;
             color: inherit;
         }
+
         .zero {
             margin: 0;
             padding: 0;
         }
+
         .menu ul li { /*li水平顯示*/
             display: inline;
         }
@@ -40,7 +41,7 @@
         </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                    <a href="~/Promotions/Promotions註冊會員禮"><img src="~/Image/Promotions/註冊會員.png" class="d-block w-100" alt="page1" height="300"></a>
+                <a href="~/Promotions/Promotions註冊會員禮"><img src="~/Image/Promotions/註冊會員.png" class="d-block w-100" alt="page1" height="300"></a>
             </div>
             <div class="carousel-item">
                 <a href="~/Promotions/Promotions會員"><img src="~/Image/Promotions/會員等級優惠及升等方式.png" class="d-block w-100" alt="page2" height="300"></a>
@@ -66,7 +67,7 @@
                 <h3>暢銷排行榜</h3>
             </div>
             <div class="col justify-content-end" style="display: flex; padding:5px">
-                <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Home/Home">看更多</a>
+                <a role="button" class=" btn btn-sm btn-outline-secondary mx-1" href="~/Home/Home">看更多</a>
             </div>
         </div>
         <div class="row">
@@ -290,7 +291,7 @@
                         @{
                             foreach (var g in Model.articals.Take(8))
                             {
-                                <li class="list-group-item"><span><a href="~/Promotions/Promotions活動文章Detail/@g.ArticalId">@g.ArticalTitle</a></span></li>
+                                    <li class="list-group-item"><span><a href="~/Promotions/Promotions活動文章Detail/@g.ArticalId">@g.ArticalTitle</a></span></li>
                             }
                         }
                     </ul>
@@ -299,19 +300,17 @@
                 <div class="card">
                     @* 中文書分類 *@
                     <div class="card-header">
-                        中文書
+                        <a asp-controller="Category" asp-action="分類頁面" asp-route-id="0">繁中</a>
                     </div>
-                    <ul class="list-group list-group-flush">
-                        @{
-                            @foreach (var category in Model.categories)
+                    @foreach (var category in Model.categories)
+                        {
+                            @if (category.CategoryId > 14)
                             {
-                                @if (category.CategoryId > 14)
-                                {
-                                    <li class="list-group-item"><span><a asp-controller="Category" asp-action="分類頁面" asp-route-id="@category.CategoryId">@category.CategoryName</a></span></li>
-                                }
+                                <div class="row card-body border-1">
+                                        <a asp-controller="Category" asp-action="分類頁面" asp-route-id="@category.CategoryId">@category.CategoryName</a>
+                                </div>
                             }
-                            }
-                    </ul>
+                        }
                 </div>
             </div>
             @* Body *@

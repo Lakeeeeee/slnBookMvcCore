@@ -10,10 +10,11 @@ namespace prjBookMvcCore.Controllers
     {
         BookShopContext db = new();
         //TODO:(書玉)分頁controller發法改寫
-        public IActionResult 分類頁面(int id, int page = 1)
+        public IActionResult 分類頁面(int id, int subid, int page = 1)
         {
             int categoryID = id;
-            int itemsPerPage = 28;//每頁只顯示28個
+            int subcategoryID = subid;
+            int itemsPerPage = 20;//每頁只顯示28個
 
             var query = from b in db.Books
                         join sd in db.CategoryDetails
@@ -39,6 +40,11 @@ namespace prjBookMvcCore.Controllers
             {
                 query = query.Where(sc => sc.分類ID == categoryID);
             }
+            else if (subcategoryID != 0)
+            {
+                query = query.Where(sc => sc.子分類ID == subcategoryID);
+            }
+
             //頁面顯示控制
             int totalItems = query.Count();
             int totalPages = (int)Math.Ceiling((double)totalItems / itemsPerPage);
@@ -79,7 +85,8 @@ namespace prjBookMvcCore.Controllers
                 menuItems = menuItems,
                 CurrentPage = page,
                 TotalPages = totalPages,
-                categoryId = categoryID // Add this line to pass the category ID to the view
+                categoryId = categoryID, // Add this line to pass the category ID to the view
+                subcategoryId= subcategoryID// Add this line to pass the subcategory ID to the view
             };
             return View(menuInformation);
         }

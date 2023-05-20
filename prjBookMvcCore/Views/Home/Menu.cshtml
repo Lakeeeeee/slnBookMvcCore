@@ -18,6 +18,7 @@
         line-height: 1.2em; /* 調整需要的行高 */
         height: 2.5em; /* 行高的兩倍 */
     }
+
     .bookCaption {
         display: -webkit-box;
         -webkit-box-orient: vertical;
@@ -32,8 +33,8 @@
             <div class="col align-content-start" style="display: flex">
                 <h3>推薦文章</h3>
             </div>
-            <div class="col justify-content-end" style="display: flex; padding:5px">
-                <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Promotions/Promotions活動總覽表">看更多</a>
+            <div class="col justify-content-end " style="display: flex; padding:5px">
+                <a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Promotions/Promotions活動總覽表">看更多</a>
             </div>
         </div>
         <div class="row">
@@ -182,10 +183,10 @@
         <br />
         <div class="row">
             <div class="col align-content-start" style="display: flex">
-                <h3>中文書籍</h3>
+                <h3>繁中書籍</h3>
             </div>
             <div class="col justify-content-end" style="display: flex; padding:5px">
-                <a asp-controller="Category" asp-action="分類頁面" asp-route-id="0">看更多</a>
+                <a class="btn btn-sm btn-outline-secondary mx-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="0">看更多</a>
             </div>
             <div class="container body-content">
                 <div id="carouselExampleEdit" class="carousel slide">
@@ -212,10 +213,10 @@
                                                             <a href="~/Book/authorInformation/@item.author.AuthorId">@item.author.AuthorName</a>
                                                         }
                                                     </li>
-                                                    <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))</span>元</li>
+                                                    <li class="Price">原    價：@((int)Math.Round(item.book.UnitPrice))元</li>
                                                     <li class="discPrice">
-                                                        優惠價：<span>@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
-                                                        <span>@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
+                                                        優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
+                                                        <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
                                                     </li>
                                                     <li class="publicationDate">
                                                         出版日期：<span>@item.book.PublicationDate.ToString("yyyy/MM/dd")</span>
@@ -254,8 +255,8 @@
                                                             </li>
                                                             <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))</span>元</li>
                                                             <li class="discPrice">
-                                                                優惠價：<span>@(item.bookDiscount.BookDiscountName)</span>
-                                                                <span>@((int)Math.Round(discountedPrice))</span>元
+                                                                優惠價：<span style="color: #E3007F;">@(item.bookDiscount.BookDiscountName)</span>
+                                                                <span style="color: #E3007F;">@((int)Math.Round(discountedPrice))</span>元
                                                             </li>
                                                             <li class="publicationDate">
                                                                 出版日期：<span>@item.book.PublicationDate.ToString("yyyy/MM/dd")</span>
@@ -273,7 +274,7 @@
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>
                         </button>
-                        @*輪播圖切換按鈕*@<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleEdit" data-bs-slide="next" border=5>
+                        @*輪播圖切換按鈕*@<button class="carousel-control-next " type="button" data-bs-target="#carouselExampleEdit" data-bs-slide="next" border=5>
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Next</span>
                         </button>
