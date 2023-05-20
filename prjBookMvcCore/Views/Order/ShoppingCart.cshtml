@@ -59,19 +59,16 @@
 
 <nav>
     @*頁籤*@
-    <div class="nav nav-tabs" id="nav-tab" role="tablist" style="display:none">
+    <div class="nav nav-tabs" id="nav-tab" role="tablist" style="">
         <button class="nav-link active" id="nav-cart-tab" data-bs-toggle="tab" data-bs-target="#nav-cart" type="button" role="tab" aria-controls="nav-cart" aria-selected="true">page1</button>
         <button class="nav-link" id="nav-checkOutInfo-tab" data-bs-toggle="tab" data-bs-target="#nav-checkOutInfo" type="button" role="tab" aria-controls="nav-checkOutInfo" aria-selected="false">page2</button>
         <button class="nav-link" id="nav-checkOutConfirm-tab" data-bs-toggle="tab" data-bs-target="#nav-checkOutConfirm" type="button" role="tab" aria-controls="nav-checkOutConfirm" aria-selected="false">page3</button>
     </div>
 </nav>
 
-<div class="tab-content" id="nav-tabContent">
-    @*頁面*@
-    <div class="tab-pane fade show active" id="nav-cart" role="tabpanel" aria-labelledby="nav-cart-tab">
-        @*page1*@
-        <div id="cart_tab">
-            @*購物車暫存切換頁籤*@
+<div class="tab-content" id="nav-tabContent">@*頁面*@
+    <div class="tab-pane fade show active" id="nav-cart" role="tabpanel" aria-labelledby="nav-cart-tab"> @*page1*@
+        <div id="cart_tab"> @*購物車暫存切換頁籤*@
             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="pills-a-tab" data-bs-toggle="pill" data-bs-target="#pills-a" type="button" role="tab" aria-controls="pills-a" aria-selected="true">購物車</button>
@@ -83,8 +80,8 @@
         </div>
         <div class="tab-content" id="pills-tabContent">
             @*購物車暫存內頁面*@
-            <div class="tab-pane fade show active" id="pills-a" role="tabpanel" aria-labelledby="pills-a-tab">
-                @*購物車頁面*@
+            <form id="form1">
+            <div class="tab-pane fade show active" id="pills-a" role="tabpanel" aria-labelledby="pills-a-tab"> @*購物車頁面*@
                 <table class="table table-striped" id="table1">
                     @*購物車內容*@
                     <thead>
@@ -99,47 +96,45 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <form id="form1">
                             @{
                                 int count = 1;
                                 decimal totalAmount = 0;
-
                                 foreach (var item in Model)
                                 {
                                     int 優惠價 = Convert.ToInt32(item.Book.UnitPrice * item.discountAmount);
                                     string bookTitle = item.Book.BookTitle.Replace("$$", "\n");
                                     decimal 小計 = 優惠價 * item.Quantity;
+                                    <input name="acid" value="@item.ActionDetial.ActionToBookId" type="hidden">
                                 <tr>
-                                    <td><input name="acid" value="@item.ActionDetial.ActionToBookId"></td>
                                     <td><input type="checkbox"></td>
                                     <td>@count</td>
                                     <td>@bookTitle</td>
                                     <td>@item.discountName</td>
                                     <td>@優惠價</td>
-                                    <td><input id="quantity_@item.ActionDetial.ActionToBookId" type="number" value="@item.Quantity" min="1" max="@item.Book.UnitInStock"></td>
+                                    <td><input name="quantity" id="quantity_@item.ActionDetial.ActionToBookId" type="number" value="@item.Quantity" min="1" max="@item.Book.UnitInStock"></td>
                                     <td id="subtotal">@小計</td>
                                     <td>
-                                        <button name="id" class="btn btn-outline-secondary" onclick="cancle(@item.ActionDetial.ActionToBookId)">取消</button>
+                                        <button class="btn btn-outline-secondary" onclick="cancle(@item.ActionDetial.ActionToBookId)">取消</button>
                                     </td>
                                 </tr>
                                     count++;
                                     totalAmount += 小計;
                                 };
                             }
-                        </form>
                     </tbody>
                 </table>
-                <div class="justify-content-end" style="text-align:right;">
-                    @*結帳資訊*@
+
+                <div class="justify-content-end" style="text-align:right;">@*結帳資訊*@
                     <div style="font-size:20px; color:#F75000;">
                         總金額 共 <sapn id="totalAmount">@totalAmount </sapn> 元
                     </div>
                     <div class="mt-3">
                         <span><button class="btn btn-primary" onclick="addToList()">加入暫存</button></span>
-                        <span><button class="btn btn-primary" id="nextForm1">來去結帳</button></span>
+                        <span><button class="btn btn-primary" type="button" id="btnForm1">來去結帳</button></span>
                     </div>
                 </div>
             </div>
+        </form>
             <div class="tab-pane fade" id="pills-b" role="tabpanel" aria-labelledby="pills-b-tab">
                 @*暫存*@
                 <table class="table table-striped">
@@ -207,8 +202,7 @@
             </div>
         </div>
     </div>
-    <div class="tab-pane fade" id="nav-checkOutInfo" role="tabpanel" aria-labelledby="nav-checkOutInfo-tab">
-        @*page2*@
+    <div class="tab-pane fade" id="nav-checkOutInfo" role="tabpanel" aria-labelledby="nav-checkOutInfo-tab"> @*page2*@
         <div class="container-sp">
             <div class="col-3" style="font-size:20px; color:	#F75000;">
                 總金額 共 <label id="totalAmount2"> </label> 元
@@ -288,8 +282,7 @@
             <button class=" btn btn-primary col-4 me-md-2" id="check_btn">下一步</button>
         </div>
     </div>
-    <div class="tab-pane fade" id="nav-checkOutConfirm" role="tabpanel" aria-labelledby="nav-checkOutConfirm-tab">
-        @*page3*@
+    <div class="tab-pane fade" id="nav-checkOutConfirm" role="tabpanel" aria-labelledby="nav-checkOutConfirm-tab">@*page3*@
         <div class="container">
             <h2>確認結帳</h2>
             <div class="table">
@@ -404,7 +397,7 @@
     };
 </script>
 <script> //page1調整數量同時更新總金額以及value
-        const table1 = document.getElementById('table1');
+    const table1 = document.getElementById('table1');
     const totalAmountElement = document.querySelector('#totalAmount');
 
     // 初始化 totalAmount 的值
@@ -455,19 +448,7 @@
     };
 </script>
 <script>  //更新總金額2並移動到下頁
-   
-    function updateTotalAmount2() {
-        var totalAmountElement = document.getElementById("totalAmount");
-        var totalAmount2Element = document.getElementById("totalAmount2");
-        totalAmount2Element.innerText = totalAmountElement.innerText;
-    };
-    const nextForm1 = document.getElementById('nextForm1');
-    nextForm1.addEventListener('click', function () {
-        updateTotalAmount2();
-        returnOd();
-        nextPage('nav-checkOutInfo-tab');
-    });
-
+    //    nextPage('nav-checkOutInfo-tab');
 </script>
 <script> //讀取會員或酷碰方法
     async function returnOd() {
@@ -506,20 +487,45 @@
 </script>
 <script> //return newItemList to page3
     const form1 = document.getElementById('form1');
-    const nextForm1 = document.getElementById('nextForm1');
-    nextForm1.addEventListener('click', async () => {
+    const table2 = document.getElementById('table2');
+    const btnForm1 = document.getElementById('btnForm1');
+    btnForm1.addEventListener('click', async () => {
         const response = await fetch('@Url.Action("Action1", "Order")', {
             method: 'POST',
             body: new FormData(form1)
         });
         const datas = await response.json();
+        console.log(datas);
+        table2.innerHTML = '';
 
-
-    })
-
-
-
-
+        // 創建 table2 的表頭
+        const table2Header = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        headerRow.innerHTML = `
+        <th style="width:50px;"><input type="checkbox"></th>
+        <th style="width:50px;">序號</th>
+        <th style="width:500px;">書名</th>
+        <th>優惠</th>
+        <th>優惠價</th>
+        <th>數量</th>
+        <th>小計</th>
+        `;
+        table2Header.appendChild(headerRow);
+        table2.appendChild(table2Header);
+        const table2Body = document.createElement('tbody');
+        datas.forEach((item, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><input type="checkbox"></td>
+                <td>${index + 1}</td>
+                <td>${item.Book.BookTitle}</td>
+                <td>${item.discountName}</td>
+                <td>${item.Book.UnitPrice * item.discountAmount}</td>
+                <td>${item.Quantity}</td>
+                <td>${item.Quantity * (item.Book.UnitPrice * item.discountAmount)}</td>
+            `;
+            table2Body.appendChild(row);
+        });
+        table2.appendChild(table2Body);
+    });
 </script>
-
-<script src="~/scripts/copy.js" defer></script>

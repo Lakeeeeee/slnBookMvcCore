@@ -49,12 +49,14 @@ namespace prjBookMvcCore.Controllers
             {
                 ActionDetial tool = _db.ActionDetials.Find(item);
                 ShoppingcartInformation x = new ShoppingcartInformation() { ActionDetial = tool };
-                foreach(var q in quantity)
-                {
-                    x.Quantity= q;
-                }
                 newCart.Add(x);
             } ;
+
+            for(int n= 0; n<newCart.Count(); n++)
+            {
+                newCart[n].Quantity= quantity[n];
+            };
+
             return Json(newCart);
         }
         public IActionResult Action2() { return View(); }
@@ -80,7 +82,6 @@ namespace prjBookMvcCore.Controllers
             Member x = _db.Members.Where(x=>x.MemberId==_user.UserId).FirstOrDefault();
             if (total > 1000)
             {
-
                 DiscountType memberDiscountType = _db.DiscountTypes.Where(x=>x.DiscountTypeId == 1).FirstOrDefault();                //回傳會員優惠
                 discountTypes.Add(memberDiscountType);
             };
@@ -89,11 +90,9 @@ namespace prjBookMvcCore.Controllers
 
             if (q.Count() > 0)
             {
-
                 DiscountType couponDiscountType = _db.DiscountTypes.Where(x => x.DiscountTypeId == 2).FirstOrDefault(); 
                 discountTypes.Add(couponDiscountType);
             };
-
             return Json(discountTypes);
         }
 
