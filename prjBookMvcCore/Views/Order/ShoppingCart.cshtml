@@ -100,18 +100,19 @@
                                 int 優惠價 = Convert.ToInt32(item.Book.UnitPrice * item.discountAmount);
                                 string bookTitle = item.Book.BookTitle.Replace("$$", "\n");
                                 decimal 小計 = 優惠價 * item.Quantity;
-                                    <tr>
+                                        <tr>
+                                        <input >    
                                         <td><input type="checkbox"></td>
-                                        <td>@count</td>
-                                        <td>@bookTitle</td>
-                                        <td>@item.discountName</td>
-                                        <td>@優惠價</td>
-                                        <td><input id="quantity" type="number" asp-for="@item.Quantity" min="1" max="@item.Book.UnitInStock"></td>
-                                        <td id="subtotal">@小計</td>
-                                        <td>
-                                            <button name="id" class="btn btn-outline-secondary" onclick="cancle(@item.ActionDetial.ActionToBookId)">取消</button>
-                                        </td>
-                                    </tr>
+                                            <td>@count</td>
+                                            <td>@bookTitle</td>
+                                            <td>@item.discountName</td>
+                                            <td>@優惠價</td>
+                                            <td><input id="quantity" type="number" asp-for="@item.Quantity" min="1" max="@item.Book.UnitInStock"></td>
+                                            <td id="subtotal">@小計</td>
+                                            <td>
+                                                <button name="id" class="btn btn-outline-secondary" onclick="cancle(@item.ActionDetial.ActionToBookId)">取消</button>
+                                            </td>
+                                        </tr>
                                 count++;
                                 totalAmount += 小計;
                             };
@@ -218,12 +219,12 @@
                 @{
                     foreach (var item in db.Payments.Take(4))
                     {
-                            <div>
-                                <input class="form-check-input" type="radio" name="paymentId" value="@item.PaymentId" checked>
-                                <label class="form-check-label" for="paymentId">
-                                    @item.PaymentName
-                                </label>
-                            </div>
+                                <div>
+                                    <input class="form-check-input" type="radio" name="paymentId" value="@item.PaymentId" checked>
+                                    <label class="form-check-label" for="paymentId">
+                                        @item.PaymentName
+                                    </label>
+                                </div>
                     };
                 }
             </div>
@@ -232,12 +233,12 @@
                 @{
                     foreach (var item in db.Shipments)
                     {
-                            <div>
-                                <input class="form-check-input" type="radio" name="shipmentId" id="text-@item.ShipmentId" value="@item.ShipmentId" checked>
-                                <label class="form-check-label" for="shipmentId">
-                                    @item.ShipmentName
-                                </label>
-                            </div>
+                                <div>
+                                    <input class="form-check-input" type="radio" name="shipmentId" id="text-@item.ShipmentId" value="@item.ShipmentId" checked>
+                                    <label class="form-check-label" for="shipmentId">
+                                        @item.ShipmentName
+                                    </label>
+                                </div>
                     };
                 }
             </div>
@@ -358,8 +359,13 @@
 
     </div>
 </div>
+<script>
+    
 
 
+
+
+</script>
 <script>//回饋金上限確認
     function checkMaxLimit() {
         var input = document.getElementById('rebateAmountInput');
@@ -382,7 +388,7 @@
                 alert('已取消');
             } else {
                 alert('不明錯誤, 你再試試');
-            }
+            };
             window.location.href = window.location.href;
         }
     };
@@ -426,46 +432,6 @@
 
         return total;
     };
-</script>
-<script> //把page1複製到page3
-    const check_btn = document.getElementById('check_btn');
-    const table2 = document.getElementById('table2');
-
-    check_btn.addEventListener('click', function () {
-        const table1Rows = table1.querySelectorAll('tbody tr');
-        // 清空 table2
-        table2.innerHTML = '';
-
-        // 创建 table2 的表头
-        const table2Header = document.createElement('thead');
-        const headerRow = document.createElement('tr');
-        headerRow.innerHTML = `
-                            <th style="width:50px;"><input type="checkbox"></th>
-                            <th style="width:50px;">序號</th>
-                            <th style="width:500px;">書名</th>
-                            <th>優惠</th>
-                            <th>優惠價</th>
-                            <th>數量</th>
-                            <th>小計</th>
-                            `;
-        table2Header.appendChild(headerRow);
-        table2.appendChild(table2Header);
-
-        // 复制 table1 的行到 table2
-        table1Rows.forEach(function (row) {
-            const quantityInput = row.querySelector('input[type="number"]');
-            const clonedRow = row.cloneNode(true);
-
-            // 更新复制的行的数量为调整后的值
-            const clonedQuantityInput = clonedRow.querySelector('input[type="number"]');
-            const clonedQuantityLabel = document.createElement('label');
-            clonedQuantityLabel.textContent = quantityInput.value;
-            clonedQuantityInput.parentNode.replaceChild(clonedQuantityLabel, clonedQuantityInput);
-
-            table2.appendChild(clonedRow);
-        });
-        nextPage('nav-checkOutConfirm-tab');
-    });
 </script>
 <script> //移動頁面方法
     function nextPage(inputTab) {
@@ -522,3 +488,4 @@
         });
     }
 </script>
+<script src="~/scripts/copy.js" defer></script>
