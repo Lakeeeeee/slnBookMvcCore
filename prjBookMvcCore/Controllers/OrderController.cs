@@ -20,55 +20,8 @@ namespace prjBookMvcCore.Controllers
             _user = user;
             _db = db;
         }
-
-        //public IActionResult ListCart() //購物車暫存
-        //{
-        //    List<ShoppingcartInformation> cartItems = new List<ShoppingcartInformation>();
-        //    var query = from b in _db.Books
-        //                join ad in _db.ActionDetials
-        //                on b.BookId equals ad.BookId
-        //                where ad.MemberId == _user.UserId && ad.ActionId == 4
-        //                orderby ad.ActionToBookId descending
-        //                select new
-        //                {
-        //                    書名 = b.BookTitle,
-        //                    書本ID = b.BookId,
-        //                    定價 = b.UnitPrice,
-        //                    出版社 = b.Publisher.PublisherName,
-        //                    折扣名 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountName).FirstOrDefault(),
-        //                    折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
-        //                    庫存 = b.UnitInStock,
-        //                    ActionID = ad.ActionId,
-        //                };
-        //    foreach (var item in query)
-        //    {
-        //        Book b = new Book()
-        //        {
-        //            BookId = item.書本ID,
-        //            BookTitle = item.書名,
-        //            UnitInStock = item.庫存,
-        //            UnitPrice = item.定價,
-        //        };
-        //        ActionDetial ad = new ActionDetial { ActionId = item.ActionID };
-        //        Publisher p = new Publisher { PublisherName = item.出版社 };
-        //        BookDiscount bd = new BookDiscount { BookDiscountAmount = item.折扣, BookDiscountName = item.折扣名 };
-        //        CInformation tmp = new CInformation()
-        //        {
-        //            book = b,
-        //            bookDiscount = bd,
-        //            publisher = p,
-        //        };
-        //        ShoppingcartInformation shoppingcartInformation = new ShoppingcartInformation()
-        //        {
-        //            CInformation = tmp,
-        //            ActionDetial = ad,
-        //        };
-        //        cartItems.Add(shoppingcartInformation);
-        //    }
-        //    return View(cartItems);
-        //}
         [Authorize]
-        public IActionResult ShoppingCart()
+        public IActionResult ShoppingCart() //開啟頁面的方法
         {
             List<ShoppingcartInformation> cartItems = new List<ShoppingcartInformation>();
 
@@ -87,7 +40,11 @@ namespace prjBookMvcCore.Controllers
 
         }
 
-        public IActionResult itemDelete(int id)
+        public IActionResult Action1() { return View(); }
+        public IActionResult Action2() { return View(); }
+        public IActionResult Action3() { return View(); }
+
+        public IActionResult itemDelete(int id) //刪除購物車項目
         {
             bool isSuccesse = false;
             var tool = _db.ActionDetials.Find(id);
@@ -98,10 +55,10 @@ namespace prjBookMvcCore.Controllers
                 isSuccesse = true;
             };
             return View(isSuccesse.ToString());
-        }
+        } 
 
         [Authorize]
-        public IActionResult searchDiscount(int total)
+        public IActionResult searchDiscount(int total)  //page2抓會員跟酷碰類型方法
         {
             List<DiscountType> discountTypes = new List<DiscountType>();
             Member x = _db.Members.Where(x=>x.MemberId==_user.UserId).FirstOrDefault();
@@ -124,9 +81,12 @@ namespace prjBookMvcCore.Controllers
             return Json(discountTypes);
         }
 
+        
+        
 
 
 
+        //----------------------------------------------------------------
         public IActionResult checkOutConfirm()
         {
             return View();
@@ -141,12 +101,6 @@ namespace prjBookMvcCore.Controllers
         {
             return View();
         }
-
-        public IActionResult Index()
-        {
-            return View();
-        }
     }
-
 }
 

@@ -495,6 +495,9 @@
             // 更新 totalAmount 的值
             totalAmount = calculateTotalAmount();
             totalAmountElement.textContent = totalAmount;
+
+            //呼叫ajax, 把調整數量後的shoppingcarts list回傳到後端，再從後端傳回前端
+
         }
     });
 
@@ -572,7 +575,6 @@
 
 </script>
 <script>
-
     async function returnOd() {
         const discountArea = document.getElementById('discountArea');
         var totalAmount2 = document.getElementById('totalAmount2');
@@ -590,7 +592,7 @@
             const radioInput = document.createElement('input');
             radioInput.setAttribute('type', 'radio');
             radioInput.setAttribute('name', 'dTy');
-            radioInput.setAttribute('id', `text-${item.discountTypeId}`);
+            radioInput.setAttribute('id', `discount-${item.discountTypeId}`);
             radioInput.setAttribute('value', item.discountTypeId);
             radioInput.classList.add('form-check-input');
             containerDiv.appendChild(radioInput);
@@ -606,5 +608,4 @@
             discountArea.appendChild(containerDiv);
         });
     }
-
 </script>
