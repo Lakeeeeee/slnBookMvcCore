@@ -40,7 +40,23 @@ namespace prjBookMvcCore.Controllers
 
         }
 
-        public IActionResult Action1() { return View(); }
+        public IActionResult Action1(IFormCollection form)
+        {
+            int[] acids = form["acid"].Select(x => int.Parse(x)).ToArray();
+            int[] quantity = form["quantity"].Select(x => int.Parse(x)).ToArray();
+            List<ShoppingcartInformation> newCart = new List<ShoppingcartInformation>();
+            foreach (var item in acids)
+            {
+                ActionDetial tool = _db.ActionDetials.Find(item);
+                ShoppingcartInformation x = new ShoppingcartInformation() { ActionDetial = tool };
+                foreach(var q in quantity)
+                {
+                    x.Quantity= q;
+                }
+                newCart.Add(x);
+            } ;
+            return Json(newCart);
+        }
         public IActionResult Action2() { return View(); }
         public IActionResult Action3() { return View(); }
 
