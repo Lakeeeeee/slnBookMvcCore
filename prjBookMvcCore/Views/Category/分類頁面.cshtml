@@ -90,7 +90,8 @@
                                     var query = db.SubCategories.Where(c => c.CategoryId == category.CategoryId).Select(c => new { c.SubCategoryId, c.SubCategoryName }).ToList();
                                     foreach (var subcategory in query)
                                     {
-                                        int subcount = query.Count;
+                                        var su = db.CategoryDetails.Where(s => s.SubCategory.SubCategoryId == subcategory.SubCategoryId).Select(s => new { s.Book }).ToList();
+                                        int subcount = su.Count;
                                         <div class="card card-body" onclick="changePath(@subcategory.SubCategoryId)">
                                             <a asp-controller="Category" asp-action="分類頁面" asp-route-subid="@subcategory.SubCategoryId">@subcategory.SubCategoryName (@subcount)</a>
                                         </div>
