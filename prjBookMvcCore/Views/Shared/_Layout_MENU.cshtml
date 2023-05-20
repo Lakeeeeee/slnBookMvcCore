@@ -9,7 +9,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - 讀本｜Menu</title>
-
     <style>
         a:link, a:visited {
             text-decoration: none;
@@ -68,7 +67,7 @@
                 <h3>暢銷排行榜</h3>
             </div>
             <div class="col justify-content-end" style="display: flex; padding:5px">
-                <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Home/Home">看更多</a>
+                <a role="button" class=" btn btn-sm btn-outline-secondary mx-1" href="~/Home/Home">看更多</a>
             </div>
         </div>
         <div class="row">
@@ -292,7 +291,7 @@
                         @{
                             foreach (var g in Model.articals.Take(8))
                             {
-                                <li class="list-group-item"><span><a href="~/Promotions/Promotions活動文章Detail/@g.ArticalId">@g.ArticalTitle</a></span></li>
+                                    <li class="list-group-item"><span><a href="~/Promotions/Promotions活動文章Detail/@g.ArticalId">@g.ArticalTitle</a></span></li>
                             }
                         }
                     </ul>
@@ -303,32 +302,15 @@
                     <div class="card-header">
                         <a asp-controller="Category" asp-action="分類頁面" asp-route-id="0">繁中</a>
                     </div>
-                    @{
-                        foreach (var category in Model.categories)
+                    @foreach (var category in Model.categories)
                         {
                             @if (category.CategoryId > 14)
                             {
-                                <div class="row">
-                                    <div class="card">
+                                <div class="row card-body">
                                         <a asp-controller="Category" asp-action="分類頁面" asp-route-id="@category.CategoryId">@category.CategoryName</a>
-                                        <a class="card-body" style="width:100%" data-bs-toggle="collapse" href="#card1" role="button" aria-expanded="false" aria-controls="card1"></a>
-                                    </div>
-                                    <div class="collapse" id="card1">
-                                        <div class="card card-body">
-                                                @{
-                                                    BookShopContext db = new BookShopContext();
-                                                    var query = db.SubCategories.Where(c => c.SubCategoryId == category.CategoryId).Select(c => c).ToList();
-                                                    foreach (var subcategory in query)
-                                                    {
-                                                        <div><a asp-controller="Category" asp-action="分類頁面" asp-route-id="@subcategory.SubCategoryId">@subcategory.SubCategoryName</a></div>
-                                                    }
-                                                }
-                                        </div>
-                                    </div>
                                 </div>
                             }
                         }
-                    }
                 </div>
             </div>
             @* Body *@
