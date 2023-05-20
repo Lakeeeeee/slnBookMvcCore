@@ -79,7 +79,7 @@
 </div>
 
 <nav>
-    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <div class="nav nav-tabs" id="nav-tab" role="tablist" style="display:none">
         <button class="nav-link active" id="nav-cart-tab" data-bs-toggle="tab" data-bs-target="#nav-cart" type="button" role="tab" aria-controls="nav-cart" aria-selected="true">Home</button>
         <button class="nav-link" id="nav-checkOutInfo-tab" data-bs-toggle="tab" data-bs-target="#nav-checkOutInfo" type="button" role="tab" aria-controls="nav-checkOutInfo" aria-selected="false">Profile</button>
         <button class="nav-link" id="nav-checkOutConfirm-tab" data-bs-toggle="tab" data-bs-target="#nav-checkOutConfirm" type="button" role="tab" aria-controls="nav-checkOutConfirm" aria-selected="false">Contact</button>
@@ -285,7 +285,8 @@
                         </label>
                         <div id="rebateAmount">
                             <label for="rebateAmountInput" class="form-label">輸入金額：(目前持有回饋金：@points 元)</label>
-                            <input type="number" class="form-control" id="rebateAmountInput" name="rebateAmountInput" placeholder="請輸入回饋金金額" min="0" max="100">
+                            <input type="number" class="form-control" id="rebateAmountInput" name="rebateAmountInput" placeholder="請輸入回饋金金額" min="0" max="@points" oninput="checkMaxLimit()" />
+                            <p id="maxLimitError" style="color: red; display: none;">輸入金額太大，請確認~</p>
                         </div>
                     </div>
 
@@ -456,6 +457,18 @@
 </div>
 
 
+<script>//回饋金上限確認
+    function checkMaxLimit() {
+        var input = document.getElementById('rebateAmountInput');
+        var maxLimitError = document.getElementById('maxLimitError');
+
+        if (parseInt(input.value) > parseInt(input.max)) {
+            maxLimitError.style.display = 'block';
+        } else {
+            maxLimitError.style.display = 'none';
+        }
+    }
+</script>
 <script>
     async function cancle(id) {
         const confirmed = confirm('確定要取消嗎?');
