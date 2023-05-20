@@ -14,7 +14,7 @@ namespace prjBookMvcCore.Controllers
         {
             int categoryID = id;
             int subcategoryID = subid;
-            int itemsPerPage = 20;//每頁只顯示28個
+            int itemsPerPage = 20;//每頁只顯示20個
 
             var query = from b in db.Books
                         join sd in db.CategoryDetails
@@ -44,7 +44,6 @@ namespace prjBookMvcCore.Controllers
             {
                 query = query.Where(sc => sc.子分類ID == subcategoryID);
             }
-
             //頁面顯示控制
             int totalItems = query.Count();
             int totalPages = (int)Math.Ceiling((double)totalItems / itemsPerPage);
