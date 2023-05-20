@@ -55,7 +55,6 @@
                 <li class="breadcrumb-item active" aria-current="page"><a class="linkaFormat" href="@Url.Action("分類頁面", new { id = Model.categoryId })">@Model.categories.FirstOrDefault(c => c.CategoryId == Model.categoryId)?.CategoryName</a></li>
                 @if (Model.subcategoryId > 0)
                 {
-
                     <li class="breadcrumb-item active" aria-current="page"><a class="linkaFormat" href="@Url.Action("分類頁面", new { id = Model.subcategoryId })">@Model.subCategories.FirstOrDefault(c => c.SubCategoryId == Model.subcategoryId)?.SubCategoryName</a></li>
                 }
             }
@@ -85,18 +84,18 @@
                                 <div class="card-body" data-bs-toggle="collapse" href="#card-@category.CategoryId" role="button" aria-expanded="false" aria-controls="card-@category.CategoryId" onclick="changePath(@category.CategoryId)">
                                     <span asp-controller="Category" asp-action="分類頁面" asp-route-id="@category.CategoryId">@category.CategoryName (@count)</span>
                                 </div>
-                                <div class="collapse" id="card-@category.CategoryId">
-                                    <div class="card card-body">
-                                        @{
-                                            var query = db.SubCategories.Where(c => c.CategoryId == category.CategoryId).Select(c => new { c.SubCategoryId, c.SubCategoryName }).ToList();
-                                            foreach (var subcategory in query)
-                                            {
-                                                int subcount = query.Count;
-                                                <div><a asp-controller="Category" asp-action="分類頁面" asp-route-subid="@subcategory.SubCategoryId">@subcategory.SubCategoryName (@subcount)</a></div>
-                                            }
-                                        }
-                                    </div>
-                                </div>
+                            </div>
+                            <div class="collapse @(Model.categoryId == category.CategoryId ? "show" : "")" id="card-@category.CategoryId">
+                                @{
+                                    var query = db.SubCategories.Where(c => c.CategoryId == category.CategoryId).Select(c => new { c.SubCategoryId, c.SubCategoryName }).ToList();
+                                    foreach (var subcategory in query)
+                                    {
+                                        int subcount = query.Count;
+                                        <div class="card card-body" onclick="changePath(@subcategory.SubCategoryId)">
+                                            <a asp-controller="Category" asp-action="分類頁面" asp-route-subid="@subcategory.SubCategoryId">@subcategory.SubCategoryName (@subcount)</a>
+                                        </div>
+                                    }
+                                }
                             </div>
                         }
                     }
@@ -193,27 +192,17 @@
     </div>
 </body>
 </html>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    //分類欄位click事件
-    function changePath(inputid) {
-        const path = '@Url.Action("分類頁面", new { id = "" })/' + inputid;
-        window.location.href = path;
-    }
 
+<script>
     /* 排序判斷動作*/
     function booksview() {
         var sortBy = document.getElementById("sort-Select").value;
-
         // Get the book list container element
         var bookList = document.getElementById("booksview");
-
         // Get all the book items inside the book list
         var bookItems = bookList.getElementsByClassName("book-item");
-
         // Convert the book items into an array
         var bookItemsArray = Array.from(bookItems);
-
         // Sort the book items based on the selected sorting method
         if (sortBy === "PublicationDate") {
             bookItemsArray.sort(function (a, b) {
@@ -228,13 +217,32 @@
                 return priceA - priceB;
             });
         }
-
         // Clear the book list
         bookList.innerHTML = "";
-
         // Append the sorted book items back to the book list
         bookItemsArray.forEach(function (item) {
             bookList.appendChild(item);
         });
+    }
+
+    //分類欄位click事件
+    function changePath(inputid) {
+        const path = '@Url.Action("分類頁面", new { id = "" })' + '/' + inputid;
+        window.location.href = path;
+
+        // Add the 'show' class to the corresponding card-body element
+        const cardBody = document.getElementById("card-" + inputid);
+        if (cardBody) {
+            cardBody.classList.add("show");
+        }
+
+        // Remove the 'show' class from other card-body elements
+        const cardBodies = document.getElementsByClassName("collapse");
+        for (let i = 0; i < cardBodies.length; i++) {
+            const body = cardBodies[i];
+            if (body.id !== "card-" + inputid) {
+                body.classList.remove("show");
+            }
+        }
     }
 </script>
