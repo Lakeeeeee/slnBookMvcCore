@@ -1,0 +1,52 @@
+﻿@inject UserInforService _userInforService
+@{
+    ViewData["Title"] = "Promotions領取月優惠";
+}
+@{ var month = ViewBag.month;}
+<h1>Promotions領取 @month 月優惠</h1>
+
+
+<script>
+    //click
+    let isLogin = false;
+    window.onload = () => {
+        if (@_userInforService.UserId !== 0) {
+            isLogin = true;
+        };
+        console.log(isLogin);
+    };
+
+    function loginCheck() {
+        if (isLogin === false) {
+            alert('尚未登入');
+            if (confirm('前往登入')) {
+                window.location.href = "../../Member/Login";
+            } else {
+            }
+            return false;
+        }
+        return true;
+    };
+
+    function takeCoupon(memberID, discountID,  date) {
+        if (loginCheck()) {
+            let self = this;
+            let url = '@Url.Action("Promotions領取特定日優惠","Promotions")?memberID=' + memberID + '&discountID=' + discountID + '&date=' + date;
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (result) {
+                    let isSuccess = result;
+                    if (isSuccess === "false") {
+                        alert('已領取'); hidePopup();
+                    }
+                    else {
+                        alert('領取成功');
+                        //alert('領取成功，系統將自動轉向會員中心');
+                        //window.location.href = '@Url.Action("MemberCenter", "Member")';
+                    }
+                },
+            });
+        }
+    };
+</script>
