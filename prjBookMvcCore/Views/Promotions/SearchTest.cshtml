@@ -1,0 +1,135 @@
+﻿@model CSearch
+@{
+    ViewData["Title"] = "SearchTest";
+}
+@{
+    string Keyword = ViewBag.KeyWord;
+}
+
+<h1>SearchTest</h1>
+
+<p>Keyword: @ViewBag.KeyWord</p>
+@if (Model != null)
+{
+
+    @* Body *@
+    <div class="col">
+        <div class="row">
+            <p>書名/ISBN</p>
+            @{
+                if (Model.c書.Count != 0)
+                {
+                    int count = 0;
+                    foreach (var item in Model.c書)
+                    {
+                        count++;
+                        <div class="clamp two-lines mt-3"><a id="@item.BookId" href="~/Book/BookInformation/@item.BookId" title="@item.BookTitle">@count @item.BookTitle</a></div>
+                    }
+                }
+                else
+                {
+                        <p>No results found.</p>
+                }
+            }
+        </div>
+        <hr />
+        <div class="row">
+            <p>作者</p>
+            @{
+                if (Model.c作者.Count != 0)
+                {
+                    int count = 0;
+                    foreach (var item in Model.c作者)
+                    {
+                        count++;
+                        <div class="clamp two-lines mt-3">@count @item.AuthorName</div>
+                    }
+                }
+                else
+                {
+                       <p>No results found.</p>
+                }
+            }
+        </div>
+        <hr>
+        <div class="row">
+            <p>譯者</p>
+            @{
+                if (Model.c譯者.Count != 0)
+                {
+                    int count = 0;
+                    foreach (var item in Model.c譯者)
+                    {
+                        count++;
+                        <div class="clamp two-lines mt-3">@count @item.TranslatorName</div>
+                    }
+                }
+                else
+                {
+                          <p>No results found.</p>
+                }
+            }
+        </div>
+        <hr />
+        <div class="row">
+            <p>繪者</p>
+            @{
+                if (Model.c繪者.Count != 0)
+                {
+                    int count = 0;
+                    foreach (var item in Model.c繪者)
+                    {
+                        count++;
+                        <div class="clamp two-lines mt-3">@count @item.PainterName</div>
+                    }
+                }
+                else
+                {
+                    <p>No results found.</p>
+                }
+            }
+        </div>
+        <hr>
+        <div class="row">
+            <p>出版社</p>
+            @{
+                if (Model.c出版社.Count != 0)
+                {
+                    int count = 0;
+                    foreach (var item in Model.c出版社)
+                    {
+                        count++;
+                        <div class="clamp two-lines mt-3">@count @item.PublisherName</div>
+                    }
+                }
+                else
+                {
+                    <p>No results found.</p>
+                }
+            }
+        </div>
+        <hr />
+        <div class="row">
+            <p>分類</p>
+            @{
+                if (Model.c分類.Count != 0)
+                {
+                    int count = 0;
+                    foreach (var item in Model.c分類)
+                    {
+                        count++;
+                        <div class="clamp two-lines mt-3">@count @item.CategoryName</div>
+                    }
+                }
+                else
+                {
+                    <p>No results found.</p>
+                }
+            }
+        </div>
+    </div>
+}
+else
+{
+    <p>No results found.</p>
+}
