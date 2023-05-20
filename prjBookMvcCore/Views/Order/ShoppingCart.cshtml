@@ -452,13 +452,14 @@
         const confirmed = confirm('確定要取消嗎?');
         if (confirmed) {
             const response = await fetch('@Url.Content("~/Order/itemDelete")?id=' + id);
-            const confirmText = await response.text();
+            var confirmText = await response.text();
+            console.log(confirmText);
             if (confirmText === "True") {
                 alert('已取消');
             } else {
                 alert('不明錯誤, 你再試試');
             };
-            window.location.href = window.location.href;
+            //window.location.href = window.location.href;
         }
     };
 </script>

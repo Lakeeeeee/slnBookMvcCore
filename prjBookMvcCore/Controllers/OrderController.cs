@@ -113,8 +113,9 @@ namespace prjBookMvcCore.Controllers
                 _db.SaveChanges();
                 isSuccesse = true;
             };
-            return View(isSuccesse.ToString());
-        } 
+            return Content(isSuccesse.ToString());
+            //var tool = _bookShopContext.ActionDetials.Where(x => x.ActionToBookId == id).FirstOrDefault();
+        }
 
         [Authorize]
         public IActionResult searchDiscount(int total)  //page2抓會員跟酷碰類型方法
