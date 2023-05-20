@@ -60,31 +60,28 @@ namespace prjBookMvcCore.Controllers
             return Json(newCart);
         }
         public IActionResult Action2() { return View(); }
-        public IActionResult Action3(IFormCollection formData)
+        public IActionResult Action3(IFormCollection formData) //createOrderdetails
         {
-            var orderData = formData["orderData"];
-            foreach (var data in orderData)
-            {
-                
-
-            }
+            //var orderData = formData["orderData"];
+            //foreach (var data in orderData)
+            //{
+            //}
 
 
-            return View();
+            return Content("Return Successe");
         }
-        public IActionResult creatOrder(IFormCollection formData)
+        public IActionResult creatOrder(IFormCollection formData)  //towrite
         {
-            var orderData = formData["orderData"];
+            //var value1 = formData["name1"];  //抓formForOrder裡的name+value
+            //var value2 = formData["name2"];  //每個input的name代表欄位, 抓出其value再塞到新order的參數
+            //var value3 = formData["name3"];  //依此類推, 有幾個欄位就抓幾個value
 
-            Order order = new Order()
-            {
-
-
-
-            };
-            _db.Orders.Add(order);
-
-            return View();
+            //Order order = new Order(){};
+            //_db.Orders.Add(order);
+            // _db.SaveChanges();
+            bool isSuccess = false;
+            isSuccess = true;
+            return Content(isSuccess.ToString());
         }
 
         public void creatOrderDetail(int orderId, int bookId, int quantity, BookShopContext db)
@@ -114,28 +111,23 @@ namespace prjBookMvcCore.Controllers
                 isSuccesse = true;
             };
             return Content(isSuccesse.ToString());
-            //var tool = _bookShopContext.ActionDetials.Where(x => x.ActionToBookId == id).FirstOrDefault();
         }
 
         [Authorize]
-        public IActionResult searchDiscount(int total)  //page2抓會員跟酷碰類型方法
+        public IActionResult searchDiscount(int total)  //page2抓會員跟酷碰方法
         {
-            List<DiscountType> discountTypes = new List<DiscountType>();
-            Member x = _db.Members.Where(x=>x.MemberId==_user.UserId).FirstOrDefault();
+            List<OrderDiscount> discounts = new List<OrderDiscount>();
             if (total > 1000)
             {
-                DiscountType memberDiscountType = _db.DiscountTypes.Where(x=>x.DiscountTypeId == 1).FirstOrDefault();                //回傳會員優惠
-                discountTypes.Add(memberDiscountType);
+                //可能會出bug 如是則改用orderdiscountId來抓
+                int index = (int)_db.MemberLevels.Where(x=>x.LevelId==_user.UserLevelId).Select(x=>x.OrderDiscountId).FirstOrDefault();
+                OrderDiscount memberDiscount = _db.OrderDiscounts.Find(index);
+                discounts.Add(memberDiscount);
             };
-
-            var q = _db.OrderDiscountDetails.Where(x=>x.MemberId==_user.UserId && x.IsOrderDiscountUse=="N").ToList();
-
-            if (q.Count() > 0)
-            {
-                DiscountType couponDiscountType = _db.DiscountTypes.Where(x => x.DiscountTypeId == 2).FirstOrDefault(); 
-                discountTypes.Add(couponDiscountType);
-            };
-            return Json(discountTypes);
+            //可能會出bug 如是則改方法抓
+            var coupons = _db.OrderDiscountDetails.Where(x=>x.MemberId==_user.UserId && x.IsOrderDiscountUse=="N").Select(x=>x.OrderDiscount);
+            discounts.AddRange(coupons);
+            return Json(discounts);
         }
 
         //----------------------------------------------------------------

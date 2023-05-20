@@ -212,18 +212,18 @@
             <form id="formForOrder">
             <div class="row mt-2">
                 <h4>訂購人資訊</h4>
-
+                    <input name="memberId" value="@_user.UserId" type="hidden" />
                 <div class="form-group">
                     <label for="inputName">姓名</label>
-                    <input type="text" class="form-control" id="inputName" name="Name" placeholder="請輸入收件人姓名">
+                    <input type="text" class="form-control" id="inputName" name="reciverName" placeholder="請輸入收件人姓名">
                 </div>
                 <div class="form-group">
                     <label for="inputPhone">電話</label>
-                    <input type="text" class="form-control" id="inputPhone" name="Phone" placeholder="請輸入電話">
+                    <input type="text" class="form-control" id="inputPhone" name="reciverPhone" placeholder="請輸入電話">
                 </div>
                 <div class="form-group">
                     <label for="inputAddress">地址</label>
-                    <input type="text" class="form-control" id="inputAddress" name="Address" placeholder="請輸入配送地址">
+                        <input type="text" class="form-control" id="inputAddress" name="shipAddr" placeholder="請輸入配送地址">
                 </div>
             </div>
             <div class="row mt-4">
@@ -267,8 +267,8 @@
                 <h2>回饋金</h2>
                 <div class="ml-3">
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="discountOptions" id="" value="回饋金">
-                        <label class="form-check-label" for="discountOptions1">
+                        <input class="form-check-input" type="radio" name="points">
+                            <label class="form-check-label" for="points">
                             回饋金折抵
                         </label>
                         <div id="rebateAmount">
@@ -277,14 +277,12 @@
                             <p id="maxLimitError" style="color: red; display: none;">輸入金額太大，請確認~</p>
                         </div>
                     </div>
-
                 </div>
             </div>
-            <button type="button" style="display:none" id="btnOrderSubmit"></button>
         </form>
         </div>
         <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
-            <button class=" btn btn-primary col-4 me-md-2" onclick="nextPage('nav-cart-tab')">返回購物車</button>
+            <button class=" btn btn-primary col-4 me-md-2" onclick="btnClick('nav-cart-tab')">返回購物車</button>
             <button class=" btn btn-primary col-4 me-md-2" id="check_btn">下一步</button>
         </div>
     </div>
@@ -324,7 +322,7 @@
                         <p>結帳金額：</p>
         </div>
         <div style="text-align:right;">
-            <button class=" btn btn-primary col-4 me-md-2" onclick="nextPage('nav-cart-tab')">返回修改</button>
+            <button class=" btn btn-primary col-4 me-md-2" onclick="btnClick('nav-cart-tab')">返回修改</button>
             <button id="btnSubmit" class="btn btn-primary col-4 me-md-2" type="button" @*data-bs-toggle="modal" data-bs-target="#successModal"*@>
                 確定送出
             </button>
@@ -353,38 +351,71 @@
 
 <script> 
     const formForOrderDetails = document.getElementById('formForOrderDetails');
-    const formData = new FormData();
-    formData.append('orderData', forOrderData);
-    formData.append('orderDetailsData', forOrderDetailsData); 
     const btnSubmit = document.getElementById('btnSubmit');
         btnSubmit.addEventListener('click', async () => {
-
+        if(orderSubmit()){
         const response = await fetch('@Url.Action("Action3", "Order")', {
             method: 'POST',
-            body: formData
+            body: new FormData(formForOrderDetails)
         });
-        const datas = await response.json();
-        console.log(datas);
-        });
+        //const datas = await response.json();
+        //console.log(datas);
+
+            const datas = await response.text();
+            alert(datas);
+        }
+});
 </script>
 <script>
-
-
-    const btnOrderSubmit = document.getElementById('btnOrderSubmit');
-    btnOrderSubmit.addEventListener('click', async()=>{
+    async function orderSubmit(){
         const formForOrder = document.getElementById('formForOrder');
         const response = await fetch('@Url.Action("creatOrder", "Order")', {
             method:'POST',
             body:new FormData(formForOrder)
         });
-        const confirm = response.text();
-
-        return true;
-
-    });
-
+        const confirm = await response.text();
+        if(confirm === "Ture"){
+            return true;
+        }else{
+            return false;
+        }
+    }
 </script>
+<script> //讀取orderDiscount方法
+    async function returnOd() {
+        const discountArea = document.getElementById('discountArea');
+        var totalAmount = document.getElementById('totalAmount');
+        var total = parseInt(totalAmount.innerText);
+        console.log(total);
+        const response = await fetch(`@Url.Content("~/Order/searchDiscount")?total=${total}`);
+        const datas = await response.json();
+        console.log(datas);
+        discountArea.innerHTML = "";
+        datas.forEach(item => {
+            // Create the container div
+            const containerDiv = document.createElement('div');
 
+            // Create the radio input element
+            const radioInput = document.createElement('input');
+            radioInput.setAttribute('type', 'radio');
+            radioInput.setAttribute('name', 'oD');
+            radioInput.setAttribute('id', `oD-${item.orderDiscountId}`);
+            radioInput.setAttribute('value', item.orderDiscountId);
+            radioInput.classList.add('form-check-input');
+            containerDiv.appendChild(radioInput);
+
+            // Create the label element
+            const label = document.createElement('label');
+            label.classList.add('form-check-label');
+            label.setAttribute('for', 'oD');
+            label.textContent = item.orderDiscountnName;
+            containerDiv.appendChild(label);
+
+            // Add the container div to the discountArea
+            discountArea.appendChild(containerDiv);
+        });
+    }
+</script>
 <script> //return newItemList to page3
     const form1 = document.getElementById('form1');
     const table2 = document.getElementById('table2');
@@ -430,7 +461,8 @@
             table2Body.appendChild(input);
         });
         table2.appendChild(table2Body);
-        nextPage('nav-checkOutInfo-tab');
+        returnOd();
+        btnClick('nav-checkOutInfo-tab');
     });
 </script>
 <script>//回饋金上限確認
@@ -453,13 +485,12 @@
         if (confirmed) {
             const response = await fetch('@Url.Content("~/Order/itemDelete")?id=' + id);
             var confirmText = await response.text();
-            console.log(confirmText);
             if (confirmText === "True") {
                 alert('已取消');
             } else {
                 alert('不明錯誤, 你再試試');
             };
-            //window.location.href = window.location.href;
+            window.location.href = window.location.href;
         }
     };
 </script>
@@ -507,45 +538,9 @@
 
     };
 </script>
-<script> //讀取會員或酷碰方法
-    async function returnOd() {
-        const discountArea = document.getElementById('discountArea');
-        var totalAmount2 = document.getElementById('totalAmount2');
-        var total = parseInt(totalAmount2.innerText);
-        console.log(total);
-        const response = await fetch('@Url.Content("~/Order/searchDiscount")?total=' + total);
-        const datas = await response.json();
-        console.log(datas);
-        discountArea.innerHTML = "";
-        datas.forEach(item => {
-            // Create the container div
-            const containerDiv = document.createElement('div');
-
-            // Create the radio input element
-            const radioInput = document.createElement('input');
-            radioInput.setAttribute('type', 'radio');
-            radioInput.setAttribute('name', 'dTy');
-            radioInput.setAttribute('id', `discount-${item.discountTypeId}`);
-            radioInput.setAttribute('value', item.discountTypeId);
-            radioInput.classList.add('form-check-input');
-            containerDiv.appendChild(radioInput);
-
-            // Create the label element
-            const label = document.createElement('label');
-            label.classList.add('form-check-label');
-            label.setAttribute('for', 'dTy');
-            label.textContent = item.discountTypeName;
-            containerDiv.appendChild(label);
-
-            // Add the container div to the discountArea
-            discountArea.appendChild(containerDiv);
-        });
-    }
-</script>
-<script>
-    //移動頁面方法
-    function nextPage(inputTab) {
-        const tabbtn = document.getElementById(inputTab);
-        tabbtn.click();
+<script> //按按鈕
+    function btnClick(inputId) {
+        const btn = document.getElementById(inputId);
+        btn.click();
     };
 </script>
