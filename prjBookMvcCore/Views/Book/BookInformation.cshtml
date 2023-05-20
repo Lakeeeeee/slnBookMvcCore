@@ -316,9 +316,7 @@
                     <div class="deliver">
                         <p>運送方式：超商取貨、宅配取貨</p>
                         <p>銷售地區：全球</p>
-                        <p v-if="book.unitInStock > 5" style="color:green">{{unitInStockContent}}</p>
-                        <p v-if="book.unitInStock > 0 && book.unitInStock < 5" style="color:skyblue">{{unitInStockContent}}</p>
-                        <p v-if="book.unitInStock == 0" style="color:red">{{unitInStockContent}}</p>
+                        <p>庫存： {{book.unitInStock}}</p>
                     </div>
                     <p class="DeliverAndKpst">
                         <a class="18h" href="#" target="_blank">
@@ -703,18 +701,6 @@
                 },
                 forewardText(){
                     return this.showAllForeward ? this.foreward : this.foreward.slice(0, 5);
-                },
-                unitInStockContent(){
-                    let count = this.book.unitInStock
-                    if(count > 5){
-                        return "庫存足夠"
-                    }
-                    else if(count > 0){
-                        return "庫存低，趕快買！"
-                    }
-                    else{
-                        return "暫無庫存，無法銷售！"
-                    }
                 }
             },
             methods: {
