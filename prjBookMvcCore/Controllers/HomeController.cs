@@ -5,6 +5,9 @@ using prjBookMvcCore.Models;
 using System.Diagnostics;
 using System.Net;
 using NuGet.Protocol;
+using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
+using static System.Formats.Asn1.AsnWriter;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -41,6 +44,91 @@ namespace prjBookMvcCore.Controllers
             return View();
         }
 
+        public IActionResult searchList(string keyword)
+        {
+            List<RecommendInformation> searchResult = GetSearchResult();
+            CForHomePage c = new CForHomePage()
+            {
+                searchResult = searchResult,
+            };
+            var results = searchResult.Where(item =>
+        (item.book != null && item.book.BookTitle.Contains(keyword)) ||
+        (item.author != null && item.author.AuthorName.Contains(keyword)) ||
+        (item.painter != null && item.painter.PainterName.Contains(keyword)) ||
+        (item.translator != null && item.translator.TranslatorName.Contains(keyword)) ||
+        (item.publisher != null && item.publisher.PublisherName.Contains(keyword))
+    );
+
+            return View(results);
+        }
+
+
+        private List<RecommendInformation> GetSearchResult()
+        {
+            using (var db = new BookShopContext())
+            {
+                var recommendBooks = (from b in db.Books
+                                      join sd in db.CategoryDetails
+                                      on b.BookId equals sd.BookId
+                                      join sc in db.SubCategories
+                                      on sd.SubCategoryId equals sc.SubCategoryId
+                                      join c in db.Comments
+                                      on b.BookId equals c.BookId
+                                      join au in db.AuthorDetails
+                                      on b.BookId equals au.BookId
+                                      join pa in db.PainterDetails
+                                      on b.BookId equals pa.BookId
+                                      join tr in db.TranslatorDetails
+                                      on b.BookId equals tr.BookId
+                                      join pub in db.Publishers
+                                      on b.PublisherId equals pub.PublisherId
+
+                                      orderby c.CommentTime ascending
+                                      orderby c.Stars descending
+                                      select new
+                                      {
+                                          書本ID = b.BookId,
+                                          書名 = b.BookTitle,
+                                          作者 = au.Author.AuthorName,
+                                          繪者 = pa.Painter.PainterName,
+                                          譯者 = tr.Translator.TranslatorName,
+                                          出版社 = pub.PublisherName,
+                                          定價 = b.UnitPrice,
+                                          路徑 = b.CoverPath,
+                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                          出版日期 = b.PublicationDate,
+                                          評論時間 = c.CommentTime,
+                                          最新評論 = c.CommentText,
+                                          評分 = c.Stars,
+                                      }).Take(20);
+                List<RecommendInformation> ris = new List<RecommendInformation>();
+                int count = 0;
+                foreach (var recommendBook in recommendBooks)
+                {
+                    count++;
+
+                    Book b = new Book { BookTitle = recommendBook.書名, BookId = recommendBook.書本ID, UnitPrice = recommendBook.定價, CoverPath = recommendBook.路徑, PublicationDate = recommendBook.出版日期 };
+                    BookDiscount bd = new BookDiscount { BookDiscountAmount = recommendBook.折扣 };
+                    Comment c = new Comment { CommentText = recommendBook.最新評論, Stars = recommendBook.評分, CommentTime = recommendBook.評論時間 };
+                    Author au = new Author { AuthorName = recommendBook.作者 };
+                    Painter pa = new Painter { PainterName = recommendBook.繪者 };
+                    Translator tr = new Translator { TranslatorName = recommendBook.譯者 };
+                    Publisher pub = new Publisher { PublisherName = recommendBook.出版社 };
+                    RecommendInformation tmp = new RecommendInformation()
+                    {
+                        book = b,
+                        bookDiscount = bd,
+                        comment = c,
+                        author = au,
+                        painter = pa,
+                        translator = tr,
+                        publisher = pub,
+                    };
+                    ris.Add(tmp);
+                }
+                return ris;
+            }
+        }
 
         #region(系統預設的東西, 先留著, 之後不需要再刪掉)
         private readonly ILogger<HomeController> _logger;

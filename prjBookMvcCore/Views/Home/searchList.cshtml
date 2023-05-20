@@ -1,0 +1,23 @@
+﻿@model IEnumerable<prjBookMvcCore.Models.CForHomePage>
+
+@{
+    ViewData["Title"] = "searchList";
+}
+
+<h1>searchList</h1>
+
+<<p>Keyword: @ViewBag.KeyWord</p>
+@if (Model != null && Model.Any())
+{
+
+    <ul>
+        @foreach (var book in Model)
+        {
+            <li>@book.</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No results found.</p>
+}
