@@ -10,11 +10,11 @@ namespace prjBookMvcCore.Controllers
     {
         BookShopContext db = new();
         //TODO:(書玉)分頁controller發法改寫
-        public IActionResult 分類頁面(int id, int page = 1)
+        public IActionResult 分類頁面(int id, int subid, int page = 1)
         {
             int categoryID = id;
-            int subcategoryID = id;
-            int itemsPerPage = 28;//每頁只顯示28個
+            int subcategoryID = subid;
+            int itemsPerPage = 20;//每頁只顯示28個
 
             var query = from b in db.Books
                         join sd in db.CategoryDetails
