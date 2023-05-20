@@ -60,7 +60,48 @@ namespace prjBookMvcCore.Controllers
             return Json(newCart);
         }
         public IActionResult Action2() { return View(); }
-        public IActionResult Action3() { return View(); }
+        public IActionResult Action3(IFormCollection formData)
+        {
+            var orderData = formData["orderData"];
+            foreach (var data in orderData)
+            {
+                
+
+            }
+
+
+            return View();
+        }
+        public IActionResult creatOrder(IFormCollection formData)
+        {
+            var orderData = formData["orderData"];
+
+            Order order = new Order()
+            {
+
+
+
+            };
+            _db.Orders.Add(order);
+
+            return View();
+        }
+
+        public void creatOrderDetail(int orderId, int bookId, int quantity, BookShopContext db)
+        {
+            OrderDetail detail = new OrderDetail()
+            {
+                OrderId = orderId,
+                BookId = bookId,
+                Quantity = quantity
+            };
+
+            int q = db.BookDiscountDetails.Where(x => x.BookId == detail.BookId).Select(x => x.BookDiscountId).FirstOrDefault();
+            decimal price = db.Books.Find(detail.BookId).UnitPrice;
+            decimal d = db.BookDiscounts.Find(q).BookDiscountAmount;
+            detail.UnitPrice = price * d;
+            db.OrderDetails.Add(detail);
+        }
 
         public IActionResult itemDelete(int id) //刪除購物車項目
         {

@@ -125,7 +125,6 @@ namespace prjBookMvcCore.Controllers
         {
             return View();
         }
-        //[HttpPost]  //用ajax方法請求回傳值跟form/submit是無相關的兩條路, 使用時要分清楚
         [Route("Member/find")]
         public IActionResult Find_password(string target) //忘記密碼方法
         {
