@@ -8,6 +8,7 @@
     string level = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.Level).Select(x => x.LevelName).FirstOrDefault();
     int points = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.Points).FirstOrDefault();
 }
+
 <style>
     .container-sp {
         width: 100%;
@@ -43,31 +44,8 @@
         alert("已放入暫存清單!");
     }
 </script>
-<script src="https://www.paypal.com/sdk/js?client-id=AQD2E8XndV3uPoaErR5zdfjhgeHdVhOzTyhRmf7oA3F-Ta2sfVTU4uMrC3sfqmT-j7FnauXqXXBSvqsw"></script>
-<script>
-    // Render the PayPal button into #paypal-button-container
-    paypal.Buttons({
-        // Set up the transaction
-        createOrder: function (data, actions) {
-            return actions.order.create({
-                purchase_units: [{
-                    amount: {
-                        value: '88.44'
-                    }
-                }]
-            });
-        },
 
-        // Finalize the transaction
-        onApprove: function (data, actions) {
-            return actions.order.capture().then(function (orderData) {
-                console.log('Capture result', orderData,
-                    JSON.stringify(orderData, null, 2));
-            });
-        }
-    }).render('#payment-button');
-</script>
-<div class="container-sp">
+<div class="container-sp"> @*麵包屑*@
     <div>
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -78,7 +56,7 @@
     </div>
 </div>
 
-<nav>
+<nav> @*頁籤*@
     <div class="nav nav-tabs" id="nav-tab" role="tablist" style="display:none">
         <button class="nav-link active" id="nav-cart-tab" data-bs-toggle="tab" data-bs-target="#nav-cart" type="button" role="tab" aria-controls="nav-cart" aria-selected="true">Home</button>
         <button class="nav-link" id="nav-checkOutInfo-tab" data-bs-toggle="tab" data-bs-target="#nav-checkOutInfo" type="button" role="tab" aria-controls="nav-checkOutInfo" aria-selected="false">Profile</button>
@@ -86,8 +64,9 @@
         <button class="nav-link" id="nav-checkOutFinal-tab" data-bs-toggle="tab" data-bs-target="#nav-checkOutFinal" type="button" role="tab" aria-controls="nav-checkOutFinal" aria-selected="false">Contact</button>
     </div>
 </nav>
+
 <div class="tab-content" id="nav-tabContent">
-    <div class="tab-pane fade show active" id="nav-cart" role="tabpanel" aria-labelledby="nav-cart-tab">
+    <div class="tab-pane fade show active" id="nav-cart" role="tabpanel" aria-labelledby="nav-cart-tab"> @*page1*@
         <div id="cart_tab">
             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
@@ -218,7 +197,7 @@
             </div>
         </div>@*為你推薦*@
     </div>
-    <div class="tab-pane fade" id="nav-checkOutInfo" role="tabpanel" aria-labelledby="nav-checkOutInfo-tab">
+    <div class="tab-pane fade" id="nav-checkOutInfo" role="tabpanel" aria-labelledby="nav-checkOutInfo-tab"> @*page2*@
         <div class="container-sp">
             <div class="col-3" style="font-size:20px; color:	#F75000;">
                 總金額 共 <label id="totalAmount2"> </label> 元
@@ -298,7 +277,7 @@
             <button class=" btn btn-primary col-4 me-md-2" id="check_btn">下一步</button>
         </div>
     </div>
-    <div class="tab-pane fade" id="nav-checkOutConfirm" role="tabpanel" aria-labelledby="nav-checkOutConfirm-tab">
+    <div class="tab-pane fade" id="nav-checkOutConfirm" role="tabpanel" aria-labelledby="nav-checkOutConfirm-tab"> @*page3*@
         <div class="container">
             <h2>確認結帳</h2>
             <div class="table">
@@ -382,78 +361,6 @@
         </div>
 
     </div>
-    <div class="tab-pane fade" id="nav-checkOutFinal" role="tabpanel" aria-labelledby="nav-checkOutFinal-tab">
-        <div class="container">
-            <h1>以下是您的訂單內容</h1>
-            <h2>書籍清單</h2>
-            <div class="table">
-                <h4>書籍清單</h4>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>書籍名稱</th>
-                            <th>訂購數量</th>
-                            <th>金額</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>商品 1</td>
-                            <td>1</td>
-                            <td>100</td>
-                        </tr>
-                        <tr>
-                            <td>商品 2</td>
-                            <td>2</td>
-                            <td>200</td>
-                        </tr>
-                        <tr>
-                            <td>商品 3</td>
-                            <td>3</td>
-                            <td>300</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <h2>結帳資訊</h2>
-            <div class="checkout-info">
-                <div class="checkout-section">
-                    <h3>訂購人</h3>
-                    <div class="col-md-6">
-                        <p>姓名：</p>
-                        <p>電話：</p>
-                        <p>Email：</p>
-                        <p>地址：</p>
-                    </div>
-                </div>
-                <div class="checkout-section">
-                    <h3>金額明細</h3>
-                    <div class="col-md-6">
-                        <p>總金額：</p>
-                        <p>優惠折扣：</p>
-                        <p>運費：</p>
-                        <P>結帳金額：</P>
-                    </div>
-                </div>
-            </div>
-            <div class="checkout-info">
-                <div class="checkout-section">
-                    <h3>訂單狀態</h3>
-                    <spin id="PayStatus">未付款</spin>
-                    <br>
-                    <div><p>立即付款：</p><div id="payment-button"></div></div>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
-            <a href="~/Home/Home" class=" btn btn-primary col-4 me-md-2" type="button">返回首頁</a>
-        </div>
-
-
-    </div>
 </div>
 
 
@@ -469,7 +376,7 @@
         }
     }
 </script>
-<script>
+<script> //取消購物車項目方法
     async function cancle(id) {
         const confirmed = confirm('確定要取消嗎?');
         if (confirmed) {
@@ -484,7 +391,7 @@
         }
     };
 </script>
-<script>
+<script> //page1調整數量同時更新總金額
     const table1 = document.getElementById('table1');
     const totalAmountElement = document.querySelector('#totalAmount');
 
@@ -508,9 +415,6 @@
             // 更新 totalAmount 的值
             totalAmount = calculateTotalAmount();
             totalAmountElement.textContent = totalAmount;
-
-            //呼叫ajax, 把調整數量後的shoppingcarts list回傳到後端，再從後端傳回前端
-
         }
     });
 
@@ -527,7 +431,7 @@
         return total;
     };
 </script>
-<script>
+<script> //把page1複製到page3
     const check_btn = document.getElementById('check_btn');
     const table2 = document.getElementById('table2');
 
@@ -567,13 +471,13 @@
         nextPage('nav-checkOutConfirm-tab');
     });
 </script>
-<script>
+<script> //移動頁面方法
     function nextPage(inputTab) {
         const tabbtn = document.getElementById(inputTab);
         tabbtn.click();
     };
 </script>
-<script>
+<script> //更新總金額2並移動到下頁
     function updateTotalAmount2() {
         var totalAmountElement = document.getElementById("totalAmount");
         var totalAmount2Element = document.getElementById("totalAmount2");
@@ -587,7 +491,7 @@
     });
 
 </script>
-<script>
+<script> //讀取會員或酷碰方法
     async function returnOd() {
         const discountArea = document.getElementById('discountArea');
         var totalAmount2 = document.getElementById('totalAmount2');

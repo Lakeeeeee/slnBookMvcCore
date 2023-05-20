@@ -81,11 +81,6 @@ namespace prjBookMvcCore.Controllers
             return Json(discountTypes);
         }
 
-        
-        
-
-
-
         //----------------------------------------------------------------
         public IActionResult checkOutConfirm()
         {
