@@ -72,6 +72,8 @@ namespace prjBookMvcCore.Controllers
         }
         public IActionResult creatOrder(IFormCollection formData)  //towrite
         {
+            bool isSuccess = false;
+
             //var value1 = formData["name1"];  //抓formForOrder裡的name+value
             //var value2 = formData["name2"];  //每個input的name代表欄位, 抓出其value再塞到新order的參數
             //var value3 = formData["name3"];  //依此類推, 有幾個欄位就抓幾個value
@@ -79,8 +81,8 @@ namespace prjBookMvcCore.Controllers
             //Order order = new Order(){};
             //_db.Orders.Add(order);
             // _db.SaveChanges();
-            bool isSuccess = false;
             isSuccess = true;
+
             return Content(isSuccess.ToString());
         }
 
@@ -119,13 +121,13 @@ namespace prjBookMvcCore.Controllers
             List<OrderDiscount> discounts = new List<OrderDiscount>();
             if (total > 1000)
             {
-                //可能會出bug 如是則改用orderdiscountId來抓
                 int index = (int)_db.MemberLevels.Where(x=>x.LevelId==_user.UserLevelId).Select(x=>x.OrderDiscountId).FirstOrDefault();
                 OrderDiscount memberDiscount = _db.OrderDiscounts.Find(index);
                 discounts.Add(memberDiscount);
             };
-            //可能會出bug 如是則改方法抓
+
             var coupons = _db.OrderDiscountDetails.Where(x=>x.MemberId==_user.UserId && x.IsOrderDiscountUse=="N").Select(x=>x.OrderDiscount);
+
             discounts.AddRange(coupons);
             return Json(discounts);
         }

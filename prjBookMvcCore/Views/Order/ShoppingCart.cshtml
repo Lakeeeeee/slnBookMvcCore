@@ -274,7 +274,7 @@
                         <div id="rebateAmount">
                             <label for="rebateAmountInput" class="form-label">輸入金額：(目前持有回饋金：@points 元)</label>
                             <input type="number" class="form-control" id="rebateAmountInput" name="rebateAmountInput" placeholder="請輸入回饋金金額" min="0" max="@points" oninput="checkMaxLimit()" />
-                            <p id="maxLimitError" style="color: red; display: none;">輸入金額太大，請確認~</p>
+                            <p id="maxLimitError" style="color: red; display: none;">購物金不夠喔，請確認~</p>
                         </div>
                     </div>
                 </div>
@@ -283,7 +283,7 @@
         </div>
         <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
             <button class=" btn btn-primary col-4 me-md-2" onclick="btnClick('nav-cart-tab')">返回購物車</button>
-            <button class=" btn btn-primary col-4 me-md-2" id="check_btn">下一步</button>
+            <button class=" btn btn-primary col-4 me-md-2" onclick="btnClick('nav-checkOutConfirm-tab')">下一步</button>
         </div>
     </div>
     <div class="tab-pane fade" id="nav-checkOutConfirm" role="tabpanel" aria-labelledby="nav-checkOutConfirm-tab">@*page3*@
@@ -349,7 +349,7 @@
 
     </div>
 
-<script> 
+<script> /*送出訂購*/
     const formForOrderDetails = document.getElementById('formForOrderDetails');
     const btnSubmit = document.getElementById('btnSubmit');
         btnSubmit.addEventListener('click', async () => {
@@ -366,7 +366,7 @@
         }
 });
 </script>
-<script>
+<script> /*送出訂單*/
     async function orderSubmit(){
         const formForOrder = document.getElementById('formForOrder');
         const response = await fetch('@Url.Action("creatOrder", "Order")', {
@@ -416,7 +416,7 @@
         });
     }
 </script>
-<script> //return newItemList to page3
+<script> //return to Action1 page3
     const form1 = document.getElementById('form1');
     const table2 = document.getElementById('table2');
     const btnForm1 = document.getElementById('btnForm1');
@@ -453,9 +453,9 @@
                     <td>${index + 1}</td>
                     <td>${item.book.bookTitle}</td>
                     <td>${item.discountName}</td>
-                     <td>${item.book.unitPrice * item.discountAmount}</td>
+                    <td>${item.book.unitPrice * item.discountAmount}</td>
                     <td><input name="quantity" value="${item.quantity}" class="cinput" type="text" readonly /></td>
-                     <td>${item.quantity * (item.book.unitPrice * item.discountAmount)}</td>
+                    <td>${item.quantity * (item.book.unitPrice * item.discountAmount)}</td>
                 `;
             table2Body.appendChild(row);
             table2Body.appendChild(input);
@@ -465,6 +465,13 @@
         btnClick('nav-checkOutInfo-tab');
     });
 </script>
+
+
+
+
+
+
+
 <script>//回饋金上限確認
     
     function checkMaxLimit() {
