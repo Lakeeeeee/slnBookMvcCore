@@ -7,6 +7,8 @@
     BookShopContext db = new BookShopContext();
     string level = db.MemberLevels.Find(_user.UserLevelId).LevelName;
     int points = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.Points).FirstOrDefault();
+    string mName = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.MemberName).FirstOrDefault();
+    string mPhone = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.Memberphone).FirstOrDefault();
 }
 
 <style>
@@ -207,11 +209,13 @@
             </div>
         </div>
     </div>
-    <div class="tab-pane fade" id="nav-checkOutInfo" role="tabpanel" aria-labelledby="nav-checkOutInfo-tab"> @*page2*@
+
+    @*page2*@
+    <div class="tab-pane fade" id="nav-checkOutInfo" role="tabpanel" aria-labelledby="nav-checkOutInfo-tab"> 
         <div class="container-sp">
             <form id="formForOrder">
             <div class="row mt-2">
-                <h4>訂購人資訊</h4>
+                <h4>收件人資訊</h4>
                     <input name="memberId" value="@_user.UserId" type="hidden" />
                 <div class="form-group">
                     <label for="inputName">姓名</label>
@@ -260,21 +264,14 @@
                 </div>
 
             </div>
-
-
-
             <div class="row mt-4">
                 <h2>回饋金</h2>
                 <div class="ml-3">
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="points">
-                            <label class="form-check-label" for="points">
-                            回饋金折抵
-                        </label>
-                        <div id="rebateAmount">
+                            <div id="rebateAmount">
                             <label for="rebateAmountInput" class="form-label">輸入金額：(目前持有回饋金：@points 元)</label>
                             <input type="number" class="form-control" id="rebateAmountInput" name="rebateAmountInput" placeholder="請輸入回饋金金額" min="0" max="@points" oninput="checkMaxLimit()" />
-                            <p id="maxLimitError" style="color: red; display: none;">購物金不夠喔，請確認~</p>
+                            <p id="maxLimitError" style="color: red; display: none;">回饋金不足喔，請確認~</p>
                         </div>
                     </div>
                 </div>
@@ -283,10 +280,12 @@
         </div>
         <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
             <button class=" btn btn-primary col-4 me-md-2" onclick="btnClick('nav-cart-tab')">返回購物車</button>
-            <button class=" btn btn-primary col-4 me-md-2" onclick="btnClick('nav-checkOutConfirm-tab')">下一步</button>
+            <button class="btn btn-primary col-4 me-md-2" onclick="p2btnClick('nav-checkOutConfirm-tab')">下一步</button>
         </div>
     </div>
-    <div class="tab-pane fade" id="nav-checkOutConfirm" role="tabpanel" aria-labelledby="nav-checkOutConfirm-tab">@*page3*@
+
+    @*page3*@
+    <div class="tab-pane fade" id="nav-checkOutConfirm" role="tabpanel" aria-labelledby="nav-checkOutConfirm-tab">
         <h2>確認結帳</h2>
         <div class="row">
                 <h4>書籍清單</h4>
@@ -309,11 +308,17 @@
         </form>
         </div>
         <div class="row">
-            <h4>訂購資訊確認</h4>
-            <p>Order需要的資料</p>
+            <h3>訂購資訊確認</h3>
+            <h4>收件人</h4>
+            <p id="reciverName">姓名: </p>
+            <p id="reciverPhone">電話: </p>
+            <p id="shipAddr">地址: </p>
+            <h4>訂購人</h4>
+            <p>姓名：@mName</p>
+            <p>電話：@mPhone</p>            
         </div>
         <div class="row">
-                <h4>結帳金額</h4>
+                <h3>結帳金額</h3>
                 <p>總共_____件</p>
                 <p></p>
                         <p>總金額：</p>
@@ -322,8 +327,8 @@
                         <p>結帳金額：</p>
         </div>
         <div style="text-align:right;">
-            <button class=" btn btn-primary col-4 me-md-2" onclick="btnClick('nav-cart-tab')">返回修改</button>
-            <button id="btnSubmit" class="btn btn-primary col-4 me-md-2" type="button" @*data-bs-toggle="modal" data-bs-target="#successModal"*@>
+            <button class=" btn btn-primary col-4 me-md-2" onclick="btnClick('nav-checkOutInfo-tab')">返回修改</button>
+            <button id="btnSubmit" class="btn btn-primary col-4 me-md-2" type="button" data-bs-toggle="modal" data-bs-target="#successModal">
                 確定送出
             </button>
         </div>
@@ -348,6 +353,25 @@
         </div>
 
     </div>
+
+
+<script>
+    //P2>>P3
+    function btnClick(tabId) {
+        // 取得輸入值
+        var reciverName = document.getElementById('inputName').value;
+        var reciverPhone = document.getElementById('inputPhone').value;
+        var shipAddr = document.getElementById('inputAddress').value;
+
+        // 更新Page 3中的內容
+        document.getElementById('reciverName').innerText = '姓名: ' + reciverName;
+        document.getElementById('reciverPhone').innerText = '電話: ' + reciverPhone;
+        document.getElementById('shipAddr').innerText = '地址: ' + shipAddr;
+
+        // 切換到Page 3
+        document.getElementById(tabId).click();
+    }
+</script>
 
 <script> /*送出訂購*/
     const formForOrderDetails = document.getElementById('formForOrderDetails');
