@@ -81,17 +81,11 @@ namespace prjBookMvcCore.Controllers
         }
         public IActionResult Promotions活動已結束() { return View(); }
         public IActionResult Index() { return View(); } //預設為 建置中
-
-        public IActionResult Promotions領取月優惠(int? month)
-        {
-            if (month == null || month < DateTime.Now.Month) { return RedirectToAction("Promotions活動已結束"); }
-            else if (month > DateTime.Now.AddMonths(2).Month) { return RedirectToAction("Index"); }
-            else { ViewBag.month = month; return View(); }
-        }
-        public string Promotions領取特定日優惠(int memberID, int discountID, DateTime date)
+        public IActionResult Promotions領取當周優惠() { return View(); }
+        public string Promotions領取特定日優惠(int discountID, DateTime date, int time)
         {
             string isSuccess;
-            var q = db.OrderDiscountDetails.Where(d => d.MemberId == memberID & d.OrderDiscountId == discountID & d.OrderDiscountStartDate == date).Select(d => d);
+            var q = db.OrderDiscountDetails.Where(d => d.MemberId == _userInforService.UserId & d.OrderDiscountId == discountID & d.OrderDiscountStartDate == date).Select(d => d);
             if (q.Count() != 0)
             {
                 isSuccess = "false";
@@ -102,9 +96,9 @@ namespace prjBookMvcCore.Controllers
                 OrderDiscountDetail newmemberdiscount = new OrderDiscountDetail()
                 {
                     OrderDiscountId = discountID,
-                    MemberId = memberID,
+                    MemberId = _userInforService.UserId,
                     OrderDiscountStartDate = date,
-                    OrderDiscountEndDate = date.AddDays(1),
+                    OrderDiscountEndDate = date.AddDays(time),
                 };
                 db.OrderDiscountDetails.Add(newmemberdiscount);
                 db.SaveChanges();
@@ -113,29 +107,15 @@ namespace prjBookMvcCore.Controllers
             }
         }
 
-        //public string Promotions領取會員優惠(int memberID, int discountID, DateTime date)
+        public IActionResult Promotions領取月優惠(int? month)
+        {
+            if (month == null || month < DateTime.Now.Month) { return RedirectToAction("Promotions活動已結束"); }
+            else if (month > DateTime.Now.AddMonths(2).Month) { return RedirectToAction("Index"); }
+            else { ViewBag.month = month; return View(); }
+        }
+        //public string Promotions領取限定會員優惠(int memberID, int discountID, DateTime date)
         //{
-        //    string isSuccess;
-        //    var q = db.OrderDiscountDetails.Where(d => d.MemberId == memberID & d.OrderDiscountId == discountID & d.OrderDiscountStartDate == date).Select(d => d);
-        //    if (q.Count() != 0)
-        //    {
-        //        isSuccess = "false";
-        //        return isSuccess;
-        //    }
-        //    else
-        //    {
-        //        OrderDiscountDetail newmemberdiscount = new OrderDiscountDetail()
-        //        {
-        //            OrderDiscountId = discountID,
-        //            MemberId = memberID,
-        //            OrderDiscountStartDate = date,
-        //            OrderDiscountEndDate = date.AddDays(1),
-        //        };
-        //        db.OrderDiscountDetails.Add(newmemberdiscount);
-        //        db.SaveChanges();
-        //        isSuccess = "true";
-        //        return isSuccess;
-        //    }
+        //   //TODO：會員等級
         //}
 
         public string Promotions限時登入領取優惠()
@@ -162,7 +142,7 @@ namespace prjBookMvcCore.Controllers
                 return isSuccess;
             }
         }
-        public IActionResult SearchTest(string txtKeyword)
+        public IActionResult SearchTest(string? txtKeyword)
         {
             ViewBag.KeyWord = txtKeyword;
             BookShopContext db = new BookShopContext();
@@ -178,7 +158,7 @@ namespace prjBookMvcCore.Controllers
                 var s譯者 = db.Translators.Where(t => t.TranslatorName.Contains(txtKeyword)).ToList();
                 var s繪者 = db.Painters.Where(p => p.PainterName.Contains(txtKeyword)).ToList();
                 var s出版社 = db.Publishers.Where(p => p.PublisherName.Contains(txtKeyword)).ToList();
-                var s分類 = db.Categories.Where(c => c.CategoryName.Contains(txtKeyword) ).ToList();
+                var s分類 = db.Categories.Where(c => c.CategoryName.Contains(txtKeyword)).ToList();
                 CSearch sTest = new CSearch
                 {
                     c書 = s書,

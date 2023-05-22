@@ -3,8 +3,8 @@
 
 @{
     ViewBag.Title = "Home";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-   //Layout = "~/Views/Shared/_Layout_Homepage.cshtml";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+   Layout = "~/Views/Shared/_Layout_Homepage.cshtml";
 }
 
 <style>
@@ -69,6 +69,7 @@
                                 <img height="150" src="~/Image/Book/@item.book.CoverPath" />
                             </li>
                             <li class="bookCaption twolines mb-2">@item.book.BookTitle</li>
+
                             <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))元</span></li>
                             <li class="discPrice">
                                 優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折

@@ -44,12 +44,13 @@
     </style>
 </head>
 <body>
-    <div class="fontsize wrapper" style="height:450px; background-image:url('/image/banner.jpg'); background-repeat: no-repeat; background-size: cover;">
+    <div class="fontsize wrapper" style="height:150px; background-image:url('/image/bar.png'); background-repeat: no-repeat; background-size:cover;background-position:center; position:sticky;top:0; z-index: 9999;">
         @*導覽開始*@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm  box-shadow mb-3 ">
             <div class="container">
                 @*LOGO開始*@
                 <div class="align-items-start" style="font-weight:900">
+                    <a href="~/Home/Home"><img src="~/Image/讀本logo.png" style="height:25pt" /></a>
                     @Html.ActionLink("讀本", "Home", "Home", new { area = "" }, new { @class = "fontsize text-black navbar-brand" })  @*須換圖*@
                 </div>
                 @*登入選項開始*@
@@ -83,6 +84,7 @@
                         <ul class="zero">
                             <li><a role="button" class="btn-outline-secondary mx-3" href="~/Home/Menu">書籍</a></li>
                             <li><a role="button" class="btn-outline-secondary mx-3" href="~/Promotions/Promotions活動總覽圖">活動文宣</a></li>
+                            <li><a role="button" class="btn-outline-secondary mx-3" href="~/Promotions/Promotions領取當周優惠">領取優惠卷</a></li>
                         </ul>
                     </div>
                 </form>
@@ -96,6 +98,11 @@
                             $('#search_link').click(function (e) {
                                 e.preventDefault(); // 防止點擊連結後直接跳轉
                                 var keyword = $('#search_input').val(); // 獲取搜尋關鍵字的值
+                                if (keyword.trim().length === 0) {
+                                    alert("請輸入關鍵字"); // 提示未輸入關鍵字
+                                    $('#search_input').focus(); // 設定焦點在輸入文本框上
+                                    return; // 停止執行
+                                }
                                 var url = '@Url.Action("SearchTest", "Promotions")' + '?txtKeyword=' + encodeURIComponent(keyword);
                                 // 使用 Url.Action 方法動態生成 ActionLink 的 URL，並將關鍵字作為參數傳遞
                                 window.location.href = url; // 跳轉到生成的 URL
@@ -153,7 +160,7 @@
                                         <span class="mx-2">至</span>
 
                                         <select id="折扣2" name="折扣2" style="width:100px">
-                              <option value="0" selected>請選擇 </option>
+                                            <option value="0" selected>請選擇 </option>
                                             @{
                                                 foreach (var dis in bookDiscount)
                                                 {
@@ -228,22 +235,3 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-<script>
-    //  const btn = document.querySelector('#search_btn');
-
-    //btn.addEventListener('click', function () {
-    //     window.location.href = '@Url.ActionLink("SearchTest", "Promotions")?txtKeyword=' + input;
-    // })
-    // function search(){
-    //     window.location.href = '@Url.ActionLink("SearchTest", "Promotions")?txtKeyword=' + input;
-    // }
-    const input = document.querySelector('#search_input');
-    function search() {
-        let txtKeyword = input.innerHTML
-        let url = '@Url.Action("SearchTest","Promotions")?txtKeyword=' + txtKeyword;
-        $.ajax({
-            url: url,
-            type: 'POST',
-        });
-    };
-</script>

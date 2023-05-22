@@ -2,9 +2,6 @@
 @{
     ViewData["Title"] = "SearchTest";
 }
-@{
-    string Keyword = ViewBag.KeyWord;
-}
 <!DOCTYPE html>
 <html>
 <head>
@@ -84,7 +81,7 @@
                                 foreach (var item in Model.c書)
                                 {
                                     count++;
-                                    <div class="clamp two-lines mt-3"><a id="@item.BookId" href="~/Book/BookInformation/@item.BookId" title="@item.BookTitle">@count @item.BookTitle</a></div>
+                                    <div class="clamp two-lines mt-3"><a id="@item.BookId" href="~/Book/BookInformation/@item.BookId" title="@item.BookTitle">@count. @item.BookTitle</a></div>
                                 }
                             }
                             else
@@ -103,7 +100,7 @@
                                 foreach (var item in Model.c作者)
                                 {
                                     count++;
-                                    <div class="clamp two-lines mt-3"><a href="~/Book/authorInformation?id=@item.AuthorId" title="查看 @item.AuthorName 書籍">@count @item.AuthorName</a></div>
+                                    <div class="clamp two-lines mt-3"><a href="~/Book/authorInformation?id=@item.AuthorId" title="查看 @item.AuthorName 書籍">@count. @item.AuthorName</a></div>
                                 }
                             }
                             else
@@ -122,7 +119,7 @@
                                 foreach (var item in Model.c譯者)
                                 {
                                     count++;
-                                    <div class="clamp two-lines mt-3"><a href="~/Book/translatorInformation?id=@item.TranslatorId" title="查看 @item.TranslatorName 書籍">@count @item.TranslatorName </a></div>
+                                    <div class="clamp two-lines mt-3"><a href="~/Book/translatorInformation?id=@item.TranslatorId" title="查看 @item.TranslatorName 書籍">@count. @item.TranslatorName </a></div>
                                 }
                             }
                             else
@@ -141,7 +138,7 @@
                                 foreach (var item in Model.c繪者)
                                 {
                                     count++;
-                                    <div class="clamp two-lines mt-3"><a href="~/Book/painterInformation?id=@item.PainterId" title="查看 @item.PainterName 書籍">@count @item.PainterName </a></div>
+                                    <div class="clamp two-lines mt-3"><a href="~/Book/painterInformation?id=@item.PainterId" title="查看 @item.PainterName 書籍">@count. @item.PainterName </a></div>
                                 }
                             }
                             else
@@ -160,7 +157,7 @@
                                 foreach (var item in Model.c出版社)
                                 {
                                     count++;
-                                    <div class="clamp two-lines mt-3"><a href="~/Book/publisherInformation?id=@item.PublisherId" title="查看 @item.PublisherName 書籍">@count @item.PublisherName </a></div>
+                                    <div class="clamp two-lines mt-3"><a href="~/Book/publisherInformation?id=@item.PublisherId" title="查看 @item.PublisherName 書籍">@count. @item.PublisherName </a></div>
                                 }
                             }
                             else
@@ -179,7 +176,7 @@
                                 foreach (var item in Model.c分類)
                                 {
                                     count++;
-                                    <div class="clamp two-lines mt-3"> <a href="~/Category/分類頁面/@item.CategoryId" title="查看 @item.CategoryName 書籍">@count @item.CategoryName </a></div>
+                                    <div class="clamp two-lines mt-3"> <a href="~/Category/分類頁面/@item.CategoryId" title="查看 @item.CategoryName 書籍">@count. @item.CategoryName </a></div>
                                 }
                             }
                             else
