@@ -9,5 +9,6 @@
         public List<RecommendInformation>? commentTimeDate { get; set; }
 
         public List<CInformation>? cSearchBook { get; set; }
+        public List<RecommendInformation>? quantity { get; set; }
     }
 }
