@@ -202,7 +202,7 @@
 </html>
 
 <script>
-    /* 排序判斷動作*/
+    // 排序判斷動作
     function booksview() {
         var sortBy = document.getElementById("sort-Select").value;
         // Get the book list container element
@@ -216,13 +216,13 @@
             bookItemsArray.sort(function (a, b) {
                 var dateA = new Date(a.getAttribute("data-publication-date"));
                 var dateB = new Date(b.getAttribute("data-publication-date"));
-                return dateB - dateA;
+                return dateB - dateA; // Sort by descending publication date (from most recent to oldest)
             });
         } else if (sortBy === "discountedPrice") {
             bookItemsArray.sort(function (a, b) {
                 var priceA = parseInt(a.getAttribute("data-price"));
                 var priceB = parseInt(b.getAttribute("data-price"));
-                return priceA - priceB;
+                return priceA - priceB; // Sort by ascending price (from lowest to highest)
             });
         }
         // Clear the book list
