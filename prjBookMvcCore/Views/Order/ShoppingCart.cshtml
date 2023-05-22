@@ -450,7 +450,7 @@
             // Create the container div
             const containerCou = document.createElement('div');
             containerCou.classList.add('coupon');
-            const containerDiv = document.createElement('span');
+            //const containerDiv = document.createElement('span');
 
             // Create the radio input element
             const radioInput = document.createElement('input');
@@ -466,10 +466,12 @@
             label.classList.add('form-check-label');
             label.setAttribute('for', 'oD');
             label.textContent = item.orderDiscountnName;
-            containerDiv.appendChild(label);
-
-            containerDiv.classList.add('couponS');
-            containerCou.appendChild(containerDiv);
+            
+            //containerDiv.appendChild(label);
+            //containerDiv.classList.add('couponS');
+            label.classList.add('couponS');
+            
+            containerCou.appendChild(label);
 
             // Add the container div to the discountArea
             discountArea.appendChild(containerCou);
