@@ -95,7 +95,7 @@
                                 {
                                     MenuItem item = Model.menuItems[i];
                                     <div class="col book-item" data-publication-date="@item.book.PublicationDate" data-price="@((int)Math.Round(item.bookDiscount.BookDiscountAmount * item.book.UnitPrice))">
-                                    <div>TOP @(i+1)</div>    
+                                    <div><img src="~/Image/crown_icon.png" height="25">TOP @(i+1)</div>    
                                     <div style="position:relative">
                                             <a href="~/Book/BookInformation/@item.book.BookId"><img src="~/Image/Book/@item.book.CoverPath" title="@item.book.BookTitle" height="150"></a>
                                         </div>
