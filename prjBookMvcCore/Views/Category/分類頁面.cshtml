@@ -52,11 +52,18 @@
             <li class="breadcrumb-item"><a class="linkaFormat" href="@Url.Action("分類頁面", new { id = 0 })">繁中</a></li>
             @if (Model.categoryId > 0)
             {
-                <li class="breadcrumb-item active" aria-current="page"><a class="linkaFormat" href="@Url.Action("分類頁面", new { id = Model.categoryId })">@Model.categories.FirstOrDefault(c => c.CategoryId == Model.categoryId)?.CategoryName</a></li>
+                <li class="breadcrumb-item" aria-current=""><a class="linkaFormat" href="@Url.Action("分類頁面", new { id = Model.categoryId })">@Model.categories.FirstOrDefault(c => c.CategoryId == Model.categoryId)?.CategoryName</a></li>
             }
-            @if (Model.subcategoryId > 0)
+            @if (Model.subcategoryId > 0 && !string.IsNullOrEmpty(Model.subCategories.FirstOrDefault(c => c.SubCategoryId == Model.subcategoryId)?.SubCategoryName))
             {
                 <li class="breadcrumb-item active" aria-current="page"><a class="linkaFormat" href="@Url.Action("分類頁面", new { subid = Model.subcategoryId })">@Model.subCategories.FirstOrDefault(c => c.SubCategoryId == Model.subcategoryId)?.SubCategoryName</a></li>
+                <script>
+                    // Add the 'show' class to the corresponding card-body element
+                    const cardBody = document.getElementById("card-@Model.subcategoryId");
+                    if (cardBody) {
+                        cardBody.classList.add("show");
+                    }
+                </script>
             }
         </ol>
     </nav>
@@ -88,12 +95,13 @@
                             <div class="collapse @(Model.categoryId == category.CategoryId ? "show" : "")" id="card-@category.CategoryId">
                                 @{
                                     var query = db.SubCategories.Where(c => c.CategoryId == category.CategoryId).Select(c => new { c.SubCategoryId, c.SubCategoryName }).ToList();
-                                    foreach (var subcategory in query)
+                                    @foreach (var subcategory in query)
                                     {
+                                        var subcategoryName = subcategory.SubCategoryName;
                                         var su = db.CategoryDetails.Where(s => s.SubCategory.SubCategoryId == subcategory.SubCategoryId).Select(s => new { s.Book }).ToList();
                                         int subcount = su.Count;
-                                        <div class="card card-body" onclick="changePath(@subcategory.SubCategoryId)">
-                                            <a asp-controller="Category" asp-action="分類頁面" asp-route-subid="@subcategory.SubCategoryId">@subcategory.SubCategoryName (@subcount)</a>
+                                        <div class="card card-body @(string.IsNullOrEmpty(subcategoryName) ? "d-none" : "")" onclick="changePath(@subcategory.SubCategoryId)">
+                                            <a asp-controller="Category" asp-action="分類頁面" asp-route-subid="@subcategory.SubCategoryId">@subcategoryName (@subcount)</a>
                                         </div>
                                     }
                                 }
@@ -226,7 +234,7 @@
         });
     }
 
-    //分類欄位click事件
+    // 分類欄位 click 事件
     function changePath(inputid) {
         const path = '@Url.Action("分類頁面", new { id = "" })' + '/' + inputid;
         window.location.href = path;
@@ -244,6 +252,26 @@
             if (body.id !== "card-" + inputid) {
                 body.classList.remove("show");
             }
+        }
+
+        // Modify the breadcrumb items
+        const breadcrumbItems = document.getElementsByClassName("breadcrumb-item");
+        for (let i = 0; i < breadcrumbItems.length; i++) {
+            const item = breadcrumbItems[i];
+            item.classList.remove("active");
+            item.removeAttribute("aria-current");
+        }
+
+        const selectedCategoryItem = document.getElementById("category-" + inputid);
+        if (selectedCategoryItem) {
+            selectedCategoryItem.classList.add("active");
+            selectedCategoryItem.setAttribute("aria-current", "page");
+        }
+
+        const selectedSubcategoryItem = document.getElementById("subcategory-" + inputid);
+        if (selectedSubcategoryItem) {
+            selectedSubcategoryItem.classList.remove("active");
+            selectedSubcategoryItem.removeAttribute("aria-current");
         }
     }
 </script>
