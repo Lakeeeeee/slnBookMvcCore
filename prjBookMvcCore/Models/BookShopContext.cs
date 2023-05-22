@@ -33,6 +33,7 @@ namespace prjBookMvcCore.Models
         public virtual DbSet<CustomerService> CustomerServices { get; set; } = null!;
         public virtual DbSet<Discount> Discounts { get; set; } = null!;
         public virtual DbSet<DiscountDetail> DiscountDetails { get; set; } = null!;
+        public virtual DbSet<DiscountType> DiscountTypes { get; set; } = null!;
         public virtual DbSet<Language> Languages { get; set; } = null!;
         public virtual DbSet<Member> Members { get; set; } = null!;
         public virtual DbSet<MemberLevel> MemberLevels { get; set; } = null!;
@@ -63,7 +64,7 @@ namespace prjBookMvcCore.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=BookShop;Integrated Security=True");
             }
         }
@@ -390,6 +391,8 @@ namespace prjBookMvcCore.Models
 
                 entity.Property(e => e.DiscountName).HasMaxLength(50);
 
+                entity.Property(e => e.DiscountTypeId).HasColumnName("DiscountTypeID");
+
                 entity.Property(e => e.EndDate).HasColumnType("datetime");
 
                 entity.Property(e => e.IsActive).HasComment("1");
@@ -408,6 +411,15 @@ namespace prjBookMvcCore.Models
                 entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
 
                 entity.Property(e => e.DiscountId).HasColumnName("DiscountID");
+            });
+
+            modelBuilder.Entity<DiscountType>(entity =>
+            {
+                entity.ToTable("DiscountType");
+
+                entity.Property(e => e.DiscountTypeId).HasColumnName("DiscountTypeID");
+
+                entity.Property(e => e.DiscountTypeName).HasMaxLength(20);
             });
 
             modelBuilder.Entity<Language>(entity =>
@@ -471,6 +483,13 @@ namespace prjBookMvcCore.Models
                 entity.Property(e => e.LevelDiscount).HasColumnType("decimal(10, 2)");
 
                 entity.Property(e => e.LevelName).HasMaxLength(10);
+
+                entity.Property(e => e.OrderDiscountId).HasColumnName("OrderDiscountID");
+
+                entity.HasOne(d => d.OrderDiscount)
+                    .WithMany(p => p.MemberLevels)
+                    .HasForeignKey(d => d.OrderDiscountId)
+                    .HasConstraintName("FK_MemberLevel_OrderDiscount");
             });
 
             modelBuilder.Entity<Message>(entity =>
@@ -552,15 +571,21 @@ namespace prjBookMvcCore.Models
                     .ValueGeneratedNever()
                     .HasColumnName("OrderID");
 
-                entity.Property(e => e.DiscountAmount).HasColumnType("money");
-
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
                 entity.Property(e => e.OrderDate).HasColumnType("date");
 
+                entity.Property(e => e.OrderDiscountId).HasColumnName("OrderDiscountID");
+
                 entity.Property(e => e.PayStatusId).HasColumnName("PayStatusID");
 
                 entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
+
+                entity.Property(e => e.PointAmount).HasColumnType("money");
+
+                entity.Property(e => e.ReciverName).HasMaxLength(50);
+
+                entity.Property(e => e.ReciverPhone).HasMaxLength(10);
 
                 entity.Property(e => e.ShipAddr).HasMaxLength(50);
 
@@ -575,6 +600,11 @@ namespace prjBookMvcCore.Models
                     .HasForeignKey(d => d.MemberId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_Member1");
+
+                entity.HasOne(d => d.OrderDiscount)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.OrderDiscountId)
+                    .HasConstraintName("FK_Order_OrderDiscount");
 
                 entity.HasOne(d => d.PayStatus)
                     .WithMany(p => p.Orders)
@@ -632,13 +662,21 @@ namespace prjBookMvcCore.Models
 
                 entity.Property(e => e.OrderDiscountId).HasColumnName("OrderDiscountID");
 
-                entity.Property(e => e.OrderDiscountAmount).HasColumnType("numeric(3, 0)");
+                entity.Property(e => e.DiscountTypeId).HasColumnName("DiscountTypeID");
+
+                entity.Property(e => e.OrderDiscountAmount).HasColumnType("decimal(10, 2)");
 
                 entity.Property(e => e.OrderDiscountCode).HasMaxLength(15);
 
                 entity.Property(e => e.OrderDiscountDescprtion).HasMaxLength(50);
 
                 entity.Property(e => e.OrderDiscountnName).HasMaxLength(50);
+
+                entity.HasOne(d => d.DiscountType)
+                    .WithMany(p => p.OrderDiscounts)
+                    .HasForeignKey(d => d.DiscountTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrderDiscount_DiscountType");
             });
 
             modelBuilder.Entity<OrderDiscountDetail>(entity =>

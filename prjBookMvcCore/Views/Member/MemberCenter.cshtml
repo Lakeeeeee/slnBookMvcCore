@@ -8,6 +8,7 @@
     var nextAmount = user._db.MemberLevels.Where(x => x.LevelId == (Model.LevelId + 1)).Select(x => x.MinCost).FirstOrDefault();
     var ex = nextAmount-Model.CostAmount;
     var q = user._db.MessageMemberDetails.Where(x => x.MemberId == user.UserId && x.ReadStatu == 0).Count();
+    var q1 = user._db.OrderDiscountDetails.Where(x => x.MemberId == user.UserId && x.IsOrderDiscountUse =="N").Count();
 }
 
 <style>
@@ -87,7 +88,7 @@
                             <a class="card-body" style="display:block;width:100%;" href="~/Member/myCoupons">
                                 <p class="card-text">
                                     您的Coupon尚有：
-                                </p><span class="display-6" id="coupons">0  </span>張
+                                </p><span class="display-6" id="coupons">@q1  </span>張
                             </a>
                         </div>
                     </div>
