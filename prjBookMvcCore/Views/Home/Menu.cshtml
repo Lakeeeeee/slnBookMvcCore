@@ -210,8 +210,8 @@
                                                         作者：
                                                         @if (item.author != null)
                                                         {
-                                                            int aa = item.author.AuthorId;
-                                                            <a asp-controller="Book" asp-action="authorInformation" asp-route-id="@aa">@item.author.AuthorName</a>
+                                                            int aaaaa = item.author.AuthorId;
+                                                            <a asp-controller="Book" asp-action="authorInformation" asp-route-id="@aaaaa">@item.author.AuthorName</a>
                                                         }
                                                     </li>
                                                     <li class="Price">原    價：@((int)Math.Round(item.book.UnitPrice))元</li>
@@ -251,7 +251,8 @@
                                                                 作者：
                                                                 @if (item.author != null)
                                                                 {
-                                                                    <a href="~/Book/authorInformation/@item.author.AuthorId">@item.author.AuthorName</a>
+                                                                    int aaaaa = item.author.AuthorId;
+                                                                    <a asp-controller="Book" asp-action="authorInformation" asp-route-id="@aaaaa">@item.author.AuthorName</a>
                                                                 }
                                                             </li>
                                                             <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))</span>元</li>

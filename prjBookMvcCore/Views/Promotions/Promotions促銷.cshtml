@@ -64,7 +64,7 @@
                         <a class="text-decoration-none" href="~/Promotions/Promotions活動總覽圖" style="color:black">活動</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a class="text-decoration-none" href="~/Promotions/Promotions促銷活動"style="color:black">促銷活動</a>
+                        <a class="text-decoration-none" href="~/Promotions/Promotions促銷活動" style="color:black">促銷活動</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page" style="color:gray">促銷 @g.BookDiscountName</li>
                 </ol>
@@ -107,7 +107,6 @@
                     </div>
                 </div>
             </div>
-
             @* Body *@
             <div class="col">
                 <div class="row">
@@ -122,7 +121,6 @@
                                 <a id="@item.book.BookId" href="~/Book/BookInformation/@item.book.BookId"> <img src="~/Image//Book/@item.book.CoverPath" class="d-block w-100 img-with-border" alt="..." title="@title中" /></a>
                                 <ul style="list-style:none; margin:0; padding:0;" class="text-start">
                                     <li><div class="clamp two-lines mt-3"><a id="@item.book.BookId" href="~/Book/BookInformation/@item.book.BookId" title="@title中">@title中</a></div></li>
-
                                     <li>原價：<del style="color:red;font-style:oblique">@price原價</del></li>
                                     <li>優惠價：@item.bookDiscount.BookDiscountName @price優惠價 元</li>
                                     <li>優惠截止日：@優惠截止日</li>
@@ -133,15 +131,12 @@
                                     </svg>
                                     加入購物車
                                 </button>
-
                             </div>
                         }
                     }
                 </div>
-
                 <hr />
             </div>
-
             <!-- 分頁欄頁面控制 -->
             <div class="row">
                 <div class="col">
@@ -177,7 +172,6 @@
             </div>
         </div>
     </div>
-
 </body>
 </html>
 <script>
