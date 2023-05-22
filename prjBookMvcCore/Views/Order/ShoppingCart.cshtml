@@ -46,6 +46,27 @@
         outline: none;
         width: auto;
     }
+.couponS {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  width: 200px;
+  background-image: url('/Image/coupon.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+    .coupon {
+        display: flex;
+        align-items: center;
+    }
+
+        .coupon input {
+            margin-right: 5px;
+        }
+
+
 </style>
 <script>
     function addToList() {
@@ -427,7 +448,9 @@
         discountArea.innerHTML = "";
         datas.forEach(item => {
             // Create the container div
-            const containerDiv = document.createElement('div');
+            const containerCou = document.createElement('div');
+            containerCou.classList.add('coupon');
+            const containerDiv = document.createElement('span');
 
             // Create the radio input element
             const radioInput = document.createElement('input');
@@ -436,7 +459,7 @@
             radioInput.setAttribute('id', `oD-${item.orderDiscountId}`);
             radioInput.setAttribute('value', item.orderDiscountId);
             radioInput.classList.add('form-check-input');
-            containerDiv.appendChild(radioInput);
+            containerCou.appendChild(radioInput);
 
             // Create the label element
             const label = document.createElement('label');
@@ -445,16 +468,11 @@
             label.textContent = item.orderDiscountnName;
             containerDiv.appendChild(label);
 
-            containerDiv.classList.add('col-2'); 
-            containerDiv.style.display = "flex"; containerDiv.style.justifyContent = "center";  containerDiv.style.alignItems = "center";
-            containerDiv.style.height = "50px"; containerDiv.style.width = "200px";
-            containerDiv.style.backgroundImage = " url('/Image/coupon.png')";
-            containerDiv.style.backgroundSize = "100% 100%";
-            containerDiv.style.backgroundRepeat = "no-repeat"
-
+            containerDiv.classList.add('couponS');
+            containerCou.appendChild(containerDiv);
 
             // Add the container div to the discountArea
-            discountArea.appendChild(containerDiv);
+            discountArea.appendChild(containerCou);
         });
     }
 </script>
