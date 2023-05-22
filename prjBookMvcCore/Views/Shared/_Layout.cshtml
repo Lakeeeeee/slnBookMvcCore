@@ -160,9 +160,9 @@
                                 <li>
                                     <div class="m-1 p-1">
                                         <span class="mx-2">售價</span>
-                                        <input style="margin-left:2em; border-right: #C4C4C4 2px solid;width:100px" placeholder="金額" type="search" maxlength="20" value="" autocomplete="off" />
+                                        <input id="frontprice" style="margin-left:2em; border-right: #C4C4C4 2px solid;width:100px" placeholder="金額" type="search" maxlength="20" value="" autocomplete="off" />
                                         <span class="mx-2">至</span>
-                                        <input style="border-right: #C4C4C4 2px solid;width:100px" placeholder="金額" type="search" maxlength="20" value="" autocomplete="off" />
+                                        <input id="backprice" style="border-right: #C4C4C4 2px solid;width:100px" placeholder="金額" type="search" maxlength="20" value="" autocomplete="off" />
                                         <span class="mx-2">之間</span>
                                     </div>
                                 </li>
@@ -210,11 +210,15 @@
                         <script>
                             $(document).ready(function () {
                                 $('#search_link').click(function (e) {
-                                    e.preventDefault(); // 防止點擊連結後直接跳轉
-                                    var keyword = $('#search_input').val(); // 獲取搜尋關鍵字的值
-                                    var url = '@Url.Action("searchList", "Home")' + '?txtKeyword=' + encodeURIComponent(keyword);
-                                    // 使用 Url.Action 方法動態生成 ActionLink 的 URL，並將關鍵字作為參數傳遞
-                                    window.location.href = url; // 跳轉到生成的 URL
+                                    e.preventDefault(); // 防止点击链接后直接跳转
+                                    var keyword = $('#search_input').val(); // 获取搜索关键字的值
+
+                                    var frontPrice = $('#frontprice').val(); // 设置价格范围的起始值
+                                    var backPrice = $('#backprice').val(); // 设置价格范围的结束值
+
+                                    var url = '@Url.Action("searchList", "Home")' + '?txtKeyword=' + encodeURIComponent(keyword) + '&frontPrice=' + frontPrice + '&backPrice=' + backPrice;
+                                    // 使用 Url.Action 方法动态生成 ActionLink 的 URL，并将关键字和价格范围作为参数传递
+                                    window.location.href = url; // 跳转到生成的 URL
                                 });
                             });
                         </script>
