@@ -93,7 +93,7 @@
                             @{
                                 for (int i = 0; i < 6; i++)
                                 {
-                                    MenuItem item = Model.orderDetails[i];
+                                    MenuItem item = Model.menuItems[i];
                                     <div class="col book-item" data-publication-date="@item.book.PublicationDate" data-price="@((int)Math.Round(item.bookDiscount.BookDiscountAmount * item.book.UnitPrice))">
                                     <div>TOP @(i+1)</div>    
                                     <div style="position:relative">
