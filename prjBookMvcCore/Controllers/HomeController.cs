@@ -41,7 +41,6 @@ namespace prjBookMvcCore.Controllers
             return View();
         }
 
-
         #region(系統預設的東西, 先留著, 之後不需要再刪掉)
         private readonly ILogger<HomeController> _logger;
 
@@ -82,11 +81,13 @@ namespace prjBookMvcCore.Controllers
                             定價 = b.UnitPrice,
                             路徑 = b.CoverPath,
                             作者 = b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault(),
+                            作者ID = b.AuthorDetails.Select(x => x.Author.AuthorId).FirstOrDefault(),
                             分類 = b.CategoryDetails.Select(x => x.SubCategory.Category.CategoryName).FirstOrDefault(),
                             分類ID = b.CategoryDetails.Select(x => x.SubCategory.CategoryId).FirstOrDefault(),
                             子分類 = b.CategoryDetails.Select(x => x.SubCategory.SubCategoryName).FirstOrDefault(),
                             子分類ID = b.CategoryDetails.Select(x => x.SubCategory.SubCategoryId).FirstOrDefault(),
                             折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                            銷售數量 = b.OrderDetails.Select(x => x.Quantity).FirstOrDefault(),
                             出版日期 = b.PublicationDate,
                         };
             List<MenuItem> menuItems = new List<MenuItem>();
@@ -101,31 +102,52 @@ namespace prjBookMvcCore.Controllers
                     PublicationDate = item.出版日期,
                 };
                 BookDiscount bd = new BookDiscount { BookDiscountAmount = item.折扣 };
-                Author a = new Author { AuthorName = item.作者 };
+                Author a = new Author { AuthorName = item.作者,AuthorId=item.作者ID };
                 Category c = new Category { CategoryName = item.分類, CategoryId = item.分類ID };
                 SubCategory sc = new SubCategory { SubCategoryName = item.子分類, SubCategoryId = item.子分類ID };
+                OrderDetail od = new OrderDetail { Quantity = item.銷售數量 };
                 MenuItem tmp = new MenuItem();
                 tmp.book = b;
                 tmp.bookDiscount = bd;
                 tmp.category = c;
                 tmp.subCategory = sc;
                 tmp.author = a;
+                tmp.orderDetail = od;
                 menuItems.Add(tmp);
             }
 
             List<Artical> articals = getArticals();
             List<Category> categories = getCategories();
             List<SubCategory> subCategories = getSubCategories();
-
+            List<OrderDetail> orderDetails = getQuantities();
             MenuInformation menuInformation = new MenuInformation
             {
                 articals = articals,
                 categories = categories,
                 subCategories = subCategories,
                 menuItems = menuItems,
+                orderDetails=orderDetails,
             };
             return View(menuInformation);
         }
+
+        private List<OrderDetail> getQuantities()
+        {
+            using (var db = new BookShopContext())
+            {
+                var query = from od in db.OrderDetails
+
+                            orderby od.Quantity descending
+                            select od;
+                List<OrderDetail> orderDetails = new List<OrderDetail>();
+                foreach (var od in query)
+                {
+                    orderDetails.Add(od);
+                }
+                return orderDetails;
+            }
+        }
+
         public List<Artical> getArticals()
         {
             using (var db = new BookShopContext())

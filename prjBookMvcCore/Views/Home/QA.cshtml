@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "View";
+    ViewData["Title"] = "Q&A";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -17,9 +17,18 @@
         border: none
     }
 
+    
 </style>
 
 <div class="container-fluid">
+    <div>
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="~/Home/Home">回首頁</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
 
     <div class="row">
         <div class="card" style="height:100%">
@@ -41,40 +50,99 @@
         </div>
         <div class="collapse" id="card2">
             <div class="card card-body">
-                <p><a href="~/Promotions/Promotions會員" title="會員等級優惠及升等方式">升級方法</a>
-                <p>1.統計期間：前年度的8/1至當年度的7/31止
-                <p>2.年度結算日：每年8/25
-                <p>
-                    3.生效日：9/1
-                    4.等級有效期間：當年度9/1至次年8/31止"
-                </p>
+                <p style="font-weight:bold">升級方法</p>
+                <ol>
+                    <li class="mt-2">統計期間：前年度的8/1至當年度的7/31止</li>
+                    <li class="mt-2">年度結算日：每年8/25</li>
+                    <li class="mt-2">生效日：9/1</li>
+                    <li class="mt-2">等級有效期間：當年度9/1至次年8/31止</li>
+                </ol>
                 <p>
                     會員優惠
-                    新皮
-                    綠皮	滿千享95折
-                    白皮	滿千享95折	滿千享1%回饋金
-                    金皮	滿千享9折	滿千享5%回饋金	訂單滿$399送$20 E-Coupon
-                    鑽皮	滿千享85折	滿千享5%回饋金	訂單滿$399送$40 E-Coupon
+                    <table class="table table-sm ">
+                        <thead>
+                            <tr>
+                            <th>會員等級</th>
+                            <th>折扣優惠</th>
+                            <th>回饋金優惠</th>
+                            <th>Coupon優惠</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>新皮</td>
+                            </tr>
+                            <tr>
+                                <td>綠皮</td>
+                                <td>滿千享95折</td>
+                            </tr>
+                            <tr>
+                                <td>白皮</td>
+                                <td>滿千享95折</td>
+                                <td>滿千享1%回饋金</td>
+                            </tr>
+                            <tr>
+                                <td>金皮</td>
+                                <td>滿千享9折</td>
+                                <td>滿千享5%回饋金</td>
+                                <td>訂單滿$399送$20 E-Coupon</td>
+                            </tr>
+                            <tr>
+                                <td>鑽皮</td>
+                                <td>滿千享85折</td>
+                                <td>滿千享5%回饋金</td>
+                                <td>訂單滿$399送$40 E-Coupon</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </p>
             </div>
-
         </div>
         </div>
-
         <div class="row">
         <div class="card" style="height:100%">
-            <a class="card-body" style="display:block;width:100%;" data-bs-toggle="collapse" href="#card2" role="button" aria-expanded="false" aria-controls="card2">
+            <a class="card-body" style="display:block;width:100%;" data-bs-toggle="collapse" href="#card3" role="button" aria-expanded="false" aria-controls="card2">
                 <p class="card-text">退換貨原則 </p>
             </a>
         </div>
+        <div class="collapse" id="card3">
+            <div class="card card-body">
+                <p style="font-weight:bold">退換貨原則</p>
+                <p>會員購買商品有10天猶豫期，如欲辦理退換貨，請在取得該商品當日起算10日內（含例假日）提出申請。</p>
+                <ol>
+                    <li>
+                        下列商品或服務，不提供10天猶豫期退貨：
+                        <ol>
+                            <li class="mt-2">依消費者要求所為之客製化給付。</li>
+                            <li class="mt-2">報紙、期刊或雜誌。</li>
+                            <li class="mt-2">經消費者拆封之影音商品或電腦軟體。</li>
+                            <li class="mt-2">電子書、電子雜誌。</li>
+                        </ol>
+                    </li>
+                    <li class="mt-4">
+                        提醒您，退換貨注意事項
+                        <ol>
+                            <li class="mt-2">辦理退換貨時，請保持商品全新狀態與完整包裝(商品本身、贈品、贈票、附件、內外包裝、保證書、隨貨文件等)一併寄回，若退回商品無法回復原狀者，將影響退換貨權利之行使或須負擔毀壞之費用。</li>
+                            <li class="mt-2">倘有運送過程所造成之瑕疵品，請提供包材及瑕疵處之清晰照片，以利退換貨。</li>
+                            <li class="mt-2">已超過10天猶豫期卻將商品寄回退貨，須請自付運費郵資取回商品。</li>
+                            <li class="mt-2">會員訂購商品後若大量退換貨，由於已造成作業上之困擾，將視情況對該會員採取限制交易方式或拒絕交易或永久取消會員資格辦理。</li>
+                        </ol>
+                    </li>
+                </ol>
+            </div>
+        </div>
 
+        </div>
+        <div class="row">
         <div class="card" style="height:100%">
-            <a class="card-body" style="display:block;width:100%;" data-bs-toggle="collapse" href="#card3" role="button" aria-expanded="false" aria-controls="card3">
+            <a class="card-body" style="display:block;width:100%;" data-bs-toggle="collapse" href="#card4" role="button" aria-expanded="false" aria-controls="card3">
                 <p class="card-text">聯絡客服 </p>
             </a>
         </div>
-</div>
-
-</div>
-</div>
+        <div class="collapse" id="card4">
+            <div class="card card-body">
+                發送客訴
+            </div>
+        </div>
+        </div>
 </div>
