@@ -40,7 +40,7 @@ namespace prjBookMvcCore.Controllers
             {
                 query = query.Where(sc => sc.分類ID == categoryID);
             }
-            else if (subcategoryID != 0)
+           if (subcategoryID != 0)
             {
                 query = query.Where(sc => sc.子分類ID == subcategoryID);
             }
