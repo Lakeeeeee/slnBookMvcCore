@@ -583,6 +583,10 @@ namespace prjBookMvcCore.Models
 
                 entity.Property(e => e.PointAmount).HasColumnType("money");
 
+                entity.Property(e => e.ReciverName).HasMaxLength(50);
+
+                entity.Property(e => e.ReciverPhone).HasMaxLength(10);
+
                 entity.Property(e => e.ShipAddr).HasMaxLength(50);
 
                 entity.Property(e => e.ShipmentId).HasColumnName("ShipmentID");

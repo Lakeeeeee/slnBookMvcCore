@@ -9,18 +9,35 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - 讀本｜Menu</title>
-
     <style>
         a:link, a:visited {
             text-decoration: none;
             color: inherit;
         }
+
         .zero {
             margin: 0;
             padding: 0;
         }
+
         .menu ul li { /*li水平顯示*/
             display: inline;
+        }
+
+        .bookCaption {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .authorCaption {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     </style>
 </head>
@@ -40,7 +57,7 @@
         </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                    <a href="~/Promotions/Promotions註冊會員禮"><img src="~/Image/Promotions/註冊會員.png" class="d-block w-100" alt="page1" height="300"></a>
+                <a href="~/Promotions/Promotions註冊會員禮"><img src="~/Image/Promotions/註冊會員.png" class="d-block w-100" alt="page1" height="300"></a>
             </div>
             <div class="carousel-item">
                 <a href="~/Promotions/Promotions會員"><img src="~/Image/Promotions/會員等級優惠及升等方式.png" class="d-block w-100" alt="page2" height="300"></a>
@@ -65,211 +82,91 @@
             <div class="col align-content-start" style="display: flex">
                 <h3>暢銷排行榜</h3>
             </div>
-            <div class="col justify-content-end" style="display: flex; padding:5px">
-                <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Home/Home">看更多</a>
-            </div>
         </div>
+        @*輪播圖*@
         <div class="row">
             <div id="carouselExampleTopSell" class="carousel slide">
                 <div class="carousel-inner">
-                    @* 暢銷排行榜輪播圖 *@
-                    @*輪播書本第一頁*@ <div class="carousel-item active">
+                    <div class="carousel-item active">
+                        @*輪播書本第一頁*@
                         <div class="row">
-                            @*第一組*@<div class="col">
-                                @*圖片*@<div style="position:relative">
-                                    <a><img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." /></a>
-                                </div>
-                                <div class="caption bookCaption">
-                                    <ul style="list-style:none; margin:0; padding:0;">
-                                        <li class='prod_TitleMain'>
-                                            <a>
-                                                戰勝會考 國中必備英語2000字（編修版）
-                                            </a>
-                                        </li>
-                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
-                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            @*第二組*@  <div class="col">
-                                <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
-                                @*圖片*@<div style="position:relative">
-                                    <a>
-                                        <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
-                                    </a>
-                                </div>
-                                <div class="caption bookCaption">
-                                    <ul style="list-style:none; margin:0; padding:0;">
-                                        <li class='prod_TitleMain'>
-                                            <a>
-                                                戰勝會考 國中必備英語2000字（編修版）
-                                            </a>
-                                        </li>
-                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
-                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            @*第三組*@  <div class="col">
-                                <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
-                                @*圖片*@<div style="position:relative">
-                                    <a>
-                                        <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
-                                    </a>
-                                </div>
-                                <div class="caption bookCaption">
-                                    <ul style="list-style:none; margin:0; padding:0;">
-                                        <li class='prod_TitleMain'>
-                                            <a>
-                                                戰勝會考 國中必備英語2000字（編修版）
-                                            </a>
-                                        </li>
-                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
-                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            @*第四組*@  <div class="col">
-                                <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
-                                @*圖片*@<div style="position:relative">
-                                    <a>
-                                        <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
-                                    </a>
-                                </div>
-                                <div class="caption bookCaption">
-                                    <ul style="list-style:none; margin:0; padding:0;">
-                                        <li class='prod_TitleMain'>
-                                            <a>
-                                                戰勝會考 國中必備英語2000字（編修版）
-                                            </a>
-                                        </li>
-                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
-                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            @*第五組*@  <div class="col">
-                                <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
-                                @*圖片*@<div style="position:relative">
-                                    <a>
-                                        <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
-                                    </a>
-                                </div>
-                                <div class="caption bookCaption">
-                                    <ul style="list-style:none; margin:0; padding:0;">
-                                        <li class='prod_TitleMain'>
-                                            <a>
-                                                戰勝會考 國中必備英語2000字（編修版）
-                                            </a>
-                                        </li>
-                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
-                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
-                                    </ul>
-                                </div>
-                            </div>
+                            @{
+                                for (int i = 0; i < 6; i++)
+                                {
+                                    MenuItem item = Model.menuItems[i];
+                                    <div class="col book-item" data-publication-date="@item.book.PublicationDate" data-price="@((int)Math.Round(item.bookDiscount.BookDiscountAmount * item.book.UnitPrice))">
+                                    <div>@if(i<3){<img src="~/Image/crown_icon.png" height="30">}TOP @(i+1)</div>    
+                                    <div style="position:relative">
+                                            <a href="~/Book/BookInformation/@item.book.BookId"><img src="~/Image/Book/@item.book.CoverPath" title="@item.book.BookTitle" height="150"></a>
+                                        </div>
+                                        <div class="caption">
+                                            <ul style="list-style:none; margin:0; padding:0;">
+                                                <li> <a class="bookCaption two-lines" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle</a></li>
+                                                <li class="prod_author authorCaption">
+                                                    作者：
+                                                    @if (item.author != null)
+                                                    {
+                                                        int aaaaa = item.author.AuthorId;
+                                                        <a asp-controller="Book" asp-action="authorInformation" asp-route-id="@aaaaa">@item.author.AuthorName</a>
+                                                    }
+                                                </li>
+                                                <li class="Price">原    價：@((int)Math.Round(item.book.UnitPrice))元</li>
+                                                <li class="discPrice">
+                                                    優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
+                                                    <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                }
+                            }
                         </div>
                     </div>
-                    @*輪播書本第二頁*@<div class="carousel-item">
-                        <div class="row">
-                            @*第一組*@<div class="col">
-                                @*圖片*@<div style="position:relative">
-                                    <a><img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." /></a>
-                                </div>
-                                <div class="caption bookCaption">
-                                    <ul style="list-style:none; margin:0; padding:0;">
-                                        <li class='prod_TitleMain'>
-                                            <a>
-                                                戰勝會考 國中必備英語2000字（編修版）
-                                            </a>
-                                        </li>
-                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
-                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            @*第二組*@  <div class="col">
-                                <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
-                                @*圖片*@<div style="position:relative">
-                                    <a>
-                                        <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
-                                    </a>
-                                </div>
-                                <div class="caption bookCaption">
-                                    <ul style="list-style:none; margin:0; padding:0;">
-                                        <li class='prod_TitleMain'>
-                                            <a>
-                                                戰勝會考 國中必備英語2000字（編修版）
-                                            </a>
-                                        </li>
-                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
-                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            @*第三組*@  <div class="col">
-                                <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
-                                @*圖片*@<div style="position:relative">
-                                    <a>
-                                        <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
-                                    </a>
-                                </div>
-                                <div class="caption bookCaption">
-                                    <ul style="list-style:none; margin:0; padding:0;">
-                                        <li class='prod_TitleMain'>
-                                            <a>
-                                                戰勝會考 國中必備英語2000字（編修版）
-                                            </a>
-                                        </li>
-                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
-                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
-                                    </ul>
+                    @*輪播書本第二~四頁*@
+                    @{
+                        for (int p = 2; p <= 3; p++)
+                        {
+                            <div class="carousel-item">
+                                <div class="row">
+                                    @{
+                                        for (int i = (p - 1) * 6; i < p * 6; i++)
+                                        {
+                                            MenuItem item = Model.menuItems[i];
+                                            <div class="col book-item" data-publication-date="@item.book.PublicationDate" data-price="@((int)Math.Round(item.bookDiscount.BookDiscountAmount * item.book.UnitPrice))">
+                                                <div>TOP @(i+1) </div>
+                                                <div style="position:relative">
+                                                    <a href="~/Book/BookInformation/@item.book.BookId"><img src="~/Image/Book/@item.book.CoverPath" title="@item.book.BookTitle" height="150"></a>
+                                                </div>
+                                                <div class="caption">
+                                                    <ul style="list-style:none; margin:0; padding:0;">
+                                                        <li> <a class="bookCaption two-lines" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle</a></li>
+                                                        <li class='prod_author'>
+                                                            作者：
+                                                            @if (item.author != null)
+                                                            {
+                                                                int aaaaa = item.author.AuthorId;
+                                                                <a asp-controller="Book" asp-action="authorInformation" asp-route-id="@aaaaa">@item.author.AuthorName</a>
+                                                            }
+                                                        </li>
+                                                        <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))</span>元</li>
+                                                        <li class="discPrice">
+                                                            優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
+                                                            <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
                                 </div>
                             </div>
-                            @*第四組*@  <div class="col">
-                                <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
-                                @*圖片*@<div style="position:relative">
-                                    <a>
-                                        <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
-                                    </a>
-                                </div>
-                                <div class="caption bookCaption">
-                                    <ul style="list-style:none; margin:0; padding:0;">
-                                        <li class='prod_TitleMain'>
-                                            <a>
-                                                戰勝會考 國中必備英語2000字（編修版）
-                                            </a>
-                                        </li>
-                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
-                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            @*第五組*@  <div class="col">
-                                <!--<a href="/sing.html?pid=11100988047" onclick="historyStat(this, event, 3)">-->
-                                @*圖片*@<div style="position:relative">
-                                    <a>
-                                        <img src="~/Image/demo-pic.jpg" class="d-block w-100" alt="..." />
-                                    </a>
-                                </div>
-                                <div class="caption bookCaption">
-                                    <ul style="list-style:none; margin:0; padding:0;">
-                                        <li class='prod_TitleMain'>
-                                            <a>
-                                                戰勝會考 國中必備英語2000字（編修版）
-                                            </a>
-                                        </li>
-                                        <li class='prod_author'>作者：<a href='/rwd_searchResult.html?keyword%5B%5D=LiveABC編輯群&keyType%5B%5D=2'>LiveABC編輯群</a></li>
-                                        <li class="discPrice">優惠價：<span>79</span>折<span>284</span>元</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        }
+                    }
                     @*輪播圖切換按鈕*@ <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleTopSell" data-bs-slide="prev" border=5>
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Previous</span>
                     </button>
-                    @*輪播圖切換按鈕*@<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleTopSell" data-bs-slide="next" border=5>
+                    @*輪播圖切換按鈕*@<button class="carousel-control-next " type="button" data-bs-target="#carouselExampleTopSell" data-bs-slide="next" border=5>
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Next</span>
                     </button>
@@ -290,7 +187,7 @@
                         @{
                             foreach (var g in Model.articals.Take(8))
                             {
-                                <li class="list-group-item"><span><a href="~/Promotions/Promotions活動文章Detail/@g.ArticalId">@g.ArticalTitle</a></span></li>
+                                    <li class="list-group-item"><span><a href="~/Promotions/Promotions活動文章Detail/@g.ArticalId">@g.ArticalTitle</a></span></li>
                             }
                         }
                     </ul>
@@ -299,19 +196,17 @@
                 <div class="card">
                     @* 中文書分類 *@
                     <div class="card-header">
-                        中文書
+                        <a asp-controller="Category" asp-action="分類頁面" asp-route-id="0">繁中</a>
                     </div>
-                    <ul class="list-group list-group-flush">
-                        @{
-                            @foreach (var item in Model.categories)
+                    @foreach (var category in Model.categories)
+                        {
+                            @if (category.CategoryId > 14)
                             {
-                                @if (item.CategoryId < 1 || item.CategoryId > 14)
-                                {
-                                    <li class="list-group-item"><span><a href="~/Category/@item.CategoryId">@item.CategoryName</a></span></li>
-                                }
+                                <div class="row card-body border-1">
+                                        <a asp-controller="Category" asp-action="分類頁面" asp-route-id="@category.CategoryId">@category.CategoryName</a>
+                                </div>
                             }
-                            }
-                    </ul>
+                        }
                 </div>
             </div>
             @* Body *@

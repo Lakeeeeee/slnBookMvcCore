@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<prjBookMvcCore.Models.Artical>
-
 @{
     ViewData["Title"] = "Promotions活動總覽圖";
 }
@@ -45,8 +44,8 @@
             {
                 string path = item.ArticalTitle + ".jpg";
                 <a role="button" class="btn btn-outline-secondary " href="~/Promotions/Promotions活動文章Detail/@item.ArticalId" style="border-color:white ;padding:30px 10px ;margin:10px;border-radius:10px;box-shadow: 0px 2px 4px rgba(	128, 128, 128, 0.5);">
-                        <img src="~/Image/ArticalPicture/@path" height="125" width="330" title="@item.ArticalTitle" />
-                    </a>
+                    <img src="~/Image/ArticalPicture/@path" height="125" width="330" title="@item.ArticalTitle" />
+                </a>
             }
             <a role="button" class="btn btn-outline-secondary " href="~/Promotions/Promotions活動已結束" style="border-color:white ;padding:30px 10px ;margin:10px;border-radius:10px;box-shadow: 0px 2px 4px rgba(	128, 128, 128, 0.5);">
                 <img src="~/Image/Promotions/Ex.png" height="125" width="330" title="活動" />

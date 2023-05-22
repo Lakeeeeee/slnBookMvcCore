@@ -289,7 +289,7 @@ namespace prjBookMvcCore.Controllers
                     where x.MessageMemberDetailId == id
                     select new
                     {
-                         time = x.UpdateTime.Value.ToShortDateString(),
+                         time = x.UpdateTime!.Value.ToShortDateString(),
                          read_a = (x.ReadStatu==1)?"已讀":"未讀",
                          content_a = y.MessageContent,
                          type_a = z.MessageTypeName
@@ -346,26 +346,22 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult cancleAuthor(int id) //取消關注的作者方法
         {
-            bool isSuccesse = false;
             var tool = _bookShopContext.CollectedAuthors.Where(x => x.MemberId == _userInforService.UserId && x.AuthorId == id).FirstOrDefault();
             if(tool != null)
             {
                 _bookShopContext.CollectedAuthors.Remove(tool);
                 _bookShopContext.SaveChanges();
-                isSuccesse = true;
             }
             return RedirectToAction("myCollect");
         }
         [Authorize]
         public IActionResult canclePublisher(int id) //取消關注的作者方法
         {
-            bool isSuccesse = false;
             var tool = _bookShopContext.CollectedPublishers.Where(x => x.MemberId == _userInforService.UserId && x.PublisherId == id).FirstOrDefault();
             if(tool != null)
             {
                 _bookShopContext.CollectedPublishers.Remove(tool);
                 _bookShopContext.SaveChanges();
-                isSuccesse = true;
             }
             return RedirectToAction("myCollect");
         }

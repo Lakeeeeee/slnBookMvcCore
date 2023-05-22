@@ -1,0 +1,65 @@
+﻿@inject UserInforService _userInforService
+@{
+    ViewData["Title"] = "Promotions領取月優惠";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    
+</head>
+<body>
+    <h1>領取 @ViewBag.month 月滿額折扣</h1>
+   @*
+    12	2	520折扣	滿520扣99
+    13	2	666折扣	滿666扣66
+    14	2	滿額折扣	滿2499扣299
+    15	2	滿額折扣	滿1699扣199
+    16	2	滿額折扣	滿1299扣139
+    17	2	滿額折扣	滿888扣88
+
+       每周三：
+       每周六日：
+       月中：
+   *@
+    @{
+        var day = DateTime.Now.DayOfYear;
+    }
+</body>
+</html>
+<script>
+    let isLogin = false;
+    window.onload = () => {
+        if (@_userInforService.UserId !== 0) {
+            isLogin = true;
+        };
+        console.log(isLogin);
+    };
+
+    function loginCheck() {
+        if (isLogin === false) {
+            alert('尚未登入');
+            if (confirm('前往登入')) {
+                window.location.href = "../../Member/Login";
+            } else {
+            }
+            return false;
+        }
+        return true;
+    };
+
+    function takeCoupon(memberID, discountID, date) {
+        if (loginCheck()) {
+            let url = '@Url.Action("Promotions領取特定日優惠","Promotions")?memberID=' + memberID + '&discountID=' + discountID + '&date=' + date;
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (result) {
+                    let isSuccess = result;
+                    if (isSuccess === "false") { alert('已領取'); }
+                    else { alert('領取成功'); }
+                },
+            });
+        }
+    };
+</script>
