@@ -210,7 +210,8 @@
                                                         作者：
                                                         @if (item.author != null)
                                                         {
-                                                            <a asp-controller="Book" asp-action="authorInformation" asp-route-id="@item.author.AuthorId">@item.author.AuthorName</a>
+                                                            int aa = item.author.AuthorId;
+                                                            <a asp-controller="Book" asp-action="authorInformation" asp-route-id="@aa">@item.author.AuthorName</a>
                                                         }
                                                     </li>
                                                     <li class="Price">原    價：@((int)Math.Round(item.book.UnitPrice))元</li>
