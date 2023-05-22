@@ -58,5 +58,27 @@ namespace prjBookMvcCore.Models
             };
             content.Add(MemberMessage); content.SaveChanges();
         }
+        
+        //TODO：有訂電子報的會員，定時發送訊息
+        public void write本月優惠Letter(Member receiver, BookShopContext content)
+        {
+            Message Letter = new Message()
+            {
+                MessageTypeId = 2,
+                MessageTitle = $"本月優惠",
+                MessageContent =
+                $"<p>Hi! {receiver.MemberName}!</p>" +
+                $"<p>本月優惠活動開跑，<a href=\"../../Promotions/Promotions領取月優惠\">快來領取使用吧!!</a>",
+            };
+            content.Add(Letter); content.SaveChanges();
+            MessageMemberDetail MemberMessage = new MessageMemberDetail()
+            {
+                MessageId = Letter.MessageId,
+                MemberId = receiver.MemberId,
+                UpdateTime = DateTime.Now,
+                ReadStatu = 0
+            };
+            content.Add(MemberMessage); content.SaveChanges();
+        }
     }
 }

@@ -44,12 +44,13 @@
     </style>
 </head>
 <body>
-    <div class="fontsize wrapper" style="height:450px; background-image:url('/image/banner.jpg'); background-repeat: no-repeat; background-size: cover;">
+    <div class="fontsize wrapper" style="height:150px; background-image:url('/image/bar.png'); background-repeat: no-repeat; background-size:cover;background-position:center; position:sticky;top:0; z-index: 9999;">
         @*導覽開始*@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm  box-shadow mb-3 ">
             <div class="container">
                 @*LOGO開始*@
                 <div class="align-items-start" style="font-weight:900">
+                    <a href ="~/Home/Home"><img src="~/Image/讀本logo.png" style="height:25pt" /></a>
                     @Html.ActionLink("讀本", "Home", "Home", new { area = "" }, new { @class = "fontsize text-black navbar-brand" })  @*須換圖*@
                 </div>
                 @*登入選項開始*@
@@ -58,13 +59,13 @@
                         @{
                             if (_userInforService.UserId != 0)
                             {
-                                <li> Hi! @_userInforService.UserName </li>
-                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/LogOut">登出</a></li>
+                                                                <li> Hi! @_userInforService.UserName </li>
+                                                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/LogOut">登出</a></li>
                             }
                             else
                             {
-                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/Login">登入</a></li>
-                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/Signin">註冊</a></li>
+                                                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/Login">登入</a></li>
+                                                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/Signin">註冊</a></li>
                             }
                         }
                         <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/MemberCenter">會員中心</a></li>
@@ -87,7 +88,7 @@
                     </div>
                 </form>
                 @*搜尋*@
-                <nav>
+                   <nav>
                     <input id="search_input" type="text" />
                     <a href="#" id="search_link" class="link-secondary">搜尋</a>
                     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -96,6 +97,11 @@
                             $('#search_link').click(function (e) {
                                 e.preventDefault(); // 防止點擊連結後直接跳轉
                                 var keyword = $('#search_input').val(); // 獲取搜尋關鍵字的值
+                                if (keyword.trim().length === 0) {
+                                    alert("請輸入關鍵字"); // 提示未輸入關鍵字
+                                    $('#search_input').focus(); // 設定焦點在輸入文本框上
+                                    return; // 停止執行
+                                }
                                 var url = '@Url.Action("SearchTest", "Promotions")' + '?txtKeyword=' + encodeURIComponent(keyword);
                                 // 使用 Url.Action 方法動態生成 ActionLink 的 URL，並將關鍵字作為參數傳遞
                                 window.location.href = url; // 跳轉到生成的 URL
@@ -146,7 +152,7 @@
                                                 var bookDiscount = db.BookDiscounts.Select(dis => new { dis.BookDiscountId, dis.BookDiscountName }).ToList();
                                                 foreach (var dis in bookDiscount)
                                                 {
-                                                    <option value="@dis.BookDiscountId">@dis.BookDiscountName</option>
+                                                                                    <option value="@dis.BookDiscountId">@dis.BookDiscountName</option>
                                                 }
                                             }
                                         </select>
@@ -157,7 +163,7 @@
                                             @{
                                                 foreach (var dis in bookDiscount)
                                                 {
-                                                    <option value="@dis.BookDiscountId">@dis.BookDiscountName</option>
+                                                                                    <option value="@dis.BookDiscountId">@dis.BookDiscountName</option>
                                                 }
                                             }
                                         </select>
@@ -228,22 +234,3 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-<script>
-    //  const btn = document.querySelector('#search_btn');
-
-    //btn.addEventListener('click', function () {
-    //     window.location.href = '@Url.ActionLink("SearchTest", "Promotions")?txtKeyword=' + input;
-    // })
-    // function search(){
-    //     window.location.href = '@Url.ActionLink("SearchTest", "Promotions")?txtKeyword=' + input;
-    // }
-    const input = document.querySelector('#search_input');
-    function search() {
-        let txtKeyword = input.innerHTML
-        let url = '@Url.Action("SearchTest","Promotions")?txtKeyword=' + txtKeyword;
-        $.ajax({
-            url: url,
-            type: 'POST',
-        });
-    };
-</script>
