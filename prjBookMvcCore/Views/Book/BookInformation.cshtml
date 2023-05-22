@@ -232,8 +232,8 @@
                 <el-breadcrumb separator-class="el-icon-arrow-right">
                     <el-breadcrumb-item><a :href="homeUrl()" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">首頁</a></el-breadcrumb-item>
                     <el-breadcrumb-item v-if="book.languageName && book.languageName.length > 1"><a :href="menuUrl()" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.languageName}}</a></el-breadcrumb-item>
-                    <el-breadcrumb-item v-if="book.categoryName && book.categoryName.length > 1"><a :href="categoryUrl(@Model.category.CategoryId)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.categoryName}}</a></el-breadcrumb-item>
-                    <el-breadcrumb-item v-if="book.subCategoryName && book.subCategoryName.length > 1"><a href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.subCategoryName}}</a></el-breadcrumb-item>
+                    <el-breadcrumb-item v-if="book.categoryName && book.categoryName.length > 1"><a :href="categoryUrl(book.categoryID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.categoryName}}</a></el-breadcrumb-item>
+                    <el-breadcrumb-item v-if="book.subCategoryName && book.subCategoryName.length > 1"><a :href="subCategoryUrl(book.subCategoryID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.subCategoryName}}</a></el-breadcrumb-item>
                     <el-breadcrumb-item><div style="color: #E3007F;">{{book.bookTitle}}</div></el-breadcrumb-item>
                 </el-breadcrumb>
             </el-container>
@@ -316,7 +316,9 @@
                     <div class="deliver">
                         <p>運送方式：超商取貨、宅配取貨</p>
                         <p>銷售地區：全球</p>
-                        <p>庫存： {{book.unitInStock}}</p>
+                        <p v-if="book.unitInStock > 5" style="color:green">{{unitInStockContent}}</p>
+                        <p v-if="book.unitInStock > 0 && book.unitInStock < 5" style="color:skyblue">{{unitInStockContent}}</p>
+                        <p v-if="book.unitInStock == 0" style="color:red">{{unitInStockContent}}</p>
                     </div>
                     <p class="DeliverAndKpst">
                         <a class="18h" href="#" target="_blank">
@@ -659,6 +661,8 @@
                     categoryName: categoryNameJS,
                     subCategoryName: subCategoryNameJS,
                     preview: [preview1JS,preview2JS,preview3JS,preview4JS],
+                    categoryID: "@Model.category.CategoryId",
+                    subCategoryID: "@Model.subCategory.SubCategoryId",
                 },
                 articalTitle: articalTitleJS,
                 articalID: "@Model.artical.ArticalId",
@@ -701,6 +705,18 @@
                 },
                 forewardText(){
                     return this.showAllForeward ? this.foreward : this.foreward.slice(0, 5);
+                },
+                unitInStockContent(){
+                    let count = this.book.unitInStock
+                    if(count > 5){
+                        return "庫存充足"
+                    }
+                    else if(count > 0){
+                        return "庫存低，趕快買！"
+                    }
+                    else{
+                        return "暫無庫存，無法銷售！"
+                    }
                 }
             },
             methods: {
@@ -885,6 +901,9 @@
                 },
                 categoryUrl(categoryID){
                     return "@Url.Action("分類頁面", "Category", new { id = "ID" })".replace("ID", categoryID);
+                },
+                subCategoryUrl(subCategoryID){
+                    return "@Url.Action("分類頁面", "Category", new { subid = "SUBID" })".replace("SUBID",subCategoryID);
                 },
                 bookUrl(bookID) {
                     return "@Url.Action("BookInformation", "Book", new { id = "BOOKID" })".replace("BOOKID", bookID);
