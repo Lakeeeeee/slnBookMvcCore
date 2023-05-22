@@ -40,6 +40,7 @@ namespace prjBookMvcCore.Controllers
                             分類 = b.CategoryDetails.Select(x => x.SubCategory.Category.CategoryName).FirstOrDefault(),
                             分類ID = b.CategoryDetails.Select(x => x.SubCategory.Category.CategoryId).FirstOrDefault(),
                             子分類 = b.CategoryDetails.Select(x => x.SubCategory.SubCategoryName).FirstOrDefault(),
+                            子分類ID = b.CategoryDetails.Select(x => x.SubCategory.SubCategoryId).FirstOrDefault(),
                             路徑 = b.CoverPath,
                             詳細資料 = b.Introduction,
                             作者介紹 = b.AboutAuthor,
@@ -81,7 +82,7 @@ namespace prjBookMvcCore.Controllers
                 Publisher p = new Publisher { PublisherName = item.出版社 , PublisherId = item.出版社ID};
                 Language l = new Language { LanguageName = item.語言 };
                 Category c = new Category { CategoryName = item.分類, CategoryId = item.分類ID };
-                SubCategory sc = new SubCategory { SubCategoryName = item.子分類 };
+                SubCategory sc = new SubCategory { SubCategoryName = item.子分類, SubCategoryId = item.子分類ID };
                 Translator t = new Translator { TranslatorName = item.譯者, TranslatorId = item.譯者ID};
                 Painter pt = new Painter { PainterName = item.繪者, PainterId = item.繪者ID };
                 Author a = new Author { AuthorName = item.作者, AuthorId = item.作者ID};
