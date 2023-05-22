@@ -2,6 +2,7 @@
 using System;
 using System.Configuration;
 using System.Drawing;
+using System.Net;
 using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Security.Policy;
@@ -80,18 +81,32 @@ namespace prjBookMvcCore.Models
             content.Add(MemberMessage); content.SaveChanges();
         }
 
-
-        public void submitComplaint(Member complainter, BookShopContext content)
+        public void writeComplanintReply(CustomerService complaint, IConfiguration config, BookShopContext db)
         {
-            CustomerService newComplaint = new CustomerService()
+            string mailContent = $"親愛的讀者：<br>" +
+                $"您於 {complaint.UpdateDate} 時，所提出的問題如下： <p>{complaint.Ccontent}</p>" +
+                $"目前的處理狀態為： <p>{db.Statuses.Find(complaint.StatusId).StatusName}</p>" +
+                $"<p>{db.Statuses.Find(complaint.StatusId).StatusDescription}</p>" +
+                $"請您耐心等待後續客服人員的聯絡，謝謝。" +
+                $"<p>讀本購書平台</p>";
+            string mailSubject = "[讀本] 您的問題已被接受";
+            string SmtpServer = "smtp.gmail.com";
+            string GoogleMailUserID = config["GoogleMailUserID"];
+            string GoogleMailUserPwd = config["GoogleMailUserPwd"];
+            int port = 587;
+            MailMessage mms = new MailMessage();
+            mms.From = new MailAddress(GoogleMailUserID);
+            mms.Subject = mailSubject;
+            mms.Body = mailContent;
+            mms.IsBodyHtml = true;
+            mms.SubjectEncoding = Encoding.UTF8;
+            mms.To.Add(new MailAddress(complaint.Email));
+            using (SmtpClient client = new SmtpClient(SmtpServer, port))
             {
-                MemberId = complainter.MemberId,
-                UpdateDate= DateTime.Now,
-                StatusId=1
-            };
-            content.CustomerServices.Add(newComplaint);
-            content.SaveChanges();
+                client.EnableSsl = true;
+                client.Credentials = new NetworkCredential(GoogleMailUserID, GoogleMailUserPwd);
+                client.Send(mms);
+            }
         }
-
     }
 }

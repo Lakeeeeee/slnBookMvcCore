@@ -360,9 +360,21 @@ namespace prjBookMvcCore.Models
 
                 entity.Property(e => e.Ccontent).HasColumnName("CContent");
 
+                entity.Property(e => e.Email)
+                    .HasMaxLength(50)
+                    .HasColumnName("email");
+
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
-                entity.Property(e => e.StatusId).HasColumnName("StatusID");
+                entity.Property(e => e.Note).HasColumnName("note");
+
+                entity.Property(e => e.StatusId)
+                    .HasColumnName("StatusID")
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Subtitle)
+                    .HasMaxLength(50)
+                    .HasColumnName("subtitle");
 
                 entity.Property(e => e.UpdateDate).HasColumnType("date");
 
