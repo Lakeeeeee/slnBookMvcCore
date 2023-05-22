@@ -50,7 +50,7 @@
             <div class="container">
                 @*LOGO開始*@
                 <div class="align-items-start" style="font-weight:900">
-                    <a href ="~/Home/Home"><img src="~/Image/讀本logo.png" style="height:25pt" /></a>
+                    <a href="~/Home/Home"><img src="~/Image/讀本logo.png" style="height:25pt" /></a>
                     @Html.ActionLink("讀本", "Home", "Home", new { area = "" }, new { @class = "fontsize text-black navbar-brand" })  @*須換圖*@
                 </div>
                 @*登入選項開始*@
@@ -59,13 +59,13 @@
                         @{
                             if (_userInforService.UserId != 0)
                             {
-                                                                <li> Hi! @_userInforService.UserName </li>
-                                                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/LogOut">登出</a></li>
+                                <li> Hi! @_userInforService.UserName </li>
+                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/LogOut">登出</a></li>
                             }
                             else
                             {
-                                                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/Login">登入</a></li>
-                                                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/Signin">註冊</a></li>
+                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/Login">登入</a></li>
+                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/Signin">註冊</a></li>
                             }
                         }
                         <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/MemberCenter">會員中心</a></li>
@@ -84,11 +84,12 @@
                         <ul class="zero">
                             <li><a role="button" class="btn-outline-secondary mx-3" href="~/Home/Menu">書籍</a></li>
                             <li><a role="button" class="btn-outline-secondary mx-3" href="~/Promotions/Promotions活動總覽圖">活動文宣</a></li>
+                            <li><a role="button" class="btn-outline-secondary mx-3" href="~/Promotions/Promotions領取當周優惠">領取優惠卷</a></li>
                         </ul>
                     </div>
                 </form>
                 @*搜尋*@
-                   <nav>
+                <nav>
                     <input id="search_input" type="text" />
                     <a href="#" id="search_link" class="link-secondary">搜尋</a>
                     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -152,18 +153,18 @@
                                                 var bookDiscount = db.BookDiscounts.Select(dis => new { dis.BookDiscountId, dis.BookDiscountName }).ToList();
                                                 foreach (var dis in bookDiscount)
                                                 {
-                                                                                    <option value="@dis.BookDiscountId">@dis.BookDiscountName</option>
+                                                    <option value="@dis.BookDiscountId">@dis.BookDiscountName</option>
                                                 }
                                             }
                                         </select>
                                         <span class="mx-2">至</span>
 
                                         <select id="折扣2" name="折扣2" style="width:100px">
-                              <option value="0" selected>請選擇 </option>
+                                            <option value="0" selected>請選擇 </option>
                                             @{
                                                 foreach (var dis in bookDiscount)
                                                 {
-                                                                                    <option value="@dis.BookDiscountId">@dis.BookDiscountName</option>
+                                                    <option value="@dis.BookDiscountId">@dis.BookDiscountName</option>
                                                 }
                                             }
                                         </select>
