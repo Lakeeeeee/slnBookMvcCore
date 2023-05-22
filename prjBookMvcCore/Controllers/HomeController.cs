@@ -5,6 +5,9 @@ using prjBookMvcCore.Models;
 using System.Diagnostics;
 using System.Net;
 using NuGet.Protocol;
+using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
+using static System.Formats.Asn1.AsnWriter;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -39,6 +42,95 @@ namespace prjBookMvcCore.Controllers
         public IActionResult QA()
         {
             return View();
+        }
+
+        private CForHomePage GetSearchResult(string txtkeyword,int frontPrice,int backPrice)
+        {
+            using (var db = new BookShopContext())
+            {
+                IQueryable<dynamic> recommendBooks = null;
+                if (frontPrice != 0 && backPrice != 0 && txtkeyword != null)
+                {
+                    recommendBooks = (from b in db.Books
+                                      where (b.BookTitle.Contains(txtkeyword) || b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault().Contains(txtkeyword)) && frontPrice <= b.UnitPrice && backPrice >= b.UnitPrice
+                                      select new
+                                      {
+                                          書本ID = b.BookId,
+                                          書名 = b.BookTitle,
+                                          作者 = b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault(),
+                                          繪者 = b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault(),
+                                          譯者 = b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault(),
+                                          出版社 = b.Publisher.PublisherName,
+                                          定價 = b.UnitPrice,
+                                          路徑 = b.CoverPath,
+                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                          出版日期 = b.PublicationDate,
+                                      }).Distinct();
+                }
+                else if (txtkeyword == null && frontPrice != 0 && backPrice != 0 )
+                {
+                    recommendBooks = (from b in db.Books
+                                      where frontPrice <= b.UnitPrice && backPrice >= b.UnitPrice
+                                      select new
+                                      {
+                                          書本ID = b.BookId,
+                                          書名 = b.BookTitle,
+                                          作者 = b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault(),
+                                          繪者 = b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault(),
+                                          譯者 = b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault(),
+                                          出版社 = b.Publisher.PublisherName,
+                                          定價 = b.UnitPrice,
+                                          路徑 = b.CoverPath,
+                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                          出版日期 = b.PublicationDate,
+                                      }).Distinct();
+                }
+                else
+                {
+                    recommendBooks = (from b in db.Books
+                                      where b.BookTitle.Contains(txtkeyword) || b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault().Contains(txtkeyword)
+                                      select new
+                                      {
+                                          書本ID = b.BookId,
+                                          書名 = b.BookTitle,
+                                          作者 = b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault(),
+                                          繪者 = b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault(),
+                                          譯者 = b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault(),
+                                          出版社 = b.Publisher.PublisherName,
+                                          定價 = b.UnitPrice,
+                                          路徑 = b.CoverPath,
+                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                          出版日期 = b.PublicationDate,
+                                      }).Distinct();
+                }
+
+                CForHomePage cForHomePage = new CForHomePage();
+                List<CInformation> cis = new List<CInformation>();
+                int count = 0;
+                foreach (var recommendBook in recommendBooks)
+                {
+                    count++;
+
+                    Book b = new Book { BookTitle = recommendBook.書名, BookId = recommendBook.書本ID, UnitPrice = recommendBook.定價, CoverPath = recommendBook.路徑, PublicationDate = recommendBook.出版日期 };
+                    BookDiscount bd = new BookDiscount { BookDiscountAmount = recommendBook.折扣 };
+                    Author au = new Author { AuthorName = recommendBook.作者 };
+                    Painter pa = new Painter { PainterName = recommendBook.繪者 };
+                    Translator tr = new Translator { TranslatorName = recommendBook.譯者 };
+                    Publisher pub = new Publisher { PublisherName = recommendBook.出版社 };
+                   CInformation tmp = new CInformation()
+                    {
+                        book = b,
+                        bookDiscount = bd,
+                        author = au,
+                        painter = pa,
+                        translator = tr,
+                        publisher = pub,
+                    };
+                    cis.Add(tmp);
+                }
+                cForHomePage.cSearchBook = cis;
+                return cForHomePage;
+            }
         }
 
         #region(系統預設的東西, 先留著, 之後不需要再刪掉)
@@ -365,6 +457,7 @@ namespace prjBookMvcCore.Controllers
                 return ris;
             }
         }
+
         public List<SubCategory> getSubCategories()
         {
             using (var db = new BookShopContext())
@@ -379,5 +472,32 @@ namespace prjBookMvcCore.Controllers
                 return subCategories;
             }
         }
+
+        public IActionResult searchList(string txtKeyword,int frontPrice, int backPrice)
+        {
+                CForHomePage  searchresult = GetSearchResult(txtKeyword,frontPrice,backPrice);
+
+                //var s書 = db.Books.Where(p => p.BookTitle.Contains(txtKeyword) || p.Isbn.Contains(txtKeyword)).ToList();
+                //var s作者 = db.Authors.Where(a => a.AuthorName.Contains(txtKeyword)).ToList();
+                //var s譯者 = db.Translators.Where(t => t.TranslatorName.Contains(txtKeyword)).ToList();
+                //var s繪者 = db.Painters.Where(p => p.PainterName.Contains(txtKeyword)).ToList();
+                //var s出版社 = db.Publishers.Where(p => p.PublisherName.Contains(txtKeyword)).ToList();
+                //var s分類 = db.Categories.Where(c => c.CategoryName.Contains(txtKeyword)).ToList();
+
+                //CForHomePage sTest = new CForHomePage
+                //{
+                //    c書 = s書,
+                //    c作者 = s作者,
+                //    c譯者 = s譯者,
+                //    c繪者 = s繪者,
+                //    c出版社 = s出版社,
+                //    c分類 = s分類,
+                //};
+                return View(searchresult);
+        }
     }
+
+
+
+
 }
