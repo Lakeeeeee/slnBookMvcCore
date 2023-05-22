@@ -8,5 +8,6 @@
         public BookDiscountDetail? bookDiscountDetail { get; set; }
         public Category? category { get; set; }
         public SubCategory? subCategory { get; set; }
+        public OrderDetail? orderDetail { get; set; }
     }
 }
