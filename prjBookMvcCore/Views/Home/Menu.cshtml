@@ -26,6 +26,14 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
+    .authorCaption {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 </style>
 <div>
     <div class="container body-content">
@@ -201,12 +209,12 @@
                                         var discountedPrice = item.book.UnitPrice * item.bookDiscount.BookDiscountAmount;
                                         <div class="col book-item" data-publication-date="@item.book.PublicationDate" data-price="@((int)Math.Round(item.bookDiscount.BookDiscountAmount * item.book.UnitPrice))">
                                             <div style="position:relative">
-                                                <a><img src="~/Image/Book/@item.book.CoverPath" alt="@item.book.CoverPath" height="300px"></a>
+                                                <a href="~/Book/BookInformation/@item.book.BookId"><img src="~/Image/Book/@item.book.CoverPath" title="@item.book.BookTitle" height="300px"></a>
                                             </div>
                                             <div class="caption">
                                                 <ul style="list-style:none; margin:0; padding:0;">
                                                     <li> <a class="bookCaption two-lines" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle</a></li>
-                                                    <li class='prod_author'>
+                                                    <li class="prod_author authorCaption">
                                                         作者：
                                                         @if (item.author != null)
                                                         {
