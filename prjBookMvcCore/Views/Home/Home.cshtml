@@ -69,7 +69,11 @@
                                 <img height="150" src="~/Image/Book/@item.book.CoverPath" />
                             </li>
                             <li class="bookCaption twolines mb-2">@item.book.BookTitle</li>
-                            <li>銷售價格：@item.book.UnitPrice 元</li>
+                            <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))元</span></li>
+                            <li class="discPrice">
+                                優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
+                                <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
+                            </li>
                             <li>出版日期：@item.book.PublicationDate.ToString("yyyy-MM-dd")</li>
                             </a>
                         </ul>
@@ -102,7 +106,11 @@
                                 <img height="150" src="~/Image/Book/@item.book.CoverPath" />
                             </li>
                             <li class="bookCaption twolines mb-2">@item.book.BookTitle</li>
-                            <li>銷售價格：@item.book.UnitPrice 元</li>
+                              <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))元</span></li>
+                            <li class="discPrice">
+                                優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
+                                <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
+                            </li>
                             <li>出版日期：@item.book.PublicationDate.ToString("yyyy-MM-dd")</li>
                             </a>
                         </ul>
@@ -161,7 +169,6 @@
                     }
                 }
             }
-
         </div>
     </div>
 
