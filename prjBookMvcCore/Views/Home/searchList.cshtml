@@ -1,23 +1,227 @@
-﻿@model IEnumerable<prjBookMvcCore.Models.CForHomePage>
-
+﻿@model CForHomePage
 @{
     ViewData["Title"] = "searchList";
 }
-
-<h1>searchList</h1>
-
-<<p>Keyword: @ViewBag.KeyWord</p>
-@if (Model != null && Model.Any())
-{
-
-    <ul>
-        @foreach (var book in Model)
-        {
-            <li>@book.</li>
+@{
+    string Keyword = ViewBag.KeyWord;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <style>
+        a {
+            color: black;
+            font-weight: bold;
+            text-decoration: none;
         }
-    </ul>
-}
-else
-{
-    <p>No results found.</p>
-}
+
+            a:hover {
+                color: rgb(125, 175, 75);
+                text-decoration: underline;
+            }
+
+        .two-lines {
+            line-height: 1.2em; /* 調整需要的行高 */
+            height: 2.5em; /* 行高的兩倍 */
+        }
+
+        .one-lines {
+            line-height: 1.2em; /* 調整需要的行高 */
+            height: 1.3em; /* 行高的兩倍 */
+        }
+
+        .clamp {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .img-with-border {
+            border: 1px dashed rgb(200, 150, 250);
+            padding: 5px;
+        }
+
+            .img-with-border:hover {
+                border: 2px ridge rgb(150, 200, 100);
+            }
+
+        .sticky1 {
+            position: sticky;
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>SearchTest</h1>
+
+    <p>Keyword: @ViewBag.KeyWord</p>
+    @if (Model != null)
+    {
+        <div class="container-fluid justify-content-center2" style="margin-top: 20px">
+            <div class="row">
+                @* 左邊功能欄 *@
+                <div class="col-2" style="position: relative;">
+                    <div class="sticky1">
+                        <div class="card ">
+                            <div class="card-header">欄位 </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><a href="#書名/ISBN" title="移至 書名/ISBN ">書名/ISBN (@Model.c書.Count)</a></li>
+                                <li class="list-group-item"><a href="#作者" title="移至 作者 ">作者 (@Model.c作者.Count)</a></li>
+                                <li class="list-group-item"><a href="#譯者" title="移至 譯者 ">譯者 (@Model.c譯者.Count)</a></li>
+                                <li class="list-group-item"><a href="#繪者" title="移至 繪者 ">繪者 (@Model.c繪者.Count)</a></li>
+                                <li class="list-group-item"><a href="#出版社" title="移至 出版社 ">出版社 (@Model.c出版社.Count)</a></li>
+                                <li class="list-group-item"><a href="#分類" title="移至 分類 ">分類 (@Model.c分類.Count)</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                @* Body *@
+                <div class="col">
+                    <div class="row" id="書名/ISBN">
+                        <p>書名/ISBN</p>
+                        @{
+                            if (Model.c書.Count != 0)
+                            {
+                                int count = 0;
+                                foreach (var item in Model.c書)
+                                {
+                                    count++;
+                                    <div class="row mb-3">
+                                        <div class="col-1">
+                                            @count
+                                        </div>
+                                        <div class="col-2 clamp mb-3">
+                                            <a id="@item.BookId" href="~/Book/BookInformation/@item.BookId" title="@item.BookTitle">
+                                                <img height="150" src="/Image/Book/@item.CoverPath" />
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <ul style="list-style:none">
+                                                <li>@item.BookTitle</li>
+                                                <li></li>
+                                                <li></li>
+                                                <li></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                }
+                            }
+                            else
+                            {
+                                <p>No results found.</p>
+                            }
+                        }
+                    </div>
+                    <hr />
+                    <div class="row" id="作者">
+                        <p>作者</p>
+                        @{
+                            if (Model.c作者.Count != 0)
+                            {
+                                int count = 0;
+                                foreach (var item in Model.c作者)
+                                {
+                                    count++;
+                                    <div class="clamp two-lines mt-3">
+                                        <a href="~/Book/authorInformation?id=@item.AuthorId" title="查看 @item.AuthorName 書籍">
+                                            @count @item.AuthorName
+                                        </a>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <p>No results found.</p>
+                            }
+                        }
+                    </div>
+                    <hr>
+                    <div class="row" id="譯者">
+                        <p>譯者</p>
+                        @{
+                            if (Model.c譯者.Count != 0)
+                            {
+                                int count = 0;
+                                foreach (var item in Model.c譯者)
+                                {
+                                    count++;
+                                    <div class="clamp two-lines mt-3"><a href="~/Book/translatorInformation?id=@item.TranslatorId" title="查看 @item.TranslatorName 書籍">@count @item.TranslatorName </a></div>
+                                }
+                            }
+                            else
+                            {
+                                <p>No results found.</p>
+                            }
+                        }
+                    </div>
+                    <hr />
+                    <div class="row" id="繪者">
+                        <p>繪者</p>
+                        @{
+                            if (Model.c繪者.Count != 0)
+                            {
+                                int count = 0;
+                                foreach (var item in Model.c繪者)
+                                {
+                                    count++;
+                                    <div class="clamp two-lines mt-3"><a href="~/Book/painterInformation?id=@item.PainterId" title="查看 @item.PainterName 書籍">@count @item.PainterName </a></div>
+                                }
+                            }
+                            else
+                            {
+                                <p>No results found.</p>
+                            }
+                        }
+                    </div>
+                    <hr>
+                    <div class="row" id="出版社">
+                        <p>出版社</p>
+                        @{
+                            if (Model.c出版社.Count != 0)
+                            {
+                                int count = 0;
+                                foreach (var item in Model.c出版社)
+                                {
+                                    count++;
+                                    <div class="clamp two-lines mt-3"><a href="~/Book/publisherInformation?id=@item.PublisherId" title="查看 @item.PublisherName 書籍">@count @item.PublisherName </a></div>
+                                }
+                            }
+                            else
+                            {
+                                <p>No results found.</p>
+                            }
+                        }
+                    </div>
+                    <hr />
+                    <div class="row" id="分類">
+                        <p>分類</p>
+                        @{
+                            if (Model.c分類.Count != 0)
+                            {
+                                int count = 0;
+                                foreach (var item in Model.c分類)
+                                {
+                                    count++;
+                                    <div class="clamp two-lines mt-3"> <a href="~/Category/分類頁面/@item.CategoryId" title="查看 @item.CategoryName 書籍">@count @item.CategoryName </a></div>
+                                }
+                            }
+                            else
+                            {
+                                <p>No results found.</p>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <p>No results found.</p>
+    }
+</body>
+</html>

@@ -43,26 +43,7 @@ namespace prjBookMvcCore.Controllers
         {
             return View();
         }
-
-        public IActionResult searchList(string keyword)
-        {
-            List<RecommendInformation> searchResult = GetSearchResult();
-            CForHomePage c = new CForHomePage()
-            {
-                searchResult = searchResult,
-            };
-            var results = searchResult.Where(item =>
-        (item.book != null && item.book.BookTitle.Contains(keyword)) ||
-        (item.author != null && item.author.AuthorName.Contains(keyword)) ||
-        (item.painter != null && item.painter.PainterName.Contains(keyword)) ||
-        (item.translator != null && item.translator.TranslatorName.Contains(keyword)) ||
-        (item.publisher != null && item.publisher.PublisherName.Contains(keyword))
-    );
-
-            return View(results);
-        }
-
-
+       
         private List<RecommendInformation> GetSearchResult()
         {
             using (var db = new BookShopContext())
@@ -431,6 +412,7 @@ namespace prjBookMvcCore.Controllers
                 return ris;
             }
         }
+
         public List<SubCategory> getSubCategories()
         {
             using (var db = new BookShopContext())
@@ -445,5 +427,42 @@ namespace prjBookMvcCore.Controllers
                 return subCategories;
             }
         }
+
+        public IActionResult searchList(string txtKeyword)
+        {
+            ViewBag.KeyWord = txtKeyword;
+            BookShopContext db = new BookShopContext();
+            if (string.IsNullOrEmpty(txtKeyword))
+            {
+                var s書 = db.Books.Select(b => b).ToList();
+                return View(s書);
+            }
+            else
+            {
+                var s書 = db.Books.Where(p => p.BookTitle.Contains(txtKeyword) || p.Isbn.Contains(txtKeyword)).ToList();
+                var s作者 = db.Authors.Where(a => a.AuthorName.Contains(txtKeyword)).ToList();
+                var s譯者 = db.Translators.Where(t => t.TranslatorName.Contains(txtKeyword)).ToList();
+                var s繪者 = db.Painters.Where(p => p.PainterName.Contains(txtKeyword)).ToList();
+                var s出版社 = db.Publishers.Where(p => p.PublisherName.Contains(txtKeyword)).ToList();
+                var s分類 = db.Categories.Where(c => c.CategoryName.Contains(txtKeyword)).ToList();
+
+                
+
+                CForHomePage sTest = new CForHomePage
+                {
+                    c書 = s書,
+                    c作者 = s作者,
+                    c譯者 = s譯者,
+                    c繪者 = s繪者,
+                    c出版社 = s出版社,
+                    c分類 = s分類,
+                };
+                return View(sTest);
+            }
+        }
     }
+
+
+
+
 }

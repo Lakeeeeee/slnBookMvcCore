@@ -140,7 +140,7 @@
                 @*搜尋*@
                 <form class="justify-content-end">
                     <div class="input-group navbar navbar-light bg-light menu">
-                        <input id="searchkeyword_input" style="border-right: #C4C4C4 2px solid;" placeholder="輸入關鍵字" name="keyword" type="text" class="mx-1 form-control inputForSearch ui-autocomplete-input" maxlength="40" value="" autocomplete="off">
+                        <input id="search_input" style="border-right: #C4C4C4 2px solid;" placeholder="輸入關鍵字" name="keyword" type="text" class="mx-1 form-control inputForSearch ui-autocomplete-input" maxlength="40" value="" autocomplete="off">
                         <div class="dropdown">
                             <button class="btn btn-sm btn-outline-secondary mx-1 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                 進階搜尋
@@ -205,7 +205,19 @@
                                 </li>
                             </ul>
                         </div>
-                        <a href="/Home/searchList" type="submit" class="btn btn-sm btn-outline-secondary mx-1" value="搜尋">搜尋</a>
+                        <a href="#" id="search_link" type="submit" class="btn btn-sm btn-outline-secondary mx-1" value="搜尋">搜尋</a>
+                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                        <script>
+                            $(document).ready(function () {
+                                $('#search_link').click(function (e) {
+                                    e.preventDefault(); // 防止點擊連結後直接跳轉
+                                    var keyword = $('#search_input').val(); // 獲取搜尋關鍵字的值
+                                    var url = '@Url.Action("searchList", "Home")' + '?txtKeyword=' + encodeURIComponent(keyword);
+                                    // 使用 Url.Action 方法動態生成 ActionLink 的 URL，並將關鍵字作為參數傳遞
+                                    window.location.href = url; // 跳轉到生成的 URL
+                                });
+                            });
+                        </script>
                     </div>
                 </form>
             </div>
