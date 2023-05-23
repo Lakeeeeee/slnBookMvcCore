@@ -277,7 +277,7 @@ namespace prjBookMvcCore.Controllers
         {
             bool isSuccess = false;
             int memId = Convert.ToInt32(form["memId"]);
-            string oldPwd = form["oldPwd"].ToString();
+            var oldPwd = form["oldPwd"];
             var newPwd = form["newPwd"];
 
             Member updateTool = _bookShopContext.Members.Find(_userInforService.UserId)!;
@@ -288,16 +288,15 @@ namespace prjBookMvcCore.Controllers
                 isSuccess = true;
                 return Json(new
                 {
-                    success = isSuccess.ToString(),
+                    success = isSuccess,
                     message = "修改密碼成功"
                 });
             }
             return Json(new
             {
-                success = isSuccess.ToString(),
+                success = isSuccess,
                 message = "更新失敗"
             });
-
         }
         [Authorize]
         public IActionResult MemberCenter() //會員中心頁面
