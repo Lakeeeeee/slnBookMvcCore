@@ -98,7 +98,7 @@ namespace prjBookMvcCore.Models
             mms.From = new MailAddress(GoogleMailUserID);
             mms.Subject = mailSubject;
             mms.Body = mailContent;
-            mms.IsBodyHtml = true;
+            mms.IsBodyHtml = false;
             mms.SubjectEncoding = Encoding.UTF8;
             mms.To.Add(new MailAddress(complaint.Email));
             using (SmtpClient client = new SmtpClient(SmtpServer, port))
@@ -107,6 +107,32 @@ namespace prjBookMvcCore.Models
                 client.Credentials = new NetworkCredential(GoogleMailUserID, GoogleMailUserPwd);
                 client.Send(mms);
             }
+        }
+        public void writeReply(CustomerService complaint, BookShopContext db)
+        {
+            string replyContent = $"親愛的讀者：<br>" +
+                $"您於 {complaint.UpdateDate} 時，所提出的問題如下： <p>{complaint.Ccontent}</p>" +
+                $"目前的處理狀態為： <p>{db.Statuses.Find(complaint.StatusId).StatusName}</p>" +
+                $"<p>{db.Statuses.Find(complaint.StatusId).StatusDescription}</p>" +
+                $"請您耐心等待後續客服人員的聯絡，謝謝。" +
+                $"<p>讀本購書平台</p>";
+
+            Message replyMessage = new Message()
+            {
+                MessageContent = replyContent,
+                MessageTitle = "[讀本] 您的問題已被接受",
+                MessageTypeId = 2
+            };
+            db.Messages.Add(replyMessage);
+            db.SaveChanges();
+            MessageMemberDetail sendReply = new MessageMemberDetail()
+            {
+                MessageId = replyMessage.MessageId,
+                MemberId = complaint.MemberId,
+                UpdateTime = DateTime.Now
+            };
+            db.MessageMemberDetails.Add(sendReply);
+            db.SaveChanges();
         }
     }
 }

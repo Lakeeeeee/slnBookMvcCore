@@ -5,57 +5,59 @@
     Layout = "~/Views/Shared/_Layout_Member.cshtml";
 }
 @section Scripts{
-    
+
 }
 
-<style>
-    div {
-        border: none
-    }
-
-    a {
-        color: black;
-        font-weight: bold;
-        text-decoration: none;
-    }
-
-        a:hover {
-            color: rgb(125, 175, 75);
-            text-decoration: underline;
+    <style>
+        div {
+            border: none
         }
-</style>
 
-<div class="container" style="margin-top:15px">
-    <p> <h6>訊息通知</h6></p>
-    <div class="row">
-        <div class="col-3">
-            <div class="list-group">
-                <button type="button" class="list-group-item list-group-item-action" aria-current="true" style="background-color:lightgray">
-                    訊息列表
-                </button>
-            </div>
-        </div>
-        <div class="col-9">
-            <div class="row">
-                <div class="col">
-                    <button type="button" class="btn btn-outline-secondary disabled" aria-current="true">
-                        訊息類型:
+        a {
+            color: black;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+            a:hover {
+                color: rgb(125, 175, 75);
+                text-decoration: underline;
+            }
+    </style>
+
+    <div class="container-fluid" style="margin-top:15px">
+        <p> <h6>訊息通知</h6></p>
+        <div class="row">
+            <div class="col-3">
+                <div class="list-group">
+                    <button type="button" class="list-group-item list-group-item-action" aria-current="true" style="background-color:lightgray">
+                        訊息列表
                     </button>
-                    <span id="messagetype" class="btn btn-outline-secondary "> 系統訊息</span>
-                </div>
-                <div class="col">
-                    <button type="button" class="btn btn-outline-secondary disabled" aria-current="true">
-                        訊息發送時間:
-                    </button>
-                    <span id="createtime" class="btn btn-outline-secondary "> 發送時間</span>
                 </div>
             </div>
+            <div class="col-9">
+                <div class="row">
+                    <div class="col-auto">
+                        <span id="messagetype" class="btn btn-outline-secondary "> 系統訊息</span>
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-outline-secondary disabled" aria-current="true">
+                            訊息發送時間:
+                        </button>
+                        <span id="createtime" class="btn btn-outline-secondary "> 發送時間</span>
+                    </div>
+                    <div class="col-auto">
+                        <button name="deletebtn" id="delete" class="btn btn-outline-secondary" onclick="">
+                            刪除訊息
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-3">
-            <div class="list-group">
-                @{
+        <div class="row">
+            <div class="col-3">
+                <div class="list-group">
+                    @{
                     foreach (var item in Model)
                     {
                         <button id="@item.MessageMemberDetailId" value="@item.MessageMemberDetailId" type="button" class="list-group-item list-group-item-action" aria-current="true" onclick="getMessage(@item.MessageMemberDetailId)">
@@ -74,15 +76,12 @@
         <div class="col-9">
             <div class="container">
                 <div id="content" class="mt-3">
-
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <script>
-
     async function getMessage(id) {
         var response = await fetch('@Url.Content("~/Member/getMessage")?id=' + id);
         var data = await response.json();
@@ -90,9 +89,26 @@
         const messagetype = document.querySelector('#messagetype');
         const createtime = document.querySelector('#createtime');
         const isRead = document.querySelector('#isRead-' + id);
+        const dBtn = document.getElementsByName('deletebtn')[0];
         content.innerHTML = `${data.content_a}`;
         messagetype.innerHTML = `${data.type_a}`;
         createtime.innerHTML = `${data.time}`;
         isRead.innerHTML = `${data.read_a}`;
+        dBtn.id = `delete-${data.mMDID}`;
+        dBtn.setAttribute('onclick', `deleteMs(${data.mMDID})`);
+        console.log(dBtn.id);
     };
+</script>
+<script>
+    async function deleteMs(id) {
+        console.log(id);
+        const response = await fetch('@Url.Content("~/Member/deleteMs")?id=' + id);
+        const comfirm = await response.text();
+        if (comfirm === "True") {
+            alert('已經刪除訊息')
+        } else {
+            alert('不明錯誤')
+        };
+        window.location.reload();
+    }
 </script>

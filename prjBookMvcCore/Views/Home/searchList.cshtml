@@ -1,4 +1,5 @@
 ﻿@model CForHomePage
+@inject UserInforService _userInforService
 @{
     ViewData["Title"] = "searchList";
 }
@@ -31,6 +32,14 @@
             height: 1.3em; /* 行高的兩倍 */
         }
 
+        .bookCaption {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         .clamp {
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -58,147 +67,121 @@
     <h1>SearchTest</h1>
 
     <p>Keyword: @ViewBag.KeyWord</p>
-    @if (Model != null)
-    {
-        <div class="container-fluid justify-content-center2" style="margin-top: 20px">
-            <div class="row">
-                @* 左邊功能欄 *@
-                <div class="col-2" style="position: relative;">
-                    <div class="sticky1">
-                        <div class="card ">
-                            <div class="card-header">欄位 </div>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><a href="#書名/ISBN" title="移至 書名/ISBN ">書名/ISBN (@Model.cSearchBook.Count())</a></li>
-                            </ul>
+    @{
+        if (Model != null)
+        {
+            <div class="container-fluid justify-content-center2" style="margin-top: 20px">
+                <div class="row">
+                    @* 左邊功能欄 *@
+                    <div class="col-2" style="position: relative;">
+                        <div class="sticky1">
+                            <div class="card ">
+                                <div class="card-header">欄位 </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><a href="#書名/ISBN" title="移至 書名/ISBN ">書名/ISBN (@Model.cSearchBook.Count())</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    @* Body *@
+                    <div class="col">
+                        <div class="row" id="書名/ISBN">
+                            @{
+                                if (Model.cSearchBook.Count() != 0)
+                                {
+                                    int count = 0;
+                                    foreach (var item in Model.cSearchBook)
+                                    {
+                                        count++;
+                                        <div class="row mb-3">
+                                            <div class="col-2 clamp mb-3">
+                                                <a id="@item.book.BookId" href="~/Book/BookInformation/@item.book.BookId" title="@item.book.BookTitle">
+                                                    <img width="150" src="/Image/Book/@item.book.CoverPath" />
+                                                </a>
+                                            </div>
+                                            <div class="col">
+                                                <ul style="list-style:none">
+                                                    <li class="bookCaption two-lines mb-1">@item.book.BookTitle</li>
+                                                    <li>作者：@item.author.AuthorName</li>
+                                                    <li>出版日期：@(item.book.PublicationDate.ToString("yyyy/MM/dd"))</li>
+                                                    <li>
+                                                        定價：
+                                                        @(item.book.UnitPrice.ToString("0")) 元，
+                                                        優惠價：<span style="color: #E3007F;">
+                                                            @((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))
+                                                        </span>折
+                                                        <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
+                                                    </li>
+                                                    <li>
+                                                        <button class="btn btn-outline-warning btn-sm my-2" title="尚未建置" onclick="addToCart(@item.book.BookId,@_userInforService.UserId)">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+                                                                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z" />
+                                                            </svg>
+                                                            加入購物車
+                                                        </button>
+                                                    </li>
+                                                    <li class="bookCaption two-lines">@item.book.ContentIntro</li>
+                                                    <li class="bookCaption two-lines">@item.book.TryContent</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                    }
+                                }
+                                else
+                                {
+                                    <p>No results found.</p>
+                                }
+                            }
                         </div>
                     </div>
                 </div>
-                @* Body *@
-                <div class="col">
-                    <div class="row" id="書名/ISBN">
-                        <p>書名/ISBN</p>
-                        @{
-                            if (Model.cSearchBook.Count() != 0)
-                            {
-                                int count = 0;
-                                foreach (var item in Model.cSearchBook)
-                                {
-                                    count++;
-                                    <div class="row mb-3">
-                                        <div class="col-1">
-                                            @count
-                                        </div>
-                                        <div class="col-2 clamp mb-3">
-                                            <a id="@item.book.BookId" href="~/Book/BookInformation/@item.book.BookId" title="@item.book.BookTitle">
-                                                <img height="150" src="/Image/Book/@item.book.CoverPath" />
-                                            </a>
-                                        </div>
-                                        <div class="col">
-                                            <ul style="list-style:none">
-                                                <li>@item.book.BookTitle</li>
-                                                <li></li>
-                                                <li></li>
-                                                <li></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                }
-                            }
-                            else
-                            {
-                                <p>No results found.</p>
-                            }
-                        }
-                    </div>
-                    <hr />
-                    <div class="row" id="作者">
-                        <p>作者</p>
-                        @{
-                            if (Model.cSearchBook.Count() != 0)
-                            {
-                                int count = 0;
-                                foreach (var item in Model.cSearchBook)
-                                {
-                                    count++;
-                                    <div class="clamp two-lines mt-3">
-                                        <a href="~/Book/authorInformation?id=@item.author.AuthorName" title="查看 @item.author.AuthorName 書籍">
-                                            @count @item.author.AuthorName
-                                        </a>
-                                    </div>
-                                }
-                            }
-                            else
-                            {
-                                <p>No results found.</p>
-                            }
-                        }
-                    </div>
-                    <hr>
-                    <div class="row" id="譯者">
-                        <p>譯者</p>
-                        @{
-                            if (Model.cSearchBook.Count() != 0)
-                            {
-                                int count = 0;
-                                foreach (var item in Model.cSearchBook)
-                                {
-                                    count++;
-                                    <div class="clamp two-lines mt-3"><a href="~/Book/translatorInformation?id=@item.translator.TranslatorId" title="查看 @item.translator.TranslatorName 書籍">@count @item.translator.TranslatorName </a></div>
-                                }
-                            }
-                            else
-                            {
-                                <p>No results found.</p>
-                            }
-                        }
-                    </div>
-                    <hr />
-                    <div class="row" id="繪者">
-                        <p>繪者</p>
-                        @{
-                            if (Model.cSearchBook.Count() != 0)
-                            {
-                                int count = 0;
-                                foreach (var item in Model.cSearchBook)
-                                {
-                                    count++;
-                                    <div class="clamp two-lines mt-3"><a href="~/Book/painterInformation?id=@item.painter.PainterName " title="查看 @item.painter.PainterName 書籍">@count @item.painter.PainterName</a></div>
-                                }
-                            }
-                            else
-                            {
-                                <p>No results found.</p>
-                            }
-                        }
-                    </div>
-                    <hr>
-                    <div class="row" id="出版社">
-                        <p>出版社</p>
-                        @{
-                            if (Model.cSearchBook.Count() != 0)
-                            {
-                                int count = 0;
-                                foreach (var item in Model.cSearchBook)
-                                {
-                                    count++;
-                                    <div class="clamp two-lines mt-3"><a href="~/Book/publisherInformation?id=@item.publisher.PublisherId " title="查看 @item.publisher.PublisherName  書籍">@count @item.publisher.PublisherName </a></div>
-                                }
-                            }
-                            else
-                            {
-                                <p>No results found.</p>
-                            }
-                        }
-                    </div>
-                    <hr />
-                </div>
             </div>
-        </div>
-    }
-    else
-    {
-        <p>No results found.</p>
+        }
+        else
+        {
+            <p>No results found.</p>
+        }
     }
 </body>
 </html>
+
+<script>
+    let isLogin = false;
+    window.onload = () => {
+        if (@_userInforService.UserId !== 0) {
+            isLogin = true;
+        };
+        console.log(isLogin);
+    };
+    function loginCheck() {
+        if (isLogin === false) {
+            alert('尚未登入');
+            if (confirm('前往登入')) {
+                window.location.href = "../../Member/Login";
+            } else {
+            }
+            return false;
+        }
+        return true;
+    };
+    function addToCart(bookID, memberID) {
+        if (loginCheck()) {
+            let self = this;
+            let url = '@Url.Action("memAction", "Action")?bookID=' + bookID + '&memberID=' + memberID + '&actionID=' + 7;
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (result) {
+                    let isSuccess = result;
+                    if (isSuccess === "true") {
+                        alert('加入購物車成功');
+                    }
+                    else {
+                        alert('加入購物車失敗，本書已在購物車內');
+                    }
+                },
+            });
+        }
+    };
+</script>
