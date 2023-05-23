@@ -394,9 +394,9 @@
                         <p>
                             類別：
                             <span>
-                                <a v-if="book.languageName && book.languageName.length > 1" href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.languageName}}</a>>
-                                <a v-if="book.categoryName && book.categoryName.length > 1" href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.categoryName}}</a>>
-                                <a v-if="book.subCategoryName && book.subCategoryName.length > 1" href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.subCategoryName}}</a>
+                                <a v-if="book.languageName && book.languageName.length > 1" :href="menuUrl()" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.languageName}}</a>>
+                                <a v-if="book.categoryName && book.categoryName.length > 1" :href="categoryUrl(book.categoryID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.categoryName}}</a>>
+                                <a v-if="book.subCategoryName && book.subCategoryName.length > 1" :href="subCategoryUrl(book.subCategoryID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.subCategoryName}}</a>
                             </span>
                         </p>
                     </div>
@@ -773,32 +773,40 @@
                 },
                 addToCart(bookID,memberID){
                     if (this.loginCheck()) {
-                        let self = this;
-                        let url = '@Url.Action("ActionTo", "Action")?bookID=' + bookID + '&memberID=' + memberID + '&actionID=' + 7;
-                        $.ajax({
-                            url: url,
-                            type: 'POST',
-                            dataType: 'json',
-                            success: function (result) {
-                                if (result) {
-                                    self.$notify({
-                                        title: '加入購物車成功',
-                                        message: '本書已加入購物車',
-                                        type: 'success'
-                                    });
+                        if (this.book.unitInStock == 0) {
+                            this.$notify.error({
+                                title: '錯誤',
+                                message: '暫無庫存，無法銷售！'
+                            });
+                        }
+                        else{
+                            let self = this;
+                            let url = '@Url.Action("ActionTo", "Action")?bookID=' + bookID + '&memberID=' + memberID + '&actionID=' + 7;
+                            $.ajax({
+                                url: url,
+                                type: 'POST',
+                                dataType: 'json',
+                                success: function (result) {
+                                    if (result) {
+                                        self.$notify({
+                                            title: '加入購物車成功',
+                                            message: '本書已加入購物車',
+                                            type: 'success'
+                                        });
+                                    }
+                                    else {
+                                        self.$notify({
+                                            title: '加入購物車失敗',
+                                            message: '本書已在購物車內',
+                                            type: 'warning'
+                                        });
+                                    }
+                                },
+                                error: function (xhr, status, error) {
+                                    console.log(error);
                                 }
-                                else {
-                                    self.$notify({
-                                        title: '加入購物車失敗',
-                                        message: '本書已在購物車內',
-                                        type: 'warning'
-                                    });
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                console.log(error);
-                            }
-                        });
+                            });
+                        }
                     }
                 },
                 redirectToCart(memberID) {
