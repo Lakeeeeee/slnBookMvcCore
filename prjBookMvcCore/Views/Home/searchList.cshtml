@@ -1,6 +1,9 @@
-﻿@model CSearch
+﻿@model CForHomePage
 @{
-    ViewData["Title"] = "SearchTest";
+    ViewData["Title"] = "searchList";
+}
+@{
+    string Keyword = ViewBag.KeyWord;
 }
 <!DOCTYPE html>
 <html>
@@ -21,6 +24,11 @@
         .two-lines {
             line-height: 1.2em; /* 調整需要的行高 */
             height: 2.5em; /* 行高的兩倍 */
+        }
+
+        .one-lines {
+            line-height: 1.2em; /* 調整需要的行高 */
+            height: 1.3em; /* 行高的兩倍 */
         }
 
         .clamp {
@@ -60,12 +68,7 @@
                         <div class="card ">
                             <div class="card-header">欄位 </div>
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><a href="#書名/ISBN" title="移至 書名/ISBN ">書名/ISBN (@Model.c書.Count)</a></li>
-                                <li class="list-group-item"><a href="#作者" title="移至 作者 ">作者 (@Model.c作者.Count)</a></li>
-                                <li class="list-group-item"><a href="#譯者" title="移至 譯者 ">譯者 (@Model.c譯者.Count)</a></li>
-                                <li class="list-group-item"><a href="#繪者" title="移至 繪者 ">繪者 (@Model.c繪者.Count)</a></li>
-                                <li class="list-group-item"><a href="#出版社" title="移至 出版社 ">出版社 (@Model.c出版社.Count)</a></li>
-                                <li class="list-group-item"><a href="#分類" title="移至 分類 ">分類 (@Model.c分類.Count)</a></li>
+                                <li class="list-group-item"><a href="#書名/ISBN" title="移至 書名/ISBN ">書名/ISBN (@Model.cSearchBook.Count())</a></li>
                             </ul>
                         </div>
                     </div>
@@ -75,13 +78,31 @@
                     <div class="row" id="書名/ISBN">
                         <p>書名/ISBN</p>
                         @{
-                            if (Model.c書.Count != 0)
+                            if (Model.cSearchBook.Count() != 0)
                             {
                                 int count = 0;
-                                foreach (var item in Model.c書)
+                                foreach (var item in Model.cSearchBook)
                                 {
                                     count++;
-                                    <div class="clamp two-lines mt-3"><a id="@item.BookId" href="~/Book/BookInformation/@item.BookId" title="@item.BookTitle">@count. @item.BookTitle</a></div>
+                                    <div class="row mb-3">
+                                        <div class="col-1">
+                                            @count
+                                        </div>
+                                        <div class="col-2 clamp mb-3">
+                                            <a id="@item.book.BookId" href="~/Book/BookInformation/@item.book.BookId" title="@item.book.BookTitle">
+                                                <img height="150" src="/Image/Book/@item.book.CoverPath" />
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <ul style="list-style:none">
+                                                <li>@item.book.BookTitle</li>
+                                                <li></li>
+                                                <li></li>
+                                                <li></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
                                 }
                             }
                             else
@@ -94,13 +115,17 @@
                     <div class="row" id="作者">
                         <p>作者</p>
                         @{
-                            if (Model.c作者.Count != 0)
+                            if (Model.cSearchBook.Count() != 0)
                             {
                                 int count = 0;
-                                foreach (var item in Model.c作者)
+                                foreach (var item in Model.cSearchBook)
                                 {
                                     count++;
-                                    <div class="clamp two-lines mt-3"><a href="~/Book/authorInformation?id=@item.AuthorId" title="查看 @item.AuthorName 書籍">@count. @item.AuthorName</a></div>
+                                    <div class="clamp two-lines mt-3">
+                                        <a href="~/Book/authorInformation?id=@item.author.AuthorName" title="查看 @item.author.AuthorName 書籍">
+                                            @count @item.author.AuthorName
+                                        </a>
+                                    </div>
                                 }
                             }
                             else
@@ -113,13 +138,13 @@
                     <div class="row" id="譯者">
                         <p>譯者</p>
                         @{
-                            if (Model.c譯者.Count != 0)
+                            if (Model.cSearchBook.Count() != 0)
                             {
                                 int count = 0;
-                                foreach (var item in Model.c譯者)
+                                foreach (var item in Model.cSearchBook)
                                 {
                                     count++;
-                                    <div class="clamp two-lines mt-3"><a href="~/Book/translatorInformation?id=@item.TranslatorId" title="查看 @item.TranslatorName 書籍">@count. @item.TranslatorName </a></div>
+                                    <div class="clamp two-lines mt-3"><a href="~/Book/translatorInformation?id=@item.translator.TranslatorId" title="查看 @item.translator.TranslatorName 書籍">@count @item.translator.TranslatorName </a></div>
                                 }
                             }
                             else
@@ -132,13 +157,13 @@
                     <div class="row" id="繪者">
                         <p>繪者</p>
                         @{
-                            if (Model.c繪者.Count != 0)
+                            if (Model.cSearchBook.Count() != 0)
                             {
                                 int count = 0;
-                                foreach (var item in Model.c繪者)
+                                foreach (var item in Model.cSearchBook)
                                 {
                                     count++;
-                                    <div class="clamp two-lines mt-3"><a href="~/Book/painterInformation?id=@item.PainterId" title="查看 @item.PainterName 書籍">@count. @item.PainterName </a></div>
+                                    <div class="clamp two-lines mt-3"><a href="~/Book/painterInformation?id=@item.painter.PainterName " title="查看 @item.painter.PainterName 書籍">@count @item.painter.PainterName</a></div>
                                 }
                             }
                             else
@@ -151,13 +176,13 @@
                     <div class="row" id="出版社">
                         <p>出版社</p>
                         @{
-                            if (Model.c出版社.Count != 0)
+                            if (Model.cSearchBook.Count() != 0)
                             {
                                 int count = 0;
-                                foreach (var item in Model.c出版社)
+                                foreach (var item in Model.cSearchBook)
                                 {
                                     count++;
-                                    <div class="clamp two-lines mt-3"><a href="~/Book/publisherInformation?id=@item.PublisherId" title="查看 @item.PublisherName 書籍">@count. @item.PublisherName </a></div>
+                                    <div class="clamp two-lines mt-3"><a href="~/Book/publisherInformation?id=@item.publisher.PublisherId " title="查看 @item.publisher.PublisherName  書籍">@count @item.publisher.PublisherName </a></div>
                                 }
                             }
                             else
@@ -167,24 +192,6 @@
                         }
                     </div>
                     <hr />
-                    <div class="row" id="分類">
-                        <p>分類</p>
-                        @{
-                            if (Model.c分類.Count != 0)
-                            {
-                                int count = 0;
-                                foreach (var item in Model.c分類)
-                                {
-                                    count++;
-                                    <div class="clamp two-lines mt-3"> <a href="~/Category/分類頁面/@item.CategoryId" title="查看 @item.CategoryName 書籍">@count. @item.CategoryName </a></div>
-                                }
-                            }
-                            else
-                            {
-                                <p>No results found.</p>
-                            }
-                        }
-                    </div>
                 </div>
             </div>
         </div>
