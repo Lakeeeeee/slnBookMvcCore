@@ -163,10 +163,31 @@
                                 <li>
                                     <div class="m-1 p-1">
                                         <span class="mx-2">售價</span>
-                                        <input id="frontprice" style="margin-left:2em; border-right: #C4C4C4 2px solid;width:130px" placeholder="金額" type="search" maxlength="20" value="" autocomplete="off" />
+                                        <input id="frontprice" style="margin-left:2em; border-right: #C4C4C4 2px solid;width:130px" placeholder="金額" type="search" maxlength="20" value="@ViewBag.frontprice" />
                                         <span class="mx-2">至</span>
-                                        <input id="backprice" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="金額" type="search" maxlength="20" value="" autocomplete="off" />
+                                        <input id="backprice" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="金額" type="search" maxlength="20" value="@ViewBag.backprice" />
                                         <span class="mx-2">之間</span>
+                                        @*<script>
+                                            // 在頁面載入時設置預設值
+                                            window.addEventListener('DOMContentLoaded', function () {
+                                                document.getElementById("frontprice").value = "1";
+                                                document.getElementById("backprice").value = "5000";
+                                            });
+
+                                            // 在表單提交時檢查並設置預設值
+                                            document.getElementById("priceForm").addEventListener("submit", function (event) {
+                                                var frontPriceInput = document.getElementById("frontprice");
+                                                var backPriceInput = document.getElementById("backprice");
+
+                                                if (frontPriceInput.value === "") {
+                                                    frontPriceInput.value = "1"; // 設定預設值
+                                                }
+
+                                                if (backPriceInput.value === "") {
+                                                    backPriceInput.value = "5000"; // 設定預設值
+                                                }
+                                            });
+                                        </script>*@
                                     </div>
                                 </li>
                                 <li>
@@ -200,9 +221,9 @@
                                 <li>
                                     <div class="m-1 p-1">
                                         <span class="mx-2">出版日期</span>
-                                        <input id="frontdate" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="日期" type="date" maxlength="20" value="2005-12-02" autocomplete="off" />
+                                        <input id="frontdate" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="日期" type="date" maxlength="20" value="2005-12-02" />
                                         <span class="mx-2">至</span>
-                                        <input id="backdate" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="日期" type="date" maxlength="20" value="2023-03-31" autocomplete="off" />
+                                        <input id="backdate" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="日期" type="date" maxlength="20" value="2023-03-31" />
                                         <span class="mx-2">之間</span>
                                     </div>
                                 </li>
@@ -233,7 +254,11 @@
                                         [backdiscount, frontdiscount] = [frontdiscount, backdiscount];
                                     }
 
-                                    var url = '@Url.Action("searchList", "Home")' + '?txtKeyword=' + encodeURIComponent(keyword) + '&frontPrice=' + frontPrice + '&backPrice=' + backPrice + '&frontdiscount=' + frontdiscount + '&backdiscount=' + backdiscount;
+                                    if (backdate < frontdate) {
+                                        [backdate, frontdate] = [frontdate, backdate]
+                                    }
+
+                                    var url = '@Url.Action("searchList", "Home")' + '?txtKeyword=' + encodeURIComponent(keyword) + '&frontPrice=' + frontPrice + '&backPrice=' + backPrice + '&frontdiscount=' + frontdiscount + '&backdiscount=' + backdiscount + '&frontdate=' + frontdate + '&backdate=' + backdate;
                                     // 使用 Url.Action 方法动态生成 ActionLink 的 URL，并将关键字和价格范围作为参数传递
                                     window.location.href = url; // 跳转到生成的 URL
                                 });
