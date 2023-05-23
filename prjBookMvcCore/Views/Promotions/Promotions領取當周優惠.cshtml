@@ -10,9 +10,11 @@
         .coupontext{
             font-size: 2em;
             font-style: italic;
-            text-align: center;
             color:cornsilk;
             font-weight:bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .expired {
             color: red;
@@ -37,14 +39,14 @@
         <div class="col-5" style="background-image: url('/Image/Promotions/週三.png'); background-size:auto;background-repeat:no-repeat; padding:50px;border:unset;align-items: center;">
         <div class="row">
             <div class="col-1"></div>
-            <div class="col-7 coupontext" style="font-size:2em">滿888扣88</div>
+            <div class="col-7 coupontext" >滿888扣88</div>
                 <div class="col-1">  <button class="btn-outline-warning" id="wednesday_coupon17" onclick="takeWeekCoupon(17,'@wednesday.ToString("yyyy/MM/dd")',1,this)">领取</button> </div>
         </div>
     </div>
     <div class="col-5" style="background-image: url('/Image/Promotions/週三.png'); background-size:auto;background-repeat:no-repeat; padding:50px;border:unset;">
         <div class="row">
             <div class="col-1"></div>
-            <div class="col-7 coupontext" style="font-size:2em">滿1699扣199</div>
+            <div class="col-7 coupontext" >滿1699扣199</div>
                 <div class="col-1">  <button class="btn-outline-warning" id="wednesday_coupon15" onclick="takeWeekCoupon(15,'@wednesday.ToString("yyyy/MM/dd")',1,this)">领取</button> </div>
         </div>
     </div>
