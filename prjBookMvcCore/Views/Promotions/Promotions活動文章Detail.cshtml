@@ -82,12 +82,9 @@
         var detail = db.ArticalToBookDetails.Where(d => d.ArticalId == ArticalId).Select(d => new { d.Book.BookTitle, d.Book.Isbn, d.Book.UnitPrice, d.Book.ContentIntro, d.Book.CoverPath, d.Book.BookId, d.Book.PublicationDate, d.Book.PublisherId, d.Book.Publisher.PublisherName }).ToList();
         foreach (var g in detail)
         {
-            var q作者 = db.AuthorDetails.Where(a => a.BookId == g.BookId).Select(a => new { a.Author.AuthorName, a.Author.AuthorId });
-            int price原價 = (int)g.UnitPrice;
             string title中 = g.BookTitle.Split("$")[0];
+            var q作者 = db.AuthorDetails.Where(a => a.BookId == g.BookId).Select(a => new { a.Author.AuthorName, a.Author.AuthorId });
             var bookDiscountDetail = db.BookDiscountDetails.Where(d => d.BookId == g.BookId & d.BookDiscountStartDate < DateTime.Now & d.BookDiscountEndDate > DateTime.Now).Select(d => new { d.BookDiscountId, d.BookDiscount.BookDiscountName, d.BookDiscount.BookDiscountAmount });
-            string price優惠價 = "";
-            foreach (var dis in bookDiscountDetail) { price優惠價 = dis.BookDiscountName + " " + $"{(dis.BookDiscountAmount * g.UnitPrice):0}"; }
             <div class="row box p-3 mb-4">
                 <div class="col-3">
                     <a href="~/Book/BookInformation/@g.BookId">
@@ -99,17 +96,18 @@
                 </div>
                 <div class="col-3">
                     <p>作者：</p>
-                    @{
-                        foreach (var item in q作者)
-                        {
-                            <a href="~/Book/authorInformation?id=@item.AuthorId"> <p style=" text-indent: 4em;line-height: 1em; " id="Author">@item.AuthorName</p> </a>
-                        }
+                    @foreach (var item in q作者)
+                    {
+                        <a href="~/Book/authorInformation?id=@item.AuthorId"> <p style=" text-indent: 4em;line-height: 1em; " id="Author">@item.AuthorName</p> </a>
                     }
                     <p>出版日期：@g.PublicationDate.ToString("yyyy/MM/dd")</p>
                     <p>出版社：<a href="~/Book/publisherInformation/@g.PublisherId">@g.PublisherName </a></p>
                     <p>ISBN：@g.Isbn</p>
-                    <p>原價：<del style="color:red;font-style:oblique">@price原價</del> 元</p>
-                    <p>優惠價： @price優惠價 元</p>
+                    <p>原價：<del style="color:red;font-style:oblique">@((int)g.UnitPrice) </del>  元</p>
+                    @foreach (var dis in bookDiscountDetail)
+                    {
+                        <p>優惠價：<span style="color: #E3007F; "> @((dis.BookDiscountAmount * 100).ToString("0"))</span>折 <span style="color: #E3007F;font-weight:bold;">@((int)Math.Round(g.UnitPrice * dis.BookDiscountAmount))</span>元</p>
+                    }
                 </div>
                 <div class="col-6">
                     <a href="~/Book/BookInformation/@g.BookId#contentIntro" title="移至完整內容簡介">簡介：</a>
