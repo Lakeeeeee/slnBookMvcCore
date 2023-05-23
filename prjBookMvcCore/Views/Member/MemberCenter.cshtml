@@ -9,6 +9,7 @@
     var ex = nextAmount-Model.CostAmount;
     var q = user._db.MessageMemberDetails.Where(x => x.MemberId == user.UserId && x.ReadStatu == 0).Count();
     var q1 = user._db.OrderDiscountDetails.Where(x => x.MemberId == user.UserId && x.IsOrderDiscountUse =="N").Count();
+    var q2 = user._db.Orders.Where(x => x.MemberId == user.UserId).Count();
 }
 
 <style>
@@ -68,7 +69,7 @@
                             <a class="card-body" style="display:block;width:100%;" href="~/Member/myOrders">
                                 <p class="card-text">
                                     您已購買過
-                                </p><span class="display-6" id="orders">0  </span>次書籍
+                                </p><span class="display-6" id="orders">@q2  </span>次書籍
                             </a>
                         </div>
                     </div>
