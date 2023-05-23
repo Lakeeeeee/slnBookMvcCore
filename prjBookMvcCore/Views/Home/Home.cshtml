@@ -4,30 +4,41 @@
 @{
     ViewBag.Title = "Home";
     Layout = "~/Views/Shared/_Layout.cshtml";
-   //Layout = "~/Views/Shared/_Layout_Homepage.cshtml";
+    //Layout = "~/Views/Shared/_Layout_Homepage.cshtml";
 }
 
 <style>
-    .twolines {
-        line-height: 1.2em;
-        height: 2.4em;
+    div {
+        boder: 1px;
+        background-color: plum;
     }
 
-     .bookCaption {
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+    .bookCaption {
+        line-height: 1.5em; /* 設置行高為字體大小的1.5倍 */
+        height: 3em; /* 設置高度為字體大小的3倍 */
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
-        .authorCaption {
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+    .authorCaption {
+        line-height: 1.5em; /* 設置行高為字體大小的1.5倍 */
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .carouselArrow {
+        top: 130px;
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 15%;
+        height: 100px;
+        width: 50px;
+    }
 </style>
 
 <body>
@@ -61,41 +72,34 @@
 
     <br />
     <hr />
-    @*暢銷排行榜*@
-    <div class="container">
-        <div class="row">
-            <div class="col align-content-start" style="display: flex">
-                <h3>暢銷排行榜</h3>
-            </div>
-        </div>
-        @*輪播圖*@
-        <div class="row">
+    @*暢銷排行榜輪播圖*@
+    <div class="row">
+        <div class="col-10 " style="margin-left:100px">
             <div id="carouselExampleTopSell" class="carousel slide">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        @*輪播書本第一頁*@
-                        <div class="row">
-                            @{
-                                for (int i = 0; i < 6; i++)
+                <div class="carousel-inner ">
+                    @for (int p = 0; p <= 3; p++)
+                    {
+                        <div class="carousel-item @(p == 0 ? "active" : "")">
+                            <div class="row">
+                                <div class="col-1" style="display:flex;justify-content:center;align-content:center">
+                                </div>
+                                @for (int i = p * 5; i < (p + 1) * 5; i++)
                                 {
-                                   RecommendInformation item = Model.quantity[i];
-                                    <div class="col book-item" data-publication-date="@item.book.PublicationDate" data-price="@((int)Math.Round(item.bookDiscount.BookDiscountAmount * item.book.UnitPrice))">
-                                    <div>@if(i<3){<img src="~/Image/crown_icon.png" height="30">}TOP @(i+1)</div>    
-                                    <div style="position:relative">
+                                    RecommendInformation item = Model.quantity[i];
+                                    <div class="col-2 book-item" data-publication-date="@item.book.PublicationDate" data-price="@((int)Math.Round(item.bookDiscount.BookDiscountAmount * item.book.UnitPrice))">
+                                        <div>
+                                            @if (i < 3)
+                                            {
+                                                <img src="~/Image/crown_icon.png" height="30">
+                                            }TOP @(i + 1)
+                                        </div>
+                                        <div style="position:relative">
                                             <a href="~/Book/BookInformation/@item.book.BookId"><img src="~/Image/Book/@item.book.CoverPath" title="@item.book.BookTitle" height="150"></a>
                                         </div>
                                         <div class="caption">
                                             <ul style="list-style:none; margin:0; padding:0;">
-                                                <li> <a class="bookCaption two-lines" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle</a></li>
-                                                <li class="prod_author authorCaption">
-                                                    作者：
-                                                    @if (item.author != null)
-                                                    {
-                                                        int aaaaa = item.author.AuthorId;
-                                                        <a asp-controller="Book" asp-action="authorInformation" asp-route-id="@aaaaa">@item.author.AuthorName</a>
-                                                    }
-                                                </li>
-                                                <li class="Price">原    價：@((int)Math.Round(item.book.UnitPrice))元</li>
+                                                <li><a class="bookCaption mb-2" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle.Replace("$$"," ")</a></li>
+                                                <li class="Price">原價：@((int)Math.Round(item.book.UnitPrice))元</li>
                                                 <li class="discPrice">
                                                     優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
                                                     <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
@@ -104,62 +108,24 @@
                                         </div>
                                     </div>
                                 }
-                            }
-                        </div>
-                    </div>
-                    @*輪播書本第二~四頁*@
-                    @{
-                        for (int p = 2; p <= 3; p++)
-                        {
-                            <div class="carousel-item">
-                                <div class="row">
-                                    @{
-                                        for (int i = (p - 1) * 6; i < p * 6; i++)
-                                        {
-                                            RecommendInformation item = Model.quantity[i];
-                                            <div class="col book-item" data-publication-date="@item.book.PublicationDate" data-price="@((int)Math.Round(item.bookDiscount.BookDiscountAmount * item.book.UnitPrice))">
-                                                <div>TOP @(i+1) </div>
-                                                <div style="position:relative">
-                                                    <a href="~/Book/BookInformation/@item.book.BookId"><img src="~/Image/Book/@item.book.CoverPath" title="@item.book.BookTitle" height="150"></a>
-                                                </div>
-                                                <div class="caption">
-                                                    <ul style="list-style:none; margin:0; padding:0;">
-                                                        <li> <a class="bookCaption two-lines" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle</a></li>
-                                                        <li class='prod_author'>
-                                                            作者：
-                                                            @if (item.author != null)
-                                                            {
-                                                                int aaaaa = item.author.AuthorId;
-                                                                <a asp-controller="Book" asp-action="authorInformation" asp-route-id="@aaaaa">@item.author.AuthorName</a>
-                                                            }
-                                                        </li>
-                                                        <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))</span>元</li>
-                                                        <li class="discPrice">
-                                                            優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
-                                                            <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        }
-                                    }
+                                <div class="col-1" style="display:flex;justify-content:center;align-content:center">
                                 </div>
                             </div>
-                        }
+                        </div>
                     }
-                    @*輪播圖切換按鈕*@ <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleTopSell" data-bs-slide="prev" border=5>
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    @*輪播圖切換按鈕*@<button class="carousel-control-next " type="button" data-bs-target="#carouselExampleTopSell" data-bs-slide="next" border=5>
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
+                </div> 
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleTopSell" data-bs-slide="prev" border=5>
+                    <span class="carousel-control-prev-icon carouselArrow" aria-hidden="true" style="margin-left:0px"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleTopSell" data-bs-slide="next" border=5>
+                    <span class="carousel-control-next-icon carouselArrow" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
         </div>
     </div>
-    <br />
+
     <hr />
 
     <div class="container">
@@ -176,8 +142,7 @@
                             <li class="text-center mb-3">
                                 <img height="150" src="~/Image/Book/@item.book.CoverPath" />
                             </li>
-                            <li class="bookCaption twolines mb-2">@item.book.BookTitle</li>
-
+                            <li class="bookCaption mb-2">@item.book.BookTitle.Replace("$$"," ")</li>
                             <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))元</span></li>
                             <li class="discPrice">
                                 優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
@@ -194,7 +159,6 @@
                     }
                 }
             }
-
         </div>
     </div>
 
@@ -214,8 +178,8 @@
                             <li class="text-center mb-3">
                                 <img height="150" src="~/Image/Book/@item.book.CoverPath" />
                             </li>
-                            <li class="bookCaption twolines mb-2">@item.book.BookTitle</li>
-                              <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))元</span></li>
+                            <li class="bookCaption mb-2">@item.book.BookTitle.Replace("$$"," ")</li>
+                            <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))元</span></li>
                             <li class="discPrice">
                                 優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
                                 <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
@@ -256,17 +220,17 @@
                             <li class="text-center mb-3">
                                 <img height="150" src="~/Image/Book/@item.book.CoverPath" />
                             </li>
-                            <li class="bookCaption twolines mb-2">@item.book.BookTitle</li>
+                            <li class="bookCaption mb-2">@item.book.BookTitle.Replace("$$"," ")</li>
                             <li>
                                 評論等級：<span>
-                                        @for (int x = 0; x < item.comment.Stars; x++)
-                                        {
+                                    @for (int x = 0; x < item.comment.Stars; x++)
+                                    {
                                         <img style="width:20px; height:auto" src="~/image/icons8-star.gif" />
-                                        }
+                                    }
                                 </span>
                             </li>
                             <li>評論日期：@item.comment.CommentTime.ToString("yyyy-MM-dd")</li>
-                            <li class="bookCaption twolines" style="color:grey">@item.comment.CommentText</li>
+                            <li class="bookCaption" style="color:grey">@item.comment.CommentText</li>
                         </ul>
                     </div>
                     <br />
