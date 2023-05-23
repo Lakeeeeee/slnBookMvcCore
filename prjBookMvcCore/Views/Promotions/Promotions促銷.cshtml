@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Promotions促銷";
+    BookShopContext db = new BookShopContext();
 }
 @inject UserInforService _userInforService
 @model MenuInformation
@@ -49,30 +50,21 @@
     </style>
 </head>
 <body>
-    @{
-        BookShopContext db = new BookShopContext();
-        int id = ViewBag.DiscountId;
-        var q = db.BookDiscounts.Where(d => d.BookDiscountId == id).Select(d => d);
-        foreach (var g in q)
-        {
-            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a class="text-decoration-none" href="~/Home/Home" style="color:black">首頁</a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a class="text-decoration-none" href="~/Promotions/Promotions活動總覽圖" style="color:black">活動</a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a class="text-decoration-none" href="~/Promotions/Promotions促銷活動" style="color:black">促銷活動</a>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page" style="color:gray">促銷 @g.BookDiscountName</li>
-                </ol>
-            </nav>
-
-            <h1>促銷 @g.BookDiscountName </h1>
-        }
-    }
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="text-decoration-none" href="~/Home/Home" style="color:black">首頁</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="text-decoration-none" href="~/Promotions/Promotions活動總覽圖" style="color:black">活動</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="text-decoration-none" href="~/Promotions/Promotions促銷活動" style="color:black">促銷活動</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page" style="color:gray">促銷 @ViewBag.Discount</li>
+        </ol>
+    </nav>
+    <h1>促銷 @ViewBag.Discount </h1>
     <div class="container-fluid justify-content-center2" style="margin-top: 20px">
         <div class="row">
             @* 左邊功能欄 *@
@@ -82,13 +74,10 @@
                         <div class="card-header">書目優惠</div>
                         <ul class="list-group list-group-flush">
                             @{
-                                for (int i = 1; i <= 5; i++)
+                                var bookDis = db.BookDiscounts.Select(b => b).Skip(1).Take(5).ToList();
+                                foreach (var g in bookDis)
                                 {
-                                    var bookDis = db.BookDiscounts.Where(b => b.BookDiscountId == i).Select(b => b).ToList();
-                                    foreach (var g in bookDis)
-                                    {
-                                        <li class="list-group-item"><a href="~/Promotions/Promotions促銷/@g.BookDiscountId" title="促銷 @g.BookDiscountName 頁面">@g.BookDiscountName</a></li>
-                                    }
+                                    <li class="list-group-item"><a href="~/Promotions/Promotions促銷/@g.BookDiscountId" title="促銷 @g.BookDiscountName 頁面">@g.BookDiscountName</a></li>
                                 }
                             }
                         </ul>
@@ -114,15 +103,16 @@
                         foreach (var item in Model.menuItems)
                         {
                             string title中 = item.book.BookTitle.Split("$")[0];
-                            string price原價 = $"{item.book.UnitPrice:c0}";
-                            var price優惠價 = $"{(item.bookDiscount.BookDiscountAmount * item.book.UnitPrice):0}";
                             var 優惠截止日 = item.bookDiscountDetail.BookDiscountEndDate.AddDays(-1).ToString("yyyy/MM/dd");
                             <div class="col-3 mb-3">
                                 <a id="@item.book.BookId" href="~/Book/BookInformation/@item.book.BookId"> <img src="~/Image//Book/@item.book.CoverPath" class="d-block w-100 img-with-border" alt="..." title="@title中" /></a>
                                 <ul style="list-style:none; margin:0; padding:0;" class="text-start">
                                     <li><div class="clamp two-lines mt-3"><a id="@item.book.BookId" href="~/Book/BookInformation/@item.book.BookId" title="@title中">@title中</a></div></li>
-                                    <li>原價：<del style="color:red;font-style:oblique">@price原價</del></li>
-                                    <li>優惠價：@item.bookDiscount.BookDiscountName @price優惠價 元</li>
+                                    <li>原價：<del style="color:red;font-style:oblique">@((int)Math.Round(item.book.UnitPrice)) </del> 元</li>
+                                    <li>
+                                        優惠價：<span style="color: #E3007F; ">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
+                                        <span style="color: #E3007F;font-weight:bold;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
+                                    </li>
                                     <li>優惠截止日：@優惠截止日</li>
                                 </ul>
                                 <button class="btn btn-outline-warning mx-5 btn-sm m-2" title="尚未建置" onclick="addToCart(@item.book.BookId,@_userInforService.UserId)">
@@ -145,25 +135,17 @@
                             @if (Model.CurrentPage > 1)
                             {
                                 <li class="page-item">
-                                    <a class="page-link" href="@Url.Action("Promotions促銷", new { id = Model.bookDiscountId, page = Model.CurrentPage - 1 })" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                        <span class="sr-only">前一頁</span>
-                                    </a>
+                                    <a class="page-link" href="@Url.Action("Promotions促銷", new { id = Model.bookDiscountId, page = Model.CurrentPage - 1 })" aria-label="Previous"><span aria-hidden="true">&laquo;</span><span class="sr-only">前一頁</span></a>
                                 </li>
                             }
                             @for (int i = 1; i <= Model.TotalPages; i++)
                             {
-                                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                                    <a class="page-link" href="@Url.Action("Promotions促銷", new { id = Model.bookDiscountId, page = i })">@i</a>
-                                </li>
+                                <li class="page-item @(i == Model.CurrentPage ? "active" : "")"><a class="page-link" href="@Url.Action("Promotions促銷", new { id = Model.bookDiscountId, page = i })">@i</a></li>
                             }
                             @if (Model.CurrentPage < Model.TotalPages)
                             {
                                 <li class="page-item">
-                                    <a class="page-link" href="@Url.Action("Promotions促銷", new { id = Model.bookDiscountId, page = Model.CurrentPage + 1 })" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                        <span class="sr-only">下一頁</span>
-                                    </a>
+                                    <a class="page-link" href="@Url.Action("Promotions促銷", new { id = Model.bookDiscountId, page = Model.CurrentPage + 1 })" aria-label="Next"><span aria-hidden="true">&raquo;</span><span class="sr-only">下一頁</span></a>
                                 </li>
                             }
                         </ul>

@@ -20,10 +20,10 @@ namespace prjBookMvcCore.Controllers
         {
             if (id != 0)
             {
-                int discountId = id;
-                ViewBag.DiscountId = discountId;
+                var bookD=db.BookDiscounts.Where(d=>d.BookDiscountId==id).ToList();
+                foreach (var g in bookD) { ViewBag.Discount = g.BookDiscountName;}
                 int itemsPerPage = 28;//每頁只顯示28個                   
-                var bookDiscountDetail = db.BookDiscountDetails.Where(d => d.BookDiscountId == discountId & d.BookDiscountStartDate < DateTime.Now & d.BookDiscountEndDate > DateTime.Now).Select(d => new { d.BookDiscount.BookDiscountName, d.BookDiscount.BookDiscountAmount, d.Book.BookTitle, d.Book.UnitPrice, d.Book.CoverPath, d.Book.BookId, d.BookDiscountEndDate });
+                var bookDiscountDetail = db.BookDiscountDetails.Where(d => d.BookDiscountId == id & d.BookDiscountStartDate < DateTime.Now & d.BookDiscountEndDate > DateTime.Now).Select(d => new { d.BookDiscount.BookDiscountName, d.BookDiscount.BookDiscountAmount, d.Book.BookTitle, d.Book.UnitPrice, d.Book.CoverPath, d.Book.BookId, d.BookDiscountEndDate });
 
                 //頁面顯示控制
                 int totalItems = bookDiscountDetail.Count();
@@ -55,7 +55,7 @@ namespace prjBookMvcCore.Controllers
                     menuItems = menuItems,
                     CurrentPage = page,
                     TotalPages = totalPages,
-                    bookDiscountId = discountId
+                    bookDiscountId = id,
                 };
                 return View(menuInformation);
             }
