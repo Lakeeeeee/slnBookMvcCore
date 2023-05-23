@@ -394,9 +394,9 @@
                         <p>
                             類別：
                             <span>
-                                <a v-if="book.languageName && book.languageName.length > 1" href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.languageName}}</a>>
-                                <a v-if="book.categoryName && book.categoryName.length > 1" href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.categoryName}}</a>>
-                                <a v-if="book.subCategoryName && book.subCategoryName.length > 1" href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.subCategoryName}}</a>
+                                <a v-if="book.languageName && book.languageName.length > 1" :href="menuUrl()" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.languageName}}</a>>
+                                <a v-if="book.categoryName && book.categoryName.length > 1" :href="categoryUrl(book.categoryID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.categoryName}}</a>>
+                                <a v-if="book.subCategoryName && book.subCategoryName.length > 1" :href="subCategoryUrl(book.subCategoryID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.subCategoryName}}</a>
                             </span>
                         </p>
                     </div>
