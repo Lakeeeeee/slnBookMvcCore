@@ -14,7 +14,7 @@
 }
     <style>
         /*    div{border:1px solid #000000}
-            */ /**/
+                                    */ /**/
 
         .linkaFormat {
             text-decoration: none;
@@ -34,22 +34,19 @@
                 <label>廣告圖</label>
             </div>
             <div class="col-4">
-                <div class="container justify-content-center bg-light" style="border-radius:10px;  padding-block:15px">
+                <div class="container justify-content-center bg-light" style="border-radius:10px; padding-block:15px">
                     <p><label class="">會員登入</label></p>
-                    <form asp-controller="Member" asp-action="Login" method="post" id="demo-form">
+                    <form asp-action="Login" id="demo-form">
                         <p><input type="text" placeholder="讀本Email" name="Account_P" id="account" /></p>
                         <p><input type="password" placeholder="讀本密碼" name="Password_P" id="password" /></p>
                         <p>
                             <div style="block-size:inherit;" id="html_element"></div>
                             <br>
-                            <button type="submit" class="btn btn-outline-success">讀本會員登入</button>
+                            <button id="submitBtn" type="submit" class="btn btn-outline-success">讀本會員登入</button>
                             <a class="linkaFormat small" href="~/Member/Signin">註冊</a>｜
                             <a class="linkaFormat small" href="~/Member/Find_password">忘記帳密</a>
                         </p>
                     </form>
-                    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
-                        async defer>
-                    </script>
                     <p>
                         <button type="button" id="demo" class="btn btn-outline-success">Demo</button>
                     </p>
@@ -71,7 +68,17 @@
         })
     </script>
     <script>
-
-
+        const form = document.getElementById('demo-form');
+        form.addEventListener('submit', async () => {
+            const response = await fetch('@Url.Action("Login", "Member")', { method: 'POST', body: new FormData(form) });
+            const comfirm = await response.json();
+            if (comfirm.success === true) {
+                alert(comfirm.message);
+                window.location.href = '/Home/Home';
+                return;
+            }
+            alert(comfirm.message);
+            window.location.reload();
+        });
     </script>
 

@@ -534,6 +534,12 @@ namespace prjBookMvcCore.Controllers
                 return ris;
             }
         }
+
+        public IActionResult askMe()
+        {
+            return View();
+        }
+
     }
 
    
