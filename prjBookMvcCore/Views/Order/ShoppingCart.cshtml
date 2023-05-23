@@ -280,7 +280,7 @@
         </div>
         <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
             <button class=" btn btn-primary col-4 me-md-2" onclick="btnClick('nav-cart-tab')">返回購物車</button>
-            <button class="btn btn-primary col-4 me-md-2" onclick="p2btnClick('nav-checkOutConfirm-tab')">下一步</button>
+            <button class="btn btn-primary col-4 me-md-2" onclick="p2nextbtnClick('nav-checkOutConfirm-tab')">下一步</button>
         </div>
     </div>
 
@@ -293,7 +293,7 @@
                 <table class="table table-striped" id="table2">
                     <thead>
                         <tr>
-                            <th style="width:50px;"><input type="checkbox"></th>
+                            @*<th style="width:50px;"><input type="checkbox"></th>*@
                             <th style="width:50px;">序號</th>
                             <th style="width:500px;">書名</th>
                             <th>優惠</th>
@@ -357,7 +357,7 @@
 
 <script>
     //P2>>P3
-    function btnClick(tabId) {
+    function p2nextbtnClick(tabId) {
         // 取得輸入值
         var reciverName = document.getElementById('inputName').value;
         var reciverPhone = document.getElementById('inputPhone').value;
