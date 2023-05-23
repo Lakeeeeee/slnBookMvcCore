@@ -23,22 +23,6 @@
         .menu ul li { /*li水平顯示*/
             display: inline;
         }
-
-        .bookCaption {
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .authorCaption {
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
     </style>
 </head>
 <body>
@@ -89,7 +73,7 @@
                         @{
                             foreach (var g in Model.articals.Take(8))
                             {
-                                    <li class="list-group-item"><span><a href="~/Promotions/Promotions活動文章Detail/@g.ArticalId">@g.ArticalTitle</a></span></li>
+                                        <li class="list-group-item"><span><a href="~/Promotions/Promotions活動文章Detail/@g.ArticalId">@g.ArticalTitle</a></span></li>
                             }
                         }
                     </ul>
@@ -98,14 +82,21 @@
                 <div class="card">
                     @* 中文書分類 *@
                     <div class="card-header">
-                        <a asp-controller="Category" asp-action="分類頁面" asp-route-id="0">繁中</a>
+                        @{
+                            BookShopContext db = new BookShopContext();
+                            var s = db.Books.Where(c => c.LanguageId == 1).Select(c => c.BookId).ToList();
+                            int countAll = s.Count;
+                            <a asp-controller="Category" asp-action="分類頁面" asp-route-id="0">繁中(@countAll)</a>
+                          }
                     </div>
                     @foreach (var category in Model.categories)
                         {
                             @if (category.CategoryId > 14)
                             {
+                            var q = db.CategoryDetails.Where(c => c.SubCategory.CategoryId == category.CategoryId).Select(c => c).ToList();
+                            int count = q.Count;
                                 <div class="row card-body border-1">
-                                        <a asp-controller="Category" asp-action="分類頁面" asp-route-id="@category.CategoryId">@category.CategoryName</a>
+                                        <a asp-controller="Category" asp-action="分類頁面" asp-route-id="@category.CategoryId">@category.CategoryName (@count)</a>
                                 </div>
                             }
                         }
