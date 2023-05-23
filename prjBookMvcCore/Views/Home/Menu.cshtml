@@ -129,14 +129,16 @@
         <hr />
         <br />
         <div class="row">
-           <div class="mb-3">
-            <div class="col align-content-start" style="display: flex">
-                <h3>繁中書籍</h3>
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="mb-0">繁中書籍</h3>
+                <div class="d-flex">
+                    <div class="ms-auto pe-2">
+                        <a role="button" class="btn btn-sm btn-outline-secondary" asp-controller="Category" asp-action="分類頁面" asp-route-id="0">看更多</a>
+                    </div>
+                </div>
             </div>
-            <div class="col justify-content-end" style="display: flex; padding:5px">
-                    <a role="button" class="btn btn-sm btn-outline-secondary mx-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="0">看更多</a>
             </div>
-            </div>
+            <br />
             <div class="container body-content">
                 <div id="carouselExampleEdit" class="carousel carousel-dark slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
