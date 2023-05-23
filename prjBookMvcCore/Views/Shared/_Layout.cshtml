@@ -170,7 +170,7 @@
                                 <li>
                                     <div class="m-1 p-1">
                                         <span class="mx-2">折扣</span>
-                                        <select id="折扣1" name="折扣1" style="margin-left:2em; width:100px">
+                                        <select id="frontdiscount" name="折扣1" style="margin-left:2em; width:100px">
                                             <option value="0" selected>請選擇 </option>
                                             @{
                                                 BookShopContext db = new BookShopContext();
@@ -182,7 +182,7 @@
                                             }
                                         </select>
                                         <span class="mx-2">至</span>
-                                        <select id="折扣2" name="折扣2" style="width:100px">
+                                        <select id="backdiscount" name="折扣2" style="width:100px">
                                             <option value="0" selected>請選擇 </option>
                                             @{
                                                 foreach (var dis in bookDiscount)
@@ -198,9 +198,9 @@
                                 <li>
                                     <div class="m-1 p-1">
                                         <span class="mx-2">出版日期</span>
-                                        <input style="border-right: #C4C4C4 2px solid;width:100px" placeholder="日期" type="search" maxlength="20" value="" autocomplete="off" />
+                                        <input id="frontdate" style="border-right: #C4C4C4 2px solid;width:100px" placeholder="日期" type="search" maxlength="20" value="" autocomplete="off" />
                                         <span class="mx-2">至</span>
-                                        <input style="border-right: #C4C4C4 2px solid;width:100px" placeholder="日期" type="search" maxlength="20" value="" autocomplete="off" />
+                                        <input id="backdate" style="border-right: #C4C4C4 2px solid;width:100px" placeholder="日期" type="search" maxlength="20" value="" autocomplete="off" />
                                         <span class="mx-2">之間</span>
                                     </div>
                                 </li>
