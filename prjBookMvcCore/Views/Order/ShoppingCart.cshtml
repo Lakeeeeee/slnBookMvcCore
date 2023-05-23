@@ -344,13 +344,16 @@
             <h4>訂購人</h4>
             <p>姓名：@mName</p>
             <p>電話：@mPhone</p>
+            <p id="paymentId">付款方式</p>
+            <p id="shipmentId">配送方式</p>
+            
         </div>
         <div class="row">
             <h3>結帳金額</h3>
-            <p>總共_____件</p>
-            <p></p>
-            <p>總金額：</p>
-            <p>優惠折扣：</p>
+            <p>總共 @*@count*@ 件</p>
+            <p>總金額：@*@totalAmount*@ 元</p>
+            <p id="discountId"></p>
+            <p id="rebateAmount"></p>
             <p>運費：</p>
             <p>結帳金額：</p>
         </div>
@@ -382,10 +385,52 @@
 
 </div>
 
-
 <script>
     //P2>>P3
-    function p2nextbtnClick(tabId) {
+    function p2btnClick(tabId) {
+        // 取得輸入值
+        var reciverName = document.getElementById('inputName').value;
+        var reciverPhone = document.getElementById('inputPhone').value;
+        var shipAddr = document.getElementById('inputAddress').value;
+        var paymentId = document.querySelector('input[name="paymentId"]:checked').value;
+        var shipmentId = document.querySelector('input[name="shipmentId"]:checked').value;
+        var discountId = document.querySelector('input[name="oD"]:checked').value;
+        var rebateAmount = document.getElementById('rebateAmountInput').value;
+
+        // 更新P3中的內容
+        document.getElementById('reciverName').innerText = '姓名: ' + reciverName;
+        document.getElementById('reciverPhone').innerText = '電話: ' + reciverPhone;
+        document.getElementById('shipAddr').innerText = '地址: ' + shipAddr;
+        document.getElementById('paymentId').innerText = '付款方式: ' + paymentName;
+        document.getElementById('shipmentId').innerText = '配送方式: ' + shipmentName;
+        document.getElementById('discountId').innerText = '優惠項目: ' + discountName;
+        document.getElementById('rebateAmount').innerText = '回饋金金額: ' + rebateAmount;
+
+        // 回饋金上限確認
+        var input = document.getElementById('rebateAmountInput');
+        var maxLimitError = document.getElementById('maxLimitError');
+
+        if (parseInt(input.value) > parseInt(input.max)) {
+            maxLimitError.style.display = 'block';
+            input.focus(); // 將焦點設定在回饋金輸入欄位上
+            return; // 阻止跳轉到下一頁
+        }
+
+        maxLimitError.style.display = 'none'; // 如果回饋金未超過上限，隱藏警告訊息
+
+        // 切換到Page 3
+        document.getElementById(tabId).classList.add('active');
+        document.getElementById('nav-checkOutInfo-tab').classList.remove('active');
+        document.getElementById('nav-checkOutInfo').classList.remove('show');
+        document.getElementById('nav-checkOutConfirm').classList.add('show');
+        document.getElementById('nav-checkOutConfirm-tab').classList.add('active');
+
+    }
+</script>
+
+@*<script>
+    //p2>p3
+    function p2btnClick(tabId) {
         // 取得輸入值
         var reciverName = document.getElementById('inputName').value;
         var reciverPhone = document.getElementById('inputPhone').value;
@@ -396,11 +441,22 @@
         document.getElementById('reciverPhone').innerText = '電話: ' + reciverPhone;
         document.getElementById('shipAddr').innerText = '地址: ' + shipAddr;
 
+        // 回饋金上限確認
+        var input = document.getElementById('rebateAmountInput');
+        var maxLimitError = document.getElementById('maxLimitError');
+
+        if (parseInt(input.value) > parseInt(input.max)) {
+            maxLimitError.style.display = 'block';
+            input.focus();
+            return; // 阻止跳轉到下一頁
+        }
+
+        maxLimitError.style.display = 'none'; // 如果回饋金未超過上限，隱藏警告訊息
+
         // 切換到Page 3
         document.getElementById(tabId).click();
     }
-</script>
-
+</script>*@
 <script>
     /*送出訂購*/
     const formForOrderDetails = document.getElementById('formForOrderDetails');
