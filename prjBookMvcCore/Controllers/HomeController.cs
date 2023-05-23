@@ -46,7 +46,7 @@ namespace prjBookMvcCore.Controllers
             return View();
         }
 
-        public IActionResult searchList(string txtKeyword, int frontPrice, int backPrice, decimal frontdiscount, decimal backdiscount, DateTime frontdate, DateTime backdate)
+        public IActionResult searchList(string txtKeyword, decimal frontPrice, decimal backPrice, decimal frontdiscount, decimal backdiscount, DateTime frontdate, DateTime backdate)
         {
             //從資料庫中取得最小值和最大值
             decimal minprice = db.Books.Min(b => b.UnitPrice);
@@ -54,11 +54,21 @@ namespace prjBookMvcCore.Controllers
             ViewBag.frontprice = minprice;
             ViewBag.backprice = maxprice;
 
+            //decimal mindiscount = db.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).Min();
+            //decimal maxdiscount=db.BookDiscountDetails.Select(x=>x.BookDiscount.BookDiscountAmount).Max();
+            //ViewBag.frontdiscount = mindiscount;
+            //ViewBag.backdiscount = maxdiscount;
+
+            DateTime mindate = db.Books.Min(d => d.PublicationDate);
+            DateTime maxdate=db.Books.Max(d=>d.PublicationDate);
+            ViewBag.frontdate = mindate;
+            ViewBag.backdate=maxdate;
+
             CForHomePage searchresult = GetSearchResult(txtKeyword, frontPrice, backPrice, frontdiscount, backdiscount, frontdate, backdate);
             return View(searchresult);
         }
 
-        private CForHomePage GetSearchResult(string txtkeyword, int frontPrice, int backPrice, decimal frontdiscount, decimal backdiscount, DateTime frontdate, DateTime backdate)
+        private CForHomePage GetSearchResult(string txtkeyword, decimal frontPrice, decimal backPrice, decimal frontdiscount, decimal backdiscount, DateTime frontdate, DateTime backdate)
         {
             using (var db = new BookShopContext())
             {
