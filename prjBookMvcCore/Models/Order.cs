@@ -17,10 +17,12 @@ namespace prjBookMvcCore.Models
         public int PaymentId { get; set; }
         public int PayStatusId { get; set; }
         public int ShippingStatusId { get; set; }
-        public string ShipAddr { get; set; } = null!;
         public int? OrderDiscountId { get; set; }
         public decimal? PointAmount { get; set; }
         public decimal? TotalPay { get; set; }
+        public string? ReciverName { get; set; }
+        public string? ReciverPhone { get; set; }
+        public string ShipAddr { get; set; } = null!;
 
         public virtual Member Member { get; set; } = null!;
         public virtual OrderDiscount? OrderDiscount { get; set; }

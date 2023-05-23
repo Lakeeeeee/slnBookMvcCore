@@ -3,7 +3,8 @@
 
 @{
     ViewBag.Title = "Home";
-    Layout = "~/Views/Shared/_Layout_Homepage.cshtml";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+   Layout = "~/Views/Shared/_Layout_Homepage.cshtml";
 }
 
 <style>
@@ -63,14 +64,19 @@
                 {
                     <div class="col">
                         <ul style="list-style:none">
+                            <a asp-controller="Book" asp-action="BookInformation" asp-route-id="@item.book.BookId">
                             <li class="text-center mb-3">
-                                <a asp-controller="Book" asp-action="BookInformation" asp-route-id="@item.book.BookId">
-                                    <img height="150" src="~/Image/Book/@item.book.CoverPath" />
-                                </a>
+                                <img height="150" src="~/Image/Book/@item.book.CoverPath" />
                             </li>
                             <li class="bookCaption twolines mb-2">@item.book.BookTitle</li>
-                            <li>銷售價格：@item.book.UnitPrice 元</li>
+
+                            <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))元</span></li>
+                            <li class="discPrice">
+                                優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
+                                <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
+                            </li>
                             <li>出版日期：@item.book.PublicationDate.ToString("yyyy-MM-dd")</li>
+                            </a>
                         </ul>
                     </div>
                     countNormal++;
@@ -80,7 +86,7 @@
                     }
                 }
             }
-            
+
         </div>
     </div>
 
@@ -96,16 +102,22 @@
                 {
                     <div class="col">
                         <ul style="list-style:none">
+                            <a asp-controller="Book" asp-action="BookInformation" asp-route-id="@item.book.BookId">
                             <li class="text-center mb-3">
-                                <a asp-controller="Book" asp-action="BookInformation" asp-route-id="@item.book.BookId">
-                                    <img height="150" src="~/Image/Book/@item.book.CoverPath" />
-                                </a>
+                                <img height="150" src="~/Image/Book/@item.book.CoverPath" />
                             </li>
                             <li class="bookCaption twolines mb-2">@item.book.BookTitle</li>
-                            <li>銷售價格：@item.book.UnitPrice 元</li>
+                              <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))元</span></li>
+                            <li class="discPrice">
+                                優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
+                                <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
+                            </li>
                             <li>出版日期：@item.book.PublicationDate.ToString("yyyy-MM-dd")</li>
+                            </a>
                         </ul>
                     </div>
+
+                    <br />
                     countpublicationDate++;
                     if (countpublicationDate % 5 == 0)
                     {
@@ -115,7 +127,6 @@
             }
         </div>
     </div>
-
     <br />
     <hr />
     <div class="container">
@@ -123,7 +134,7 @@
         <div class="row">
             <div class="col align-items-start">書評區</div>
             <div class="col justify-content-end" style="display: flex; padding:10px">
-                <a role="button" class="btn btn-sm btn-outline-success mx-1" href="~/Home/commentList">看更多</a>
+                <a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Home/commentList">看更多</a>
             </div>
         </div>
         <div class="row">
@@ -133,25 +144,25 @@
                 {
                     <div class="col">
                         <ul style="list-style:none">
+                            <a href="/Book/BookInformation/@item.book.BookId#comment">
                             <li class="text-center mb-3">
-                                <a href="/Book/BookInformation/@item.book.BookId#comment">
-                                    <img height="150" src="~/Image/Book/@item.book.CoverPath" />
-                                </a>
+                                <img height="150" src="~/Image/Book/@item.book.CoverPath" />
                             </li>
                             <li class="bookCaption twolines mb-2">@item.book.BookTitle</li>
                             <li>
                                 評論等級：<span>
-                                    @for (int x = 0; x < item.comment.Stars; x++)
-                                    {
+                                        @for (int x = 0; x < item.comment.Stars; x++)
+                                        {
                                         <img style="width:20px; height:auto" src="~/image/icons8-star.gif" />
-                                    }
+                                        }
                                 </span>
                             </li>
                             <li>評論日期：@item.comment.CommentTime.ToString("yyyy-MM-dd")</li>
                             <li class="bookCaption twolines" style="color:grey">@item.comment.CommentText</li>
-                            <li></li>
+                            </a>
                         </ul>
                     </div>
+                    <br />
                     countcommentTimeDate++;
                     if (countcommentTimeDate % 5 == 0)
                     {
@@ -159,7 +170,6 @@
                     }
                 }
             }
-
         </div>
     </div>
 

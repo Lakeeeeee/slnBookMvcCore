@@ -1,17 +1,17 @@
 ﻿@model IEnumerable<prjBookMvcCore.Models.Order>
 
 @{
-    ViewData["Title"] = "myOrders";
+    ViewData["Title"] = "我的訂單";
     Layout = "~/Views/Shared/_Layout_Member.cshtml";
-    decimal memberDiscount = 1; string Discount = "";
+    string Discount = "";
     foreach (var item in Model)
     {
-        memberDiscount = item.Member.Level.LevelDiscount;
-        Discount = item.Member.Level.LevelDescription;
+        BookShopContext db = new BookShopContext();
+        Discount = db.OrderDiscounts.Where(x => x.OrderDiscountId == item.OrderDiscountId).Select(x => x.OrderDiscountDescprtion).FirstOrDefault();
     }
 }
 
-<div class="container" style="margin-top:15px">
+<div class="container-sp" style="margin-top:15px">
     <p> <h6>訂單</h6></p>
     <table class="table table-hover">
         <tr>
@@ -23,6 +23,7 @@
             <th>支付狀態</th>
             <th>運送狀態</th>
             <th>運費</th>
+            <th>總金額</th>
         </tr>
 
         @{
@@ -56,11 +57,11 @@
                     </td>
 
                     <td>
-                        @Convert.ToInt32(@item.Shipment.Freight)
+                        @Convert.ToInt32(item.Shipment.Freight) 元
                     </td>
 
                     <td>
-                        @Html.DisplayFor(modelitem=> item.TotalPay)
+                        @Convert.ToInt32(item.TotalPay) 元
                     </td>
                     <td>
                         <button onclick="viewDetails(@item.OrderId)" class="btn btn-outline-secondary btn-sm">檢視詳細</button>
