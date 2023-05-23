@@ -360,9 +360,21 @@ namespace prjBookMvcCore.Models
 
                 entity.Property(e => e.Ccontent).HasColumnName("CContent");
 
+                entity.Property(e => e.Email)
+                    .HasMaxLength(50)
+                    .HasColumnName("email");
+
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
-                entity.Property(e => e.StatusId).HasColumnName("StatusID");
+                entity.Property(e => e.Note).HasColumnName("note");
+
+                entity.Property(e => e.StatusId)
+                    .HasColumnName("StatusID")
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Subtitle)
+                    .HasMaxLength(50)
+                    .HasColumnName("subtitle");
 
                 entity.Property(e => e.UpdateDate).HasColumnType("date");
 
@@ -567,9 +579,9 @@ namespace prjBookMvcCore.Models
             {
                 entity.ToTable("Order");
 
-                entity.Property(e => e.OrderId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("OrderID");
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+
+                entity.Property(e => e.FinalPay).HasColumnType("money");
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
@@ -577,7 +589,9 @@ namespace prjBookMvcCore.Models
 
                 entity.Property(e => e.OrderDiscountId).HasColumnName("OrderDiscountID");
 
-                entity.Property(e => e.PayStatusId).HasColumnName("PayStatusID");
+                entity.Property(e => e.PayStatusId)
+                    .HasColumnName("PayStatusID")
+                    .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
 
@@ -591,7 +605,9 @@ namespace prjBookMvcCore.Models
 
                 entity.Property(e => e.ShipmentId).HasColumnName("ShipmentID");
 
-                entity.Property(e => e.ShippingStatusId).HasColumnName("ShippingStatusID");
+                entity.Property(e => e.ShippingStatusId)
+                    .HasColumnName("ShippingStatusID")
+                    .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.TotalPay).HasColumnType("money");
 

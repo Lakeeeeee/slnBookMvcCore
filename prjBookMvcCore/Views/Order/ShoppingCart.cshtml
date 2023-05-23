@@ -9,6 +9,7 @@
     int points = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.Points).FirstOrDefault();
     string mName = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.MemberName).FirstOrDefault();
     string mPhone = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.Memberphone).FirstOrDefault();
+
 }
 
 <style>
@@ -296,10 +297,9 @@
                     <h2>回饋金</h2>
                     <div class="ml-3">
                         <div class="form-check">
-                            <div id="rebateAmount">
+                            <div>
                                 <label for="rebateAmountInput" class="form-label">輸入金額：(目前持有回饋金：@points 元)</label>
-                                <input type="number" class="form-control" id="rebateAmountInput" name="rebateAmountInput" placeholder="請輸入回饋金金額" min="0" max="@points" oninput="checkMaxLimit()" />
-                                <p id="maxLimitError" style="color: red; display: none;">回饋金不足喔，請確認~</p>
+                                <input type="number" class="form-control" id="rebateAmountInput" name="rebateAmountInput" placeholder="請輸入回饋金金額" min="0" max="@points" />
                             </div>
                         </div>
                     </div>
@@ -307,11 +307,10 @@
             </form>
         </div>
         <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
-            <button class=" btn btn-primary col-4 me-md-2" onclick="btnClick('nav-cart-tab')">返回購物車</button>
-            <button class="btn btn-primary col-4 me-md-2" onclick="p2nextbtnClick('nav-checkOutConfirm-tab')">下一步</button>
+            <button class="btn btn-primary col-4 me-md-2" onclick="btnClick('nav-cart-tab')">返回購物車</button>
+            <button class="btn btn-primary col-4 me-md-2" type="button" onclick="p2nextbtnClick('nav-checkOutConfirm-tab')">下一步</button>
         </div>
     </div>
-
     @*page3*@
     <div class="tab-pane fade" id="nav-checkOutConfirm" role="tabpanel" aria-labelledby="nav-checkOutConfirm-tab">
         <h2>確認結帳</h2>
@@ -321,7 +320,6 @@
                 <table class="table table-striped" id="table2">
                     <thead>
                         <tr>
-                            @*<th style="width:50px;"><input type="checkbox"></th>*@
                             <th style="width:50px;">序號</th>
                             <th style="width:500px;">書名</th>
                             <th>優惠</th>
@@ -350,16 +348,15 @@
         </div>
         <div class="row">
             <h3>結帳金額</h3>
-            <p>總共 @*@count*@ 件</p>
-            <p>總金額：@*@totalAmount*@ 元</p>
+            <p>總金額：<span id="seconTotal"> </span></p>
             <p id="discountId"></p>
             <p id="rebateAmount"></p>
             <p>運費：</p>
             <p>結帳金額：</p>
         </div>
         <div style="text-align:right;">
-            <button class=" btn btn-primary col-4 me-md-2" onclick="btnClick('nav-checkOutInfo-tab')">返回修改</button>
-            <button id="btnSubmit" class="btn btn-primary col-4 me-md-2" type="button" data-bs-toggle="modal" data-bs-target="#successModal">
+            <button class=" btn btn-primary col-4 me-md-2" onclick="btnClick('nav-checkOutInfo-')">返回修改</button>
+            <button id="btnSubmit" class="btn btn-primary col-4 me-md-2" type="button" @*data-bs-toggle="modal" data-bs-target="#successModal"*@>
                 確定送出
             </button>
         </div>
@@ -385,114 +382,88 @@
 
 </div>
 
-<script>
-    //P2>>P3
-    function p2btnClick(tabId) {
-        // 取得輸入值
-        var reciverName = document.getElementById('inputName').value;
-        var reciverPhone = document.getElementById('inputPhone').value;
-        var shipAddr = document.getElementById('inputAddress').value;
-        var paymentId = document.querySelector('input[name="paymentId"]:checked').value;
-        var shipmentId = document.querySelector('input[name="shipmentId"]:checked').value;
-        var discountId = document.querySelector('input[name="oD"]:checked').value;
-        var rebateAmount = document.getElementById('rebateAmountInput').value;
-
-        // 更新P3中的內容
-        document.getElementById('reciverName').innerText = '姓名: ' + reciverName;
-        document.getElementById('reciverPhone').innerText = '電話: ' + reciverPhone;
-        document.getElementById('shipAddr').innerText = '地址: ' + shipAddr;
-        document.getElementById('paymentId').innerText = '付款方式: ' + paymentName;
-        document.getElementById('shipmentId').innerText = '配送方式: ' + shipmentName;
-        document.getElementById('discountId').innerText = '優惠項目: ' + discountName;
-        document.getElementById('rebateAmount').innerText = '回饋金金額: ' + rebateAmount;
-
-        // 回饋金上限確認
-        var input = document.getElementById('rebateAmountInput');
-        var maxLimitError = document.getElementById('maxLimitError');
-
-        if (parseInt(input.value) > parseInt(input.max)) {
-            maxLimitError.style.display = 'block';
-            input.focus(); // 將焦點設定在回饋金輸入欄位上
-            return; // 阻止跳轉到下一頁
-        }
-
-        maxLimitError.style.display = 'none'; // 如果回饋金未超過上限，隱藏警告訊息
-
-        // 切換到Page 3
-        document.getElementById(tabId).classList.add('active');
-        document.getElementById('nav-checkOutInfo-tab').classList.remove('active');
-        document.getElementById('nav-checkOutInfo').classList.remove('show');
-        document.getElementById('nav-checkOutConfirm').classList.add('show');
-        document.getElementById('nav-checkOutConfirm-tab').classList.add('active');
-
-    }
-</script>
-
-@*<script>
-    //p2>p3
-    function p2btnClick(tabId) {
-        // 取得輸入值
-        var reciverName = document.getElementById('inputName').value;
-        var reciverPhone = document.getElementById('inputPhone').value;
-        var shipAddr = document.getElementById('inputAddress').value;
-
-        // 更新Page 3中的內容
-        document.getElementById('reciverName').innerText = '姓名: ' + reciverName;
-        document.getElementById('reciverPhone').innerText = '電話: ' + reciverPhone;
-        document.getElementById('shipAddr').innerText = '地址: ' + shipAddr;
-
-        // 回饋金上限確認
-        var input = document.getElementById('rebateAmountInput');
-        var maxLimitError = document.getElementById('maxLimitError');
-
-        if (parseInt(input.value) > parseInt(input.max)) {
-            maxLimitError.style.display = 'block';
-            input.focus();
-            return; // 阻止跳轉到下一頁
-        }
-
-        maxLimitError.style.display = 'none'; // 如果回饋金未超過上限，隱藏警告訊息
-
-        // 切換到Page 3
-        document.getElementById(tabId).click();
-    }
-</script>*@
-<script>
-    /*送出訂購*/
-    const formForOrderDetails = document.getElementById('formForOrderDetails');
+<script> //送出訂單
     const btnSubmit = document.getElementById('btnSubmit');
-    btnSubmit.addEventListener('click', async () => {
-        if (orderSubmit()) {
-            const response = await fetch('@Url.Action("Action3", "Order")', {
-                method: 'POST',
-                body: new FormData(formForOrderDetails)
-            });
-            //const datas = await response.json();
-            //console.log(datas);
-
-            const datas = await response.text();
-            alert(datas);
+    btnSubmit.addEventListener('click', async function () {
+        if (await orderSubmit()) {
+            if (await orderDetailsSubmit()) {
+                alert('成功');
+            } else {
+                alert('OD失敗');
+            }
+        } else {
+            alert('O失敗');
         }
     });
-</script>
-<script>
+
     /*送出訂單*/
     async function orderSubmit() {
         const formForOrder = document.getElementById('formForOrder');
-        const response = await fetch('@Url.Action("creatOrder", "Order")', {
+        const response = await fetch('@Url.Action("Action2", "Order")', {
             method: 'POST',
             body: new FormData(formForOrder)
         });
         const confirm = await response.text();
-        if (confirm === "Ture") {
+        if (confirm === "True") {
             return true;
         } else {
             return false;
         }
+    };
+
+    async function orderDetailsSubmit() {
+        const formForOrderDetails = document.getElementById('formForOrderDetails');
+        const formdata = new FormData(formForOrderDetails);
+        console.log(formdata);
+        const response = await fetch('@Url.Action("Action3", "Order")', {
+            method: 'POST',
+            body: formdata
+        });
+
+        const confirm = await response.text();
+        if (confirm === "True") {
+            return true;
+        } else {
+            return false;
+        };
     }
 </script>
-<script>
-    //讀取orderDiscount方法
+<script> //P2 >> P3
+    function p2nextbtnClick(tabId) {
+            // 取得輸入值
+            var reciverName = document.getElementById('inputName').value;
+            var reciverPhone = document.getElementById('inputPhone').value;
+            var shipAddr = document.getElementById('inputAddress').value;
+
+            var paymentId = document.querySelector('input[name="paymentId"]:checked').value;
+            var paymentName = document.querySelector('input[name="paymentId"]:checked + label').innerText;
+            var shipmentId = document.querySelector('input[name="shipmentId"]:checked').value;
+            var shipmentName = document.querySelector('input[name="shipmentId"]:checked + label').innerText;
+            var rebateAmount = document.getElementById('rebateAmountInput').value;
+            rebateAmount = rebateAmount !== '' ? rebateAmount : 0;
+            console.log(rebateAmount);
+        // 更新P3中的內容
+            document.getElementById('reciverName').innerText = '姓名: ' + reciverName;
+            document.getElementById('reciverPhone').innerText = '電話: ' + reciverPhone;
+            document.getElementById('shipAddr').innerText = '地址: ' + shipAddr;
+            document.getElementById('paymentId').innerText = '付款方式: ' + paymentName;
+            document.getElementById('shipmentId').innerText = '配送方式: ' + shipmentName;
+            document.getElementById('rebateAmount').innerText = '回饋金金額: ' + rebateAmount;
+
+            setFinalTotal();
+            document.getElementById(tabId).click();
+    }  
+</script>
+<script> // p3顯示總金額的值並
+
+    function setFinalTotal() {
+        const totalA = document.getElementById('totalAmount');
+        const seconTotal = document.getElementById('seconTotal');
+        seconTotal.textContent = `${totalA.innerText} 元`;
+    };
+</script>
+
+<script> //讀取orderDiscount方法
     async function returnOd() {
         const discountArea = document.getElementById('discountArea');
         var totalAmount = document.getElementById('totalAmount');
@@ -528,8 +499,7 @@
         });
     }
 </script>
-<script>
-    //return to Action1 page3
+<script> //return to Action1 page3
     const form1 = document.getElementById('form1');
     const table2 = document.getElementById('table2');
     const btnForm1 = document.getElementById('btnForm1');
@@ -579,29 +549,7 @@
     });
 </script>
 
-
-
-
-
-
-
-<script>
-    //回饋金上限確認
-
-    function checkMaxLimit() {
-        var input = document.getElementById('rebateAmountInput');
-        var maxLimitError = document.getElementById('maxLimitError');
-
-        if (parseInt(input.value) > parseInt(input.max)) {
-            maxLimitError.style.display = 'block';
-        } else {
-            maxLimitError.style.display = 'none';
-        }
-    }
-</script>
-<script>
-    //取消購物車項目方法
-
+<script> //取消購物車項目方法
     async function cancle(id) {
         const confirmed = confirm('確定要取消嗎?');
         if (confirmed) {
@@ -616,11 +564,9 @@
         }
     };
 </script>
-<script>
-    //page1調整數量同時更新總金額以及value
+<script> //page1調整數量同時更新總金額以及value
     const table1 = document.getElementById('table1');
     const totalAmountElement = document.querySelector('#totalAmount');
-
     // 初始化 totalAmount 的值
     let totalAmount = 0;
 
@@ -661,8 +607,7 @@
 
     };
 </script>
-<script>
-    //按按鈕
+<script> //按按鈕
     function btnClick(inputId) {
         const btn = document.getElementById(inputId);
         btn.click();

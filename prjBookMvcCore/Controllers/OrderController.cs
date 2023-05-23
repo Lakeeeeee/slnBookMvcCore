@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using prjBookMvcCore.Models;
 using prjBookMvcCore.ViewModel;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Diagnostics;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -14,7 +15,6 @@ namespace prjBookMvcCore.Controllers
     {
         public UserInforService _user { get; set; }
         BookShopContext _db = new BookShopContext();
-
         public OrderController(UserInforService user, BookShopContext db)
         {
             _user = user;
@@ -59,30 +59,91 @@ namespace prjBookMvcCore.Controllers
 
             return Json(newCart);
         }
-        public IActionResult Action2() { return View(); }
-        public IActionResult Action3(IFormCollection formData) //createOrderdetails
-        {
-            //var orderData = formData["orderData"];
-            //foreach (var data in orderData)
-            //{
-            //}
-
-
-            return Content("Return Successe");
-        }
-        public IActionResult creatOrder(IFormCollection formData)  //towrite
+        int y = 0;
+        public IActionResult Action2(IFormCollection form)
         {
             bool isSuccess = false;
+            var MemberId = form["memberId"];
+            var ReciverName = form["reciverName"];
+            var ReciverPhone = form["reciverPhone"];
+            var ShipAddr = form["shipAddr"];
+            var PaymentId = int.Parse(form["paymentId"]);
+            var ShipmentId = int.Parse(form["shipmentId"]);
 
-            //var value1 = formData["name1"];  //抓formForOrder裡的name+value
-            //var value2 = formData["name2"];  //每個input的name代表欄位, 抓出其value再塞到新order的參數
-            //var value3 = formData["name3"];  //依此類推, 有幾個欄位就抓幾個value
+            string rebateAmountInput = form["rebateAmountInput"];
+            int RebateAmount;
+            if (string.IsNullOrEmpty(rebateAmountInput))
+            {
+                RebateAmount = 0;
+            }
+            else
+            {
+                RebateAmount = int.Parse(rebateAmountInput);
+            };
 
-            //Order order = new Order(){};
-            //_db.Orders.Add(order);
-            // _db.SaveChanges();
+            var oD = int.Parse(form["oD"]);
+
+            Order order = new Order()
+            {
+                MemberId = Convert.ToInt32(MemberId),
+                OrderDate = DateTime.Now,
+                ShipmentId = Convert.ToInt32(ShipmentId),
+                PaymentId = Convert.ToInt32(PaymentId),
+                OrderDiscountId = oD,
+                PointAmount = RebateAmount,
+                ReciverName = ReciverName,
+                ReciverPhone = ReciverPhone,
+                ShipAddr = ShipAddr,
+            };
+
+            _db.Orders.Add(order);
+            _db.SaveChanges();
+
+            Member member = _db.Members.Find(order.MemberId);
+
+            switch (member.LevelId)
+            {
+                case 3:
+                    member.Points = (int)((member.Points) + Convert.ToInt32(order.TotalPay) * 0.01);
+                    break;
+                case 4:
+                    member.Points = (int)((member.Points) + Convert.ToInt32(order.TotalPay) * 0.05);
+                    break;
+                case 5:
+                    member.Points = (int)((member.Points) + Convert.ToInt32(order.TotalPay) * 0.05);
+                    break;
+            };
+            _db.SaveChanges();
+            y = order.OrderId;
             isSuccess = true;
+            return Content(isSuccess.ToString());
+        }
 
+
+        public IActionResult Action3(IFormCollection formData) //createOrderdetails
+        {
+            bool isSuccess = false;
+            Order order = _db.Orders.OrderByDescending(o => o.OrderId).FirstOrDefault();
+            int[] acids = formData["acid"].Select(x => int.Parse(x)).ToArray();
+            int[] quantity = formData["quantity"].Select(x => int.Parse(x)).ToArray();
+            List<OrderDetail> list = new List<OrderDetail>();
+            foreach (var item in acids)
+            {
+                int bookid = _db.ActionDetials.Where(x => x.ActionToBookId == item).Select(x => x.BookId).FirstOrDefault();
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.BookId = bookid;
+                orderDetail.OrderId = order.OrderId;
+
+                list.Add(orderDetail);
+            };
+
+            for (int n = 0; n < list.Count(); n++)
+            {
+                list[n].Quantity = quantity[n];
+            };
+            _db.OrderDetails.AddRange(list);
+            _db.SaveChanges();
+            isSuccess = true;
             return Content(isSuccess.ToString());
         }
 
