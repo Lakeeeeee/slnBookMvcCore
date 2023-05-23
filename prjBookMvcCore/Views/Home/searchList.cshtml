@@ -101,8 +101,10 @@
                                             </div>
                                             <div class="col">
                                                 <ul style="list-style:none">
-                                                    <li class="bookCaption two-lines mb-1">@item.book.BookTitle</li>
+                                                    <li class="bookCaption two-lines mb-1">@item.book.BookTitle.Replace("$$"," ")</li>
                                                     <li>作者：@item.author.AuthorName</li>
+                                                    <li>繪者：@item.painter.PainterName</li>
+                                                    <li>譯者：@item.translator.TranslatorName</li>
                                                     <li>出版日期：@(item.book.PublicationDate.ToString("yyyy/MM/dd"))</li>
                                                     <li>
                                                         定價：
