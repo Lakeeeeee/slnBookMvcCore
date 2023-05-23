@@ -8,11 +8,6 @@
 }
 
 <style>
-    div {
-        boder: 1px;
-        background-color: plum;
-    }
-
     .bookCaption {
         line-height: 1.5em; /* 設置行高為字體大小的1.5倍 */
         height: 3em; /* 設置高度為字體大小的3倍 */
@@ -33,10 +28,10 @@
     }
 
     .carouselArrow {
-        top: 130px;
+        top: 150px;
         border: 1px solid rgba(255,255,255,0.2);
         border-radius: 15%;
-        height: 100px;
+        height: 70px;
         width: 50px;
     }
 </style>
@@ -73,65 +68,56 @@
     <br />
     <hr />
     @*暢銷排行榜輪播圖*@
-    <div class="row">
-        <div class="col-10 " style="margin-left:100px">
-            <div id="carouselExampleTopSell" class="carousel slide">
-                <div class="carousel-inner ">
-                    @for (int p = 0; p <= 3; p++)
-                    {
-                        <div class="carousel-item @(p == 0 ? "active" : "")">
-                            <div class="row">
-                                <div class="col-1" style="display:flex;justify-content:center;align-content:center">
+    <div id="carouselExampleTopSell" class="carousel carousel-dark slide" data-bs-ride="carousel">
+        <div class="carousel-inner ">
+            <h3>暢銷排行榜</h3>
+            @for (int p = 0; p <= 3; p++)
+            {
+                <div class="carousel-item @(p == 0 ? "active" : "")">
+                    <div class="row">
+                        <div class="col-1" style="display:flex;justify-content:center;align-content:center">
+                        </div>
+                        @for (int i = p * 5; i < (p + 1) * 5; i++)
+                        {
+                            RecommendInformation item = Model.quantity[i];
+                            <div class="col book-item ms-3" data-publication-date="@item.book.PublicationDate" data-price="@((int)Math.Round(item.bookDiscount.BookDiscountAmount * item.book.UnitPrice))">
+                                <h4>@if (i < 3){<img src="~/Image/crown_icon.png" height="25">}TOP @(i + 1)</h4>
+                                <div style="position:relative" class=" mb-3">
+                                    <a href="~/Book/BookInformation/@item.book.BookId"><img src="~/Image/Book/@item.book.CoverPath" title="@item.book.BookTitle" height="150"></a>
                                 </div>
-                                @for (int i = p * 5; i < (p + 1) * 5; i++)
-                                {
-                                    RecommendInformation item = Model.quantity[i];
-                                    <div class="col-2 book-item" data-publication-date="@item.book.PublicationDate" data-price="@((int)Math.Round(item.bookDiscount.BookDiscountAmount * item.book.UnitPrice))">
-                                        <div>
-                                            @if (i < 3)
-                                            {
-                                                <img src="~/Image/crown_icon.png" height="30">
-                                            }TOP @(i + 1)
-                                        </div>
-                                        <div style="position:relative">
-                                            <a href="~/Book/BookInformation/@item.book.BookId"><img src="~/Image/Book/@item.book.CoverPath" title="@item.book.BookTitle" height="150"></a>
-                                        </div>
-                                        <div class="caption">
-                                            <ul style="list-style:none; margin:0; padding:0;">
-                                                <li><a class="bookCaption mb-2" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle.Replace("$$"," ")</a></li>
-                                                <li class="Price">原價：@((int)Math.Round(item.book.UnitPrice))元</li>
-                                                <li class="discPrice">
-                                                    優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
-                                                    <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                }
-                                <div class="col-1" style="display:flex;justify-content:center;align-content:center">
+                                <div class="caption mb-3">
+                                    <ul style="list-style:none; margin:0; padding:0;">
+                                        <li><a class="bookCaption mb-2" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle.Replace("$$"," ")</a></li>
+                                        <li class="Price">原價：@((int)Math.Round(item.book.UnitPrice))元</li>
+                                        <li class="discPrice">
+                                            優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
+                                            <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
+                        }
+                        <div class="col-1" style="display:flex;justify-content:center;align-content:center">
                         </div>
-                    }
-                </div> 
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleTopSell" data-bs-slide="prev" border=5>
-                    <span class="carousel-control-prev-icon carouselArrow" aria-hidden="true" style="margin-left:0px"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleTopSell" data-bs-slide="next" border=5>
-                    <span class="carousel-control-next-icon carouselArrow" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-            </div>
+                    </div>
+                </div>
+            }
         </div>
+        <button class="carousel-control-prev carouselArrow" type="button" data-bs-target="#carouselExampleTopSell" data-bs-slide="prev" border=5>
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next carouselArrow" type="button" data-bs-target="#carouselExampleTopSell" data-bs-slide="next" border=5>
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
-
     <hr />
 
     <div class="container">
         @* 商品展示一區 *@
         <div class="row">
-            <p>今日特輯</p>
+            <h3>今日特輯</h3>
             @{
                 int countNormal = 0;
                 foreach (var item in Model.normal)
@@ -167,7 +153,7 @@
     <div class="container">
         @* 商品展示二區 *@
         <div class="row">
-            <p>注目新品</p>
+            <h3>注目新品</h3>
             @{
                 int countpublicationDate = 0;
                 foreach (var item in Model.publicationDate)
@@ -188,7 +174,6 @@
                             </a>
                         </ul>
                     </div>
-
                     <br />
                     countpublicationDate++;
                     if (countpublicationDate % 5 == 0)
@@ -204,7 +189,7 @@
     <div class="container">
         @* 商品展示三區 *@
         <div class="row">
-            <div class="col align-items-start">書評區</div>
+            <h3 class="col align-items-start">書評區</h3>
             <div class="col justify-content-end" style="display: flex; padding:10px">
                 <a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Home/commentList">看更多</a>
             </div>

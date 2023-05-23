@@ -131,14 +131,13 @@
                     @{
                         foreach (var item in Model.menuItems)
                         {
-                            <div class="col-3 " style="margin:0; padding:0;">
-                                <div class="row card book-item border-0" data-publication-date="@item.book.PublicationDate.ToString("yyyy/MM/dd")" data-price="@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))">
+                                <div class="col-3 card book-item border-0" data-publication-date="@item.book.PublicationDate.ToString("yyyy/MM/dd")" data-price="@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))">
                                     <div class="headshot">
                                         <a href="~/Book/BookInformation/@item.book.BookId"><img src="~/Image/Book/@item.book.CoverPath" title="@item.book.BookTitle"></a>
                                     </div>
                                     <div class="card-body">
                                         <ul style="list-style:none; ">
-                                            <li> <a class="bookCaption two-lines" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle</a></li>
+                                            <li> <a class="bookCaption two-lines" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle.Replace("$$"," ")</a></li>
                                             <li class="prod_author authorCaption">
                                                 作者：
                                                 @if (item.author != null)
@@ -158,7 +157,6 @@
                                         </ul>
                                     </div>
                                 </div>
-                            </div>
                         }
                     }
                 </div>
