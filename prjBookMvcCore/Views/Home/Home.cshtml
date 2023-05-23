@@ -8,11 +8,6 @@
 }
 
 <style>
-    div {
-        boder: 1px;
-        background-color: plum;
-    }
-
     .bookCaption {
         line-height: 1.5em; /* 設置行高為字體大小的1.5倍 */
         height: 3em; /* 設置高度為字體大小的3倍 */
@@ -33,16 +28,16 @@
     }
 
     .carouselArrow {
-        top: 130px;
+        top: 80px;
         border: 1px solid rgba(255,255,255,0.2);
         border-radius: 15%;
-        height: 100px;
+        height: 70px;
         width: 50px;
     }
 </style>
 
 <body>
-    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" >
         @* 活動輪播圖 *@
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -124,8 +119,15 @@
                 </button>
             </div>
         </div>
+        <button class="carousel-control-prev carouselArrow" type="button" data-bs-target="#carouselExampleTopSell" data-bs-slide="prev" border=5>
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next carouselArrow" type="button" data-bs-target="#carouselExampleTopSell" data-bs-slide="next" border=5>
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
-
     <hr />
 
     <div class="container">
@@ -136,6 +138,7 @@
                 int countNormal = 0;
                 foreach (var item in Model.normal)
                 {
+
                     <div class="col">
                         <ul style="list-style:none">
                             <a asp-controller="Book" asp-action="BookInformation" asp-route-id="@item.book.BookId">
