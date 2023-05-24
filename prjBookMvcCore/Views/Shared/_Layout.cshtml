@@ -211,44 +211,33 @@
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="width:500px">
                                 <li>
                                     <div class="m-1 p-1">
-                                        <span class="mx-2">搜尋欄位</span>
-                                        <select id="搜尋欄位" name="搜尋欄位" style="width:100px">
-                                            <option value="ALL" selected>全文 </option>
-                                            <option value="BookTitle">書名</option>
-                                            <option value="Author">作者</option>
-                                            <option value="ELSE">...</option>
-                                        </select>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="m-1 p-1">
                                         <span class="mx-2">售價</span>
-                                        <input id="frontprice" style="margin-left:2em; border-right: #C4C4C4 2px solid;width:100px" placeholder="金額" type="search" maxlength="20" value="" autocomplete="off" />
+                                        <input id="frontprice" style="margin-left:2em; border-right: #C4C4C4 2px solid;width:130px" placeholder="金額" type="search" maxlength="20" value="@ViewBag.frontprice" />
                                         <span class="mx-2">至</span>
-                                        <input id="backprice" style="border-right: #C4C4C4 2px solid;width:100px" placeholder="金額" type="search" maxlength="20" value="" autocomplete="off" />
+                                        <input id="backprice" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="金額" type="search" maxlength="20" value="@ViewBag.backprice" />
                                         <span class="mx-2">之間</span>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="m-1 p-1">
                                         <span class="mx-2">折扣</span>
-                                        <select id="折扣1" name="折扣1" style="margin-left:2em; width:100px">
+                                        <select id="frontdiscount" name="折扣1" style="margin-left:2em; width:130px" value="@ViewBag.frontdiscount">
                                             <option value="0" selected>請選擇 </option>
                                             @{
-                                                var bookDiscount = db.BookDiscounts.Select(dis => new { dis.BookDiscountId, dis.BookDiscountName }).ToList();
+                                                var bookDiscount = db.BookDiscounts.Select(dis => new { dis.BookDiscountId, dis.BookDiscountAmount, dis.BookDiscountName }).ToList();
                                                 foreach (var dis in bookDiscount)
                                                 {
-                                                                    <option value="@dis.BookDiscountId">@dis.BookDiscountName</option>
+                                                    <option value="@dis.BookDiscountAmount">@dis.BookDiscountName</option>
                                                 }
                                             }
                                         </select>
                                         <span class="mx-2">至</span>
-                                        <select id="折扣2" name="折扣2" style="width:100px">
+                                        <select id="backdiscount" name="折扣2" style="width:130px" value="@ViewBag.backdiscount">
                                             <option value="0" selected>請選擇 </option>
                                             @{
                                                 foreach (var dis in bookDiscount)
                                                 {
-                                                                    <option value="@dis.BookDiscountId">@dis.BookDiscountName</option>
+                                                    <option value="@dis.BookDiscountAmount">@dis.BookDiscountName</option>
                                                 }
                                             }
                                         </select>
@@ -259,9 +248,9 @@
                                 <li>
                                     <div class="m-1 p-1">
                                         <span class="mx-2">出版日期</span>
-                                        <input style="border-right: #C4C4C4 2px solid;width:100px" placeholder="日期" type="search" maxlength="20" value="" autocomplete="off" />
+                                        <input id="frontdate" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="日期" type="date" maxlength="20" value="@ViewBag.backdate" />
                                         <span class="mx-2">至</span>
-                                        <input style="border-right: #C4C4C4 2px solid;width:100px" placeholder="日期" type="search" maxlength="20" value="" autocomplete="off" />
+                                        <input id="backdate" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="日期" type="date" maxlength="20" value="@ViewBag.frontdate" />
                                         <span class="mx-2">之間</span>
                                     </div>
                                 </li>
@@ -272,13 +261,40 @@
                         <script>
                             $(document).ready(function () {
                                 $('#search_link').click(function (e) {
-                                    e.preventDefault(); // 防止点击链接后直接跳转
-                                    var keyword = $('#search_input').val(); // 获取搜索关键字的值
+                                    e.preventDefault();         // 防止點擊連結後直接跳轉
+                                    var keyword = $('#search_input').val();         // 獲取搜尋關鍵字的值
 
-                                    var frontPrice = $('#frontprice').val(); // 设置价格范围的起始值
-                                    var backPrice = $('#backprice').val(); // 设置价格范围的结束值
+                                    var frontPrice = $('#frontprice').val();        // 設置價格範圍的起始值
+                                    var backPrice = $('#backprice').val();      // 設置價格範圍的起始值
 
-                                    var url = '@Url.Action("searchList", "Home")' + '?txtKeyword=' + encodeURIComponent(keyword) + '&frontPrice=' + frontPrice + '&backPrice=' + backPrice;
+                                    var frontdiscount = $('#frontdiscount').val();      // 設置折扣範圍的起始值
+                                    var backdiscount = $('#backdiscount').val();        // 設置折扣範圍的起始值
+
+                                    var frontdate = $('#frontdate').val();      // 設置日期範圍的起始值
+                                    var backdate = $('#backdate').val();      // 設置日期範圍的起始值
+
+                                    if (frontdiscount == 0) {
+                                        frontdiscount = 0;
+                                    }
+
+                                    if (backdiscount == 0) {
+                                        backdiscount = 1;
+                                    }
+
+
+                                    if (backPrice < frontPrice) {
+                                        [backPrice, frontPrice] = [frontPrice, backPrice];
+                                    }
+
+                                    if (backdiscount > frontdiscount) {
+                                        [backdiscount, frontdiscount] = [frontdiscount, backdiscount];
+                                    }
+
+                                    if (backdate < frontdate) {
+                                        [backdate, frontdate] = [frontdate, backdate]
+                                    }
+
+                                    var url = '@Url.Action("searchList", "Home")' + '?txtKeyword=' + encodeURIComponent(keyword) + '&frontPrice=' + frontPrice + '&backPrice=' + backPrice + '&frontdiscount=' + frontdiscount + '&backdiscount=' + backdiscount + '&frontdate=' + frontdate + '&backdate=' + backdate;
                                     // 使用 Url.Action 方法动态生成 ActionLink 的 URL，并将关键字和价格范围作为参数传递
                                     window.location.href = url; // 跳转到生成的 URL
                                 });
@@ -320,12 +336,13 @@
         <br />
         <hr />
         <div>
-            <span style="margin-right:10px"><a href="#id">客服專區</a></span>
             <span style="margin-right:10px"><a href="~/Home/QA">客服專區</a></span>
         </div>
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>
+                &copy; @DateTime.Now.Year - BookShop.com by 陳千湖、李佳燕、張信中、黃怡安、蔡一銘、翁書玉、魏士翔 <span style="font-size:10px">(按筆畫排序)</span>
+            </p>
         </footer>
     </div>
 

@@ -1,5 +1,6 @@
 ﻿@using prjBookMvcCore.Models
 @model List<ShoppingcartInformation>
+
 @inject UserInforService _user
 @{
     ViewBag.Title = "購物車";
@@ -237,7 +238,6 @@
             @*為你推薦*@
             <h5>為你推薦</h5>
             <div class="row">
-
                 @{
                     var q = db.Books.Select(b => b).Skip(20).Take(6);
                     foreach (var g in q)
