@@ -167,11 +167,18 @@ namespace prjBookMvcCore.Controllers
                 var thebook = _db.Books.Where(x => x.BookId == list[n].BookId).FirstOrDefault();
                 thebook.UnitInStock = thebook.UnitInStock - quantity[n];
             };
-
-
             _db.OrderDetails.AddRange(list);
             _db.SaveChanges();
             isSuccess = true;
+
+            //刪除購物車
+            foreach(int item in acids)
+            {
+                ActionDetial tool = _db.ActionDetials.Find(item);
+                _db.ActionDetials.Remove(tool);
+            }
+            _db.SaveChanges();
+
             return Content(isSuccess.ToString());
         }
         public IActionResult itemDelete(int id) //刪除購物車項目
