@@ -8,16 +8,6 @@
 }
 
 <style>
-    .bookCaption {
-        line-height: 1.5em; /* 設置行高為字體大小的1.5倍 */
-        height: 3em; /* 設置高度為字體大小的3倍 */
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
     .authorCaption {
         line-height: 1.5em; /* 設置行高為字體大小的1.5倍 */
         display: -webkit-box;
@@ -81,7 +71,10 @@
                         {
                             RecommendInformation item = Model.quantity[i];
                             <div class="col book-item ms-3" data-publication-date="@item.book.PublicationDate" data-price="@((int)Math.Round(item.bookDiscount.BookDiscountAmount * item.book.UnitPrice))">
-                                <h4>@if (i < 3){<img src="~/Image/crown_icon.png" height="25">}TOP @(i + 1)</h4>
+                                <h4>@if (i < 3)
+                                    {
+                                        <img src="~/Image/crown_icon.png" height="25">
+                                    }TOP @(i + 1)</h4>
                                 <div style="position:relative" class=" mb-3">
                                     <a href="~/Book/BookInformation/@item.book.BookId"><img src="~/Image/Book/@item.book.CoverPath" title="@item.book.BookTitle" height="150"></a>
                                 </div>
@@ -208,10 +201,10 @@
                             <li class="bookCaption mb-2">@item.book.BookTitle.Replace("$$"," ")</li>
                             <li>
                                 評論等級：<span>
-                                    @for (int x = 0; x < item.comment.Stars; x++)
-                                    {
+                                        @for (int x = 0; x < item.comment.Stars; x++)
+                                        {
                                         <img style="width:20px; height:auto" src="~/image/icons8-star.gif" />
-                                    }
+                                        }
                                 </span>
                             </li>
                             <li>評論日期：@item.comment.CommentTime.ToString("yyyy-MM-dd")</li>
