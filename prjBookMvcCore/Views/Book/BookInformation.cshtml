@@ -789,6 +789,9 @@
                                             message: '本書已加入購物車',
                                             type: 'success'
                                         });
+                                        setTimeout(() => {
+                                            location.reload()
+                                        }, 1500);
                                     }
                                     else {
                                         self.$notify({
@@ -841,9 +844,12 @@
                             success: function (result) {
                                 if (result) {
                                     self.$message({
-                                        message: '評價成功！請重載網頁',
+                                        message: '評價成功！',
                                         type: 'success'
                                     });
+                                    setTimeout(() => {
+                                        location.reload()
+                                    }, 1500);
                                 }
                                 else {
                                     self.$notify({
