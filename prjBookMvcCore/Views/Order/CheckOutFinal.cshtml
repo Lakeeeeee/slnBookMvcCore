@@ -7,6 +7,7 @@
 	BookShopContext db = new BookShopContext();
 	string mName = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.MemberName).FirstOrDefault();
 	string mPhone = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.Memberphone).FirstOrDefault();
+	
 }
 
 
@@ -115,6 +116,7 @@ th {
 					@{
 						foreach(var item in Model.OrderDetails)
 						{
+							//decimal totalPrice = item.Book.UnitPrice * 
 							<tr>
 								<th>@item.Book.BookTitle</th>
 								<th>@item.Quantity</th>
@@ -145,10 +147,10 @@ th {
 			<div class="checkout-section">
 				<h3>金額明細</h3>
 				<div class="col-md-6">
-					<p>總金額：</p>
+					<p>總金額：@Model.TotalPay</p>
 					<p>優惠折扣：</p>
 					<p>運費：</p>
-					<P>結帳金額：</P>
+					<P>結帳金額：@Model.FinalPay</P>
 				</div>			
 			</div>
 	</div>

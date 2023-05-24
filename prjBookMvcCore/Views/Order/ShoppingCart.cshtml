@@ -10,8 +10,7 @@
     int points = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.Points).FirstOrDefault();
     string mName = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.MemberName).FirstOrDefault();
     string mPhone = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.Memberphone).FirstOrDefault();
-    int shipmentid = 0;
-    decimal freight = db.Shipments.Where(x => x.ShipmentId == shipmentid).Select(x => x.Freight).FirstOrDefault();
+    int shipmentid = 0;   
 
 
 }
@@ -365,8 +364,8 @@
             <p>總金額：<span id="seconTotal"> </span></p>
             <p id="discountId"></p>
             <p id="rebateAmount"></p>
-            <p>運費：100</p>
-            <p>結帳金額：</p>
+            <p id="freight"></p>
+            <p>結帳金額：<span id="checkoutAmount"></span></p>
         </div>
         <div style="text-align:right;">
             <button class=" btn btn-primary col-4 me-md-2" onclick="btnClick('nav-checkOutInfo-tab')">返回修改</button>
@@ -477,6 +476,22 @@
         document.getElementById('shipmentId').innerText = '配送方式: ' + shipmentName;
         document.getElementById('rebateAmount').innerText = '回饋金金額: ' + rebateAmount;
 
+        // 判斷運費
+        var freight = 0;
+        if (shipmentId == 1) {
+            freight = 120;
+        } else if (shipmentId == 2) {
+            freight = 80;
+        }
+        // 顯示
+        document.getElementById('freight').innerText = '運費: ' + freight;
+
+        // 計算結帳金額
+        var totalAmount = parseFloat(document.getElementById('totalAmount').innerText);
+        var checkoutAmount = totalAmount - parseFloat(rebateAmount) + parseFloat(freight);
+        // 顯示結帳金額
+        document.getElementById('checkoutAmount').innerText = checkoutAmount + ' 元';
+
         setFinalTotal();
         document.getElementById(tabId).click();
     }
@@ -552,7 +567,7 @@
         const table2Header = document.createElement('thead');
         const headerRow = document.createElement('tr');
         headerRow.innerHTML = `
-                                <th style="width:50px;"><input type="checkbox"></th>
+                                <th><input type="hidden" value="checkbox"></th>
                                 <th style="width:50px;">序號</th>
                                 <th style="width:500px;">書名</th>
                                 <th>優惠</th>
@@ -570,7 +585,7 @@
             input.type = "hidden";
             const row = document.createElement('tr');
             row.innerHTML = `
-                                    <td><input type="checkbox"></td>
+                                    <td><input type="hidden" value="checkbox"></td>
                                     <td>${index + 1}</td>
                                     <td>${item.book.bookTitle}</td>
                                     <td>${item.discountName}</td>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 
+
 namespace prjBookMvcCore.Models
 {
     public partial class Order
@@ -12,7 +13,7 @@ namespace prjBookMvcCore.Models
         {
             OrderDetails = new HashSet<OrderDetail>();
 		}
-
+  	
 		public Book Book { get { return db.Books.Find(Book); } }
 		public int OrderId { get; set; }
         public int MemberId { get; set; }
