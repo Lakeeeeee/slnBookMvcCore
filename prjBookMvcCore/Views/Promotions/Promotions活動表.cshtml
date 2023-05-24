@@ -1,0 +1,84 @@
+﻿@model IEnumerable<prjBookMvcCore.Models.Artical>
+@{
+    ViewData["Title"] = "讀本活動總覽";
+}
+
+<html>
+<body>
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a class="text-decoration-none" href="~/Home/Home" style="color:black">首頁</a></li>
+            <li class="breadcrumb-item active" aria-current="page" style="color:gray">活動總覽</li>
+        </ol>
+    </nav>
+    <h1>活動總覽</h1>
+    <div style="text-align:right;">
+        <a role="button" class="btn  btn-outline-success mx-1" href="~/Promotions/Promotions活動圖">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid-3x3-gap-fill" viewBox="0 0 16 16">
+                <path d="M1 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V2zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V2zM1 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V7zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V7zM1 12a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-2zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-2zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-2z" />
+            </svg>活動圖
+        </a>
+        <a role="button" class="btn  btn-success mx-1" href="~/Promotions/Promotions活動表">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-stars" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5z" />
+                <path d="M2.242 2.194a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.277.277 0 0 0-.094.3l.173.569c.078.256-.213.462-.423.3l-.417-.324a.267.267 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.277.277 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.271.271 0 0 0 .259-.194l.162-.53zm0 4a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.277.277 0 0 0-.094.3l.173.569c.078.255-.213.462-.423.3l-.417-.324a.267.267 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.277.277 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.271.271 0 0 0 .259-.194l.162-.53zm0 4a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.277.277 0 0 0-.094.3l.173.569c.078.255-.213.462-.423.3l-.417-.324a.267.267 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.277.277 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.271.271 0 0 0 .259-.194l.162-.53z" />
+            </svg>活動表
+        </a>
+    </div>
+    <br />
+    <table class="table table-hover align-middle" style="text-align:center">
+        <thead>
+            <tr>
+                <th>
+                    序號
+                </th>
+                <th>
+                    標題
+                </th>
+                <th>
+                    更新日期
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>
+                    @Html.ActionLink("註冊會員禮", "Promotions註冊會員禮" , "Promotions" ,new{},new{@class="link-secondary"})
+                </td>
+                <td> 持續優惠中 </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>
+                    @Html.ActionLink("促銷活動", "Promotions促銷活動" , "Promotions" ,new{},new{@class="link-secondary"})
+                </td>
+                <td> 持續更新中 </td>
+            </tr>
+            @{
+                int count = 2;
+                foreach (var item in Model)
+                {
+                    string path = item.ArticalTitle + ".jpg";
+                    count++;
+                    string date = item.ArticalDate.ToString("yyyy/MM/dd");
+                    <tr>
+                        <td>@count</td>
+                        <td>
+                            @Html.ActionLink(item.ArticalTitle, "Promotions活動已結束" , "Promotions" ,new{id=item.ArticalId},new{@class="link-secondary"})
+                        </td>
+                        <td>已結束 </td>
+                    </tr>
+                }
+                <tr>
+                    <td>@count</td>
+                    <td>
+                        @Html.ActionLink("配著小說許下未來心願", "Promotions活動已結束" , "Promotions" ,new{},new{@class="link-secondary"})
+                    </td>
+                    <td>已結束 </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

@@ -24,6 +24,8 @@ namespace prjBookMvcCore.Controllers
                             ISBN = b.Isbn,
                             作者ID = b.AuthorDetails.Select(x => x.AuthorId).FirstOrDefault(),
                             作者 = b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault(),
+                            多個作者 = b.AuthorDetails.Select(x => x.Author.AuthorName).ToList(),
+                            多個作者ID = b.AuthorDetails.Select(x => x.Author.AuthorId).ToList(),
                             譯者 = b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault(),
                             繪者 = b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault(),
                             出版社ID = b.Publisher.PublisherId,
@@ -53,7 +55,7 @@ namespace prjBookMvcCore.Controllers
                             試讀2 = b.Previews.Select(x => x.PreviewImagePath2).FirstOrDefault(),
                             試讀3 = b.Previews.Select(x => x.PreviewImagePath3).FirstOrDefault(),
                             試讀4 = b.Previews.Select(x => x.PreviewImagePath4).FirstOrDefault(),
-                            折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                            折扣 = b.BookDiscountDetails.Where(x=>x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                             折扣名稱 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountName).FirstOrDefault(),
                             截止日 = b.BookDiscountDetails.Select(x => x.BookDiscountEndDate).FirstOrDefault(),
                         };
@@ -90,6 +92,14 @@ namespace prjBookMvcCore.Controllers
                 BookDiscount bd = new BookDiscount { BookDiscountAmount = item.折扣, BookDiscountName = item.折扣名稱};
                 BookDiscountDetail bdd = new BookDiscountDetail { BookDiscountEndDate = item.截止日 };
 
+                List<Author> aa = new List<Author>();
+                for(int i = 0; i < item.多個作者.Count(); i++)
+                {
+                    Author tmp = new Author();
+                    tmp.AuthorName = item.多個作者[i];
+                    tmp.AuthorId = item.多個作者ID[i];
+                    aa.Add(tmp);
+                }
 
                 List<CommentInformation> cis = getCommentInformation(bookId);
 
@@ -113,6 +123,7 @@ namespace prjBookMvcCore.Controllers
                     bookDiscount = bd,
                     bookDiscountDetail = bdd,
                     artical = ac,
+                    authors = aa,
                 };
 
                 return View(newBook);

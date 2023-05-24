@@ -64,12 +64,22 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult Promotions活動總覽圖()
         {
-            var datas = db.Articals.OrderByDescending(a => a.ArticalId).Select(a => a);
+            var datas = db.Articals.OrderByDescending(a => a.ArticalId).Where(a => a.ArticalId != 8 & a.ArticalId != 10 & a.ArticalId != 17).Select(a => a);
             return View(datas);
         }
         public IActionResult Promotions活動總覽表()
         {
-            var datas = db.Articals.OrderByDescending(a => a.ArticalId).Select(a => a);
+            var datas = db.Articals.OrderByDescending(a => a.ArticalId).Where(a => a.ArticalId != 8 & a.ArticalId != 10 & a.ArticalId != 17).Select(a => a);
+            return View(datas);
+        }
+        public IActionResult Promotions活動圖()
+        {
+            var datas = db.Articals.OrderByDescending(a => a.ArticalId).Where(a=>a.ArticalId==8 || a.ArticalId==10 || a.ArticalId==17).Select(a => a);
+            return View(datas);
+        }
+        public IActionResult Promotions活動表()
+        {
+            var datas = db.Articals.OrderByDescending(a => a.ArticalId).Where(a => a.ArticalId == 8 || a.ArticalId == 10 || a.ArticalId == 17).Select(a => a);
             return View(datas);
         }
 

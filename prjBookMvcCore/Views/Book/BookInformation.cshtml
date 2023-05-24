@@ -239,7 +239,7 @@
                     <el-aside width="310px" height="400px">
                         <div class="demo-image__placeholder">
                             <div class="block">
-                                <el-image :src="book.coverPath">
+                                <el-image :src="book.coverPath" class="p-2">
                                     <div slot="placeholder" class="image-slot">
                                         加載中<span class="dot">...</span>
                                     </div>
@@ -282,7 +282,12 @@
                     <div style="padding-left: 5px;">
                         <h1 style="line-height: normal;letter-spacing: 0.5px;font-size:20px;font-weight:bold;">{{book.bookTitle}}</h1>
                         <div class="authorBoard">
-                            <p style="text-align: left;"><span>作者：<a :href="authorUrl(book.authorID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.authorName}}</a></span></p>
+                             <p>作者：
+                                  <span v-for="(author, index) in book.authors" :key="index">
+                                    <a :href="authorUrl(author.authorID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{author.authorName}}</a>
+                                    <span v-if="index !== book.authors.length - 1">、</span>
+                                  </span>
+                            </p>
                         </div>
                         <el-row>
                             <el-button round size="small" type="pinkBorder" style="margin-left: 0px; padding: 9px;"><i class="el-icon-edit"></i><span style="color:#E3007F;"> {{comment.length}} </span>評價</el-button>
@@ -313,7 +318,7 @@
                         <p>運送方式：超商取貨、宅配取貨</p>
                         <p>銷售地區：全球</p>
                         <p v-if="book.unitInStock > 5" style="color:green">{{unitInStockContent}}</p>
-                        <p v-if="book.unitInStock > 0 && book.unitInStock < 5" style="color:skyblue">{{unitInStockContent}}</p>
+                        <p v-if="book.unitInStock > 0 && book.unitInStock <= 5" style="color:skyblue">{{unitInStockContent}}</p>
                         <p v-if="book.unitInStock == 0" style="color:red">{{unitInStockContent}}</p>
                     </div>
                     <p class="DeliverAndKpst">
@@ -377,7 +382,12 @@
                 <el-main>
                     <div class="information">
                         <span style="font-size: 20px; font-weight: bold;">商品資料</span>
-                        <p>作者：<span><a :href="authorUrl(book.authorID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.authorName}}</a></span></p>
+                        <p>作者：
+                          <span v-for="(author, index) in book.authors" :key="index">
+                            <a :href="authorUrl(author.authorID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{author.authorName}}</a>
+                            <span v-if="index !== book.authors.length - 1">、</span>
+                          </span>
+                        </p>
                         <p v-if="book.translatorName && book.translatorName.length > 1">譯者：<span><a :href="translatorUrl(book.translatorID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.translatorName}}</a></span></p>
                         <p v-if="book.painterName && book.painterName.length > 1">繪者：<span><a :href="painterUrl(book.painterID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.painterName}}</a></span></p>
                         <p>出版社：<span><a :href="publisherUrl(book.publisherID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.publisherName}}</a></span></p>
@@ -594,6 +604,17 @@
         let discountDateJS = replaceDoubleDollarSign(decodeHTML("@Model.bookDiscountDetail.BookDiscountEndDate")).split(/[\s上午下午]/)[0];
         let discountNameJS = replaceDoubleDollarSign(decodeHTML("@Model.bookDiscount.BookDiscountName"))
 
+        let authorsInformations =  @Html.Raw(Json.Serialize(Model.authors));
+        let authorsJS = [];
+        for (let i = 0; i <authorsInformations.length; i++) {
+            let a = {
+                authorName: authorsInformations[i].authorName,
+                authorID: authorsInformations[i].authorId,
+            };
+            authorsJS.push(a);
+        }
+        console.log(authorsJS)
+
 
         let commentInformations = @Html.Raw(Json.Serialize(Model.commentInformations));
         let commentsJS = [];
@@ -650,6 +671,7 @@
                     publisherID: "@Model.publisher.PublisherId",
                     authorName: authorNameJS,
                     authorID: "@Model.author.AuthorId",
+                    authors: authorsJS,
                     translatorName: translatorNameJS,
                     translatorID: "@Model.translator.TranslatorId",
                     painterName: painterNameJS,
@@ -789,6 +811,9 @@
                                             message: '本書已加入購物車',
                                             type: 'success'
                                         });
+                                        setTimeout(() => {
+                                            location.reload()
+                                        }, 1500);
                                     }
                                     else {
                                         self.$notify({
@@ -841,9 +866,12 @@
                             success: function (result) {
                                 if (result) {
                                     self.$message({
-                                        message: '評價成功！請重載網頁',
+                                        message: '評價成功！',
                                         type: 'success'
                                     });
+                                    setTimeout(() => {
+                                        location.reload()
+                                    }, 1500);
                                 }
                                 else {
                                     self.$notify({
