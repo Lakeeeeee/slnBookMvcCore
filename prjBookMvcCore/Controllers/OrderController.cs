@@ -81,7 +81,6 @@ namespace prjBookMvcCore.Controllers
                 RebateAmount = int.Parse(rebateAmountInput);
             };
 
-            var oD = int.Parse(form["oD"]);
 
             Order order = new Order()
             {
@@ -89,7 +88,6 @@ namespace prjBookMvcCore.Controllers
                 OrderDate = DateTime.Now,
                 ShipmentId = Convert.ToInt32(ShipmentId),
                 PaymentId = Convert.ToInt32(PaymentId),
-                OrderDiscountId = oD,
                 PointAmount = RebateAmount,
                 ReciverName = ReciverName,
                 ReciverPhone = ReciverPhone,
@@ -99,12 +97,26 @@ namespace prjBookMvcCore.Controllers
             _db.Orders.Add(order);
             _db.SaveChanges();
 
-            var q = _db.OrderDiscountDetails.Include(x => x.OrderDiscount).Where(x => x.OrderDiscountId == oD && x.MemberId == _user.UserId).FirstOrDefault();
-            if (q.OrderDiscount.DiscountTypeId == 2)
-            {
-                _db.Remove(q);
-                _db.SaveChanges();
-            }
+			string oDValue = form["oD"];
+			int oD;
+			if (int.TryParse(oDValue, out oD))
+			{
+				order.OrderDiscountId = oD;
+				var q = _db.OrderDiscountDetails.Include(x => x.OrderDiscount).Where(x => x.OrderDiscountId == oD && x.MemberId == _user.UserId).FirstOrDefault();
+				if(q != null)
+                {
+                    if (q.OrderDiscount.DiscountTypeId == 2)
+                    {
+                        _db.Remove(q);
+                        _db.SaveChanges();
+                    };
+                }
+			}
+			else
+			{
+				// 解析失敗，oDValue 為 null 或無效的整數表示
+				// 在此處理相應的邏輯
+			}
 
             Member member = _db.Members.Find(order.MemberId);
 
@@ -155,11 +167,18 @@ namespace prjBookMvcCore.Controllers
                 var thebook = _db.Books.Where(x => x.BookId == list[n].BookId).FirstOrDefault();
                 thebook.UnitInStock = thebook.UnitInStock - quantity[n];
             };
-
-
             _db.OrderDetails.AddRange(list);
             _db.SaveChanges();
             isSuccess = true;
+
+            //刪除購物車
+            foreach(int item in acids)
+            {
+                ActionDetial tool = _db.ActionDetials.Find(item);
+                _db.ActionDetials.Remove(tool);
+            }
+            _db.SaveChanges();
+
             return Content(isSuccess.ToString());
         }
         public IActionResult itemDelete(int id) //刪除購物車項目
@@ -205,7 +224,7 @@ namespace prjBookMvcCore.Controllers
         }
         public IActionResult checkOutFinal(int id)
         {
-            Order order = _db.Orders.Include(x=>x.OrderDetails).ThenInclude(x=>x.Book).Where(x => x.OrderId == id).FirstOrDefault();
+            Order order = _db.Orders.Include(x=>x.Member).Include(x=>x.OrderDetails).ThenInclude(x=>x.Book).Where(x => x.OrderId == id).FirstOrDefault();
             return View(order);
         }
     }

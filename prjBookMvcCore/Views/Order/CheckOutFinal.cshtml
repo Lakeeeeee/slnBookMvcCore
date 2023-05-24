@@ -5,10 +5,8 @@
 	ViewBag.Title = "購物車";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 	BookShopContext db = new BookShopContext();
-
-	
-	
-
+	string mName = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.MemberName).FirstOrDefault();
+	string mPhone = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.Memberphone).FirstOrDefault();
 }
 
 
@@ -114,11 +112,17 @@ th {
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>商品 1</td>
-						<td>1</>
-						<td>100</td>
-					</tr>
+					@{
+						foreach(var item in Model.OrderDetails)
+						{
+							<tr>
+								<th>@item.Book.BookTitle</th>
+								<th>@item.Quantity</th>
+								<th>@item.UnitPrice</th>
+							</tr>
+						}					
+					
+					}			
 				</tbody>
 			</table>
 		</div>
@@ -128,10 +132,14 @@ th {
 			<div class="checkout-section">
 				<h3>訂購人</h3>
 				<div class="col-md-6">
-					<p>姓名：</p>
-					<p>電話：</p>
-					<p>Email：</p>
-					<p>地址：</p>
+					<p>姓名：@Model.Member.MemberName</p>
+					<p>電話：@Model.Member.Memberphone</p>
+				</div>
+				<h3>收件人</h3>
+				<div class="col-md-6">
+					<p>姓名：@Model.ReciverName</p>
+					<p>電話：@Model.ReciverPhone</p>
+					<p>地址：@Model.ShipAddr</p>
 				</div>
 			</div>
 			<div class="checkout-section">
