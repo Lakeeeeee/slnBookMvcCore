@@ -53,7 +53,7 @@ namespace prjBookMvcCore.Controllers
                             試讀2 = b.Previews.Select(x => x.PreviewImagePath2).FirstOrDefault(),
                             試讀3 = b.Previews.Select(x => x.PreviewImagePath3).FirstOrDefault(),
                             試讀4 = b.Previews.Select(x => x.PreviewImagePath4).FirstOrDefault(),
-                            折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                            折扣 = b.BookDiscountDetails.Where(x=>x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                             折扣名稱 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountName).FirstOrDefault(),
                             截止日 = b.BookDiscountDetails.Select(x => x.BookDiscountEndDate).FirstOrDefault(),
                         };
