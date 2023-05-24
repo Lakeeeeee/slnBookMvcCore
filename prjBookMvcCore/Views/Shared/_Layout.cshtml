@@ -8,7 +8,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - prjBookMvcCore</title>
+    <title>@ViewData["Title"] - 讀本</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/prjBookMvcCore.styles.css" asp-append-version="true" />
@@ -178,6 +178,16 @@
                             <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Home/Menu">書籍</a></li>
                             <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Promotions/Promotions活動總覽圖">推薦書區</a></li>
                             <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Promotions/Promotions領取當周優惠">領取優惠卷</a></li>
+                            @foreach (var category in Model.categories)
+                            {
+                                @if (category.CategoryId > 14 && category.CategoryId<22)
+                                {
+                                    <li>
+                                        <a role="button" class="btn btn-sm btn-outline-secondary mx-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="@category.CategoryId">@category.CategoryName</a>
+                                    </li>
+                                }
+                            }
+                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Home/Menu">更多書籍</a></li>
                         </ul>
                     </div>
                 </form>
