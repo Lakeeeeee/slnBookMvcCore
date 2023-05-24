@@ -126,7 +126,6 @@ namespace prjBookMvcCore.Controllers
         {
             return View();
         }
-        //[HttpPost]  //用ajax方法請求回傳值跟form/submit是無相關的兩條路, 使用時要分清楚
         [Route("Member/find")]
         public IActionResult Find_password(string target) //忘記密碼方法
         {
@@ -277,7 +276,7 @@ namespace prjBookMvcCore.Controllers
         {
             bool isSuccess = false;
             int memId = Convert.ToInt32(form["memId"]);
-            string oldPwd = form["oldPwd"].ToString();
+            var oldPwd = form["oldPwd"];
             var newPwd = form["newPwd"];
 
             Member updateTool = _bookShopContext.Members.Find(_userInforService.UserId)!;
@@ -288,16 +287,15 @@ namespace prjBookMvcCore.Controllers
                 isSuccess = true;
                 return Json(new
                 {
-                    success = isSuccess.ToString(),
+                    success = isSuccess,
                     message = "修改密碼成功"
                 });
             }
             return Json(new
             {
-                success = isSuccess.ToString(),
+                success = isSuccess,
                 message = "更新失敗"
             });
-
         }
         [Authorize]
         public IActionResult MemberCenter() //會員中心頁面
@@ -484,7 +482,6 @@ namespace prjBookMvcCore.Controllers
                 _bookShopContext.SaveChanges();
                 isExsit = true;
             };
-
             return Content(isExsit.ToString());
         }
 
@@ -494,6 +491,5 @@ namespace prjBookMvcCore.Controllers
             var q = _bookShopContext.OrderDetails.Include(x => x.Book).ThenInclude(x => x.BookDiscountDetails).ThenInclude(x => x.BookDiscount).Where(x => x.OrderId == id);
             return PartialView("PartailOrderDetail", q);
         }
-
     }
 }

@@ -1,11 +1,14 @@
 ﻿@inject UserInforService _userInforService
+@{
+    BookShopContext db = new BookShopContext();
+}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - prjBookMvcCore</title>
+    <title>@ViewData["Title"] - 讀本</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/prjBookMvcCore.styles.css" asp-append-version="true" />
@@ -64,6 +67,18 @@
             text-decoration: none;
             color: inherit;
         }
+
+        #viewcart_popup {
+            display: none; /* 設定浮動視窗一開始隱藏 */
+            position: absolute; /* 設定絕對定位 */
+            top: 100%; /* 距離上方的距離 */
+            right: 10%; /* 距離左方的距離 */
+            background-color: rgb(250, 240, 230);
+            padding: 10px;
+            border: 2px dashed rgb(150, 25, 200);
+            border-radius: 5px;
+            z-index: 9999;
+        }
     </style>
 </head>
 <body>
@@ -76,7 +91,6 @@
         </button>
         <span class="translate-middle badge rounded-pill bg-secondary" id="timer"></span>
     </div>
-
     <div id="popup" class="popup-container">
         <h2>領取優惠券</h2>
         <p style="text-align:center">滿999扣77元</p>
@@ -92,7 +106,6 @@
             現在領取優惠券，立即享受折扣優惠！
         </button>
     </div>
-
 
 
     <div class="" style="background-image:url('');background-size:100%;">
@@ -119,7 +132,31 @@
                             }
                         }
                         <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/MemberCenter">會員中心</a></li>
-                        <li><a role="button" class="btn btn-outline-secondary mx-3" href="~/Order/ShoppingCart"><img src="~/Image/shoppingCartIcon20px.png" /></a></li>
+                        <li id="viewcart"><a role="button" class="btn btn-outline-secondary mx-3" href="~/Order/ShoppingCart"><img src="~/Image/shoppingCartIcon20px.png" /></a></li>
+                        <div id="viewcart_popup"class="col-3">
+                            @{
+                                if (_userInforService.UserId == 0)
+                                {
+                                    <p>尚未登入</p>
+                                }
+                                else
+                                {
+                                    <p>購物車預覽</p>
+                                    <table>
+                                        @{
+                                            var cart = db.ActionDetials.Where(a => a.MemberId == _userInforService.UserId & a.ActionId == 7).Select(a => new { a.BookId, a.Book.BookTitle, a.Book.CoverPath, a.Book.UnitPrice }).ToList();
+                                            foreach (var g in cart)
+                                            {
+                                                var dis = db.BookDiscountDetails.Where(d => d.BookId == g.BookId & d.BookDiscountStartDate < DateTime.Now & d.BookDiscountEndDate > DateTime.Now).Select(d => new { d.BookDiscount.BookDiscountAmount }).ToList();
+                                                <tr><td rowspan="3" class="p-1"><img src="~/Image/Book/@g.CoverPath" class="d-block w-100 img-with-border" /></td><td>@(g.BookTitle.Split("$")[0])</td></tr>
+                                                <tr><td>原價：<del style="color:red;font-style:oblique">@((int)Math.Round(g.UnitPrice)) </del>  元</td></tr>
+                                                <tr class="m-1"><td> 優惠價：<span style="color: #E3007F; ">@((dis[0].BookDiscountAmount * 100).ToString("0"))</span> 折 <span style="color: #E3007F;font-weight:bold;"> @((int)Math.Round(g.UnitPrice * dis[0].BookDiscountAmount)) </span>元</td></tr>
+                                            }
+                                        }
+                                    </table>
+                                }
+                            }
+                        </div>
                     </ul>
                 </div>
             </div>
@@ -132,7 +169,8 @@
                 <form class="justify-content-start">
                     <div class="menu">
                         <ul class="zero">
-                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Promotions/Promotions活動總覽圖">活動文宣</a></li>
+                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Home/Menu">書籍</a></li>
+                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Promotions/Promotions活動總覽圖">推薦書區</a></li>
                             <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Promotions/Promotions領取當周優惠">領取優惠卷</a></li>
                             <li>
                                 <a role="button" class="btn btn-sm btn-outline-secondary mx-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="15">人文社科</a>
@@ -397,3 +435,14 @@
         }
     };
 </script>
+
+<script>
+    // 當游標進入時顯示浮動視窗
+    document.getElementById('viewcart').addEventListener('mouseenter', function () {
+        document.getElementById('viewcart_popup').style.display = 'block';
+    });
+
+    // 當游標離開時隱藏浮動視窗
+    document.getElementById('viewcart').addEventListener('mouseleave', function () {
+        document.getElementById('viewcart_popup').style.display = 'none';
+    });</script>
