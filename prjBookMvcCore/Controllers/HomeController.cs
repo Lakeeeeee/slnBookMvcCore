@@ -19,12 +19,14 @@ namespace prjBookMvcCore.Controllers
             List<RecommendInformation> normal = getNormal();
             List<RecommendInformation> publicationDate = getPublicationDate();
             List<RecommendInformation> commentTimeDate = getCommentTimeDate();
+            List<RecommendInformation> quantity = getQuantity();
 
             CForHomePage c = new CForHomePage()
             {
                 normal = normal,
                 commentTimeDate = commentTimeDate,
                 publicationDate = publicationDate,
+                quantity=quantity,
             };
             return View(c);
         }
@@ -495,9 +497,50 @@ namespace prjBookMvcCore.Controllers
                 //};
                 return View(searchresult);
         }
+
+        public List<RecommendInformation> getQuantity()
+        {
+            using (var db = new BookShopContext())
+            {
+                var recommendBooks = (from b in db.Books
+                                      join od in db.OrderDetails
+                                      on b.BookId equals od.BookId
+                                      orderby od.Quantity descending
+                                      select new
+                                      {
+                                          書本ID = b.BookId,
+                                          書名 = b.BookTitle,
+                                          定價 = b.UnitPrice,
+                                          路徑 = b.CoverPath,
+                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                          出版日期 = b.PublicationDate,
+                                          銷售數量 = b.OrderDetails.Select(x => x.Quantity).FirstOrDefault()
+                                      });
+                List<RecommendInformation> ris = new List<RecommendInformation>();
+
+                foreach (var recommendBook in recommendBooks)
+                {
+                    Book b = new Book { BookTitle = recommendBook.書名, BookId = recommendBook.書本ID, UnitPrice = recommendBook.定價, CoverPath = recommendBook.路徑, PublicationDate = recommendBook.出版日期 };
+                    BookDiscount bd = new BookDiscount { BookDiscountAmount = recommendBook.折扣 };
+                    OrderDetail od = new OrderDetail { Quantity = recommendBook.銷售數量 };
+                    RecommendInformation tmp = new RecommendInformation()
+                    {
+                        book = b,
+                        bookDiscount = bd,
+                        orderDetail = od,
+                    };
+                    ris.Add(tmp);
+                }
+                return ris;
+            }
+        }
+
+        public IActionResult askMe()
+        {
+            return View();
+        }
+
     }
 
-
-
-
+   
 }

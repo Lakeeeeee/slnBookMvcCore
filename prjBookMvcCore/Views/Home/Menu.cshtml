@@ -1,25 +1,13 @@
 @using prjBookMvcCore.Models
 @model MenuInformation
 @{
-    ViewData["Title"] = "Menu";
+    ViewData["Title"] = "更多書籍";
     Layout = "~/Views/Shared/_Layout_Menu.cshtml";
 }
 <style>
-    td {
-        padding: 0 20px;
-    }
-
-    button {
-        border: 1px solid black;
-        border-radius: 20px;
-    }
-
-    .two-lines {
-        line-height: 1.2em; /* 調整需要的行高 */
-        height: 2.5em; /* 行高的兩倍 */
-    }
-
     .bookCaption {
+        line-height: 1.5em; /* 設置行高為字體大小的1.5倍 */
+        height: 3em; /* 設置高度為字體大小的3倍 */
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
@@ -28,28 +16,46 @@
     }
 
     .authorCaption {
+        line-height: 1.5em; /* 設置行高為字體大小的1.5倍 */
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 1;
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
+    .carouselArrowEdit {
+        top: 430px;
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 15%;
+        height: 120px;
+        width: 50px;
+    }
+
+    .carouselArrowNew {
+        top: 80px;
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 15%;
+        height: 120px;
+        width: 50px;
+    }
 </style>
 <div>
     <div class="container body-content">
-        <div class="row">
+        <div class="row mb-3">
             <div class="col align-content-start" style="display: flex">
-                <h3>推薦文章</h3>
+                <h3 >推薦文章</h3>
             </div>
             <div class="col justify-content-end " style="display: flex; padding:5px">
                 <a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Promotions/Promotions活動總覽表">看更多</a>
             </div>
         </div>
         <div class="row">
-            <div id="carouselExampleNew" class="carousel slide" data-bs-ride="carousel">
+            <div id="carouselExampleNew" class="carousel carousel-dark slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     @*輪播推薦文章*@
-                    @*輪播書本第一頁*@ <div class="carousel-item active">
+                    @*輪播書本第一頁*@ 
+                    <div class="carousel-item active">
                         <div class="row">
                             @{
                                 int latestArticalId = 0;
@@ -99,11 +105,11 @@
                             </div>
                         }
                     }
-                    @*輪播圖切換按鈕*@ <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleNew" data-bs-slide="prev" border=5>
+                    @*輪播圖切換按鈕*@ <button class="carousel-control-prev carouselArrowNew" type="button" data-bs-target="#carouselExampleNew" data-bs-slide="prev" border=5>
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Previous</span>
                     </button>
-                    @*輪播圖切換按鈕*@<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleNew" data-bs-slide="next" border=5>
+                    @*輪播圖切換按鈕*@<button class="carousel-control-next carouselArrowNew" type="button" data-bs-target="#carouselExampleNew" data-bs-slide="next" border=5>
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Next</span>
                     </button>
@@ -114,14 +120,18 @@
         <hr />
         <br />
         <div class="row">
-            <div class="col align-content-start" style="display: flex">
-                <h3>繁中書籍</h3>
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="mb-0">繁中書籍</h3>
+                <div class="d-flex">
+                    <div class="ms-auto pe-2">
+                        <a role="button" class="btn btn-sm btn-outline-secondary" asp-controller="Category" asp-action="分類頁面" asp-route-id="0">看更多</a>
+                    </div>
+                </div>
             </div>
-            <div class="col justify-content-end" style="display: flex; padding:5px">
-                <a class="btn btn-sm btn-outline-secondary mx-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="0">看更多</a>
             </div>
+            <br />
             <div class="container body-content">
-                <div id="carouselExampleEdit" class="carousel slide">
+                <div id="carouselExampleEdit" class="carousel carousel-dark slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
                             @*輪播書本第一頁*@
@@ -131,12 +141,12 @@
                                     {
                                         MenuItem item = Model.menuItems[i];
                                         <div class="col book-item" data-publication-date="@item.book.PublicationDate" data-price="@((int)Math.Round(item.bookDiscount.BookDiscountAmount * item.book.UnitPrice))">
-                                            <div style="position:relative">
+                                            <div style="position:relative" class=" mb-3">
                                                 <a href="~/Book/BookInformation/@item.book.BookId"><img src="~/Image/Book/@item.book.CoverPath" title="@item.book.BookTitle" height="300px"></a>
                                             </div>
-                                            <div class="caption">
+                                            <div class="caption mb-3">
                                                 <ul style="list-style:none; margin:0; padding:0;">
-                                                    <li> <a class="bookCaption two-lines" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle</a></li>
+                                                    <li> <a class="bookCaption mb-2" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle.Replace("$$"," ")</a></li>
                                                     <li class="prod_author authorCaption">
                                                         作者：
                                                         @if (item.author != null)
@@ -150,7 +160,7 @@
                                                         優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
                                                         <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
                                                     </li>
-                                                    <li class="publicationDate">
+                                                    <li class="publicationDate mb-5">
                                                         出版日期：<span>@item.book.PublicationDate.ToString("yyyy/MM/dd")</span>
                                                     </li>
                                                 </ul>
@@ -162,7 +172,7 @@
                         </div>
                         @*輪播書本第二~四頁*@
                         @{
-                            for (int p = 2; p <= 6; p++)
+                            for (int p = 2; p <= 5; p++)
                             {
                                 <div class="carousel-item">
                                     <div class="row">
@@ -171,13 +181,13 @@
                                             {
                                                 MenuItem item = Model.menuItems[i];
                                                 <div class="col book-item" data-publication-date="@item.book.PublicationDate" data-price="@((int)Math.Round(item.bookDiscount.BookDiscountAmount * item.book.UnitPrice))">
-                                                    <div style="position:relative">
+                                                    <div style="position:relative" class="mb-3">
                                                         <a href="~/Book/BookInformation/@item.book.BookId"><img src="~/Image/Book/@item.book.CoverPath" title="@item.book.BookTitle" height="300px"></a>
                                                     </div>
-                                                    <div class="caption">
+                                                    <div class="caption mb-3">
                                                         <ul style="list-style:none; margin:0; padding:0;">
-                                                            <li> <a class="bookCaption two-lines" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle</a></li>
-                                                            <li class='prod_author'>
+                                                            <li> <a class="bookCaption mb-2" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle.Replace("$$"," ")</a></li>
+                                                            <li class="prod_author authorCaption">
                                                                 作者：
                                                                 @if (item.author != null)
                                                                 {
@@ -190,7 +200,7 @@
                                                                 優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
                                                                 <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
                                                             </li>
-                                                            <li class="publicationDate">
+                                                            <li class="publicationDate mb-5">
                                                                 出版日期：<span>@item.book.PublicationDate.ToString("yyyy/MM/dd")</span>
                                                             </li>
                                                         </ul>
@@ -202,17 +212,16 @@
                                 </div>
                             }
                         }
-                        @*輪播圖切換按鈕*@ <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleEdit" data-bs-slide="prev" border=5>
+                        @*輪播圖切換按鈕*@ <button class="carousel-control-prev carouselArrowEdit" type="button" data-bs-target="#carouselExampleEdit" data-bs-slide="prev" border=5>
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>
                         </button>
-                        @*輪播圖切換按鈕*@<button class="carousel-control-next " type="button" data-bs-target="#carouselExampleEdit" data-bs-slide="next" border=5>
+                        @*輪播圖切換按鈕*@<button class="carousel-control-next carouselArrowEdit" type="button" data-bs-target="#carouselExampleEdit" data-bs-slide="next" border=5>
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Next</span>
                         </button>
                     </div>
                 </div>
             </div>
-        </div>
     </div>
 </div>

@@ -1,8 +1,5 @@
 ﻿@using prjBookMvcCore.Models
 @model CInformation
-@{
-    ViewData["Title"] = "BookInformation";
-}
 @inject UserInforService _userInforService
 <!DOCTYPE html>
 <html>
@@ -11,7 +8,6 @@
     <!-- import CSS -->
     <!-- 6-37 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-
     <style>
         .el-aside {
             background-color: #FFFFFF;
@@ -321,7 +317,7 @@
                         <p v-if="book.unitInStock == 0" style="color:red">{{unitInStockContent}}</p>
                     </div>
                     <p class="DeliverAndKpst">
-                        <a class="18h" href="#" target="_blank">
+                        <a class="18h" href="~/Home/QA#card8" target="_blank">
                             <img style="width: 50px;height: 50px;" src="../../image/Book/bookIcon/shipIcon.png" alt="">
                         </a>
                     </p>
@@ -394,9 +390,9 @@
                         <p>
                             類別：
                             <span>
-                                <a v-if="book.languageName && book.languageName.length > 1" href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.languageName}}</a>>
-                                <a v-if="book.categoryName && book.categoryName.length > 1" href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.categoryName}}</a>>
-                                <a v-if="book.subCategoryName && book.subCategoryName.length > 1" href="#" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.subCategoryName}}</a>
+                                <a v-if="book.languageName && book.languageName.length > 1" :href="menuUrl()" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.languageName}}</a>>
+                                <a v-if="book.categoryName && book.categoryName.length > 1" :href="categoryUrl(book.categoryID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.categoryName}}</a>>
+                                <a v-if="book.subCategoryName && book.subCategoryName.length > 1" :href="subCategoryUrl(book.subCategoryID)" v-on:mouseover="hoverStyle($event)" v-on:mouseout="restoreStyle($event)">{{book.subCategoryName}}</a>
                             </span>
                         </p>
                     </div>
@@ -494,7 +490,7 @@
                                         辦理退換貨時，請保持商品全新狀態與完整包裝（商品本身、贈品、贈票、附件、內外包裝、保證書、隨貨文件等）一併寄回。若退回商品無法回復原狀者，可能影響退換貨權利之行使或須負擔部分費用。
                                     </p>
                                     <strong>訂購本商品前請務必詳閱</strong>
-                                    <a class="linkStyleTextArea" href="https://www.taaze.tw/member_serviceCenter.html?qa_type=g#a1" target="_blank">退換貨原則</a>。
+                                    <a href="~/Home/QA#card3" style="color:#E3007F">退換貨原則</a>
                                 </div>
                             </div>
                         </el-main>
@@ -773,32 +769,40 @@
                 },
                 addToCart(bookID,memberID){
                     if (this.loginCheck()) {
-                        let self = this;
-                        let url = '@Url.Action("ActionTo", "Action")?bookID=' + bookID + '&memberID=' + memberID + '&actionID=' + 7;
-                        $.ajax({
-                            url: url,
-                            type: 'POST',
-                            dataType: 'json',
-                            success: function (result) {
-                                if (result) {
-                                    self.$notify({
-                                        title: '加入購物車成功',
-                                        message: '本書已加入購物車',
-                                        type: 'success'
-                                    });
+                        if (this.book.unitInStock == 0) {
+                            this.$notify.error({
+                                title: '錯誤',
+                                message: '暫無庫存，無法銷售！'
+                            });
+                        }
+                        else{
+                            let self = this;
+                            let url = '@Url.Action("ActionTo", "Action")?bookID=' + bookID + '&memberID=' + memberID + '&actionID=' + 7;
+                            $.ajax({
+                                url: url,
+                                type: 'POST',
+                                dataType: 'json',
+                                success: function (result) {
+                                    if (result) {
+                                        self.$notify({
+                                            title: '加入購物車成功',
+                                            message: '本書已加入購物車',
+                                            type: 'success'
+                                        });
+                                    }
+                                    else {
+                                        self.$notify({
+                                            title: '加入購物車失敗',
+                                            message: '本書已在購物車內',
+                                            type: 'warning'
+                                        });
+                                    }
+                                },
+                                error: function (xhr, status, error) {
+                                    console.log(error);
                                 }
-                                else {
-                                    self.$notify({
-                                        title: '加入購物車失敗',
-                                        message: '本書已在購物車內',
-                                        type: 'warning'
-                                    });
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                console.log(error);
-                            }
-                        });
+                            });
+                        }
                     }
                 },
                 redirectToCart(memberID) {
@@ -930,6 +934,7 @@
         })
     let testLogin = @_userInforService.UserId !== 0
     app.isLogin = testLogin
+    document.title = bookTitleJS
     </script>
 </body>
 </html>

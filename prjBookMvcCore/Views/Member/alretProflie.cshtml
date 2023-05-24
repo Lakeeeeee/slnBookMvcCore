@@ -3,7 +3,7 @@
 @model prjBookMvcCore.Models.Member
 
 @{
-    ViewData["Title"] = "alretProflie";
+    ViewData["Title"] = "修改個人資料";
     Layout = "~/Views/Shared/_Layout_Member.cshtml";
     BookShopContext db = new BookShopContext();
 }
@@ -92,7 +92,7 @@
                         <tr>
                             <td>預設支付方式：</td>
                             <td>
-                                <select class="btn btn-light" name="PaymentId">
+                                <select class="btn btn-light" name="PaymentId" asp-for="PaymentId">
                                     @{
                                         foreach (var item in db.Payments.Select(x => x))
                                         {
@@ -120,7 +120,6 @@
 </div>
 <script>
     const form = document.querySelector('#form');
-
     form.addEventListener('submit', async () => {
         const response = await fetch('@Url.ActionLink("alretProflie")', {
             method: 'Post',
