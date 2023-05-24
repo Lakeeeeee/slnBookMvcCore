@@ -81,8 +81,8 @@
     <div>
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="~/Home/Home">首頁</a></li>
-                <li class="breadcrumb-item active" aria-current="page">購物車</li>
+               @* <li class="breadcrumb-item"><a href="~/Home/Home">首頁</a></li>
+                <li class="breadcrumb-item active" aria-current="page">購物車</li>*@
             </ol>
         </nav>
     </div>
@@ -90,7 +90,7 @@
 
 <nav>
     @*頁籤*@
-    <div class="nav nav-tabs" id="nav-tab" role="tablist" style="">
+    <div class="nav nav-tabs" id="nav-tab" role="tablist" style="display:none">
         <button class="nav-link active" id="nav-cart-tab" data-bs-toggle="tab" data-bs-target="#nav-cart" type="button" role="tab" aria-controls="nav-cart" aria-selected="true">page1</button>
         <button class="nav-link" id="nav-checkOutInfo-tab" data-bs-toggle="tab" data-bs-target="#nav-checkOutInfo" type="button" role="tab" aria-controls="nav-checkOutInfo" aria-selected="false">page2</button>
         <button class="nav-link" id="nav-checkOutConfirm-tab" data-bs-toggle="tab" data-bs-target="#nav-checkOutConfirm" type="button" role="tab" aria-controls="nav-checkOutConfirm" aria-selected="false">page3</button>
@@ -356,7 +356,7 @@
         </div>
         <div style="text-align:right;">
             <button class=" btn btn-primary col-4 me-md-2" onclick="btnClick('nav-checkOutInfo-')">返回修改</button>
-            <button id="btnSubmit" class="btn btn-primary col-4 me-md-2" type="button" @*data-bs-toggle="modal" data-bs-target="#successModal"*@>
+            <button class="btn btn-primary col-4 me-md-2" type="button" data-bs-toggle="modal" data-bs-target="#successModal">
                 確定送出
             </button>
         </div>
@@ -380,6 +380,23 @@
         </div>
     </div>
 
+</div>
+
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">訂單完成</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                您的訂單已完成！
+            </div>
+            <div class="modal-footer">
+                <a href="~/Order/CheckOutFinal" class=" btn btn-primary col-4 me-md-2" type="button">確定</a>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script> //送出訂單

@@ -70,6 +70,8 @@ namespace prjBookMvcCore.Controllers
             var PaymentId = int.Parse(form["paymentId"]);
             var ShipmentId = int.Parse(form["shipmentId"]);
 
+            
+
             string rebateAmountInput = form["rebateAmountInput"];
             int RebateAmount;
             if (string.IsNullOrEmpty(rebateAmountInput))
@@ -98,6 +100,13 @@ namespace prjBookMvcCore.Controllers
 
             _db.Orders.Add(order);
             _db.SaveChanges();
+
+            var q = _db.OrderDiscountDetails.Include(x => x.OrderDiscount).Where(x => x.OrderDiscountId == oD && x.MemberId == _user.UserId).FirstOrDefault();
+            if (q.OrderDiscount.DiscountTypeId == 2)
+            {
+                _db.Remove(q);
+                _db.SaveChanges();
+            }
 
             Member member = _db.Members.Find(order.MemberId);
 
@@ -131,8 +140,11 @@ namespace prjBookMvcCore.Controllers
             {
                 int bookid = _db.ActionDetials.Where(x => x.ActionToBookId == item).Select(x => x.BookId).FirstOrDefault();
                 OrderDetail orderDetail = new OrderDetail();
+                Shipment shipment = new Shipment(); 
+
                 orderDetail.BookId = bookid;
                 orderDetail.OrderId = order.OrderId;
+                decimal freight = shipment.Freight;
 
                 list.Add(orderDetail);
             };
@@ -147,13 +159,14 @@ namespace prjBookMvcCore.Controllers
             return Content(isSuccess.ToString());
         }
 
-        public void creatOrderDetail(int orderId, int bookId, int quantity, BookShopContext db)
+        public void creatOrderDetail(int orderId, int bookId, int quantity, decimal unitprice ,BookShopContext db)
         {
             OrderDetail detail = new OrderDetail()
             {
                 OrderId = orderId,
                 BookId = bookId,
-                Quantity = quantity
+                Quantity = quantity,
+                UnitPrice = unitprice
             };
 
             int q = db.BookDiscountDetails.Where(x => x.BookId == detail.BookId).Select(x => x.BookDiscountId).FirstOrDefault();
