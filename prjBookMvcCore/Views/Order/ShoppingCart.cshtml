@@ -356,13 +356,12 @@
         </div>
         <div style="text-align:right;">
             <button class=" btn btn-primary col-4 me-md-2" onclick="btnClick('nav-checkOutInfo-')">返回修改</button>
-            <button class="btn btn-primary col-4 me-md-2" type="button" data-bs-toggle="modal" data-bs-target="#successModal">
+            <button id="btnSubmit" class="btn btn-primary col-4 me-md-2" type="button" data-bs-toggle="modal" data-bs-target="#successModal">
                 確定送出
             </button>
         </div>
     </div>
 </div>
-<div class="d-grid gap-2 c d-md-flex justify-content-md-end">
     <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -374,30 +373,19 @@
                     您的訂單已完成！
                 </div>
                 <div class="modal-footer">
-                    <a href="~/Order/CheckOutFinal" class=" btn btn-primary col-4 me-md-2" type="button">確定</a>
+                <button class=" btn btn-primary col-4 me-md-2" type="button" onclick="toPage4">確定</button>
                 </div>
             </div>
         </div>
     </div>
 
-</div>
+<script>
+    function toPage4 (){
+        URL = @Url.Action("checkOutFinal", "Order");
+        
 
-<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="successModalLabel">訂單完成</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                您的訂單已完成！
-            </div>
-            <div class="modal-footer">
-                <a href="~/Order/CheckOutFinal" class=" btn btn-primary col-4 me-md-2" type="button">確定</a>
-            </div>
-        </div>
-    </div>
-</div>
+    }
+</script>
 
 <script> //送出訂單
     const btnSubmit = document.getElementById('btnSubmit');
