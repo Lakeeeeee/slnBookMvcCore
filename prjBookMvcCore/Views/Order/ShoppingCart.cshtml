@@ -376,7 +376,7 @@
             <p>結帳金額：</p>
         </div>
         <div style="text-align:right;">
-            <button class=" btn btn-primary col-4 me-md-2" onclick="btnClick('nav-checkOutInfo-')">返回修改</button>
+            <button class=" btn btn-primary col-4 me-md-2" onclick="btnClick('nav-checkOutInfo-tab')">返回修改</button>
             <button id="btnSubmit" class="btn btn-primary col-4 me-md-2" type="button">
                 確定送出
             </button>
@@ -540,6 +540,15 @@
     const table2 = document.getElementById('table2');
     const btnForm1 = document.getElementById('btnForm1');
     btnForm1.addEventListener('click', async () => {
+        const totalAmountElement = document.getElementById('totalAmount');
+        const totalAmount = parseInt(totalAmountElement.innerText);
+
+        //沒金額鎖按鈕
+        if (totalAmount <= 0) {
+            btnForm1.disabled = true;
+            return;
+        }
+
         const response = await fetch('@Url.Action("Action1", "Order")', {
             method: 'POST',
             body: new FormData(form1)
@@ -549,8 +558,7 @@
         table2.innerHTML = '';
         const table2Header = document.createElement('thead');
         const headerRow = document.createElement('tr');
-        headerRow.innerHTML = `
-                            <th style="width:50px;"><input type="checkbox"></th>
+        headerRow.innerHTML = `                            
                             <th style="width:50px;">序號</th>
                             <th style="width:500px;">書名</th>
                             <th>優惠</th>
@@ -567,8 +575,7 @@
             input.value = item.actionDetial.actionToBookId;
             input.type = "hidden";
             const row = document.createElement('tr');
-            row.innerHTML = `
-                                    <td><input type="checkbox"></td>
+            row.innerHTML = `                                       
                                     <td>${index + 1}</td>
                                     <td>${item.book.bookTitle}</td>
                                     <td>${item.discountName}</td>
