@@ -1,14 +1,26 @@
 @using prjBookMvcCore.Models
 @model MenuInformation
-@{
-    ViewData["Title"] = "分類頁面";
-}
 
-<!DOCTYPE html>
+
+
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @if (Model.subcategoryId > 0 && !string.IsNullOrEmpty(Model.subCategories.FirstOrDefault(c => c.SubCategoryId == Model.subcategoryId)?.SubCategoryName))
+    {
+        var subcategoryName = Model.subCategories.FirstOrDefault(c => c.SubCategoryId == Model.subcategoryId)?.SubCategoryName;
+        if (!string.IsNullOrEmpty(subcategoryName))
+        {
+            ViewData["Title"] = $"{ViewData["Title"]}   {subcategoryName}";
+        }
+    }
+    else if (Model.categoryId > 0)
+    {
+        var categoryName = Model.categories.FirstOrDefault(c => c.CategoryId == Model.categoryId)?.CategoryName;
+        if (!string.IsNullOrEmpty(categoryName))
+        {
+            ViewData["Title"] = $"{ViewData["Title"]}   {categoryName}";
+        }
+    }
 
     <style>
         a:link, a:visited {
@@ -16,12 +28,9 @@
             color: inherit;
         }
 
-        .two-lines {
-            line-height: 1.2em; /* 調整需要的行高 */
-            height: 2.5em; /* 行高的兩倍 */
-        }
-
         .bookCaption {
+            line-height: 1.5em; /* 設置行高為字體大小的1.5倍 */
+            height: 3em; /* 設置高度為字體大小的3倍 */
             display: -webkit-box;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 2;
@@ -30,6 +39,7 @@
         }
 
         .authorCaption {
+            line-height: 1.5em; /* 設置行高為字體大小的1.5倍 */
             display: -webkit-box;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 1;
@@ -37,9 +47,9 @@
             text-overflow: ellipsis;
         }
 
-        img {
+         .bookimg {
             width: 85%;
-            margin: 10px;
+            margin-left: 25px;
         }
     </style>
 </head>
@@ -60,7 +70,7 @@
                 <script>
                     // Add the 'show' class to the corresponding card-body element
                     const cardBody = document.getElementById("card-@Model.subcategoryId");
-                    if (cardBody) {cardBody.classList.add("show"); }
+                    if (cardBody) { cardBody.classList.add("show"); }
                 </script>
             }
         </ol>
@@ -131,32 +141,32 @@
                     @{
                         foreach (var item in Model.menuItems)
                         {
-                                <div class="col-3 card book-item border-0" data-publication-date="@item.book.PublicationDate.ToString("yyyy/MM/dd")" data-price="@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))">
-                                    <div class="headshot">
-                                        <a href="~/Book/BookInformation/@item.book.BookId"><img src="~/Image/Book/@item.book.CoverPath" title="@item.book.BookTitle"></a>
-                                    </div>
-                                    <div class="card-body">
-                                        <ul style="list-style:none; ">
-                                            <li> <a class="bookCaption two-lines" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle.Replace("$$"," ")</a></li>
-                                            <li class="prod_author authorCaption">
-                                                作者：
-                                                @if (item.author != null)
-                                                {
-                                                    int aaaaa = item.author.AuthorId;
-                                                    <a asp-controller="Book" asp-action="authorInformation" asp-route-id="@aaaaa">@item.author.AuthorName</a>
-                                                }
-                                            </li>
-                                            <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))元</span></li>
-                                            <li class="discPrice">
-                                                優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
-                                                <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
-                                            </li>
-                                            <li class="publicationDate">
-                                                出版日期：<span>@item.book.PublicationDate.ToString("yyyy/MM/dd")</span>
-                                            </li>
-                                        </ul>
-                                    </div>
+                            <div class="col-3 card book-item border-0" data-publication-date="@item.book.PublicationDate.ToString("yyyy/MM/dd")" data-price="@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))">
+                                <div class="headshot">
+                                    <a href="~/Book/BookInformation/@item.book.BookId"><img class="bookimg" src="~/Image/Book/@item.book.CoverPath" title="@item.book.BookTitle"></a>
                                 </div>
+                                <div class="card-body">
+                                    <ul style="list-style:none; ">
+                                        <li> <a class="bookCaption mb-2" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle.Replace("$$"," ")</a></li>
+                                        <li class="prod_author authorCaption">
+                                            作者：
+                                            @if (item.author != null)
+                                            {
+                                                int aaaaa = item.author.AuthorId;
+                                                <a asp-controller="Book" asp-action="authorInformation" asp-route-id="@aaaaa">@item.author.AuthorName</a>
+                                            }
+                                        </li>
+                                        <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))元</span></li>
+                                        <li class="discPrice">
+                                            優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
+                                            <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
+                                        </li>
+                                        <li class="publicationDate">
+                                            出版日期：<span>@item.book.PublicationDate.ToString("yyyy/MM/dd")</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         }
                     }
                 </div>
