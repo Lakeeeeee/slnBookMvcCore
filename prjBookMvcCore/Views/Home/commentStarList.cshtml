@@ -1,0 +1,73 @@
+﻿@using prjBookMvcCore.Models
+@model CForHomePage
+
+@{
+    ViewBag.Title = @ViewData["countStar"] + "星評論";
+    Layout = "~/Views/Shared/_Layout_Comment.cshtml";
+}
+
+<style>
+    .twolines {
+        line-height: 1.2em;
+        height: 2.4em;
+    }
+
+    .bookCaption {
+        line-height: 1.5em; /* 設置行高為字體大小的1.5倍 */
+        height: 3em; /* 設置高度為字體大小的3倍 */
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }</style>
+
+<h3 class="mt-2">@ViewData["countStar"]星評論</h3>
+
+
+<div class="container">
+    <div class="row">
+    @{
+        int countcommentTimeDate = 0;
+        foreach (var item in Model.commentStar)
+        {
+            <div class="col-6">
+                <div class="row mb-4">
+                    <div class="col text-center mb-6">
+                        <a href="/Book/BookInformation/@item.book.BookId#comment"><img height="150" src="~/Image/Book/@item.book.CoverPath" /></a>
+                    </div>
+                    <div class="col">
+                        <ul style="list-style:none; margin:0; padding:0;">
+                            <li class="bookCaption mb-2">@item.book.BookTitle.Replace("$$"," ")</li>
+                            <li>
+                                評論等級：<span class="star star-s">
+                                    @for (int x = 0; x < item.comment.Stars; x++)
+                                    {
+                                        <img style="width:20px; height:auto" src="~/image/icons8-star.gif" />
+                                    }
+                                </span>
+                            </li>
+                            <li>評論日期：@item.comment.CommentTime.ToString("yyyy-MM-dd")</li>
+                                <li class="col twolines bookCaption" style="color:gray">
+                                    @item.comment.CommentText
+                                </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                    
+                
+            </div>
+            countcommentTimeDate++;
+            if (countcommentTimeDate % 2 == 0)
+            {
+                <div class="row"></div>
+                <hr />
+
+                <br />
+            }
+        }
+    }
+    </div>
+</div>
+
