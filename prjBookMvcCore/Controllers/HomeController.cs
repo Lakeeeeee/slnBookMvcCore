@@ -73,6 +73,58 @@ namespace prjBookMvcCore.Controllers
             return View(c);
         }
 
+        public IActionResult commentStarList(int countStar)
+        {
+            List<RecommendInformation> commentStar = GetProductByStar(countStar);
+            CForHomePage c = new CForHomePage()
+            {
+                commentStar = commentStar
+            };
+            ViewData["countStar"] = countStar;
+            return View(c);
+        }
+
+        public List<RecommendInformation> GetProductByStar(int countStar)
+        {
+            using (var db = new BookShopContext())
+            {
+                var recommendProducts = (from b in db.Books
+                                         join c in db.Comments on b.BookId equals c.BookId
+                                         where c.Stars== countStar
+                                         select new
+                                         {
+                                             書本ID = b.BookId,
+                                             書名 = b.BookTitle,
+                                             定價 = b.UnitPrice,
+                                             路徑 = b.CoverPath,
+                                             折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                             出版日期 = b.PublicationDate,
+                                             評論時間 = c.CommentTime,
+                                             最新評論 = c.CommentText,
+                                             評分 = c.Stars,
+                                         }).ToList();
+
+                List<RecommendInformation> ris = new List<RecommendInformation>();
+
+                foreach (var recommendBook in recommendProducts)
+                {
+                    Book b = new Book { BookTitle = recommendBook.書名, BookId = recommendBook.書本ID, UnitPrice = recommendBook.定價, CoverPath = recommendBook.路徑, PublicationDate = recommendBook.出版日期 };
+                    BookDiscount bd = new BookDiscount { BookDiscountAmount = recommendBook.折扣 };
+                    Comment c = new Comment { CommentText = recommendBook.最新評論, Stars = recommendBook.評分, CommentTime = recommendBook.評論時間 };
+                    RecommendInformation tmp = new RecommendInformation()
+                    {
+                        book = b,
+                        bookDiscount = bd,
+                        comment = c,
+                    };
+                    ris.Add(tmp);
+                }
+
+                return ris;
+            }
+        }
+
+
         public IActionResult QA()
         {
             return View();

@@ -2,7 +2,7 @@
 @model CForHomePage
 
 @{
-    ViewBag.Title = "commentList";
+    ViewBag.Title = "讀者好評";
     Layout = "~/Views/Shared/_Layout_Comment.cshtml";
 }
 
@@ -13,6 +13,8 @@
     }
 
     .bookCaption {
+        line-height: 1.5em; /* 設置行高為字體大小的1.5倍 */
+        height: 3em; /* 設置高度為字體大小的3倍 */
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
@@ -36,7 +38,7 @@
                             </div>
                             <div class="col">
                                 <ul style="list-style:none; margin:0; padding:0;">
-                                    <li class="bookCaption twolines mb-2">@item.book.BookTitle</li>
+                                    <li class="bookCaption mb-2">@item.book.BookTitle.Replace("$$"," ")</li>
                                     <li>
                                         評論等級：<span class="star star-s">
                                             @for (int x = 0; x < item.comment.Stars; x++)

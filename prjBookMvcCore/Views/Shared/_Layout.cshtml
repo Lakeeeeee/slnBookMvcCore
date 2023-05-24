@@ -218,7 +218,6 @@
                                         <select id="frontdiscount" name="折扣1" style="margin-left:2em; width:130px" value="@ViewBag.frontdiscount">
                                             <option value="0" selected>請選擇 </option>
                                             @{
-                                                BookShopContext db = new BookShopContext();
                                                 var bookDiscount = db.BookDiscounts.Select(dis => new { dis.BookDiscountId, dis.BookDiscountAmount, dis.BookDiscountName }).ToList();
                                                 foreach (var dis in bookDiscount)
                                                 {
