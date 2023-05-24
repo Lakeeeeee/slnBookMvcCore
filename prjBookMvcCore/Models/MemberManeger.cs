@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Plugins;
 using System;
 using System.Configuration;
 using System.Drawing;
 using System.Net;
 using System.Net.Mail;
+using System.Reflection.Metadata;
 using System.Security.Cryptography;
 using System.Security.Policy;
 using System.Text;
@@ -134,5 +136,38 @@ namespace prjBookMvcCore.Models
             db.MessageMemberDetails.Add(sendReply);
             db.SaveChanges();
         }
+
+        public OrderDiscount newCoupon(int typeId, string couponName, string de, int con, decimal amount,  BookShopContext content)
+        {
+            OrderDiscount newCoupon = new OrderDiscount()
+            {
+                DiscountTypeId = typeId,
+                OrderDiscountnName = couponName,
+                OrderDiscountDescprtion = de,
+                OrderDiscountCondition = con,
+                OrderDiscountAmount = amount,
+            };
+            content.Add(newCoupon);
+            content.SaveChanges();
+            return newCoupon;
+        }
+
+
+
+        public string Promotions領取特定日優惠(int discountID,Member member, BookShopContext db)
+        {
+            string isSuccess;
+                OrderDiscountDetail newmemberdiscount = new OrderDiscountDetail()
+                {
+                    OrderDiscountId = discountID,
+                    MemberId = member.MemberId,
+                    OrderDiscountStartDate = DateTime.Now,
+                    OrderDiscountEndDate = DateTime.Now.AddDays(30),
+                };
+                db.OrderDiscountDetails.Add(newmemberdiscount);
+                db.SaveChanges();
+                isSuccess = "true";
+                return isSuccess;
+            }
+        }
     }
-}

@@ -114,9 +114,10 @@ namespace prjBookMvcCore.Controllers
 			}
 			else
 			{
-				// 解析失敗，oDValue 為 null 或無效的整數表示
-				// 在此處理相應的邏輯
-			}
+                // 解析失敗，oDValue 為 null 或無效的整數表示
+                // 在此處理相應的邏輯
+                order.OrderDiscountId = 7;
+            }
 
             Member member = _db.Members.Find(order.MemberId);
 
@@ -147,12 +148,12 @@ namespace prjBookMvcCore.Controllers
             foreach (var item in acids)
             {
                 int bookid = _db.ActionDetials.Where(x => x.ActionToBookId == item).Select(x => x.BookId).FirstOrDefault();
-                decimal bookPrice = _db.Books.Find(bookid).UnitPrice ;
+                decimal 折扣 = _db.BookDiscountDetails.Include(x=>x.BookDiscount).Where(x=>x.BookId==bookid).Select(x=>x.BookDiscount).Select(x=>x.BookDiscountAmount).FirstOrDefault();
+                decimal bookPrice = _db.Books.Find(bookid).UnitPrice;
                 OrderDetail orderDetail = new OrderDetail();
                 orderDetail.BookId = bookid;
                 orderDetail.OrderId = order.OrderId;
-                orderDetail.UnitPrice= bookPrice;
-
+                orderDetail.UnitPrice= bookPrice* 折扣;
                 list.Add(orderDetail);
             };
 
@@ -199,10 +200,17 @@ namespace prjBookMvcCore.Controllers
                 OrderDiscount memberDiscount = _db.OrderDiscounts.Find(index);
                 discounts.Add(memberDiscount);
             };
-
+            
             var coupons = _db.OrderDiscountDetails.Where(x=>x.MemberId==_user.UserId && x.IsOrderDiscountUse=="N").Select(x=>x.OrderDiscount);
-
-            discounts.AddRange(coupons);
+            
+            //庫碰判斷滿額
+            foreach(var coupon in coupons)
+            {
+                if (total>coupon.OrderDiscountCondition)
+                {
+                    discounts.Add(coupon);
+                }
+            }
             return Json(discounts);
         }
 
