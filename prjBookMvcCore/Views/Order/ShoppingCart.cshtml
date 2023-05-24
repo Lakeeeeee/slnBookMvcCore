@@ -121,7 +121,7 @@
                         @*購物車內容*@
                         <thead>
                             <tr>
-                                <th style="width:50px;"><input type="checkbox"></th>
+                                <th style="width:50px;"></th>
                                 <th style="width:50px;">序號</th>
                                 <th style="width:500px;">書名</th>
                                 <th>優惠</th>
@@ -141,6 +141,7 @@
                                     decimal 小計 = 優惠價 * item.Quantity;
                                     <input name="acid" value="@item.ActionDetial.ActionToBookId" type="hidden">
                                     <tr>
+                                        <td style=""></td>
                                         <td>@count</td>
                                         <td>@bookTitle</td>
                                         <td>@item.discountName</td>
@@ -478,7 +479,6 @@
         seconTotal.textContent = `${totalA.innerText} 元`;
     };
 </script>
-
 <script> //讀取orderDiscount方法
     async function returnOd() {
         const discountArea = document.getElementById('discountArea');
