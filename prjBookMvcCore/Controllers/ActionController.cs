@@ -61,5 +61,18 @@ namespace prjBookMvcCore.Controllers
                 return isSuccess;
             }
         }
+
+        public string viewcart刪除(int ActionToBookId)
+        {
+            string isSuccess = " false";
+            var q = db.ActionDetials.Where(a => a.ActionToBookId == ActionToBookId).FirstOrDefault();
+            if (q != null)
+            {
+                db.ActionDetials.Remove(q);
+                db.SaveChanges();
+                isSuccess = "true";
+            }
+            return isSuccess;
+        }
     }
 }
