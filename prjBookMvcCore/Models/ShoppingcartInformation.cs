@@ -14,11 +14,11 @@
         {
             get
             {
-                return db.BookDiscountDetails.Where(x => x.BookId == bookId).Select(x => x.BookDiscount).Select(x=>x.BookDiscountName).FirstOrDefault();
+                return db.BookDiscountDetails.Where(x => x.BookId == bookId & x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount).Select(x=>x.BookDiscountName).FirstOrDefault();
             }
         }
 
-        public decimal discountAmount { get { return db.BookDiscountDetails.Where(x => x.BookId == bookId).Select(x => x.BookDiscount).Select(x => x.BookDiscountAmount).FirstOrDefault(); } }
+        public decimal discountAmount { get { return db.BookDiscountDetails.Where(x => x.BookId == bookId & x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount).Select(x => x.BookDiscountAmount).FirstOrDefault(); } }
 
         public int Quantity { get; set; }
     }
