@@ -24,6 +24,7 @@ using Microsoft.CodeAnalysis.Scripting;
 using NuGet.Protocol;
 using System.Configuration;
 using System;
+using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -115,11 +116,11 @@ namespace prjBookMvcCore.Controllers
                     //建構cookie用戶驗證物件的狀態存取
                     var varClainsIdentity = new ClaimsIdentity(useClain, CookieAuthenticationDefaults.AuthenticationScheme);
                     HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(varClainsIdentity));
-                    return Redirect("~/Home/Home");
+                    return Json(new { success = true, message = "登入成功" });
                 }
+                return Json(new { success = false, message = "密碼不正確" });
             }
-            string script = "<script>alert('登入失敗');window.history.back();</script>";
-            return Content(script, "text/html", System.Text.Encoding.UTF8);
+            return Json(new { success = false, message = "登入失敗，請確認輸入正確的帳號密碼" });
         }
         public IActionResult Find_password() //忘記密碼頁面
         {
@@ -161,6 +162,19 @@ namespace prjBookMvcCore.Controllers
             }
             return Content(isEmailExist.ToString());
         }
+        public IActionResult deleteMs(int id)
+        {
+            bool isSuccess = false;
+            MessageMemberDetail tool = _bookShopContext.MessageMemberDetails.Where(x => x.MessageMemberDetailId == id).FirstOrDefault();
+            if(tool != null)
+            {
+                _bookShopContext.MessageMemberDetails.Remove(tool);
+                _bookShopContext.SaveChanges();
+                isSuccess = true;
+            }
+            return Content(isSuccess.ToString());
+        }
+
         [HttpPost]
         public IActionResult submitComplaint(IFormCollection form)
         {
@@ -181,17 +195,16 @@ namespace prjBookMvcCore.Controllers
                 };
                 _bookShopContext.CustomerServices.Add(newComplaint);
                 _bookShopContext.SaveChanges();
-
                 if (isMailCheck == "on")
                 {
                     var Mail = form["Mail"];
                     newComplaint.Email = Mail;
                     _cm.writeComplanintReply(newComplaint, _config, _bookShopContext);
                 }
+                _cm.writeReply(newComplaint, _bookShopContext);
                 isSuccess = true;
             }
             catch (Exception e) { }
-
             return Content(isSuccess.ToString());
         }
 
@@ -264,7 +277,7 @@ namespace prjBookMvcCore.Controllers
         {
             bool isSuccess = false;
             int memId = Convert.ToInt32(form["memId"]);
-            string oldPwd = form["oldPwd"].ToString();
+            var oldPwd = form["oldPwd"];
             var newPwd = form["newPwd"];
 
             Member updateTool = _bookShopContext.Members.Find(_userInforService.UserId)!;
@@ -275,16 +288,15 @@ namespace prjBookMvcCore.Controllers
                 isSuccess = true;
                 return Json(new
                 {
-                    success = isSuccess.ToString(),
+                    success = isSuccess,
                     message = "修改密碼成功"
                 });
             }
             return Json(new
             {
-                success = isSuccess.ToString(),
+                success = isSuccess,
                 message = "更新失敗"
             });
-
         }
         [Authorize]
         public IActionResult MemberCenter() //會員中心頁面
@@ -324,6 +336,7 @@ namespace prjBookMvcCore.Controllers
                     where x.MessageMemberDetailId == id
                     select new
                     {
+                        mMDID = x.MessageMemberDetailId,
                         time = x.UpdateTime!.Value.ToShortDateString(),
                         read_a = (x.ReadStatu == 1) ? "已讀" : "未讀",
                         content_a = y.MessageContent,
@@ -474,7 +487,8 @@ namespace prjBookMvcCore.Controllers
             return Content(isExsit.ToString());
         }
 
-        public IActionResult PartailOrderDetail(int id)
+
+        public IActionResult PartailOrderDetail(int id) //訂單檢視詳細
         {
             var q = _bookShopContext.OrderDetails.Include(x => x.Book).ThenInclude(x => x.BookDiscountDetails).ThenInclude(x => x.BookDiscount).Where(x => x.OrderId == id);
             return PartialView("PartailOrderDetail", q);
