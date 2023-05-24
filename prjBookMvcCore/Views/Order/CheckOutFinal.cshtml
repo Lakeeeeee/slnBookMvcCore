@@ -1,13 +1,14 @@
 ﻿@using prjBookMvcCore.Models
-@model Order
+@model List<Order>
 @inject UserInforService _user
 @{
 	ViewBag.Title = "購物車";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 	BookShopContext db = new BookShopContext();
+	int bookid = 0; 
+	string bookTitle = db.OrderDetails.Where(od => od.BookId == bookid).Select(od => od.Book.BookTitle).ToString();	
+	//int quantity = db.OrderDetails.Where(od=>od.OrderDetailId==);
 
-	
-	
 
 }
 
@@ -114,11 +115,21 @@ th {
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>商品 1</td>
-						<td>1</>
-						<td>100</td>
-					</tr>
+					@{
+						foreach(var item in Model)
+						{
+							<tr>
+								<th>@bookTitle</th>
+								<th></th>
+								<th></th>
+							</tr>
+						}
+						
+					
+					}
+						
+						
+					
 				</tbody>
 			</table>
 		</div>

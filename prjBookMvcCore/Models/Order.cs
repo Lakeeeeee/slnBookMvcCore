@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 
 namespace prjBookMvcCore.Models
 {
     public partial class Order
     {
-        public Order()
+
+		private readonly BookShopContext db = new BookShopContext();
+		public Order()
         {
             OrderDetails = new HashSet<OrderDetail>();
-        }
+		}
 
-        public int OrderId { get; set; }
+		public Book Book { get { return db.Books.Find(Book); } }
+		public int OrderId { get; set; }
         public int MemberId { get; set; }
         public DateTime OrderDate { get; set; }
         public int ShipmentId { get; set; }
