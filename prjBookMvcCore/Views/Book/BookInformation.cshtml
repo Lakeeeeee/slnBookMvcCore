@@ -318,7 +318,7 @@
                         <p>運送方式：超商取貨、宅配取貨</p>
                         <p>銷售地區：全球</p>
                         <p v-if="book.unitInStock > 5" style="color:green">{{unitInStockContent}}</p>
-                        <p v-if="book.unitInStock > 0 && book.unitInStock < 5" style="color:skyblue">{{unitInStockContent}}</p>
+                        <p v-if="book.unitInStock > 0 && book.unitInStock <= 5" style="color:skyblue">{{unitInStockContent}}</p>
                         <p v-if="book.unitInStock == 0" style="color:red">{{unitInStockContent}}</p>
                     </div>
                     <p class="DeliverAndKpst">
