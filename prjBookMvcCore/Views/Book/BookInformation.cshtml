@@ -1,8 +1,5 @@
 ﻿@using prjBookMvcCore.Models
 @model CInformation
-@{
-    ViewData["Title"] = "BookInformation";
-}
 @inject UserInforService _userInforService
 <!DOCTYPE html>
 <html>
@@ -11,7 +8,6 @@
     <!-- import CSS -->
     <!-- 6-37 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-
     <style>
         .el-aside {
             background-color: #FFFFFF;
@@ -321,7 +317,7 @@
                         <p v-if="book.unitInStock == 0" style="color:red">{{unitInStockContent}}</p>
                     </div>
                     <p class="DeliverAndKpst">
-                        <a class="18h" href="#" target="_blank">
+                        <a class="18h" href="~/Home/QA#card8" target="_blank">
                             <img style="width: 50px;height: 50px;" src="../../image/Book/bookIcon/shipIcon.png" alt="">
                         </a>
                     </p>
@@ -938,6 +934,7 @@
         })
     let testLogin = @_userInforService.UserId !== 0
     app.isLogin = testLogin
+    document.title = bookTitleJS
     </script>
 </body>
 </html>
