@@ -22,5 +22,7 @@
 
         public Artical ?artical { get; set; }
 
+        public List<Author> ?authors { get; set; }
+
     }
 }
