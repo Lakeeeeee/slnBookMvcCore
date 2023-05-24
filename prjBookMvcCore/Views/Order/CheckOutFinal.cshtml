@@ -1,10 +1,11 @@
 ﻿@using prjBookMvcCore.Models
-@model List<ShoppingcartInformation>
+@model List<Order>
 @inject UserInforService _user
 @{
 	ViewBag.Title = "購物車";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 	BookShopContext db = new BookShopContext();
+	//string bookName
 	
 }
 
@@ -111,21 +112,15 @@ th {
 					</tr>
 				</thead>
 				<tbody>
+					@{
+						foreach (var item in Model)
+
 					<tr>
 						<td>商品 1</td>
 						<td>1</td>
 						<td>100</td>
 					</tr>
-					<tr>
-						<td>商品 2</td>
-						<td>2</td>
-						<td>200</td>
-					</tr>
-					<tr>
-						<td>商品 3</td>
-						<td>3</td>
-						<td>300</td>
-					</tr>
+					}
 				</tbody>
 			</table>
 		</div>
