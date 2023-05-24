@@ -1,6 +1,6 @@
 ﻿@Html.AntiForgeryToken()
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "會員登入";
     Layout = "~/Views/Shared/_Layout_Login.cshtml";
 }
 @section Scripts{
@@ -13,9 +13,6 @@
     </script>
 }
     <style>
-        /*    div{border:1px solid #000000}
-                                    */ /**/
-
         .linkaFormat {
             text-decoration: none;
             color: inherit
@@ -60,11 +57,7 @@
         const P = document.getElementById('password');
         x.addEventListener('click', function () {
             A.value = "greenLake092@gmail.com";
-            P.value = "123";
-
-            //A.value = "swift9428@gmail.com";
-            //P.value = "4u4yh5Ld";
-
+            P.value = "Bs123456";
         })
     </script>
     <script>
@@ -81,4 +74,3 @@
             window.location.reload();
         });
     </script>
-

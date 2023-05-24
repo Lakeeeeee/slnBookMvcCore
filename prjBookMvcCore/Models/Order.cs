@@ -23,6 +23,7 @@ namespace prjBookMvcCore.Models
         public string? ReciverName { get; set; }
         public string? ReciverPhone { get; set; }
         public string ShipAddr { get; set; } = null!;
+        public decimal? FinalPay { get; set; }
 
         public virtual Member Member { get; set; } = null!;
         public virtual OrderDiscount? OrderDiscount { get; set; }

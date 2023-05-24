@@ -92,7 +92,7 @@
                         <tr>
                             <td>預設支付方式：</td>
                             <td>
-                                <select class="btn btn-light" name="PaymentId">
+                                <select class="btn btn-light" name="PaymentId" asp-for="PaymentId">
                                     @{
                                         foreach (var item in db.Payments.Select(x => x))
                                         {

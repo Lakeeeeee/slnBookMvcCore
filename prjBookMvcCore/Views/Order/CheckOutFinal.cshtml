@@ -1,7 +1,16 @@
-﻿@{
-    ViewBag.Title = "完成訂購";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+﻿@using prjBookMvcCore.Models
+@model Order
+@inject UserInforService _user
+@{
+	ViewBag.Title = "購物車";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	BookShopContext db = new BookShopContext();
+
+	
+	
+
 }
+
 
 <head>
     <meta charset="utf-8" />
@@ -107,18 +116,8 @@ th {
 				<tbody>
 					<tr>
 						<td>商品 1</td>
-						<td>1</td>
+						<td>1</>
 						<td>100</td>
-					</tr>
-					<tr>
-						<td>商品 2</td>
-						<td>2</td>
-						<td>200</td>
-					</tr>
-					<tr>
-						<td>商品 3</td>
-						<td>3</td>
-						<td>300</td>
 					</tr>
 				</tbody>
 			</table>
