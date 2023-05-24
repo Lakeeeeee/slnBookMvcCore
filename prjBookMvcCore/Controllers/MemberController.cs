@@ -89,7 +89,7 @@ namespace prjBookMvcCore.Controllers
                 _bookShopContext.SaveChanges();
                 _cm.write註冊會員禮Letter(newmember, _bookShopContext);
                 _cm.writeWelcomeLetter(newmember, _bookShopContext);
-
+                writeCouponMessage(newmember, _bookShopContext);
                 return Content("notexist");
             }
         }
@@ -491,6 +491,47 @@ namespace prjBookMvcCore.Controllers
         {
             var q = _bookShopContext.OrderDetails.Include(x => x.Book).ThenInclude(x => x.BookDiscountDetails).ThenInclude(x => x.BookDiscount).Where(x => x.OrderId == id);
             return PartialView("PartailOrderDetail", q);
+        }
+        [Authorize]
+        public IActionResult getCart(int id)
+        {
+            int q = _bookShopContext.ActionDetials.Where(x => x.MemberId == id && x.ActionId == 7).Count();
+            return Content(q.ToString());
+        }
+
+        public void writeCouponMessage(Member receiver, BookShopContext content)
+        {
+            Models.Message Letter = new Models.Message()
+            {
+                MessageTypeId = 1,
+                MessageTitle = $"訂閱送好禮!",
+                MessageContent =
+                $"<p>Hi! {receiver.MemberName}!</p>" +
+                $"<p>感謝您的訂閱，<a href=\"{Url.Action("giveYou", "Member", new { id = 18, you = receiver.MemberId }, Request.Scheme)}\">快來領取使用吧!!</a>",
+            };
+            content.Add(Letter); content.SaveChanges();
+            MessageMemberDetail MemberMessage = new MessageMemberDetail()
+            {
+                MessageId = Letter.MessageId,
+                MemberId = receiver.MemberId,
+                UpdateTime = DateTime.Now,
+                ReadStatu = 0
+            };
+            content.Add(MemberMessage); content.SaveChanges();
+        }
+        [Authorize]
+        public IActionResult giveYou(int id, int you)
+        {
+            OrderDiscountDetail newOD = new OrderDiscountDetail()
+            {
+                OrderDiscountId = id,
+                MemberId = you,
+                OrderDiscountStartDate = DateTime.Now,
+                OrderDiscountEndDate = DateTime.Now.AddMonths(1),
+            };
+            BookShopContext db = new BookShopContext();
+            db.Add(newOD); db.SaveChanges();
+            return RedirectToAction("myCoupons");
         }
     }
 }
