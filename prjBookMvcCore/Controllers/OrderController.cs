@@ -81,7 +81,6 @@ namespace prjBookMvcCore.Controllers
                 RebateAmount = int.Parse(rebateAmountInput);
             };
 
-            var oD = int.Parse(form["oD"]);
 
             Order order = new Order()
             {
@@ -89,7 +88,6 @@ namespace prjBookMvcCore.Controllers
                 OrderDate = DateTime.Now,
                 ShipmentId = Convert.ToInt32(ShipmentId),
                 PaymentId = Convert.ToInt32(PaymentId),
-                OrderDiscountId = oD,
                 PointAmount = RebateAmount,
                 ReciverName = ReciverName,
                 ReciverPhone = ReciverPhone,
@@ -99,12 +97,23 @@ namespace prjBookMvcCore.Controllers
             _db.Orders.Add(order);
             _db.SaveChanges();
 
-            var q = _db.OrderDiscountDetails.Include(x => x.OrderDiscount).Where(x => x.OrderDiscountId == oD && x.MemberId == _user.UserId).FirstOrDefault();
-            if (q.OrderDiscount.DiscountTypeId == 2)
-            {
-                _db.Remove(q);
-                _db.SaveChanges();
-            }
+			string oDValue = form["oD"];
+			int oD;
+			if (int.TryParse(oDValue, out oD))
+			{
+				order.OrderDiscountId = oD;
+				var q = _db.OrderDiscountDetails.Include(x => x.OrderDiscount).Where(x => x.OrderDiscountId == oD && x.MemberId == _user.UserId).FirstOrDefault();
+				if (q.OrderDiscount.DiscountTypeId == 2)
+				{
+					_db.Remove(q);
+					_db.SaveChanges();
+				};
+			}
+			else
+			{
+				// 解析失敗，oDValue 為 null 或無效的整數表示
+				// 在此處理相應的邏輯
+			}
 
             Member member = _db.Members.Find(order.MemberId);
 

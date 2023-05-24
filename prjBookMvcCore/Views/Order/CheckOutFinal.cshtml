@@ -1,15 +1,12 @@
 ﻿@using prjBookMvcCore.Models
-@model List<Order>
+@model Order
 @inject UserInforService _user
 @{
 	ViewBag.Title = "購物車";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 	BookShopContext db = new BookShopContext();
-	int bookid = 0; 
-	string bookTitle = db.OrderDetails.Where(od => od.BookId == bookid).Select(od => od.Book.BookTitle).ToString();	
-	//int quantity = db.OrderDetails.Where(od=>od.OrderDetailId==);
-
-
+	string mName = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.MemberName).FirstOrDefault();
+	string mPhone = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.Memberphone).FirstOrDefault();
 }
 
 
@@ -116,20 +113,16 @@ th {
 				</thead>
 				<tbody>
 					@{
-						foreach(var item in Model)
+						foreach(var item in Model.OrderDetails)
 						{
 							<tr>
-								<th>@bookTitle</th>
-								<th></th>
-								<th></th>
+								<th>@item.Book.BookTitle</th>
+								<th>@item.Quantity</th>
+								<th>@item.UnitPrice</th>
 							</tr>
-						}
-						
+						}					
 					
-					}
-						
-						
-					
+					}			
 				</tbody>
 			</table>
 		</div>
@@ -139,10 +132,14 @@ th {
 			<div class="checkout-section">
 				<h3>訂購人</h3>
 				<div class="col-md-6">
-					<p>姓名：</p>
-					<p>電話：</p>
-					<p>Email：</p>
-					<p>地址：</p>
+					<p>姓名：@Model.Member.MemberName</p>
+					<p>電話：@Model.Member.Memberphone</p>
+				</div>
+				<h3>收件人</h3>
+				<div class="col-md-6">
+					<p>姓名：@Model.ReciverName</p>
+					<p>電話：@Model.ReciverPhone</p>
+					<p>地址：@Model.ShipAddr</p>
 				</div>
 			</div>
 			<div class="checkout-section">
