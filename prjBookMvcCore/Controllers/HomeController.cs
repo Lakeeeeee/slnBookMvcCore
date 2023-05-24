@@ -8,6 +8,7 @@ using NuGet.Protocol;
 using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 using static System.Formats.Asn1.AsnWriter;
 using static System.Reflection.Metadata.BlobBuilder;
+using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -16,6 +17,37 @@ namespace prjBookMvcCore.Controllers
         BookShopContext db = new();
         public IActionResult Home()
         {
+            //從資料庫中取得最小值和最大值
+            decimal minprice = db.Books.Min(b => b.UnitPrice);
+            decimal maxprice = db.Books.Max(b => b.UnitPrice);
+            ViewBag.frontprice = minprice.ToString("0");
+            ViewBag.backprice = maxprice.ToString("0");
+
+            DateTime mindate = DateTime.Now, maxdate = DateTime.Now;
+            int maxtime = 0;
+            int mintime = 100000;
+
+            List<DateTime> d = db.Books.Select(x => x.PublicationDate).ToList();
+
+            foreach (var date in d)
+            {
+                int diff = (DateTime.Now - date).Days;
+                if (diff < mintime)
+                {
+                    mintime = diff;
+                    mindate = date;
+                }
+
+                if (diff > maxtime)
+                {
+                    maxtime = diff;
+                    maxdate = date;
+                }
+            }
+
+            ViewBag.frontdate = mindate.ToString("yyyy-MM-dd");
+            ViewBag.backdate = (maxdate).ToString("yyyy-MM-dd");
+
             List<RecommendInformation> normal = getNormal();
             List<RecommendInformation> publicationDate = getPublicationDate();
             List<RecommendInformation> commentTimeDate = getCommentTimeDate();
@@ -51,18 +83,38 @@ namespace prjBookMvcCore.Controllers
             //從資料庫中取得最小值和最大值
             decimal minprice = db.Books.Min(b => b.UnitPrice);
             decimal maxprice = db.Books.Max(b => b.UnitPrice);
-            ViewBag.frontprice = minprice;
-            ViewBag.backprice = maxprice;
+            ViewBag.frontprice = minprice.ToString("0");
+            ViewBag.backprice = maxprice.ToString("0");
 
-            //decimal mindiscount = db.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).Min();
-            //decimal maxdiscount=db.BookDiscountDetails.Select(x=>x.BookDiscount.BookDiscountAmount).Max();
-            //ViewBag.frontdiscount = mindiscount;
-            //ViewBag.backdiscount = maxdiscount;
+            DateTime mindate = DateTime.Now, maxdate = DateTime.Now;
+            int maxtime = 0;
+            int mintime = 100000;
 
-            DateTime mindate = db.Books.Min(d => d.PublicationDate);
-            DateTime maxdate=db.Books.Max(d=>d.PublicationDate);
-            ViewBag.frontdate = mindate;
-            ViewBag.backdate=maxdate;
+            List<DateTime> d = db.Books.Select(x => x.PublicationDate).ToList();
+
+
+
+            ViewBag.frontdiscount = frontdiscount;
+            ViewBag.backdiscount = backdiscount;
+
+            foreach (var date in d)
+            {
+                int diff = (DateTime.Now - date).Days;
+                if (diff < mintime)
+                {
+                    mintime = diff;
+                    mindate = date;
+                }
+
+                if (diff > maxtime)
+                {
+                    maxtime = diff;
+                    maxdate = date;
+                }
+            }
+
+            ViewBag.frontdate = mindate.ToString("yyyy-MM-dd");
+            ViewBag.backdate = (maxdate).ToString("yyyy-MM-dd");
 
             CForHomePage searchresult = GetSearchResult(txtKeyword, frontPrice, backPrice, frontdiscount, backdiscount, frontdate, backdate);
             return View(searchresult);
@@ -104,48 +156,16 @@ namespace prjBookMvcCore.Controllers
                                           出版日期 = b.PublicationDate,
                                       }).Distinct();
                 }
-                else if (txtkeyword == null && frontPrice == 0 && backPrice == 0 && frontdiscount != 0 && backdiscount != 0)
+                else if (txtkeyword == null && frontPrice != 0 && backPrice != 0 && frontdiscount != 0 && backdiscount != 0 && frontdate != null && backdate != null)
                 {
                     recommendBooks = (from b in db.Books
                                       where
+                                      frontPrice <= b.UnitPrice && backPrice >= b.UnitPrice &&
+
                                       frontdiscount >= b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault() &&
-                                      backdiscount <= b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault()
-                                      select new
-                                      {
-                                          書本ID = b.BookId,
-                                          書名 = b.BookTitle,
-                                          作者 = b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault(),
-                                          繪者 = b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault(),
-                                          譯者 = b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault(),
-                                          出版社 = b.Publisher.PublisherName,
-                                          定價 = b.UnitPrice,
-                                          路徑 = b.CoverPath,
-                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
-                                          出版日期 = b.PublicationDate,
-                                      }).Distinct();
-                }
-                else if (txtkeyword == null && frontPrice != 0 && backPrice != 0 && frontdiscount == 0 && backdiscount == 0)
-                {
-                    recommendBooks = (from b in db.Books
-                                      where frontPrice <= b.UnitPrice && backPrice >= b.UnitPrice
-                                      select new
-                                      {
-                                          書本ID = b.BookId,
-                                          書名 = b.BookTitle,
-                                          作者 = b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault(),
-                                          繪者 = b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault(),
-                                          譯者 = b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault(),
-                                          出版社 = b.Publisher.PublisherName,
-                                          定價 = b.UnitPrice,
-                                          路徑 = b.CoverPath,
-                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
-                                          出版日期 = b.PublicationDate,
-                                      }).Distinct();
-                }
-                else if (txtkeyword == null && frontPrice == 0 && backPrice == 0 && frontdiscount == 0 && backdiscount == 0 && frontdate != null && backdate != null)
-                {
-                    recommendBooks = (from b in db.Books
-                                      where frontdate <= b.PublicationDate && backdate >= b.PublicationDate
+                                      backdiscount <= b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault() &&
+
+                                      frontdate <= b.PublicationDate && backdate >= b.PublicationDate
                                       select new
                                       {
                                           書本ID = b.BookId,
@@ -168,7 +188,14 @@ namespace prjBookMvcCore.Controllers
                                       b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault().Contains(txtkeyword)) ||
                                       b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault().Contains(txtkeyword) ||
                                       b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault().Contains(txtkeyword) ||
-                                      b.Publisher.PublisherName.Contains(txtkeyword)
+                                      b.Publisher.PublisherName.Contains(txtkeyword) &&
+
+                                      frontPrice <= b.UnitPrice && backPrice >= b.UnitPrice &&
+
+                                      frontdiscount >= b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault() &&
+                                      backdiscount <= b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault() &&
+
+                         frontdate <= b.PublicationDate && backdate >= b.PublicationDate
 
                                       select new
                                       {
