@@ -142,22 +142,17 @@ namespace prjBookMvcCore.Controllers
             Order order = _db.Orders.OrderByDescending(o => o.OrderId).FirstOrDefault();
             int[] acids = formData["acid"].Select(x => int.Parse(x)).ToArray();
             int[] quantity = formData["quantity"].Select(x => int.Parse(x)).ToArray();
-            Shipment shipment = new Shipment();
-            Book book = new Book();
-            decimal freight = shipment.Freight;
-            int? unitInStock = book.UnitInStock;
-            decimal unitPrice = book.UnitPrice;
-
 
             List<OrderDetail> list = new List<OrderDetail>();
             foreach (var item in acids)
             {
                 int bookid = _db.ActionDetials.Where(x => x.ActionToBookId == item).Select(x => x.BookId).FirstOrDefault();
+                decimal bookPrice = _db.Books.Find(bookid).UnitPrice;
                 OrderDetail orderDetail = new OrderDetail();
                 
                 orderDetail.BookId = bookid;
                 orderDetail.OrderId = order.OrderId;
-                orderDetail.UnitPrice= unitPrice;
+                orderDetail.UnitPrice= bookPrice;
                 list.Add(orderDetail);
             };
 

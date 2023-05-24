@@ -372,7 +372,7 @@
             <p>總金額：<span id="seconTotal"> </span></p>
             <p id="discountId"></p>
             <p id="rebateAmount"></p>
-            <p>運費：@freight</p>
+            <p>運費：100</p>
             <p>結帳金額：</p>
         </div>
         <div style="text-align:right;">
@@ -581,9 +581,9 @@
                                     <td>${index + 1}</td>
                                     <td>${item.book.bookTitle}</td>
                                     <td>${item.discountName}</td>
-                                    <td>${item.book.unitPrice * item.discountAmount}</td>
+                                    <td>${Math.floor(item.book.unitPrice * item.discountAmount)}</td>
                                     <td><input name="quantity" value="${item.quantity}" class="cinput" type="text" readonly /></td>
-                                    <td>${item.quantity * (item.book.unitPrice * item.discountAmount)}</td>
+                                    <td>${Math.floor(item.quantity * (item.book.unitPrice * item.discountAmount))}</td>
                                 `;
             table2Body.appendChild(row);
             table2Body.appendChild(input);
