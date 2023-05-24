@@ -8,6 +8,7 @@ using prjBookMvcCore.Models;
 using prjBookMvcCore.ViewModel;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Diagnostics;
+using System.Net;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -135,24 +136,35 @@ namespace prjBookMvcCore.Controllers
             Order order = _db.Orders.OrderByDescending(o => o.OrderId).FirstOrDefault();
             int[] acids = formData["acid"].Select(x => int.Parse(x)).ToArray();
             int[] quantity = formData["quantity"].Select(x => int.Parse(x)).ToArray();
+            Shipment shipment = new Shipment();
+            Book book = new Book();
+            decimal freight = shipment.Freight;
+            int? unitInStock = book.UnitInStock;
+
             List<OrderDetail> list = new List<OrderDetail>();
             foreach (var item in acids)
             {
                 int bookid = _db.ActionDetials.Where(x => x.ActionToBookId == item).Select(x => x.BookId).FirstOrDefault();
                 OrderDetail orderDetail = new OrderDetail();
-                Shipment shipment = new Shipment(); 
-
+                
                 orderDetail.BookId = bookid;
-                orderDetail.OrderId = order.OrderId;
-                decimal freight = shipment.Freight;
+                orderDetail.OrderId = order.OrderId;           
+                
 
                 list.Add(orderDetail);
             };
 
+            //var Unit = _db.Books.Include(x => x.BookId).Where(x => x.BookId == ).Select(x => x.UnitInStock).FirstOrDefault();
+            //{
+
+            //}
             for (int n = 0; n < list.Count(); n++)
             {
                 list[n].Quantity = quantity[n];
             };
+           
+           
+
             _db.OrderDetails.AddRange(list);
             _db.SaveChanges();
             isSuccess = true;
@@ -170,6 +182,8 @@ namespace prjBookMvcCore.Controllers
             };
 
             int q = db.BookDiscountDetails.Where(x => x.BookId == detail.BookId).Select(x => x.BookDiscountId).FirstOrDefault();
+            
+            //需要改位置?
             decimal price = db.Books.Find(detail.BookId).UnitPrice;
             decimal d = db.BookDiscounts.Find(q).BookDiscountAmount;
             detail.UnitPrice = price * d;
