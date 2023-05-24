@@ -340,7 +340,8 @@
     //視窗
     window.addEventListener('DOMContentLoaded', function () {
         saveStartTime();
-       // startCountdown();
+        resetCountdown(); // 重設計時器
+        // startCountdown();
         //showPopup();
         var close隱藏浮動視窗 = document.querySelector('#close');
         close隱藏浮動視窗.addEventListener('click', function (event) {
@@ -348,7 +349,10 @@
             hidePopup();
         });
     });
-
+    function resetCountdown() {
+        clearInterval(countdownId);
+        startCountdown();
+    }
     function showPopup() {
         var popup = document.getElementById("popup");
         popup.classList.add("show-popup");

@@ -232,30 +232,23 @@
                 </table>
             </div>
         </div>
+        <hr />
         <div class="container">
             @*為你推薦*@
-            為你推薦
+            <h5>為你推薦</h5>
             <div class="row">
-                <div class="col">
-                    <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-                    productshow productshow productshow productshow productshow productshow productshow productshow
-                </div>
-                <div class="col">
-                    <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-                    productshow productshow productshow productshow productshow productshow productshow productshow
-                </div>
-                <div class="col">
-                    <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-                    productshow productshow productshow productshow productshow productshow productshow productshow
-                </div>
-                <div class="col">
-                    <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-                    productshow productshow productshow productshow productshow productshow productshow productshow
-                </div>
-                <div class="col">
-                    <a><img src="~/image/demo-pic.jpg" width="100%" /></a>
-                    productshow productshow productshow productshow productshow productshow productshow productshow
-                </div>
+
+                @{
+                    var q = db.Books.Select(b => b).Skip(20).Take(6);
+                    foreach (var g in q)
+                    {
+                        <div class="col-2 mt-3 p-3">
+                            <a href="~/Book/BookInformation/@g.BookId"><img src="~/Image/Book/@g.CoverPath" class="d-block w-100 img-with-border mb-3" />
+                                <p>@(g.BookTitle.Split("$")[0])</p>
+                            </a>
+                        </div>
+                    }
+                }
             </div>
         </div>
     </div>
@@ -550,14 +543,14 @@
         const table2Header = document.createElement('thead');
         const headerRow = document.createElement('tr');
         headerRow.innerHTML = `
-                            <th style="width:50px;"><input type="checkbox"></th>
-                            <th style="width:50px;">序號</th>
-                            <th style="width:500px;">書名</th>
-                            <th>優惠</th>
-                            <th>優惠價</th>
-                            <th>數量</th>
-                            <th>小計</th>
-                            `;
+                                <th style="width:50px;"><input type="checkbox"></th>
+                                <th style="width:50px;">序號</th>
+                                <th style="width:500px;">書名</th>
+                                <th>優惠</th>
+                                <th>優惠價</th>
+                                <th>數量</th>
+                                <th>小計</th>
+                                `;
         table2Header.appendChild(headerRow);
         table2.appendChild(table2Header);
         const table2Body = document.createElement('tbody');
@@ -568,14 +561,14 @@
             input.type = "hidden";
             const row = document.createElement('tr');
             row.innerHTML = `
-                                    <td><input type="checkbox"></td>
-                                    <td>${index + 1}</td>
-                                    <td>${item.book.bookTitle}</td>
-                                    <td>${item.discountName}</td>
-                                    <td>${item.book.unitPrice * item.discountAmount}</td>
-                                    <td><input name="quantity" value="${item.quantity}" class="cinput" type="text" readonly /></td>
-                                    <td>${item.quantity * (item.book.unitPrice * item.discountAmount)}</td>
-                                `;
+                                        <td><input type="checkbox"></td>
+                                        <td>${index + 1}</td>
+                                        <td>${item.book.bookTitle}</td>
+                                        <td>${item.discountName}</td>
+                                        <td>${item.book.unitPrice * item.discountAmount}</td>
+                                        <td><input name="quantity" value="${item.quantity}" class="cinput" type="text" readonly /></td>
+                                        <td>${item.quantity * (item.book.unitPrice * item.discountAmount)}</td>
+                                    `;
             table2Body.appendChild(row);
             table2Body.appendChild(input);
         });
