@@ -9,6 +9,9 @@
     int points = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.Points).FirstOrDefault();
     string mName = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.MemberName).FirstOrDefault();
     string mPhone = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.Memberphone).FirstOrDefault();
+    int shipmentid = 0;
+    decimal freight = db.Shipments.Where(x => x.ShipmentId == shipmentid).Select(x => x.Freight).FirstOrDefault();
+
 
 }
 
@@ -369,12 +372,12 @@
             <p>總金額：<span id="seconTotal"> </span></p>
             <p id="discountId"></p>
             <p id="rebateAmount"></p>
-            <p>運費：</p>
+            <p>運費：@freight</p>
             <p>結帳金額：</p>
         </div>
         <div style="text-align:right;">
             <button class=" btn btn-primary col-4 me-md-2" onclick="btnClick('nav-checkOutInfo-')">返回修改</button>
-            <button id="btnSubmit" class="btn btn-primary col-4 me-md-2" type="button" @* data-bs-toggle="modal" data-bs-target="#successModal"*@>
+            <button id="btnSubmit" class="btn btn-primary col-4 me-md-2" type="button">
                 確定送出
             </button>
         </div>
