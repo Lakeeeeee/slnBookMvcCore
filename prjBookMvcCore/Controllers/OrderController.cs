@@ -200,10 +200,17 @@ namespace prjBookMvcCore.Controllers
                 OrderDiscount memberDiscount = _db.OrderDiscounts.Find(index);
                 discounts.Add(memberDiscount);
             };
-
+            
             var coupons = _db.OrderDiscountDetails.Where(x=>x.MemberId==_user.UserId && x.IsOrderDiscountUse=="N").Select(x=>x.OrderDiscount);
-
-            discounts.AddRange(coupons);
+            
+            //庫碰判斷滿額
+            foreach(var coupon in coupons)
+            {
+                if (total>coupon.OrderDiscountCondition)
+                {
+                    discounts.Add(coupon);
+                }
+            }
             return Json(discounts);
         }
 
