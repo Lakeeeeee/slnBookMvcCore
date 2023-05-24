@@ -103,11 +103,14 @@ namespace prjBookMvcCore.Controllers
 			{
 				order.OrderDiscountId = oD;
 				var q = _db.OrderDiscountDetails.Include(x => x.OrderDiscount).Where(x => x.OrderDiscountId == oD && x.MemberId == _user.UserId).FirstOrDefault();
-				if (q.OrderDiscount.DiscountTypeId == 2)
-				{
-					_db.Remove(q);
-					_db.SaveChanges();
-				};
+				if(q != null)
+                {
+                    if (q.OrderDiscount.DiscountTypeId == 2)
+                    {
+                        _db.Remove(q);
+                        _db.SaveChanges();
+                    };
+                }
 			}
 			else
 			{
@@ -214,7 +217,7 @@ namespace prjBookMvcCore.Controllers
         }
         public IActionResult checkOutFinal(int id)
         {
-            Order order = _db.Orders.Include(x=>x.OrderDetails).ThenInclude(x=>x.Book).Where(x => x.OrderId == id).FirstOrDefault();
+            Order order = _db.Orders.Include(x=>x.Member).Include(x=>x.OrderDetails).ThenInclude(x=>x.Book).Where(x => x.OrderId == id).FirstOrDefault();
             return View(order);
         }
     }
