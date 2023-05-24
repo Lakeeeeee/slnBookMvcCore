@@ -40,7 +40,6 @@ namespace prjBookMvcCore.Controllers
             return View(cartItems);
 
         }
-
         public IActionResult Action1(IFormCollection form)
         {
             int[] acids = form["acid"].Select(x => int.Parse(x)).ToArray();
@@ -128,8 +127,6 @@ namespace prjBookMvcCore.Controllers
             isSuccess = true;
             return Content(isSuccess.ToString());
         }
-
-
         public IActionResult Action3(IFormCollection formData) //createOrderdetails
         {
             bool isSuccess = false;
@@ -148,48 +145,21 @@ namespace prjBookMvcCore.Controllers
                 OrderDetail orderDetail = new OrderDetail();
                 
                 orderDetail.BookId = bookid;
-                orderDetail.OrderId = order.OrderId;           
-                
-
+                orderDetail.OrderId = order.OrderId;
                 list.Add(orderDetail);
             };
 
-            //var Unit = _db.Books.Include(x => x.BookId).Where(x => x.BookId == ).Select(x => x.UnitInStock).FirstOrDefault();
-            //{
-
-            //}
             for (int n = 0; n < list.Count(); n++)
             {
                 list[n].Quantity = quantity[n];
+                var thebook = _db.Books.Where(x => x.BookId == list[n].BookId).FirstOrDefault();
+                thebook.UnitInStock = thebook.UnitInStock - quantity[n];
             };
-           
-           
-
             _db.OrderDetails.AddRange(list);
             _db.SaveChanges();
             isSuccess = true;
             return Content(isSuccess.ToString());
         }
-
-        public void creatOrderDetail(int orderId, int bookId, int quantity, decimal unitprice ,BookShopContext db)
-        {
-            OrderDetail detail = new OrderDetail()
-            {
-                OrderId = orderId,
-                BookId = bookId,
-                Quantity = quantity,
-                UnitPrice = unitprice
-            };
-
-            int q = db.BookDiscountDetails.Where(x => x.BookId == detail.BookId).Select(x => x.BookDiscountId).FirstOrDefault();
-            
-            //需要改位置?
-            decimal price = db.Books.Find(detail.BookId).UnitPrice;
-            decimal d = db.BookDiscounts.Find(q).BookDiscountAmount;
-            detail.UnitPrice = price * d;
-            db.OrderDetails.Add(detail);
-        }
-
         public IActionResult itemDelete(int id) //刪除購物車項目
         {
             bool isSuccesse = false;
@@ -231,9 +201,10 @@ namespace prjBookMvcCore.Controllers
 
             return View(model);
         }
-        public IActionResult checkOutFinal()
+        public IActionResult checkOutFinal(int id)
         {
-            return View();
+            Order order = _db.Orders.Include(x=>x.OrderDetails).ThenInclude(x=>x.Book).Where(x => x.OrderId == id).FirstOrDefault();
+            return View(order);
         }
     }
 }
