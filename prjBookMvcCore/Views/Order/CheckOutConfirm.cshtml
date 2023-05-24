@@ -48,11 +48,29 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>商品 1</td>
-						<td>1</td>
-						<td>100</td>
-					</tr>
+					
+					@{
+						int count = 1;
+						decimal totalAmount = 0;
+						foreach (var item in Model)
+						{
+							if (item.ActionDetial.ActionId == 7)
+							{
+								Decimal discount = Math.Floor(@item.CInformation.book.UnitPrice * @item.CInformation.bookDiscount.BookDiscountAmount);
+								string bookTitle = item.CInformation.book.BookTitle.Replace("$$", "\n");
+								<tr>									
+									<td>@count</td>
+									<td>@bookTitle</td>
+									<td>@item.CInformation.bookDiscount.BookDiscountName</td>
+									<td>@discount</td>
+									<td>@item.CInformation.publisher.PublisherName</td>
+									<td>@item.CInformation.book.UnitInStock</td>
+								</tr>
+								totalAmount += discount;
+								count++;
+							};
+						};
+					}
 					<tr>
 						<td>商品 2</td>
 						<td>2</td>
