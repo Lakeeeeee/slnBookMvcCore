@@ -137,6 +137,8 @@ namespace prjBookMvcCore.Controllers
             Book book = new Book();
             decimal freight = shipment.Freight;
             int? unitInStock = book.UnitInStock;
+            decimal unitPrice = book.UnitPrice;
+
 
             List<OrderDetail> list = new List<OrderDetail>();
             foreach (var item in acids)
@@ -146,6 +148,7 @@ namespace prjBookMvcCore.Controllers
                 
                 orderDetail.BookId = bookid;
                 orderDetail.OrderId = order.OrderId;
+                orderDetail.UnitPrice= unitPrice;
                 list.Add(orderDetail);
             };
 
@@ -155,6 +158,8 @@ namespace prjBookMvcCore.Controllers
                 var thebook = _db.Books.Where(x => x.BookId == list[n].BookId).FirstOrDefault();
                 thebook.UnitInStock = thebook.UnitInStock - quantity[n];
             };
+
+
             _db.OrderDetails.AddRange(list);
             _db.SaveChanges();
             isSuccess = true;
