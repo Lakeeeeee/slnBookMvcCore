@@ -67,6 +67,24 @@
             margin-right: 5px;
         }
 
+    #successModal {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* 透明黑色背景 */
+    }
+
+    .modal-dialog {
+        max-width: 400px; /* 設定彈出視窗的最大寬度 */
+        width: 100%;
+        margin: auto;
+    }
+
 
 </style>
 <script>
@@ -139,19 +157,19 @@
                                     int 優惠價 = Convert.ToInt32(item.Book.UnitPrice * item.discountAmount);
                                     string bookTitle = item.Book.BookTitle.Replace("$$", "\n");
                                     decimal 小計 = 優惠價 * item.Quantity;
-                                    <input name="acid" value="@item.ActionDetial.ActionToBookId" type="hidden">
-                                    <tr>
-                                        <td style=""></td>
-                                        <td>@count</td>
-                                        <td>@bookTitle</td>
-                                        <td>@item.discountName</td>
-                                        <td>@優惠價</td>
-                                        <td><input name="quantity" id="quantity_@item.ActionDetial.ActionToBookId" type="number" value="@item.Quantity" min="1" max="@item.Book.UnitInStock"></td>
-                                        <td id="subtotal">@小計</td>
-                                        <td>
-                                            <button class="btn btn-outline-secondary" onclick="cancle(@item.ActionDetial.ActionToBookId)">取消</button>
-                                        </td>
-                                    </tr>
+                                                                        <input name="acid" value="@item.ActionDetial.ActionToBookId" type="hidden">
+                                                                        <tr>
+                                                                            <td style=""></td>
+                                                                            <td>@count</td>
+                                                                            <td>@bookTitle</td>
+                                                                            <td>@item.discountName</td>
+                                                                            <td>@優惠價</td>
+                                                                            <td><input name="quantity" id="quantity_@item.ActionDetial.ActionToBookId" type="number" value="@item.Quantity" min="1" max="@item.Book.UnitInStock"></td>
+                                                                            <td id="subtotal">@小計</td>
+                                                                            <td>
+                                                                                <button class="btn btn-outline-secondary" onclick="cancle(@item.ActionDetial.ActionToBookId)">取消</button>
+                                                                            </td>
+                                                                        </tr>
                                     count++;
                                     totalAmount += 小計;
                                 };
@@ -264,12 +282,12 @@
                     @{
                         foreach (var item in db.Payments.Take(4))
                         {
-                            <div>
-                                <input class="form-check-input" type="radio" name="paymentId" value="@item.PaymentId" checked>
-                                <label class="form-check-label" for="paymentId">
-                                    @item.PaymentName
-                                </label>
-                            </div>
+                                                                <div>
+                                                                    <input class="form-check-input" type="radio" name="paymentId" value="@item.PaymentId" checked>
+                                                                    <label class="form-check-label" for="paymentId">
+                                                                        @item.PaymentName
+                                                                    </label>
+                                                                </div>
                         };
                     }
                 </div>
@@ -278,12 +296,12 @@
                     @{
                         foreach (var item in db.Shipments)
                         {
-                            <div>
-                                <input class="form-check-input" type="radio" name="shipmentId" id="text-@item.ShipmentId" value="@item.ShipmentId" checked>
-                                <label class="form-check-label" for="shipmentId">
-                                    @item.ShipmentName
-                                </label>
-                            </div>
+                                                                <div>
+                                                                    <input class="form-check-input" type="radio" name="shipmentId" id="text-@item.ShipmentId" value="@item.ShipmentId" checked>
+                                                                    <label class="form-check-label" for="shipmentId">
+                                                                        @item.ShipmentName
+                                                                    </label>
+                                                                </div>
                         };
                     }
                 </div>
@@ -356,48 +374,57 @@
         </div>
         <div style="text-align:right;">
             <button class=" btn btn-primary col-4 me-md-2" onclick="btnClick('nav-checkOutInfo-')">返回修改</button>
-            <button id="btnSubmit" class="btn btn-primary col-4 me-md-2" type="button" data-bs-toggle="modal" data-bs-target="#successModal">
+            <button id="btnSubmit" class="btn btn-primary col-4 me-md-2" type="button"@* data-bs-toggle="modal" data-bs-target="#successModal"*@>
                 確定送出
             </button>
         </div>
-    </div>
-</div>
-    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="successModalLabel">訂單完成</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    您的訂單已完成！
-                </div>
-                <div class="modal-footer">
-                <button class=" btn btn-primary col-4 me-md-2" type="button" onclick="toPage4">確定</button>
+
+        <div class="" id="successModal" tabindex="-1" style="display:none">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="successModalLabel">訂單完成</h5>
+                    </div>
+                    <div class="modal-body">
+                        您的訂單已完成！
+                    </div>
+                    <div class="modal-footer">
+                        <button id="confirmButton" class=" btn btn-primary col-4 me-md-2" type="button">確定</button>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
+</div>
 
-<script>
-    function toPage4 (){
-        URL = @Url.Action("checkOutFinal", "Order");
-        
 
-    }
-</script>
 
 <script> //送出訂單
+    function toPage4(id) {
+        const url = '@Url.Action("checkOutFinal", "Order")?id=' + id;
+        window.location.href = url;
+    };
+
+    function showSuccessModal(id) {
+        const successModal = document.getElementById('successModal');
+        successModal.style.display = 'block';
+        const confirmButton = document.getElementById('confirmButton');
+        confirmButton.addEventListener('click', function () {
+        toPage4(id); // 在確定按鈕的點擊事件處理程序中呼叫 toPage4() 函數
+        });
+    };
+
     const btnSubmit = document.getElementById('btnSubmit');
     btnSubmit.addEventListener('click', async function () {
-        if (await orderSubmit()) {
-            if (await orderDetailsSubmit()) {
-                alert('成功');
-            } else {
+        const orderSubmitResult = await orderSubmit();
+        if (orderSubmitResult > 0) {
+            if (await orderDetailsSubmit()){
+            showSuccessModal(orderSubmitResult); // 呼叫顯示成功模態框的函數
+            }
+            else {
                 alert('OD失敗');
             }
-        } else {
-            alert('O失敗');
         }
     });
 
@@ -408,12 +435,9 @@
             method: 'POST',
             body: new FormData(formForOrder)
         });
-        const confirm = await response.text();
-        if (confirm === "True") {
-            return true;
-        } else {
-            return false;
-        }
+        const confirmText = await response.text();
+        const confirm = parseInt(confirmText, 10); // 將 confirmText 轉換為整數
+        return confirm;
     };
 
     async function orderDetailsSubmit() {

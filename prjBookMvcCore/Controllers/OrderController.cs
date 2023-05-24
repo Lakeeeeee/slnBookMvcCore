@@ -62,7 +62,7 @@ namespace prjBookMvcCore.Controllers
         int y = 0;
         public IActionResult Action2(IFormCollection form)
         {
-            bool isSuccess = false;
+            int theorderID = 0;
             var MemberId = form["memberId"];
             var ReciverName = form["reciverName"];
             var ReciverPhone = form["reciverPhone"];
@@ -121,9 +121,8 @@ namespace prjBookMvcCore.Controllers
                     break;
             };
             _db.SaveChanges();
-            y = order.OrderId;
-            isSuccess = true;
-            return Content(isSuccess.ToString());
+            theorderID = order.OrderId;
+            return Content(theorderID.ToString());
         }
         public IActionResult Action3(IFormCollection formData) //createOrderdetails
         {
