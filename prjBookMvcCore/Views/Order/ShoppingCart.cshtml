@@ -558,7 +558,8 @@
         table2.innerHTML = '';
         const table2Header = document.createElement('thead');
         const headerRow = document.createElement('tr');
-        headerRow.innerHTML = `                            
+        headerRow.innerHTML = `
+                            <th style="width:50px;"><input type="checkbox"></th>
                             <th style="width:50px;">序號</th>
                             <th style="width:500px;">書名</th>
                             <th>優惠</th>
@@ -575,7 +576,8 @@
             input.value = item.actionDetial.actionToBookId;
             input.type = "hidden";
             const row = document.createElement('tr');
-            row.innerHTML = `                                       
+            row.innerHTML = `
+                                    <td><input type="checkbox"></td>
                                     <td>${index + 1}</td>
                                     <td>${item.book.bookTitle}</td>
                                     <td>${item.discountName}</td>
