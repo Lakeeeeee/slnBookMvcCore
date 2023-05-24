@@ -70,8 +70,6 @@ namespace prjBookMvcCore.Controllers
             var PaymentId = int.Parse(form["paymentId"]);
             var ShipmentId = int.Parse(form["shipmentId"]);
 
-            
-
             string rebateAmountInput = form["rebateAmountInput"];
             int RebateAmount;
             if (string.IsNullOrEmpty(rebateAmountInput))
