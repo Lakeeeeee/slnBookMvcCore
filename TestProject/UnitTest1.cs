@@ -23,7 +23,6 @@ namespace TestProject
         [Test]
         public void TestCategory()
         {
-            // Arrange
             CategoryController categoryController = new CategoryController();
 
             // Act
@@ -32,7 +31,6 @@ namespace TestProject
             var menuInformation = viewResult.Model as MenuInformation;
             var categoryName = GetCategoryNameById(menuInformation.categoryId);
 
-            // Assert
             Assert.AreEqual("日中對照", categoryName);
         }
     }
