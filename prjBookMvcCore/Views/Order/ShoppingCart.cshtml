@@ -47,16 +47,17 @@
         outline: none;
         width: auto;
     }
-.couponS {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50px;
-  width: 200px;
-  background-image: url('/Image/coupon.png');
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-}
+
+    .couponS {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
+        width: 200px;
+        background-image: url('/Image/coupon.png');
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+    }
 
     .coupon {
         display: flex;
@@ -67,6 +68,23 @@
             margin-right: 5px;
         }
 
+    #successModal {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* 透明黑色背景 */
+    }
+
+    .modal-dialog {
+        max-width: 400px; /* 設定彈出視窗的最大寬度 */
+        width: 100%;
+        margin: auto;
+    }
 
 </style>
 <script>
@@ -81,7 +99,7 @@
     <div>
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb">
-               @* <li class="breadcrumb-item"><a href="~/Home/Home">首頁</a></li>
+                @* <li class="breadcrumb-item"><a href="~/Home/Home">首頁</a></li>
                 <li class="breadcrumb-item active" aria-current="page">購物車</li>*@
             </ol>
         </nav>
@@ -344,7 +362,7 @@
             <p>電話：@mPhone</p>
             <p id="paymentId">付款方式</p>
             <p id="shipmentId">配送方式</p>
-            
+
         </div>
         <div class="row">
             <h3>結帳金額</h3>
@@ -356,48 +374,58 @@
         </div>
         <div style="text-align:right;">
             <button class=" btn btn-primary col-4 me-md-2" onclick="btnClick('nav-checkOutInfo-')">返回修改</button>
-            <button id="btnSubmit" class="btn btn-primary col-4 me-md-2" type="button" data-bs-toggle="modal" data-bs-target="#successModal">
+            <button id="btnSubmit" class="btn btn-primary col-4 me-md-2" type="button" @* data-bs-toggle="modal" data-bs-target="#successModal"*@>
                 確定送出
             </button>
         </div>
-    </div>
-</div>
-    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="successModalLabel">訂單完成</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    您的訂單已完成！
-                </div>
-                <div class="modal-footer">
-                <button class=" btn btn-primary col-4 me-md-2" type="button" onclick="toPage4">確定</button>
+
+        <div class="" id="successModal" tabindex="-1" style="display:none">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="successModalLabel">訂單完成</h5>
+                    </div>
+                    <div class="modal-body">
+                        您的訂單已完成！
+                    </div>
+                    <div class="modal-footer">
+                        <button id="confirmButton" class=" btn btn-primary col-4 me-md-2" type="button">確定</button>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
+</div>
+
+
 
 <script>
-    function toPage4 (){
-        URL = @Url.Action("checkOutFinal", "Order");
-        
+    //送出訂單
+    function toPage4(id) {
+        const url = '@Url.Action("checkOutFinal", "Order")?id=' + id;
+        window.location.href = url;
+    };
 
-    }
-</script>
+    function showSuccessModal(id) {
+        const successModal = document.getElementById('successModal');
+        successModal.style.display = 'block';
+        const confirmButton = document.getElementById('confirmButton');
+        confirmButton.addEventListener('click', function () {
+            toPage4(id); // 在確定按鈕的點擊事件處理程序中呼叫 toPage4() 函數
+        });
+    };
 
-<script> //送出訂單
     const btnSubmit = document.getElementById('btnSubmit');
     btnSubmit.addEventListener('click', async function () {
-        if (await orderSubmit()) {
+        const orderSubmitResult = await orderSubmit();
+        if (orderSubmitResult > 0) {
             if (await orderDetailsSubmit()) {
-                alert('成功');
-            } else {
+                showSuccessModal(orderSubmitResult); // 呼叫顯示成功模態框的函數
+            }
+            else {
                 alert('OD失敗');
             }
-        } else {
-            alert('O失敗');
         }
     });
 
@@ -408,12 +436,9 @@
             method: 'POST',
             body: new FormData(formForOrder)
         });
-        const confirm = await response.text();
-        if (confirm === "True") {
-            return true;
-        } else {
-            return false;
-        }
+        const confirmText = await response.text();
+        const confirm = parseInt(confirmText, 10); // 將 confirmText 轉換為整數
+        return confirm;
     };
 
     async function orderDetailsSubmit() {
@@ -433,33 +458,35 @@
         };
     }
 </script>
-<script> //P2 >> P3
+<script>
+    //P2 >> P3
     function p2nextbtnClick(tabId) {
-            // 取得輸入值
-            var reciverName = document.getElementById('inputName').value;
-            var reciverPhone = document.getElementById('inputPhone').value;
-            var shipAddr = document.getElementById('inputAddress').value;
+        // 取得輸入值
+        var reciverName = document.getElementById('inputName').value;
+        var reciverPhone = document.getElementById('inputPhone').value;
+        var shipAddr = document.getElementById('inputAddress').value;
 
-            var paymentId = document.querySelector('input[name="paymentId"]:checked').value;
-            var paymentName = document.querySelector('input[name="paymentId"]:checked + label').innerText;
-            var shipmentId = document.querySelector('input[name="shipmentId"]:checked').value;
-            var shipmentName = document.querySelector('input[name="shipmentId"]:checked + label').innerText;
-            var rebateAmount = document.getElementById('rebateAmountInput').value;
-            rebateAmount = rebateAmount !== '' ? rebateAmount : 0;
-            console.log(rebateAmount);
+        var paymentId = document.querySelector('input[name="paymentId"]:checked').value;
+        var paymentName = document.querySelector('input[name="paymentId"]:checked + label').innerText;
+        var shipmentId = document.querySelector('input[name="shipmentId"]:checked').value;
+        var shipmentName = document.querySelector('input[name="shipmentId"]:checked + label').innerText;
+        var rebateAmount = document.getElementById('rebateAmountInput').value;
+        rebateAmount = rebateAmount !== '' ? rebateAmount : 0;
+        console.log(rebateAmount);
         // 更新P3中的內容
-            document.getElementById('reciverName').innerText = '姓名: ' + reciverName;
-            document.getElementById('reciverPhone').innerText = '電話: ' + reciverPhone;
-            document.getElementById('shipAddr').innerText = '地址: ' + shipAddr;
-            document.getElementById('paymentId').innerText = '付款方式: ' + paymentName;
-            document.getElementById('shipmentId').innerText = '配送方式: ' + shipmentName;
-            document.getElementById('rebateAmount').innerText = '回饋金金額: ' + rebateAmount;
+        document.getElementById('reciverName').innerText = '姓名: ' + reciverName;
+        document.getElementById('reciverPhone').innerText = '電話: ' + reciverPhone;
+        document.getElementById('shipAddr').innerText = '地址: ' + shipAddr;
+        document.getElementById('paymentId').innerText = '付款方式: ' + paymentName;
+        document.getElementById('shipmentId').innerText = '配送方式: ' + shipmentName;
+        document.getElementById('rebateAmount').innerText = '回饋金金額: ' + rebateAmount;
 
-            setFinalTotal();
-            document.getElementById(tabId).click();
-    }  
+        setFinalTotal();
+        document.getElementById(tabId).click();
+    }
 </script>
-<script> // p3顯示總金額的值並
+<script>
+    // p3顯示總金額的值並
 
     function setFinalTotal() {
         const totalA = document.getElementById('totalAmount');
@@ -467,7 +494,8 @@
         seconTotal.textContent = `${totalA.innerText} 元`;
     };
 </script>
-<script> //讀取orderDiscount方法
+<script>
+    //讀取orderDiscount方法
     async function returnOd() {
         const discountArea = document.getElementById('discountArea');
         var totalAmount = document.getElementById('totalAmount');
@@ -497,13 +525,14 @@
             label.setAttribute('for', 'oD');
             label.textContent = item.orderDiscountnName;
             label.classList.add('couponS');
-            
+
             containerCou.appendChild(label);
             discountArea.appendChild(containerCou);
         });
     }
 </script>
-<script> //return to Action1 page3
+<script>
+    //return to Action1 page3
     const form1 = document.getElementById('form1');
     const table2 = document.getElementById('table2');
     const btnForm1 = document.getElementById('btnForm1');
@@ -518,14 +547,14 @@
         const table2Header = document.createElement('thead');
         const headerRow = document.createElement('tr');
         headerRow.innerHTML = `
-                        <th style="width:50px;"><input type="checkbox"></th>
-                        <th style="width:50px;">序號</th>
-                        <th style="width:500px;">書名</th>
-                        <th>優惠</th>
-                        <th>優惠價</th>
-                        <th>數量</th>
-                        <th>小計</th>
-                        `;
+                            <th style="width:50px;"><input type="checkbox"></th>
+                            <th style="width:50px;">序號</th>
+                            <th style="width:500px;">書名</th>
+                            <th>優惠</th>
+                            <th>優惠價</th>
+                            <th>數量</th>
+                            <th>小計</th>
+                            `;
         table2Header.appendChild(headerRow);
         table2.appendChild(table2Header);
         const table2Body = document.createElement('tbody');
@@ -536,14 +565,14 @@
             input.type = "hidden";
             const row = document.createElement('tr');
             row.innerHTML = `
-                                <td><input type="checkbox"></td>
-                                <td>${index + 1}</td>
-                                <td>${item.book.bookTitle}</td>
-                                <td>${item.discountName}</td>
-                                <td>${item.book.unitPrice * item.discountAmount}</td>
-                                <td><input name="quantity" value="${item.quantity}" class="cinput" type="text" readonly /></td>
-                                <td>${item.quantity * (item.book.unitPrice * item.discountAmount)}</td>
-                            `;
+                                    <td><input type="checkbox"></td>
+                                    <td>${index + 1}</td>
+                                    <td>${item.book.bookTitle}</td>
+                                    <td>${item.discountName}</td>
+                                    <td>${item.book.unitPrice * item.discountAmount}</td>
+                                    <td><input name="quantity" value="${item.quantity}" class="cinput" type="text" readonly /></td>
+                                    <td>${item.quantity * (item.book.unitPrice * item.discountAmount)}</td>
+                                `;
             table2Body.appendChild(row);
             table2Body.appendChild(input);
         });
@@ -553,7 +582,8 @@
     });
 </script>
 
-<script> //取消購物車項目方法
+<script>
+    //取消購物車項目方法
     async function cancle(id) {
         const confirmed = confirm('確定要取消嗎?');
         if (confirmed) {
@@ -568,7 +598,8 @@
         }
     };
 </script>
-<script> //page1調整數量同時更新總金額以及value
+<script>
+    //page1調整數量同時更新總金額以及value
     const table1 = document.getElementById('table1');
     const totalAmountElement = document.querySelector('#totalAmount');
     // 初始化 totalAmount 的值
@@ -611,7 +642,8 @@
 
     };
 </script>
-<script> //按按鈕
+<script>
+    //按按鈕
     function btnClick(inputId) {
         const btn = document.getElementById(inputId);
         btn.click();
