@@ -126,7 +126,6 @@ namespace prjBookMvcCore.Controllers
         {
             return View();
         }
-        //[HttpPost]  //用ajax方法請求回傳值跟form/submit是無相關的兩條路, 使用時要分清楚
         [Route("Member/find")]
         public IActionResult Find_password(string target) //忘記密碼方法
         {
@@ -483,7 +482,6 @@ namespace prjBookMvcCore.Controllers
                 _bookShopContext.SaveChanges();
                 isExsit = true;
             };
-
             return Content(isExsit.ToString());
         }
 
@@ -493,6 +491,5 @@ namespace prjBookMvcCore.Controllers
             var q = _bookShopContext.OrderDetails.Include(x => x.Book).ThenInclude(x => x.BookDiscountDetails).ThenInclude(x => x.BookDiscount).Where(x => x.OrderId == id);
             return PartialView("PartailOrderDetail", q);
         }
-
     }
 }

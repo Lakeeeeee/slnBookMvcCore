@@ -17,10 +17,10 @@
         <li class="nav-item" role="presentation">
             <button class="btn btn-outline-light " id="pills-3-tab" data-bs-toggle="pill" data-bs-target="#pills-3" type="button" role="tab" aria-controls="pills-3" aria-selected="false">收藏的出版社</button>
         </li>
-        <li class="nav-item" role="presentation">
+@*        <li class="nav-item" role="presentation">
             <button class="btn btn-outline-light " id="pills-4-tab" data-bs-toggle="pill" data-bs-target="#pills-4" type="button" role="tab" aria-controls="pills-4" aria-selected="false">可購買時通知我</button>
         </li>
-    </ul>
+*@    </ul>
     <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade show active" id="pills-1" role="tabpanel" aria-labelledby="pills-1-tab">
             <table class="table table-hover">
@@ -30,6 +30,8 @@
                     <th>優惠</th>
                     <th>優惠價</th>
                     <th>出版社</th>
+                    <th>來去購買</th>
+                    <th>取消追蹤</th>
                 </tr>
                 @{
                     int count = 0;
@@ -108,10 +110,10 @@
         table.innerHTML = '';
         const thead = table.createTHead();
         const row = thead.insertRow();
-        row.insertCell().innerText = '序號';
-        row.insertCell().innerText = '作者';
-        row.insertCell().innerText = '最近的書目';
-        row.insertCell().innerText = '取消追蹤';
+        row.insertAdjacentHTML('beforeend', '<th>序號</th>');
+        row.insertAdjacentHTML('beforeend', '<th>作者</th>');
+        row.insertAdjacentHTML('beforeend', '<th>最近的書目</th>');
+        row.insertAdjacentHTML('beforeend', '<th>取消追蹤</th>');
         const tbody = table.createTBody();
         authors.forEach(data => {
             count = count + 1;
@@ -146,9 +148,10 @@
         table.innerHTML = '';
         const thead = table.createTHead();
         const row = thead.insertRow();
-        row.insertCell().innerText = '序號';
-        row.insertCell().innerText = '出版社';
-        row.insertCell().innerText = '最近的書目';
+        row.insertAdjacentHTML('beforeend', '<th>序號</th>');
+        row.insertAdjacentHTML('beforeend', '<th>出版社</th>');
+        row.insertAdjacentHTML('beforeend', '<th>最近的書目</th>');
+        row.insertAdjacentHTML('beforeend', '<th>取消追蹤</th>');
         const tbody = table.createTBody();
         authors.forEach(data => {
             count = count + 1;
