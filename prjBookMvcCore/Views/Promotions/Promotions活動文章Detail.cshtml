@@ -2,7 +2,6 @@
 @{
     ViewData["Title"] = "讀本專文";
 }
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -84,7 +83,7 @@
         {
             string title中 = g.BookTitle.Split("$")[0];
             var q作者 = db.AuthorDetails.Where(a => a.BookId == g.BookId).Select(a => new { a.Author.AuthorName, a.Author.AuthorId });
-            var bookDiscountDetail = db.BookDiscountDetails.Where(d => d.BookId == g.BookId & d.BookDiscountStartDate < DateTime.Now & d.BookDiscountEndDate > DateTime.Now).Select(d => new { d.BookDiscountId, d.BookDiscount.BookDiscountName, d.BookDiscount.BookDiscountAmount });
+            var bookDiscountDetail = db.BookDiscountDetails.Where(d => d.BookId == g.BookId & d.BookDiscountStartDate < DateTime.Now & d.BookDiscountEndDate > DateTime.Now).Select(d => new { d.BookDiscountId, d.BookDiscount.BookDiscountName, d.BookDiscount.BookDiscountAmount }).ToList();
             <div class="row box p-3 mb-4">
                 <div class="col-3">
                     <a href="~/Book/BookInformation/@g.BookId">
@@ -104,10 +103,7 @@
                     <p>出版社：<a href="~/Book/publisherInformation/@g.PublisherId">@g.PublisherName </a></p>
                     <p>ISBN：@g.Isbn</p>
                     <p>原價：<del style="color:red;font-style:oblique">@((int)g.UnitPrice) </del>  元</p>
-                    @foreach (var dis in bookDiscountDetail)
-                    {
-                        <p>優惠價：<span style="color: #E3007F; "> @((dis.BookDiscountAmount * 100).ToString("0"))</span>折 <span style="color: #E3007F;font-weight:bold;">@((int)Math.Round(g.UnitPrice * dis.BookDiscountAmount))</span>元</p>
-                    }
+                    <p>優惠價：<span style="color: #E3007F; "> @((bookDiscountDetail[0].BookDiscountAmount * 100).ToString("0"))</span>折 <span style="color: #E3007F;font-weight:bold;">@((int)Math.Ceiling(g.UnitPrice * bookDiscountDetail[0].BookDiscountAmount))</span>元</p>
                 </div>
                 <div class="col-6">
                     <a href="~/Book/BookInformation/@g.BookId#contentIntro" title="移至完整內容簡介">簡介：</a>
