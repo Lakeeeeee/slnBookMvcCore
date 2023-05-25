@@ -199,7 +199,6 @@
                             </li>
                             <li>
                                 <a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="23">旅遊</a>
-                                <a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="24">商業理財</a>
                             </li>
                             <li>
                                 <a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="24">商業理財</a>
@@ -283,18 +282,17 @@
                                         backdiscount = 1;
                                     }
 
+                                    //if (backPrice < frontPrice) {
+                                    //    [backPrice, frontPrice] = [frontPrice, backPrice];
+                                    //}
 
-                                    if (backPrice < frontPrice) {
-                                        [backPrice, frontPrice] = [frontPrice, backPrice];
-                                    }
+                                    //if (backdiscount > frontdiscount) {
+                                    //    [backdiscount, frontdiscount] = [frontdiscount, backdiscount];
+                                    //}
 
-                                    if (backdiscount > frontdiscount) {
-                                        [backdiscount, frontdiscount] = [frontdiscount, backdiscount];
-                                    }
-
-                                    if (backdate < frontdate) {
-                                        [backdate, frontdate] = [frontdate, backdate]
-                                    }
+                                    //if (backdate < frontdate) {
+                                    //    [backdate, frontdate] = [frontdate, backdate]
+                                    //}
 
                                     var url = '@Url.Action("searchList", "Home")' + '?txtKeyword=' + encodeURIComponent(keyword) + '&frontPrice=' + frontPrice + '&backPrice=' + backPrice + '&frontdiscount=' + frontdiscount + '&backdiscount=' + backdiscount + '&frontdate=' + frontdate + '&backdate=' + backdate;
                                     // 使用 Url.Action 方法动态生成 ActionLink 的 URL，并将关键字和价格范围作为参数传递

@@ -17,37 +17,6 @@ namespace prjBookMvcCore.Controllers
         BookShopContext db = new();
         public IActionResult Home()
         {
-            //從資料庫中取得最小值和最大值
-            decimal minprice = db.Books.Min(b => b.UnitPrice);
-            decimal maxprice = db.Books.Max(b => b.UnitPrice);
-            ViewBag.frontprice = minprice.ToString("0");
-            ViewBag.backprice = maxprice.ToString("0");
-
-            DateTime mindate = DateTime.Now, maxdate = DateTime.Now;
-            int maxtime = 0;
-            int mintime = 100000;
-
-            List<DateTime> d = db.Books.Select(x => x.PublicationDate).ToList();
-
-            foreach (var date in d)
-            {
-                int diff = (DateTime.Now - date).Days;
-                if (diff < mintime)
-                {
-                    mintime = diff;
-                    mindate = date;
-                }
-
-                if (diff > maxtime)
-                {
-                    maxtime = diff;
-                    maxdate = date;
-                }
-            }
-
-            ViewBag.frontdate = mindate.ToString("yyyy-MM-dd");
-            ViewBag.backdate = (maxdate).ToString("yyyy-MM-dd");
-
             List<RecommendInformation> normal = getNormal();
             List<RecommendInformation> publicationDate = getPublicationDate();
             List<RecommendInformation> commentTimeDate = getCommentTimeDate();
@@ -132,9 +101,6 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult searchList(string txtKeyword, decimal frontPrice, decimal backPrice, decimal frontdiscount, decimal backdiscount, DateTime frontdate, DateTime backdate)
         {
-
-
-            //從資料庫中取得最小值和最大值
             decimal minprice = frontPrice;
             decimal maxprice = backPrice;
 
@@ -154,9 +120,6 @@ namespace prjBookMvcCore.Controllers
                 maxprice = db.Books.Max(b => b.UnitPrice);
                 ViewBag.backprice = maxprice.ToString("0");
             }
-
-
-
 
             DateTime mindate = DateTime.Now, maxdate = DateTime.Now;
             int maxtime = 0;
@@ -181,15 +144,15 @@ namespace prjBookMvcCore.Controllers
             }
 
             ViewBag.frontdate = mindate.ToString("yyyy-MM-dd");
-            ViewBag.backdate = (maxdate).ToString("yyyy-MM-dd");
+            ViewBag.backdate = maxdate.ToString("yyyy-MM-dd");
 
             ViewBag.KeyWord = txtKeyword;
-            ViewBag.frontprice = minprice;
-            ViewBag.backprice = maxprice;
+            //ViewBag.frontprice = minprice;
+            //ViewBag.backprice = maxprice;
             ViewBag.frontdiscount = frontdiscount;
             ViewBag.backdiscount = backdiscount;
-            ViewBag.frontdate = frontdate;
-            ViewBag.backdate = backdate;
+            //ViewBag.frontdate = frontdate;
+            //ViewBag.backdate = backdate;
 
             CForHomePage searchresult = GetSearchResult(txtKeyword, minprice, maxprice, frontdiscount, backdiscount, frontdate, backdate);
             return View(searchresult);
@@ -699,6 +662,4 @@ namespace prjBookMvcCore.Controllers
         }
 
     }
-
-
 }
