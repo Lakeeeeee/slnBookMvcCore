@@ -132,24 +132,37 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult searchList(string txtKeyword, decimal frontPrice, decimal backPrice, decimal frontdiscount, decimal backdiscount, DateTime frontdate, DateTime backdate)
         {
-            ViewBag.KeyWord = txtKeyword;
+
 
             //從資料庫中取得最小值和最大值
-            decimal minprice = db.Books.Min(b => b.UnitPrice);
-            decimal maxprice = db.Books.Max(b => b.UnitPrice);
-            ViewBag.frontprice = minprice.ToString("0");
-            ViewBag.backprice = maxprice.ToString("0");
+            decimal minprice = frontPrice;
+            decimal maxprice = backPrice;
+
+            if (txtKeyword == null)
+            {
+                txtKeyword = string.Empty;
+            }
+
+            if (frontPrice == 0)
+            {
+                minprice = db.Books.Min(b => b.UnitPrice);
+                ViewBag.frontprice = minprice.ToString("0");
+            }
+
+            if (backPrice == 0)
+            {
+                maxprice = db.Books.Max(b => b.UnitPrice);
+                ViewBag.backprice = maxprice.ToString("0");
+            }
+
+
+
 
             DateTime mindate = DateTime.Now, maxdate = DateTime.Now;
             int maxtime = 0;
             int mintime = 100000;
 
             List<DateTime> d = db.Books.Select(x => x.PublicationDate).ToList();
-
-
-
-            ViewBag.frontdiscount = frontdiscount;
-            ViewBag.backdiscount = backdiscount;
 
             foreach (var date in d)
             {
@@ -170,7 +183,15 @@ namespace prjBookMvcCore.Controllers
             ViewBag.frontdate = mindate.ToString("yyyy-MM-dd");
             ViewBag.backdate = (maxdate).ToString("yyyy-MM-dd");
 
-            CForHomePage searchresult = GetSearchResult(txtKeyword, frontPrice, backPrice, frontdiscount, backdiscount, frontdate, backdate);
+            ViewBag.KeyWord = txtKeyword;
+            ViewBag.frontprice = minprice;
+            ViewBag.backprice = maxprice;
+            ViewBag.frontdiscount = frontdiscount;
+            ViewBag.backdiscount = backdiscount;
+            ViewBag.frontdate = frontdate;
+            ViewBag.backdate = backdate;
+
+            CForHomePage searchresult = GetSearchResult(txtKeyword, minprice, maxprice, frontdiscount, backdiscount, frontdate, backdate);
             return View(searchresult);
         }
 
@@ -183,11 +204,11 @@ namespace prjBookMvcCore.Controllers
                 {
                     recommendBooks = (from b in db.Books
                                       where
-                                      ((b.BookTitle.Contains(txtkeyword) ||
-                                      b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault().Contains(txtkeyword)) ||
+                                      b.BookTitle.Contains(txtkeyword) ||
+                                      b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault().Contains(txtkeyword) ||
                                       b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault().Contains(txtkeyword) ||
                                       b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault().Contains(txtkeyword) ||
-                                      b.Publisher.PublisherName.Contains(txtkeyword)) &&
+                                      b.Publisher.PublisherName.Contains(txtkeyword) &&
 
                                       frontPrice <= b.UnitPrice && backPrice >= b.UnitPrice &&
 
@@ -210,7 +231,7 @@ namespace prjBookMvcCore.Controllers
                                           出版日期 = b.PublicationDate,
                                       }).Distinct();
                 }
-                else if (txtkeyword == null && frontPrice != 0 && backPrice != 0 && frontdiscount != 0 && backdiscount != 0 && frontdate != null && backdate != null)
+                else if (txtkeyword == null)
                 {
                     recommendBooks = (from b in db.Books
                                       where
