@@ -757,7 +757,7 @@
                     }
                 },
                 getDiscountPrice(item) {
-                    return Math.floor(item.unitPrice * item.discount / 100);
+                    return Math.ceil(item.unitPrice * item.discount / 100);
                 },
                 storeTempList(bookID,memberID) {
                     if (this.loginCheck()) {
