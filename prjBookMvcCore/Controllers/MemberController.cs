@@ -85,7 +85,7 @@ namespace prjBookMvcCore.Controllers
                         MemberId = newmember.MemberId
                     };
                     _bookShopContext.MessageSubscribes.Add(subscribe);
-                   //writeCouponMessage(newmember, _bookShopContext);
+                   writeCouponMessage(newmember, _bookShopContext);
                 }
                 _bookShopContext.SaveChanges();
                 _cm.write註冊會員禮Letter(newmember, _bookShopContext);

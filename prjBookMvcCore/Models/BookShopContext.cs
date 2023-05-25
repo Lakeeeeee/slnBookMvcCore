@@ -581,7 +581,9 @@ namespace prjBookMvcCore.Models
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
-                entity.Property(e => e.FinalPay).HasColumnType("money");
+                entity.Property(e => e.FinalPay)
+                    .HasColumnType("money")
+                    .HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
@@ -609,7 +611,9 @@ namespace prjBookMvcCore.Models
                     .HasColumnName("ShippingStatusID")
                     .HasDefaultValueSql("((1))");
 
-                entity.Property(e => e.TotalPay).HasColumnType("money");
+                entity.Property(e => e.TotalPay)
+                    .HasColumnType("money")
+                    .HasDefaultValueSql("((0))");
 
                 entity.HasOne(d => d.Member)
                     .WithMany(p => p.Orders)
