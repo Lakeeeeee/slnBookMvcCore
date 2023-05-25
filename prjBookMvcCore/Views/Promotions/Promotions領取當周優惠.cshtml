@@ -12,9 +12,7 @@
             font-style: italic;
             color: cornsilk;
             font-weight: bold;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+          text-align:center;
         }
 
         .expired {
@@ -37,7 +35,7 @@
     <p id="wednesday">週三 @wednesday.ToString("MM/dd") (三)</p>
     <div class="row" style="text-align:center;">
         <div class="col-1"></div>
-        <div class="col-5" style="background-image: url('/Image/Promotions/週三.png'); background-size:auto;background-repeat:no-repeat; padding:50px;border:unset;align-items: center;">
+        <div class="col-5" style="background-image: url('/Image/Promotions/週三.png'); background-size:auto;background-repeat:no-repeat; padding:25px;border:unset;align-items: center;">
             <div class="row">
                 <div class="col-1"></div>
                 <div class="col-7 coupontext">滿888扣88</div>
@@ -48,22 +46,22 @@
                             var q = db.OrderDiscountDetails.Where(d => d.MemberId == _userInforService.UserId & d.OrderDiscountId == 17 & d.OrderDiscountStartDate == wednesday).Select(d => d);
                             if (q.Count() != 0)
                             {
-                                <button class="btn-outline-warning" id="weekend_coupon17" disabled>已领取 </button>
+                                    <button class="btn-outline-warning" id="weekend_coupon17" disabled>已领取 </button>
                             }
                             else
                             {
-                                <button class="btn-outline-warning" id="wednesday_coupon17" onclick="takeWeekCoupon(17,'@wednesday.ToString("yyyy/MM/dd")',1,this)">领取</button>
+                                    <button class="btn-outline-warning" id="wednesday_coupon17" onclick="takeWeekCoupon(17,'@wednesday.ToString("yyyy/MM/dd")',1,this)">领取</button>
                             }
                         }
                         else
                         {
-                            <button class="btn-outline-warning" id="wednesday_coupon17" onclick="takeWeekCoupon(17,'@wednesday.ToString("yyyy/MM/dd")',1,this)">领取</button>
+                                <button class="btn-outline-warning" id="wednesday_coupon17" onclick="takeWeekCoupon(17,'@wednesday.ToString("yyyy/MM/dd")',1,this)">领取</button>
                         }
                     }
                 </div>
             </div>
         </div><div class="col-1"></div>
-        <div class="col-5" style="background-image: url('/Image/Promotions/週三.png'); background-size:auto;background-repeat:no-repeat; padding:50px;border:unset;">
+        <div class="col-5" style="background-image: url('/Image/Promotions/週三.png'); background-size:auto;background-repeat:no-repeat; padding:25px;border:unset;">
             <div class="row">
                 <div class="col-1"></div>
                 <div class="col-7 coupontext">滿1699扣199</div>
@@ -74,16 +72,16 @@
                             var q = db.OrderDiscountDetails.Where(d => d.MemberId == _userInforService.UserId & d.OrderDiscountId == 15 & d.OrderDiscountStartDate == wednesday).Select(d => d);
                             if (q.Count() != 0)
                             {
-                                <button class="btn-outline-warning" id="weekend_coupon15" disabled>已领取 </button>
+                                    <button class="btn-outline-warning" id="weekend_coupon15" disabled>已领取 </button>
                             }
                             else
                             {
-                                <button class="btn-outline-warning" id="wednesday_coupon15" onclick="takeWeekCoupon(15,'@wednesday.ToString("yyyy/MM/dd")',1,this)">领取</button>
+                                    <button class="btn-outline-warning" id="wednesday_coupon15" onclick="takeWeekCoupon(15,'@wednesday.ToString("yyyy/MM/dd")',1,this)">领取</button>
                             }
                         }
                         else
                         {
-                            <button class="btn-outline-warning" id="wednesday_coupon15" onclick="takeWeekCoupon(15,'@wednesday.ToString("yyyy/MM/dd")',1,this)">领取</button>
+                                <button class="btn-outline-warning" id="wednesday_coupon15" onclick="takeWeekCoupon(15,'@wednesday.ToString("yyyy/MM/dd")',1,this)">领取</button>
                         }
                     }
                 </div>
@@ -94,7 +92,7 @@
     <p id="weekend">週末 @saturday.ToString("MM/dd") (六)、@sunday.ToString("MM/dd") (日)</p>
     <div class="row">
         <div class="col-1"></div>
-        <div class="col-5" style="background-image: url('/Image/Promotions/週末.png'); background-size:auto;background-repeat:no-repeat; padding:50px;border:unset">
+        <div class="col-5" style="background-image: url('/Image/Promotions/週末.png'); background-size:auto;background-repeat:no-repeat; padding:25px;border:unset">
             <div class="row">
                 <div class="col-1"></div>
                 <div class="col-7  coupontext">滿1299扣139</div>
@@ -105,22 +103,22 @@
                             var q = db.OrderDiscountDetails.Where(d => d.MemberId == _userInforService.UserId & d.OrderDiscountId == 16 & d.OrderDiscountStartDate == saturday).Select(d => d);
                             if (q.Count() != 0)
                             {
-                                <button class="btn-outline-warning" id="weekend_coupon16" disabled>已领取 </button>
+                                    <button class="btn-outline-warning" id="weekend_coupon16" disabled>已领取 </button>
                             }
                             else
                             {
-                                <button class="btn-outline-warning" id="weekend_coupon16" onclick="takeWeekCoupon(16,'@saturday.ToString("yyyy/MM/dd")',2,this)">领取</button>
+                                    <button class="btn-outline-warning" id="weekend_coupon16" onclick="takeWeekCoupon(16,'@saturday.ToString("yyyy/MM/dd")',2,this)">领取</button>
                             }
                         }
                         else
                         {
-                            <button class="btn-outline-warning" id="weekend_coupon16" onclick="takeWeekCoupon(16,'@saturday.ToString("yyyy/MM/dd")',2,this)">领取</button>
+                                <button class="btn-outline-warning" id="weekend_coupon16" onclick="takeWeekCoupon(16,'@saturday.ToString("yyyy/MM/dd")',2,this)">领取</button>
                         }
                     }
                 </div>
             </div>
         </div><div class="col-1"></div>
-        <div class="col-5" style="background-image: url('/Image/Promotions/週末.png'); background-size:auto;background-repeat:no-repeat; padding:50px;border:unset;">
+        <div class="col-5" style="background-image: url('/Image/Promotions/週末.png'); background-size:auto;background-repeat:no-repeat; padding:25px;border:unset;">
             <div class="row">
                 <div class="col-1"></div>
                 <div class="col-7 coupontext">滿2499扣299</div>
@@ -131,16 +129,16 @@
                             var q = db.OrderDiscountDetails.Where(d => d.MemberId == _userInforService.UserId & d.OrderDiscountId == 14 & d.OrderDiscountStartDate == saturday).Select(d => d);
                             if (q.Count() != 0)
                             {
-                                <button class="btn-outline-warning" id="weekend_coupon14" disabled>已领取 </button>
+                                    <button class="btn-outline-warning" id="weekend_coupon14" disabled>已领取 </button>
                             }
                             else
                             {
-                                <button class="btn-outline-warning" id="weekend_coupon14" onclick="takeWeekCoupon(14,'@saturday.ToString("yyyy/MM/dd")',2,this)">领取</button>
+                                    <button class="btn-outline-warning" id="weekend_coupon14" onclick="takeWeekCoupon(14,'@saturday.ToString("yyyy/MM/dd")',2,this)">领取</button>
                             }
                         }
                         else
                         {
-                            <button class="btn-outline-warning" id="weekend_coupon14" onclick="takeWeekCoupon(14,'@saturday.ToString("yyyy/MM/dd")',2,this)">领取</button>
+                                <button class="btn-outline-warning" id="weekend_coupon14" onclick="takeWeekCoupon(14,'@saturday.ToString("yyyy/MM/dd")',2,this)">领取</button>
                         }
                     }
                 </div>
