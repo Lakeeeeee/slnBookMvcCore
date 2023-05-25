@@ -503,7 +503,7 @@ namespace prjBookMvcCore.Controllers
         {
             Models.Message Letter = new Models.Message()
             {
-                MessageTypeId = 1,
+                MessageTypeId = 2,
                 MessageTitle = $"訂閱送好禮!",
                 MessageContent =
                 $"<p>Hi! {receiver.MemberName}!</p>" +
