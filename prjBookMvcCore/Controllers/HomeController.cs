@@ -90,7 +90,7 @@ namespace prjBookMvcCore.Controllers
             {
                 var recommendProducts = (from b in db.Books
                                          join c in db.Comments on b.BookId equals c.BookId
-                                         where c.Stars== countStar
+                                         where c.Stars == countStar
                                          select new
                                          {
                                              書本ID = b.BookId,
@@ -204,11 +204,11 @@ namespace prjBookMvcCore.Controllers
                 {
                     recommendBooks = (from b in db.Books
                                       where
-                                      b.BookTitle.Contains(txtkeyword) ||
-                                      b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault().Contains(txtkeyword) ||
+                                      ((b.BookTitle.Contains(txtkeyword) ||
+                                      b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault().Contains(txtkeyword)) ||
                                       b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault().Contains(txtkeyword) ||
                                       b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault().Contains(txtkeyword) ||
-                                      b.Publisher.PublisherName.Contains(txtkeyword) &&
+                                      b.Publisher.PublisherName.Contains(txtkeyword)) &&
 
                                       frontPrice <= b.UnitPrice && backPrice >= b.UnitPrice &&
 
