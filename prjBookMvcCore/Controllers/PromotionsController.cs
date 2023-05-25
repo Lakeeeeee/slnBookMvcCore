@@ -14,14 +14,12 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult Promotions註冊會員禮() { return View(); }
         public IActionResult Promotions會員() { return View(); }
-
         public IActionResult Promotions促銷活動() { return View(); }
         public IActionResult Promotions促銷(int id, int page = 1)
         {
             if (id != 0)
             {
-                var bookD=db.BookDiscounts.Where(d=>d.BookDiscountId==id).ToList();
-                foreach (var g in bookD) { ViewBag.Discount = g.BookDiscountName;}
+                ViewBag.Discount = db.BookDiscounts.Where(d => d.BookDiscountId == id).Select(d=>d.BookDiscountName).FirstOrDefault();
                 int itemsPerPage = 28;//每頁只顯示28個                   
                 var bookDiscountDetail = db.BookDiscountDetails.Where(d => d.BookDiscountId == id & d.BookDiscountStartDate < DateTime.Now & d.BookDiscountEndDate > DateTime.Now).Select(d => new { d.BookDiscount.BookDiscountName, d.BookDiscount.BookDiscountAmount, d.Book.BookTitle, d.Book.UnitPrice, d.Book.CoverPath, d.Book.BookId, d.BookDiscountEndDate });
 
@@ -61,7 +59,6 @@ namespace prjBookMvcCore.Controllers
             }
             else { return RedirectToAction("Promotions促銷活動"); }
         }
-
         public IActionResult Promotions活動總覽圖()
         {
             var datas = db.Articals.OrderByDescending(a => a.ArticalId).Where(a => a.ArticalId != 8 & a.ArticalId != 10 & a.ArticalId != 17).Select(a => a);
@@ -74,7 +71,7 @@ namespace prjBookMvcCore.Controllers
         }
         public IActionResult Promotions活動圖()
         {
-            var datas = db.Articals.OrderByDescending(a => a.ArticalId).Where(a=>a.ArticalId==8 || a.ArticalId==10 || a.ArticalId==17).Select(a => a);
+            var datas = db.Articals.OrderByDescending(a => a.ArticalId).Where(a => a.ArticalId == 8 || a.ArticalId == 10 || a.ArticalId == 17).Select(a => a);
             return View(datas);
         }
         public IActionResult Promotions活動表()
@@ -82,7 +79,6 @@ namespace prjBookMvcCore.Controllers
             var datas = db.Articals.OrderByDescending(a => a.ArticalId).Where(a => a.ArticalId == 8 || a.ArticalId == 10 || a.ArticalId == 17).Select(a => a);
             return View(datas);
         }
-
         public IActionResult Promotions活動文章Detail(int? id)
         {
             if (id == null) { return RedirectToAction("Promotions活動已結束"); }
@@ -117,17 +113,6 @@ namespace prjBookMvcCore.Controllers
             }
         }
 
-        public IActionResult Promotions領取月優惠(int? month)
-        {
-            if (month == null || month < DateTime.Now.Month) { return RedirectToAction("Promotions活動已結束"); }
-            else if (month > DateTime.Now.AddMonths(2).Month) { return RedirectToAction("Index"); }
-            else { ViewBag.month = month; return View(); }
-        }
-        //public string Promotions領取限定會員優惠(int memberID, int discountID, DateTime date)
-        //{
-        //   //TODO：會員等級
-        //}
-
         public string Promotions限時登入領取優惠()
         {
             string isSuccess;
@@ -152,6 +137,14 @@ namespace prjBookMvcCore.Controllers
                 return isSuccess;
             }
         }
+        //TODO：會員等級
+        public IActionResult Promotions領取月優惠(int? month)
+        {
+            if (month == null || month < DateTime.Now.Month) { return RedirectToAction("Promotions活動已結束"); }
+            else if (month > DateTime.Now.AddMonths(2).Month) { return RedirectToAction("Index"); }
+            else { ViewBag.month = month; return View(); }
+        }
+
         public IActionResult SearchTest(string? txtKeyword)
         {
             ViewBag.KeyWord = txtKeyword;
