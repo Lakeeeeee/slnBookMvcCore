@@ -212,23 +212,23 @@
                     <div class="input-group bg-light menu">
                         <input id="search_input" style="border-right: #C4C4C4 2px solid;" placeholder="輸入關鍵字" name="keyword" type="text" class="fontsize18 mx-1 form-control inputForSearch ui-autocomplete-input" maxlength="40" value="" autocomplete="off">
                         <div class="dropdown">
-                            <button class="fontsize18 btn btn-outline-secondary mx-1 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button style="width:230px" class="fontsize18 btn btn-outline-secondary mx-1 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                 進階搜尋
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="width:500px">
                                 <li>
                                     <div class="m-1 p-1">
                                         <span class="mx-2">售價</span>
-                                        <input id="frontprice" style="margin-left:2em; border-right: #C4C4C4 2px solid;width:130px" placeholder="金額" type="search" maxlength="20" value="@ViewBag.frontprice" />
+                                        <input id="frontprice" style="margin-left:2em; border-right: #C4C4C4 2px solid;width:130px" placeholder="金額" type="search" maxlength="20" />
                                         <span class="mx-2">至</span>
-                                        <input id="backprice" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="金額" type="search" maxlength="20" value="@ViewBag.backprice" />
+                                        <input id="backprice" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="金額" type="search" maxlength="20" />
                                         <span class="mx-2">之間</span>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="m-1 p-1">
                                         <span class="mx-2">折扣</span>
-                                        <select id="frontdiscount" name="折扣1" style="margin-left:2em; width:130px" value="@ViewBag.frontdiscount">
+                                        <select id="frontdiscount" name="折扣1" style="margin-left:2em; width:130px">
                                             <option value="0" selected>請選擇 </option>
                                             @{
                                                 var bookDiscount = db.BookDiscounts.Select(dis => new { dis.BookDiscountId, dis.BookDiscountAmount, dis.BookDiscountName }).ToList();
@@ -239,7 +239,7 @@
                                             }
                                         </select>
                                         <span class="mx-2">至</span>
-                                        <select id="backdiscount" name="折扣2" style="width:130px" value="@ViewBag.backdiscount">
+                                        <select id="backdiscount" name="折扣2" style="width:130px" >
                                             <option value="0" selected>請選擇 </option>
                                             @{
                                                 foreach (var dis in bookDiscount)
@@ -255,9 +255,9 @@
                                 <li>
                                     <div class="m-1 p-1">
                                         <span class="mx-2">出版日期</span>
-                                        <input id="frontdate" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="日期" type="date" maxlength="20" value="@ViewBag.backdate" />
+                                        <input id="frontdate" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="日期" type="date" maxlength="20" />
                                         <span class="mx-2">至</span>
-                                        <input id="backdate" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="日期" type="date" maxlength="20" value="@ViewBag.frontdate" />
+                                        <input id="backdate" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="日期" type="date" maxlength="20" />
                                         <span class="mx-2">之間</span>
                                     </div>
                                 </li>

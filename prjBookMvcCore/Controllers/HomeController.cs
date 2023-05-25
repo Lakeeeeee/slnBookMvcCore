@@ -90,7 +90,7 @@ namespace prjBookMvcCore.Controllers
             {
                 var recommendProducts = (from b in db.Books
                                          join c in db.Comments on b.BookId equals c.BookId
-                                         where c.Stars== countStar
+                                         where c.Stars == countStar
                                          select new
                                          {
                                              書本ID = b.BookId,
@@ -133,6 +133,12 @@ namespace prjBookMvcCore.Controllers
         public IActionResult searchList(string txtKeyword, decimal frontPrice, decimal backPrice, decimal frontdiscount, decimal backdiscount, DateTime frontdate, DateTime backdate)
         {
             ViewBag.KeyWord = txtKeyword;
+            ViewBag.frontprice = frontPrice;
+            ViewBag.backprice = backPrice;
+            ViewBag.frontdiscount = frontdiscount;
+            ViewBag.backdiscount = backdiscount;
+            ViewBag.frontdate = frontdate;
+            ViewBag.backdate = backdate;
 
             //從資料庫中取得最小值和最大值
             decimal minprice = db.Books.Min(b => b.UnitPrice);
