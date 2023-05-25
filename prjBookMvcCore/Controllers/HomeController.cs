@@ -112,13 +112,13 @@ namespace prjBookMvcCore.Controllers
             if (frontPrice == 0)
             {
                 minprice = db.Books.Min(b => b.UnitPrice);
-                ViewBag.frontprice = minprice.ToString("0");
+                //ViewBag.frontprice = minprice.ToString("0");
             }
 
             if (backPrice == 0)
             {
                 maxprice = db.Books.Max(b => b.UnitPrice);
-                ViewBag.backprice = maxprice.ToString("0");
+                //ViewBag.backprice = maxprice.ToString("0");
             }
 
             DateTime mindate = DateTime.Now, maxdate = DateTime.Now;
@@ -147,8 +147,8 @@ namespace prjBookMvcCore.Controllers
             ViewBag.backdate = maxdate.ToString("yyyy-MM-dd");
 
             ViewBag.KeyWord = txtKeyword;
-            //ViewBag.frontprice = minprice;
-            //ViewBag.backprice = maxprice;
+            ViewBag.frontprice = minprice.ToString("0");
+            ViewBag.backprice = maxprice.ToString("0");
             ViewBag.frontdiscount = frontdiscount;
             ViewBag.backdiscount = backdiscount;
             //ViewBag.frontdate = frontdate;
