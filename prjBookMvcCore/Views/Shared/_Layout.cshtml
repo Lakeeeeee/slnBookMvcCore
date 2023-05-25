@@ -122,13 +122,13 @@
                         @{
                             if (_userInforService.UserId != 0)
                             {
-                                                <li> Hi! @_userInforService.UserName </li>
-                                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/LogOut">登出</a></li>
+                                <li> Hi! @_userInforService.UserName </li>
+                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/LogOut">登出</a></li>
                             }
                             else
                             {
-                                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/Login">登入</a></li>
-                                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/Signin">註冊</a></li>
+                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/Login">登入</a></li>
+                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/Signin">註冊</a></li>
                             }
                         }
                         <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/MemberCenter">會員中心</a></li>
@@ -138,29 +138,31 @@
                         @{
                             if (_userInforService.UserId == 0)
                             {
-                                                <p>尚未登入</p>
+                                <p>尚未登入</p>
                             }
                             else
                             {
-                                                <p>購物車預覽</p>
-                                                <table>
-                                                    @{
-                                        var totalprice = 0;
-                                        var cart = db.ActionDetials.Where(a => a.MemberId == _userInforService.UserId & a.ActionId == 7).Select(a => new { a.BookId, a.Book.BookTitle, a.Book.CoverPath, a.Book.UnitPrice, a.ActionToBookId }).ToList();
-                                        foreach (var g in cart)
-                                        {
-                                            var dis = db.BookDiscountDetails.Where(d => d.BookId == g.BookId & d.BookDiscountStartDate < DateTime.Now & d.BookDiscountEndDate > DateTime.Now).Select(d => new { d.BookDiscount.BookDiscountAmount }).ToList();
-                                            <tr><td rowspan="4" class="p-1"><a href="~/Book/BookInformation/@g.BookId"><img src="~/Image/Book/@g.CoverPath" class="d-block w-100 img-with-border" /></a></td><td><a class="bookCaption" href="~/Book/BookInformation/@g.BookId">@(g.BookTitle.Split("$")[0])</a></td></tr>
-                                                                            <tr><td>原價：<del style="color:red;font-style:oblique">@((int)Math.Round(g.UnitPrice)) </del>  元</td></tr>
-                                                                            <tr class="m-1"><td> 優惠價：<span style="color: #E3007F; ">@((dis[0].BookDiscountAmount * 100).ToString("0"))</span> 折 <span style="color: #E3007F;font-weight:bold;"> @((int)Math.Round(g.UnitPrice * dis[0].BookDiscountAmount)) </span>元</td></tr>
-                                            totalprice = totalprice + (int)Math.Round(g.UnitPrice * dis[0].BookDiscountAmount);
-                                                                            <tr><td style="text-align:right"><a role="button" onclick="cartDel(@g.ActionToBookId)" class="btn btn-outline-info">刪除 </a></td></tr>
+                                <p>購物車預覽</p>
+                                <div style="max-height:600px ;overflow:auto">
+                                    <table>
+                                        @{
+                                            var totalprice = 0;
+                                            var cart = db.ActionDetials.Where(a => a.MemberId == _userInforService.UserId & a.ActionId == 7).Select(a => new { a.BookId, a.Book.BookTitle, a.Book.CoverPath, a.Book.UnitPrice, a.ActionToBookId }).ToList();
+                                            foreach (var g in cart)
+                                            {
+                                                var dis = db.BookDiscountDetails.Where(d => d.BookId == g.BookId & d.BookDiscountStartDate < DateTime.Now & d.BookDiscountEndDate > DateTime.Now).Select(d => new { d.BookDiscount.BookDiscountAmount }).ToList();
+                                                <tr><td rowspan="4" class="p-1"><a href="~/Book/BookInformation/@g.BookId"><img src="~/Image/Book/@g.CoverPath" class="d-block w-100 img-with-border" /></a></td><td><a class="bookCaption" href="~/Book/BookInformation/@g.BookId">@(g.BookTitle.Split("$")[0])</a></td></tr>
+                                                <tr><td>原價：<del style="color:red;font-style:oblique">@((int)Math.Round(g.UnitPrice)) </del>  元</td></tr>
+                                                <tr class="m-1"><td> 優惠價：<span style="color: #E3007F; ">@((dis[0].BookDiscountAmount * 100).ToString("0"))</span> 折 <span style="color: #E3007F;font-weight:bold;"> @((int)Math.Round(g.UnitPrice * dis[0].BookDiscountAmount)) </span>元</td></tr>
+                                                totalprice = totalprice + (int)Math.Round(g.UnitPrice * dis[0].BookDiscountAmount);
+                                                <tr><td style="text-align:right"><a role="button" onclick="cartDel(@g.ActionToBookId)" class="btn btn-outline-info">刪除 </a></td></tr>
+                                            }
                                         }
-                                                    }
-                                                </table>
-                                                <hr />
-                                                <p style="text-align:center">已選購 @cart.Count 件商品，共<span style="color: #E3007F;font-weight:bold;"> @totalprice </span>元。</p>
-                                                <div style="text-align:center"> <a role="button" class="btn btn-outline-danger" href="~/Order/ShoppingCart"> 結帳</a></div>
+                                    </table>
+                                </div>
+                                <hr />
+                                <p style="text-align:center">已選購 @cart.Count 件商品，共<span style="color: #E3007F;font-weight:bold;"> @totalprice </span>元。</p>
+                                <div style="text-align:center"> <a role="button" class="btn btn-outline-danger" href="~/Order/ShoppingCart"> 結帳</a></div>
                             }
                         }
                     </div>
