@@ -36,6 +36,7 @@ namespace TestProject
             // 執行搜尋功能
             IActionResult result = homeController.searchList(txtKeyword, frontprice, backprice, frontdiscount, backdiscount, frontdate, backdate);
 
+            Assert.IsNotNull(result);
             // 驗證結果類型
             Assert.IsInstanceOf<ViewResult>(result);
 
