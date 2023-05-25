@@ -36,7 +36,7 @@
                         <p class="h5" style="font:bold">
                             @item.OrderDiscount.OrderDiscountnName
                             <div class="small ">@item.OrderDiscount.OrderDiscountDescprtion</div>
-                        </p><span class="small"> 使用期限至: @item.OrderDiscountEndDate</span>
+                        </p><span class="small"> 使用期限：@item.OrderDiscountStartDate.ToString("yyyy/MM/dd") ~ @item.OrderDiscountEndDate.AddDays(-1).ToString("yyyy/MM/dd")</span>
                     </a>
                 </div>
             </div>
