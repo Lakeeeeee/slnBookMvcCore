@@ -59,8 +59,16 @@
             align-items: center; /* 內容區塊水平置中 */
         }
 
-        .fontsize {
+        .fontsize24 {
+            font-size: 24px;
+        }
+
+        .fontsize20 {
             font-size: 20px;
+        }
+
+        .fontsize18 {
+            font-size: 16px;
         }
 
         a:link, a:visited {
@@ -114,10 +122,10 @@
             <div class="container">
                 @*LOGO開始*@
                 <div class="align-items-start" style="font-weight:900">
-                    @Html.ActionLink("讀本", "Home", "Home", new { area = "" }, new { @class = "fontsize navbar-brand" })  @*須換圖*@
+                    @Html.ActionLink("讀本", "Home", "Home", new { area = "" }, new { @class = "fontsize24 navbar-brand" })  @*須換圖*@
                 </div>
                 @*登入選項開始*@
-                <div class="justify-content-end menu">
+                <div class="fontsize20 justify-content-end menu">
                     <ul class="zero">
                         @{
                             if (_userInforService.UserId != 0)
@@ -171,43 +179,40 @@
         </nav>
         @*導覽結束*@
         @*分類 & 搜尋開始*@
-        <div class="navbar navbar-default navbar-fixed-top" style="">
+        <div class="navbar navbar-default navbar-fixed-top">
             <div class="navbar navbar-light bg-light container" style="border:1px solid #000000; background-color:#ebf8bc">
                 @*分類*@
-                <form class="justify-content-start">
+                <div class="justify-content-start">
                     <div class="menu">
                         <ul class="zero">
-                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Promotions/Promotions活動圖">活動專區</a></li>
-                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Promotions/Promotions活動總覽圖">推薦專文</a></li>
-                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Promotions/Promotions領取當周優惠">領取優惠劵</a></li>
+                            <li><a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" href="~/Promotions/Promotions活動圖">活動專區</a></li>
+                            <li><a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" href="~/Promotions/Promotions活動總覽圖">推薦專文</a></li>
+                            <li><a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" href="~/Promotions/Promotions領取當周優惠">領取優惠劵</a></li>
                             <li>
-                                <a role="button" class="btn btn-sm btn-outline-secondary mx-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="15">人文社科</a>
+                                <a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="15">人文社科</a>
                             </li>
                             <li>
-                                <a role="button" class="btn btn-sm btn-outline-secondary mx-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="16">心理勵志</a>
+                                <a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="16">心理勵志</a>
                             </li>
                             <li>
-                                <a role="button" class="btn btn-sm btn-outline-secondary mx-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="19">生活風格</a>
+                                <a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="19">生活風格</a>
                             </li>
                             <li>
-                                <a role="button" class="btn btn-sm btn-outline-secondary mx-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="21">自然科普</a>
+                                <a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="23">旅遊</a>
                             </li>
                             <li>
-                                <a role="button" class="btn btn-sm btn-outline-secondary mx-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="23">旅遊</a>
+                                <a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="24">商業理財</a>
                             </li>
-                            <li>
-                                <a role="button" class="btn btn-sm btn-outline-secondary mx-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="24">商業理財</a>
-                            </li>
-                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Home/Menu">更多書籍</a></li>
+                            <li><a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" href="~/Home/Menu">更多書籍</a></li>
                         </ul>
                     </div>
-                </form>
+                </div>
                 @*搜尋*@
-                <form class="justify-content-end">
-                    <div class="input-group navbar navbar-light bg-light menu">
-                        <input id="search_input" style="border-right: #C4C4C4 2px solid;" placeholder="輸入關鍵字" name="keyword" type="text" class="mx-1 form-control inputForSearch ui-autocomplete-input" maxlength="40" value="" autocomplete="off">
+                <div class="justify-content-end">
+                    <div class="input-group bg-light menu">
+                        <input id="search_input" style="border-right: #C4C4C4 2px solid;" placeholder="輸入關鍵字" name="keyword" type="text" class="fontsize18 mx-1 form-control inputForSearch ui-autocomplete-input" maxlength="40" value="" autocomplete="off">
                         <div class="dropdown">
-                            <button class="btn btn-sm btn-outline-secondary mx-1 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="fontsize18 btn btn-outline-secondary mx-1 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                 進階搜尋
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="width:500px">
@@ -258,7 +263,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <a href="#" id="search_link" type="submit" class="btn btn-sm btn-outline-secondary mx-1" value="搜尋">搜尋</a>
+                        <a role="button" href="#" id="search_link" type="submit" style="border-radius:5px" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" value="搜尋">搜尋</a>
                         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                         <script>
                             $(document).ready(function () {
@@ -303,7 +308,7 @@
                             });
                         </script>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
         @*分類 & 搜尋結束*@
