@@ -15,6 +15,12 @@ namespace prjBookMvcCore.Controllers
         public IActionResult BookInformation(int id)
         {
             int bookId = id;
+
+            //莫名其妙的bug，隨便設一個
+            if(bookId == 0)
+            {
+                bookId = 3;
+            }
             var query = from b in db.Books
                         where b.BookId == bookId
                         select new
