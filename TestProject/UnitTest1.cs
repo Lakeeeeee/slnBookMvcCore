@@ -16,7 +16,7 @@ namespace TestProject
             using (var db = new BookShopContext())
             {
                 var category = db.Categories.FirstOrDefault(c => c.CategoryId == categoryId);
-                return category?.CategoryName;
+                return category.CategoryName;
             }
         }
 
