@@ -94,7 +94,6 @@ namespace prjBookMvcCore.Controllers
             }
         }
 
-
         public IActionResult QA()
         {
             return View();
@@ -148,8 +147,8 @@ namespace prjBookMvcCore.Controllers
             ViewBag.backdate = maxdate.ToString("yyyy-MM-dd");
 
             ViewBag.KeyWord = txtKeyword;
-            ViewBag.frontprice = minprice;
-            ViewBag.backprice = maxprice;
+            //ViewBag.frontprice = minprice;
+            //ViewBag.backprice = maxprice;
             ViewBag.frontdiscount = frontdiscount;
             ViewBag.backdiscount = backdiscount;
             //ViewBag.frontdate = frontdate;
