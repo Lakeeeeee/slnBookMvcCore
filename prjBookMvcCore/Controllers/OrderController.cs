@@ -50,11 +50,11 @@ namespace prjBookMvcCore.Controllers
                 ActionDetial tool = _db.ActionDetials.Find(item);
                 ShoppingcartInformation x = new ShoppingcartInformation() { ActionDetial = tool };
                 newCart.Add(x);
-            } ;
+            };
 
-            for(int n= 0; n<newCart.Count(); n++)
+            for (int n = 0; n < newCart.Count(); n++)
             {
-                newCart[n].Quantity= quantity[n];
+                newCart[n].Quantity = quantity[n];
             };
 
             return Json(newCart);
@@ -97,13 +97,13 @@ namespace prjBookMvcCore.Controllers
             _db.Orders.Add(order);
             _db.SaveChanges();
 
-			string oDValue = form["oD"];
-			int oD;
-			if (int.TryParse(oDValue, out oD))
-			{
-				order.OrderDiscountId = oD;
-				var q = _db.OrderDiscountDetails.Include(x => x.OrderDiscount).Where(x => x.OrderDiscountId == oD && x.MemberId == _user.UserId).FirstOrDefault();
-				if(q != null)
+            string oDValue = form["oD"];
+            int oD;
+            if (int.TryParse(oDValue, out oD))
+            {
+                order.OrderDiscountId = oD;
+                var q = _db.OrderDiscountDetails.Include(x => x.OrderDiscount).Where(x => x.OrderDiscountId == oD && x.MemberId == _user.UserId).FirstOrDefault();
+                if (q != null)
                 {
                     if (q.OrderDiscount.DiscountTypeId == 2)
                     {
@@ -111,9 +111,9 @@ namespace prjBookMvcCore.Controllers
                         _db.SaveChanges();
                     };
                 }
-			}
-			else
-			{
+            }
+            else
+            {
                 // 解析失敗，oDValue 為 null 或無效的整數表示
                 // 在此處理相應的邏輯
                 order.OrderDiscountId = 7;
@@ -148,12 +148,12 @@ namespace prjBookMvcCore.Controllers
             foreach (var item in acids)
             {
                 int bookid = _db.ActionDetials.Where(x => x.ActionToBookId == item).Select(x => x.BookId).FirstOrDefault();
-                decimal 折扣 = _db.BookDiscountDetails.Include(x=>x.BookDiscount).Where(x=>x.BookId==bookid).Select(x=>x.BookDiscount).Select(x=>x.BookDiscountAmount).FirstOrDefault();
+                decimal 折扣 = _db.BookDiscountDetails.Include(x => x.BookDiscount).Where(x => x.BookId == bookid).Select(x => x.BookDiscount).Select(x => x.BookDiscountAmount).FirstOrDefault();
                 decimal bookPrice = _db.Books.Find(bookid).UnitPrice;
                 OrderDetail orderDetail = new OrderDetail();
                 orderDetail.BookId = bookid;
                 orderDetail.OrderId = order.OrderId;
-                orderDetail.UnitPrice= bookPrice* 折扣;
+                orderDetail.UnitPrice = bookPrice * 折扣;
                 list.Add(orderDetail);
             };
 
@@ -168,7 +168,7 @@ namespace prjBookMvcCore.Controllers
             isSuccess = true;
 
             //刪除購物車
-            foreach(int item in acids)
+            foreach (int item in acids)
             {
                 ActionDetial tool = _db.ActionDetials.Find(item);
                 _db.ActionDetials.Remove(tool);
@@ -196,17 +196,17 @@ namespace prjBookMvcCore.Controllers
             List<OrderDiscount> discounts = new List<OrderDiscount>();
             if (total > 1000)
             {
-                int index = (int)_db.MemberLevels.Where(x=>x.LevelId==_user.UserLevelId).Select(x=>x.OrderDiscountId).FirstOrDefault();
+                int index = (int)_db.MemberLevels.Where(x => x.LevelId == _user.UserLevelId).Select(x => x.OrderDiscountId).FirstOrDefault();
                 OrderDiscount memberDiscount = _db.OrderDiscounts.Find(index);
                 discounts.Add(memberDiscount);
             };
-            
-            var coupons = _db.OrderDiscountDetails.Where(x=>x.MemberId==_user.UserId && x.IsOrderDiscountUse=="N").Select(x=>x.OrderDiscount);
-            
+
+            var coupons = _db.OrderDiscountDetails.Where(x => x.MemberId == _user.UserId & x.OrderDiscountStartDate < DateTime.Now & x.OrderDiscountEndDate > DateTime.Now & x.IsOrderDiscountUse == "N").Select(x => x.OrderDiscount);
+
             //庫碰判斷滿額
-            foreach(var coupon in coupons)
+            foreach (var coupon in coupons)
             {
-                if (total>coupon.OrderDiscountCondition)
+                if (total > coupon.OrderDiscountCondition)
                 {
                     discounts.Add(coupon);
                 }
@@ -227,7 +227,7 @@ namespace prjBookMvcCore.Controllers
         }
         public IActionResult checkOutFinal(int id)
         {
-            Order order = _db.Orders.Include(x=>x.Member).Include(x=>x.OrderDetails).ThenInclude(x=>x.Book).Where(x => x.OrderId == id).FirstOrDefault();
+            Order order = _db.Orders.Include(x => x.Member).Include(x => x.OrderDetails).ThenInclude(x => x.Book).Where(x => x.OrderId == id).FirstOrDefault();
             return View(order);
         }
     }

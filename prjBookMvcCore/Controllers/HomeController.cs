@@ -132,6 +132,8 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult searchList(string txtKeyword, decimal frontPrice, decimal backPrice, decimal frontdiscount, decimal backdiscount, DateTime frontdate, DateTime backdate)
         {
+            ViewBag.KeyWord = txtKeyword;
+
             //從資料庫中取得最小值和最大值
             decimal minprice = db.Books.Min(b => b.UnitPrice);
             decimal maxprice = db.Books.Max(b => b.UnitPrice);

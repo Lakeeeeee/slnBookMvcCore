@@ -51,9 +51,9 @@
     </style>
 </head>
 <body>
-    <h1>SearchTest</h1>
+    <h1>搜尋結果</h1>
 
-    <p>Keyword: @ViewBag.KeyWord</p>
+    <p>搜尋關鍵字： @ViewBag.KeyWord</p>
     @{
         if (Model != null)
         {
@@ -65,7 +65,7 @@
                             <div class="card ">
                                 <div class="card-header">欄位 </div>
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item"><a href="#書名/ISBN" title="移至 書名/ISBN ">書名/ISBN (@Model.cSearchBook.Count())</a></li>
+                                    <li class="list-group-item"><a href="#書名/ISBN" title="移至 書名/ISBN ">搜尋結果：(@Model.cSearchBook.Count())</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -109,8 +109,6 @@
                                                             加入購物車
                                                         </button>
                                                     </li>
-                                                    <li class="bookCaption two-lines">@item.book.ContentIntro</li>
-                                                    <li class="bookCaption two-lines">@item.book.TryContent</li>
                                                 </ul>
                                             </div>
                                         </div>
