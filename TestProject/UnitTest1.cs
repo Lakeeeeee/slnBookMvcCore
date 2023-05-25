@@ -27,11 +27,11 @@ namespace TestProject
 
             // Act
             IActionResult result = categoryController.分類頁面(18, 0, 1);
-            ViewResult viewResult = result as ViewResult;
-            var menuInformation = viewResult.Model as MenuInformation;
-            var categoryName = GetCategoryNameById(menuInformation.categoryId);
+            ViewResult? viewResult = result as ViewResult;
+            var menuInformation = viewResult?.Model as MenuInformation;
+            string? categoryName = GetCategoryNameById(menuInformation.categoryId);
 
-            Assert.AreEqual("日中對照", categoryName);
+            Assert.That(categoryName, Is.EqualTo("日中對照"));
         }
     }
 }
