@@ -449,6 +449,8 @@ namespace prjBookMvcCore.Models
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
+                entity.Property(e => e.CostAmount).HasDefaultValueSql("((0))");
+
                 entity.Property(e => e.LevelId)
                     .HasColumnName("LevelID")
                     .HasDefaultValueSql("((1))");
@@ -472,7 +474,6 @@ namespace prjBookMvcCore.Models
                 entity.HasOne(d => d.Level)
                     .WithMany(p => p.Members)
                     .HasForeignKey(d => d.LevelId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Member_MemberLevel");
 
                 entity.HasOne(d => d.Payment)
