@@ -1,6 +1,6 @@
 ﻿@using prjBookMvcCore.ViewModel
 @model OrderViewModel
-
+@Html.AntiForgeryToken()
 @{
     ViewBag.Title = "訂單確認";
     Layout = "~/Views/Shared/_Layout.cshtml";

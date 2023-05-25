@@ -220,6 +220,7 @@ namespace prjBookMvcCore.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult checkOutConfirm(OrderViewModel model)
         {
 
