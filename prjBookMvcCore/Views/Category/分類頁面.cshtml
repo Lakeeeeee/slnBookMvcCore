@@ -173,7 +173,7 @@
                                 @if (Model.CurrentPage > 1)
                                 {
                                     <li class="page-item">
-                                        <a class="page-link" href="@Url.Action("分類頁面", new { id = Model.categoryId, page = Model.CurrentPage - 1 })" aria-label="Previous">
+                                        <a class="page-link" href="@Url.Action("分類頁面", new { id = Model.categoryId, subid = Model.subcategoryId, page = Model.CurrentPage - 1 })" aria-label="Previous">
                                             <span aria-hidden="true">&laquo;</span>
                                             <span class="sr-only">前一頁</span>
                                         </a>
@@ -182,13 +182,13 @@
                                 @for (int i = 1; i <= Model.TotalPages; i++)
                                 {
                                     <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                                        <a class="page-link" href="@Url.Action("分類頁面", new { id = Model.categoryId, page = i })">@i</a>
+                                        <a class="page-link" href="@Url.Action("分類頁面", new { id = Model.categoryId, subid = Model.subcategoryId, page = i })">@i</a>
                                     </li>
                                 }
                                 @if (Model.CurrentPage < Model.TotalPages)
                                 {
                                     <li class="page-item">
-                                        <a class="page-link" href="@Url.Action("分類頁面", new { id = Model.categoryId, page = Model.CurrentPage + 1 })" aria-label="Next">
+                                        <a class="page-link" href="@Url.Action("分類頁面", new { id = Model.categoryId, subid = Model.subcategoryId, page = Model.CurrentPage + 1 })" aria-label="Next">
                                             <span aria-hidden="true">&raquo;</span>
                                             <span class="sr-only">下一頁</span>
                                         </a>

@@ -153,7 +153,7 @@ namespace prjBookMvcCore.Controllers
                 OrderDetail orderDetail = new OrderDetail();
                 orderDetail.BookId = bookid;
                 orderDetail.OrderId = order.OrderId;
-                orderDetail.UnitPrice = bookPrice * 折扣;
+                orderDetail.UnitPrice = Math.Ceiling(bookPrice * 折扣);
                 list.Add(orderDetail);
             };
 
