@@ -25,6 +25,7 @@ using NuGet.Protocol;
 using System.Configuration;
 using System;
 using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
+using Newtonsoft.Json;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -366,13 +367,39 @@ namespace prjBookMvcCore.Controllers
             return Content(isSuccess.ToString());
         }
 
-        public IActionResult addCart()
+        public string ActionTo(int bookID, int memberID, int actionID)
         {
+            bool isSuccess = true;
 
+            var query = from ad in _bookShopContext.ActionDetials
+                        where ad.ActionId == actionID && ad.MemberId == memberID && ad.BookId == bookID
+                        select ad;
+            if (query.Count() != 0)
+            {
+                isSuccess = false;
+            }
+            else
+            {
+                ActionDetial newAd = new ActionDetial
+                {
+                    ActionId = actionID,
+                    BookId = bookID,
+                    MemberId = memberID,
+                };
+                _bookShopContext.ActionDetials.Add(newAd);
+                _bookShopContext.SaveChanges();
 
-
+                var q = _bookShopContext.ActionDetials.Where(x => x.MemberId == memberID & x.BookId == bookID & x.ActionId == 4).FirstOrDefault();
+                if(q != null)
+                {
+                    _bookShopContext.ActionDetials.Remove(q);
+                    _bookShopContext.SaveChanges();
+                }
+            }
+            string jsonData = JsonConvert.SerializeObject(isSuccess);
+            return jsonData;
         }
-             
+
 
         [Authorize]
         public IActionResult myPublisher() //關注的出版社方法

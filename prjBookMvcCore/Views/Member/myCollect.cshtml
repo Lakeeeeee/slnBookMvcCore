@@ -37,27 +37,26 @@
                         decimal 折扣 = item.BookDiscountDetails.Where(x => x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault();
                         int 活動價 = (int)Math.Ceiling(item.UnitPrice * 折扣);
                         int adcId = item.ActionDetials.Where(x => x.MemberId == user.UserId && x.BookId == item.BookId).Select(x => x.ActionToBookId).FirstOrDefault();
-                                        <tr>
-                                            <td>
-                                                @count
-                                            </td>
-                                            <td id="text-@item.BookId">
-                                                @item.BookTitle
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(item=>活動價) 元
-                                            </td>
-                                            <td>
-                                                @item.UnitInStock 本
-                                            </td>
-                                            <td>
-                                                @Html.ActionLink("來去購買", "BookInformation", "Book", new{id=item.BookId}, new{@class="btn btn-outline-secondary btn-sm"})
-                                                <button class="btn btn-outline-secondary" onclick="ActionTo(@item.BookId,@user.UserLevelId)">加入購物車</button>
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-outline-secondary btn-sm" name="id" value="@adcId" id="followCancle">取消追蹤</button>
-                                            </td>
-                                        </tr>
+                        <tr>
+                            <td>
+                                @count
+                            </td>
+                            <td id="text-@item.BookId">
+                                @Html.ActionLink(@item.BookTitle, "BookInformation", "Book", new{id=item.BookId}/*, new{@class="btn btn-outline-secondary btn-sm"}*/)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(item=>活動價) 元
+                            </td>
+                            <td>
+                                @item.UnitInStock 本
+                            </td>
+                            <td>
+                                <button class="btn btn-outline-secondary btn-sm" onclick="ActionTo(@item.BookId,@user.UserId)">加入購物車</button>
+                            </td>
+                            <td>
+                                <button class="btn btn-outline-secondary btn-sm" name="id" value="@adcId" id="followCancle">取消追蹤</button>
+                            </td>
+                        </tr>
                     }
                 }
             </table> @*//暫存清單*@
@@ -79,10 +78,14 @@
 </div>
 <script>
 
-    //async function ActionTo(bookid, memid) {
-    //    const response = await fetch(`@Url.Action("ActionTo", "Book")?bookID=${bookid}&memberID=${memid}&actionID=7`);
-    //    const 
-    //}
+    async function ActionTo(bookid, memid) {
+        const response = await fetch('@Url.Action("ActionTo", "Member")?bookID=' + bookid + '&memberID=' + memid + '&actionID=' + 7);
+        const confirm = await response.json();
+        if (confirm == true) {
+            alert('已經加入購物車!');
+            window.location.reload();
+        };
+    };
 
 
 </script>
@@ -91,7 +94,7 @@
     @foreach (var item in Model)
     {
         <text>
-            var b = document.getElementById('text-@item.BookId');
+                            var b = document.getElementById('text-@item.BookId');
             b.innerText = replaceDoubleDollarSign(b.innerText);
         </text>
     };
@@ -177,39 +180,7 @@
         window.location.href = url
     }
 </script>
-<script>
-    const btn4 = document.querySelector('#pills-4-tab');
-    btn4.addEventListener('click', async () => {
-        const response = await fetch('@Url.Action("myNotice")');
-        const dataobj = await response.json();
-        const datas = JSON.parse(dataobj).map(({ actionDetailId, bookId, bookStock, bookName }) => ({ acdid: actionDetailId, id: bookId, stock: bookStock, name: bookName }));
-        let count = 0;
-        const table = document.querySelector('#table3');
-        table.innerHTML = '';
-        const thead = table.createTHead();
-        const row = thead.insertRow();
-        row.insertCell().innerText = '序號';
-        row.insertCell().innerText = '書名';
-        row.insertCell().innerText = '庫存情況';
-        const tbody = table.createTBody();
-        datas.forEach(data => {
-            count = count + 1;
-            const row = tbody.insertRow();
-            row.insertCell().innerText = count;
-            row.insertCell().innerText = data.name;
-            row.insertCell().innerText = data.stock;
-            const btnHtml = `<button type="submit" name="id" value="${data.id}" class="btn btn-outline-secondary btn-sm" onclick="redirectToAction(${data.id})">來去購買</button>`;
-            row.insertCell().innerHTML = btnHtml;
-            const btnHtm2 = `<button class="btn btn-outline-secondary btn-sm" name="id" value="${data.id}" onclick="cancleAction(${data.acdid})">取消追蹤</button>`
-            row.insertCell().innerHTML = btnHtm2;
-        });
-        table.appendChild(thead, tbody);
-    });
-    function redirectToAction(id) {
-        const url = '@Url.Action("BookInformation", "Book")' + "?id=" + id;
-        window.location.href = url
-    };
-</script>
+
 <script>
     const cancleBtn = document.getElementById('followCancle');
     cancleBtn.addEventListener('click', function () {
@@ -228,5 +199,7 @@
             }
             window.location.href = window.location.href;
         }
-    }
+    };
+
+
 </script>
