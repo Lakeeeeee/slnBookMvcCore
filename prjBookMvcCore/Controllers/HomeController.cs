@@ -179,7 +179,6 @@ namespace prjBookMvcCore.Controllers
                                       backdiscount <= b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault() &&
 
                                       frontdate <= b.PublicationDate && backdate >= b.PublicationDate
-
                                       select new
                                       {
                                           書本ID = b.BookId,
@@ -193,7 +192,7 @@ namespace prjBookMvcCore.Controllers
                                           路徑 = b.CoverPath,
                                           折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                                           出版日期 = b.PublicationDate,
-                                      }).Distinct();
+                                      }).OrderByDescending(b => b.定價).Distinct();
                 }
                 else if (txtkeyword == null)
                 {
@@ -205,6 +204,7 @@ namespace prjBookMvcCore.Controllers
                                       backdiscount <= b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault() &&
 
                                       frontdate <= b.PublicationDate && backdate >= b.PublicationDate
+
                                       select new
                                       {
                                           書本ID = b.BookId,
@@ -218,7 +218,7 @@ namespace prjBookMvcCore.Controllers
                                           路徑 = b.CoverPath,
                                           折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                                           出版日期 = b.PublicationDate,
-                                      }).Distinct();
+                                      }).OrderByDescending(b => b.定價).Distinct();
                 }
                 else
                 {
@@ -236,7 +236,6 @@ namespace prjBookMvcCore.Controllers
                                       backdiscount <= b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault() &&
 
                          frontdate <= b.PublicationDate && backdate >= b.PublicationDate
-
                                       select new
                                       {
                                           書本ID = b.BookId,
@@ -250,7 +249,7 @@ namespace prjBookMvcCore.Controllers
                                           路徑 = b.CoverPath,
                                           折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                                           出版日期 = b.PublicationDate,
-                                      }).Distinct();
+                                      }).OrderByDescending(b => b.定價).Distinct();
                 }
 
                 CForHomePage cForHomePage = new CForHomePage();
