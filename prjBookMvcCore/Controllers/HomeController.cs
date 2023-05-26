@@ -163,94 +163,87 @@ namespace prjBookMvcCore.Controllers
             using (var db = new BookShopContext())
             {
                 IQueryable<dynamic> recommendBooks = null;
-                if (txtkeyword != null && frontPrice != 0 && backPrice != 0 && frontdiscount != 0 && backdiscount != 0 && frontdate != null && backdate != null)
+                if (txtkeyword != null && frontPrice != 0 && backPrice != 0 && frontdiscount != 0 && backdiscount != 0)
                 {
-                    recommendBooks = (from b in db.Books
-                                      where
-                                      ((b.BookTitle.Contains(txtkeyword) ||
-                                      b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault().Contains(txtkeyword)) ||
-                                      b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault().Contains(txtkeyword) ||
-                                      b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault().Contains(txtkeyword) ||
-                                      b.Publisher.PublisherName.Contains(txtkeyword)) &&
-
-                                      frontPrice <= b.UnitPrice && backPrice >= b.UnitPrice &&
-
-                                      frontdiscount >= b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault() &&
-                                      backdiscount <= b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault() &&
-
-                                      frontdate <= b.PublicationDate && backdate >= b.PublicationDate
-
-                                      select new
-                                      {
-                                          書本ID = b.BookId,
-                                          書名 = b.BookTitle,
-                                          作者 = b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault(),
-                                          繪者 = b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault(),
-                                          譯者 = b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault(),
-                                          出版社 = b.Publisher.PublisherName,
-                                          簡介=b.ContentIntro,
-                                          定價 = b.UnitPrice,
-                                          路徑 = b.CoverPath,
-                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
-                                          出版日期 = b.PublicationDate,
-                                      }).Distinct();
+                    recommendBooks = from b in db.Books
+                                     where
+                                     b.BookTitle.Contains(txtkeyword) ||
+                                     b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault().Contains(txtkeyword) ||
+                                     b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault().Contains(txtkeyword) ||
+                                     b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault().Contains(txtkeyword) ||
+                                     b.Publisher.PublisherName.Contains(txtkeyword) &&
+                                     frontPrice <= b.UnitPrice && backPrice >= b.UnitPrice &&
+                                     frontdiscount >= b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault() &&
+                                     backdiscount <= b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault() &&
+                                     frontdate <= b.PublicationDate && backdate >= b.PublicationDate
+                                     orderby b.UnitPrice
+                                     select new
+                                     {
+                                         書本ID = b.BookId,
+                                         書名 = b.BookTitle,
+                                         作者 = b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault(),
+                                         繪者 = b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault(),
+                                         譯者 = b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault(),
+                                         出版社 = b.Publisher.PublisherName,
+                                         簡介 = b.ContentIntro,
+                                         定價 = b.UnitPrice,
+                                         路徑 = b.CoverPath,
+                                         折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                         出版日期 = b.PublicationDate,
+                                     };
                 }
                 else if (txtkeyword == null)
                 {
-                    recommendBooks = (from b in db.Books
-                                      where
-                                      frontPrice <= b.UnitPrice && backPrice >= b.UnitPrice &&
-
-                                      frontdiscount >= b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault() &&
-                                      backdiscount <= b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault() &&
-
-                                      frontdate <= b.PublicationDate && backdate >= b.PublicationDate
-                                      select new
-                                      {
-                                          書本ID = b.BookId,
-                                          書名 = b.BookTitle,
-                                          作者 = b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault(),
-                                          繪者 = b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault(),
-                                          譯者 = b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault(),
-                                          出版社 = b.Publisher.PublisherName,
-                                          簡介 = b.ContentIntro,
-                                          定價 = b.UnitPrice,
-                                          路徑 = b.CoverPath,
-                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
-                                          出版日期 = b.PublicationDate,
-                                      }).Distinct();
+                    recommendBooks = from b in db.Books
+                                     where
+                                     frontPrice <= b.UnitPrice && backPrice >= b.UnitPrice &&
+                                     frontdiscount >= b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault() &&
+                                     backdiscount <= b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault() &&
+                                     frontdate <= b.PublicationDate && backdate >= b.PublicationDate
+                                     orderby b.UnitPrice
+                                     select new
+                                     {
+                                         書本ID = b.BookId,
+                                         書名 = b.BookTitle,
+                                         作者 = b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault(),
+                                         繪者 = b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault(),
+                                         譯者 = b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault(),
+                                         出版社 = b.Publisher.PublisherName,
+                                         簡介 = b.ContentIntro,
+                                         定價 = b.UnitPrice,
+                                         路徑 = b.CoverPath,
+                                         折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                         出版日期 = b.PublicationDate,
+                                     };
                 }
                 else
                 {
-                    recommendBooks = (from b in db.Books
-                                      where
-                                      (b.BookTitle.Contains(txtkeyword) ||
-                                      b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault().Contains(txtkeyword)) ||
-                                      b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault().Contains(txtkeyword) ||
-                                      b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault().Contains(txtkeyword) ||
-                                      b.Publisher.PublisherName.Contains(txtkeyword) &&
-
-                                      frontPrice <= b.UnitPrice && backPrice >= b.UnitPrice &&
-
-                                      frontdiscount >= b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault() &&
-                                      backdiscount <= b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault() &&
-
-                         frontdate <= b.PublicationDate && backdate >= b.PublicationDate
-
-                                      select new
-                                      {
-                                          書本ID = b.BookId,
-                                          書名 = b.BookTitle,
-                                          作者 = b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault(),
-                                          繪者 = b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault(),
-                                          譯者 = b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault(),
-                                          出版社 = b.Publisher.PublisherName,
-                                          簡介 = b.ContentIntro,
-                                          定價 = b.UnitPrice,
-                                          路徑 = b.CoverPath,
-                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
-                                          出版日期 = b.PublicationDate,
-                                      }).Distinct();
+                    recommendBooks = from b in db.Books
+                                     where
+                                     b.BookTitle.Contains(txtkeyword) ||
+                                     b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault().Contains(txtkeyword) ||
+                                     b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault().Contains(txtkeyword) ||
+                                     b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault().Contains(txtkeyword) ||
+                                     b.Publisher.PublisherName.Contains(txtkeyword) &&
+                                     frontPrice <= b.UnitPrice && backPrice >= b.UnitPrice &&
+                                     frontdiscount >= b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault() &&
+                                     backdiscount <= b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault() &&
+                                     frontdate <= b.PublicationDate && backdate >= b.PublicationDate
+                                     orderby b.UnitPrice
+                                     select new
+                                     {
+                                         書本ID = b.BookId,
+                                         書名 = b.BookTitle,
+                                         作者 = b.AuthorDetails.Select(x => x.Author.AuthorName).FirstOrDefault(),
+                                         繪者 = b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault(),
+                                         譯者 = b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault(),
+                                         出版社 = b.Publisher.PublisherName,
+                                         簡介 = b.ContentIntro,
+                                         定價 = b.UnitPrice,
+                                         路徑 = b.CoverPath,
+                                         折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                         出版日期 = b.PublicationDate,
+                                     };
                 }
 
                 CForHomePage cForHomePage = new CForHomePage();
@@ -260,7 +253,7 @@ namespace prjBookMvcCore.Controllers
                 {
                     count++;
 
-                    Book b = new Book { BookTitle = recommendBook.書名, BookId = recommendBook.書本ID, UnitPrice = recommendBook.定價, CoverPath = recommendBook.路徑, PublicationDate = recommendBook.出版日期, ContentIntro=recommendBook.簡介 };
+                    Book b = new Book { BookTitle = recommendBook.書名, BookId = recommendBook.書本ID, UnitPrice = recommendBook.定價, CoverPath = recommendBook.路徑, PublicationDate = recommendBook.出版日期, ContentIntro = recommendBook.簡介 };
                     BookDiscount bd = new BookDiscount { BookDiscountAmount = recommendBook.折扣 };
                     Author au = new Author { AuthorName = recommendBook.作者 };
                     Painter pa = new Painter { PainterName = recommendBook.繪者 };

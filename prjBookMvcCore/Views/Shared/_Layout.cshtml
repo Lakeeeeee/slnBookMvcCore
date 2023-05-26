@@ -1,9 +1,8 @@
 ﻿@inject UserInforService _userInforService
 @{
     BookShopContext db = new BookShopContext();
-    string disCount = db.OrderDiscountDetails.Where(x => x.MemberId == _userInforService.UserId& x.IsOrderDiscountUse=="N").Count().ToString();
+    string disCount = db.OrderDiscountDetails.Where(x => x.MemberId == _userInforService.UserId & x.IsOrderDiscountUse == "N" & x.OrderDiscountEndDate > DateTime.Now).Count().ToString();
     int mS = db.MessageMemberDetails.Where(x => x.MemberId == _userInforService.UserId && x.ReadStatu == 0).Count();
-    
 }
 
 <!DOCTYPE html>
@@ -203,8 +202,8 @@
                     <div class="menu">
                         <ul class="zero">
                             <li><a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" href="~/Promotions/Promotions活動圖">活動專區</a></li>
-                            <li><a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" href="~/Promotions/Promotions活動總覽圖">推薦專文</a></li>
                             <li><a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" href="~/Promotions/Promotions領取當周優惠">領取優惠劵</a></li>
+                            <li><a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" href="~/Promotions/Promotions活動總覽圖">推薦專文</a></li>
                             <li>
                                 <a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="23">旅遊</a>
                             </li>
@@ -270,9 +269,9 @@
                                 </div>
                                 <div class="m-1 p-1 dropdown-item">
                                     <span class="mx-2">出版日期</span>
-                                    <input id="frontdate" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="日期" type="date" maxlength="20" />
+                                    <input id="frontdate" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="日期" type="date" maxlength="20" value="2005-12-02" />
                                     <span class="mx-2">至</span>
-                                    <input id="backdate" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="日期" type="date" maxlength="20" />
+                                    <input id="backdate" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="日期" type="date" maxlength="20" value="2023-03-31" />
                                     <span class="mx-2">之間</span>
                                 </div>
                             </div>
@@ -302,17 +301,22 @@
                                         backdiscount = 1;
                                     }
 
-                                    //if (backPrice < frontPrice) {
-                                    //    [backPrice, frontPrice] = [frontPrice, backPrice];
-                                    //}
+                                    if (!keyword && !frontPrice && !backPrice && !frontdiscount && !backdiscount && !frontdate && !backdate) {
+                                        alert('請至少輸入一個搜尋條件');
+                                        return;
+                                    }
 
-                                    //if (backdiscount > frontdiscount) {
-                                    //    [backdiscount, frontdiscount] = [frontdiscount, backdiscount];
-                                    //}
+                                    if (backPrice < frontPrice) {
+                                        [backPrice, frontPrice] = [frontPrice, backPrice];
+                                    }
 
-                                    //if (backdate < frontdate) {
-                                    //    [backdate, frontdate] = [frontdate, backdate]
-                                    //}
+                                    if (backdiscount > frontdiscount) {
+                                        [backdiscount, frontdiscount] = [frontdiscount, backdiscount];
+                                    }
+
+                                    if (backdate < frontdate) {
+                                        [backdate, frontdate] = [frontdate, backdate]
+                                    }
 
                                     var url = '@Url.Action("searchList", "Home")' + '?txtKeyword=' + encodeURIComponent(keyword) + '&frontPrice=' + frontPrice + '&backPrice=' + backPrice + '&frontdiscount=' + frontdiscount + '&backdiscount=' + backdiscount + '&frontdate=' + frontdate + '&backdate=' + backdate;
                                     // 使用 Url.Action 方法动态生成 ActionLink 的 URL，并将关键字和价格范围作为参数传递
@@ -378,7 +382,7 @@
     window.addEventListener('DOMContentLoaded', function () {
         saveStartTime();
         resetCountdown(); // 重設計時器
-        // startCountdown();
+         startCountdown();
         //showPopup();
         var close隱藏浮動視窗 = document.querySelector('#close');
         close隱藏浮動視窗.addEventListener('click', function (event) {
@@ -417,7 +421,7 @@
         if (startTime) {
             const currentTime = Math.floor(Date.now() / 1000);
             const elapsedTime = currentTime - startTime;
-            const initialTime = 60 * 60; // 60 minutes
+            const initialTime = 60 * 60*24*100; // 60 minutes
             return Math.max(initialTime - elapsedTime, 0);
         }
         return 0;
