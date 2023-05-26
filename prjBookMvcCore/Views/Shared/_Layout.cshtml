@@ -1,6 +1,8 @@
 ﻿@inject UserInforService _userInforService
 @{
     BookShopContext db = new BookShopContext();
+    string disCount = db.OrderDiscountDetails.Where(x => x.MemberId == _userInforService.UserId& x.IsOrderDiscountUse=="N").Count().ToString();
+    int mS = db.MessageMemberDetails.Where(x => x.MemberId == _userInforService.UserId && x.ReadStatu == 0).Count();
 }
 
 <!DOCTYPE html>
@@ -131,6 +133,8 @@
                             if (_userInforService.UserId != 0)
                             {
                                 <li> Hi! @_userInforService.UserName </li>
+                                <li><a href="~/Member/myCoupons"> 優惠劵(@disCount)</a></li>
+                                <li><a href="~/Member/myMessage"> ｜未讀訊息(@mS) 封</a></li>
                                 <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/LogOut">登出</a></li>
                             }
                             else
