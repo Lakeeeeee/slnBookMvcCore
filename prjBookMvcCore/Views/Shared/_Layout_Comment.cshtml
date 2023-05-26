@@ -36,13 +36,14 @@
                 </ul>
             </div>
 
-
+            <div class="col-10">
+                <h2 class="mt-2">好書推薦</h2>
             @* Body *@
-            <div class="col-10 bg-light" @*style="border: 1px dashed #ff0000; border-radius: 5px"*@>
+            <div class="bg-light" @*style="border: 1px dashed #ff0000; border-radius: 5px"*@>
                 @RenderSection("test", required: false)
                 <section class="font14px">@RenderBody()</section>
             </div>
-
+            </div>
 
         </div>
 

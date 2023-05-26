@@ -27,47 +27,49 @@
 
 <div class="container">
     <div class="row">
-    @{
-        int countcommentTimeDate = 0;
-        foreach (var item in Model.commentStar)
-        {
-            <div class="col-6">
-                <div class="row mb-4">
-                    <div class="col text-center mb-6">
-                        <a href="/Book/BookInformation/@item.book.BookId#comment"><img height="150" src="~/Image/Book/@item.book.CoverPath" /></a>
-                    </div>
-                    <div class="col">
-                        <ul style="list-style:none; margin:0; padding:0;">
-                            <li class="bookCaption mb-2">@item.book.BookTitle.Replace("$$"," ")</li>
-                            <li>
-                                評論等級：<span class="star star-s">
-                                    @for (int x = 0; x < item.comment.Stars; x++)
-                                    {
-                                        <img style="width:20px; height:auto" src="~/image/icons8-star.gif" />
-                                    }
-                                </span>
-                            </li>
-                            <li>評論日期：@item.comment.CommentTime.ToString("yyyy-MM-dd")</li>
+        @{
+            int countcommentTimeDate = 0;
+            foreach (var item in Model.commentStar)
+            {
+                <div class="col-6">
+                    <div class="row mb-4">
+                        <div class="col text-center mb-6">
+                            <a href="/Book/BookInformation/@item.book.BookId#comment">
+                                <img height="150" src="~/Image/Book/@item.book.CoverPath" />
+                            </a>
+                        </div>
+                        <div class="col">
+                            <ul style="list-style:none; margin:0; padding:0;">
+                                <li class="bookCaption mb-2">@item.book.BookTitle.Replace("$$"," ")</li>
+                                <li>
+                                    評論等級：<span class="star star-s">
+                                        @for (int x = 0; x < item.comment.Stars; x++)
+                                        {
+                                            <img style="width:20px; height:auto" src="~/image/icons8-star.gif" />
+                                        }
+                                    </span>
+                                </li>
+                                <li>評論日期：@item.comment.CommentTime.ToString("yyyy-MM-dd")</li>
                                 <li class="col twolines bookCaption" style="color:gray">
                                     @item.comment.CommentText
                                 </li>
-                        </ul>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-                
-                    
-                
-            </div>
-            countcommentTimeDate++;
-            if (countcommentTimeDate % 2 == 0)
-            {
-                <div class="row"></div>
-                <hr />
 
-                <br />
+
+
+                </div>
+                countcommentTimeDate++;
+                if (countcommentTimeDate % 2 == 0)
+                {
+                    <div class="row"></div>
+                    <hr />
+
+                    <br />
+                }
             }
         }
-    }
     </div>
 </div>
 
