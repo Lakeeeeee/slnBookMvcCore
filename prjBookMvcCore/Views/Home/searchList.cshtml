@@ -1,11 +1,9 @@
 ﻿@model CForHomePage
 @inject UserInforService _userInforService
 @{
-    ViewData["Title"] = "searchList";
+    ViewData["Title"] = "搜尋結果";
 }
-@{
-    string Keyword = ViewBag.KeyWord;
-}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,6 +23,11 @@
         .one-lines {
             line-height: 1.2em; /* 調整需要的行高 */
             height: 1.3em; /* 行高的兩倍 */
+        }
+
+        .three-lines{
+            line-height: 1.2em; /* 調整需要的行高 */
+            height: 3.6em; /* 行高的兩倍 */
         }
 
         .clamp {
@@ -48,20 +51,20 @@
             position: sticky;
             top: 0;
         }
+
+        .infosmallfontsize {
+            font-size: 14px
+        }
     </style>
 </head>
 <body>
     <h1>搜尋結果</h1>
 
-    <p>搜尋條件：</p>
-    <p>關鍵字： @ViewBag.KeyWord</p>
     <p>
-        價錢範圍：@ViewBag.frontprice ~ @ViewBag.backprice
-    </p>
-    <p>
-        折扣範圍：@ViewBag.frontdiscount ~ @ViewBag.backdiscount
-    </p>
-    <p>
+        搜尋條件：<br />
+        關鍵字： @ViewBag.KeyWord<br />
+        價錢範圍：@ViewBag.frontprice ~ @ViewBag.backprice<br />
+        折扣範圍：@ViewBag.frontdiscount ~ @ViewBag.backdiscount<br />
         出版日期：@ViewBag.frontdate ~ @ViewBag.backdate
     </p>
 
@@ -83,7 +86,7 @@
                     </div>
                     @* Body *@
                     <div class="col">
-                        <div class="row" id="書名/ISBN">
+                        <div class="row" id="搜尋結果">
                             @{
                                 if (Model.cSearchBook.Count() != 0)
                                 {
@@ -91,35 +94,60 @@
                                     foreach (var item in Model.cSearchBook)
                                     {
                                         count++;
-                                        <div class="row mb-3">
-                                            <div class="col-2 clamp mb-3">
+                                        <div class="row">
+                                            <div class="col-2 clamp">
                                                 <a id="@item.book.BookId" href="~/Book/BookInformation/@item.book.BookId" title="@item.book.BookTitle">
                                                     <img width="150" src="/Image/Book/@item.book.CoverPath" />
                                                 </a>
                                             </div>
-                                            <div class="col">
+                                            <div class="col infosmallfontsize">
                                                 <ul style="list-style:none">
-                                                    <li class="bookCaption two-lines mb-1">@item.book.BookTitle.Replace("$$"," ")</li>
-                                                    <li>作者：@item.author.AuthorName</li>
-                                                    <li>繪者：@item.painter.PainterName</li>
-                                                    <li>譯者：@item.translator.TranslatorName</li>
+                                                    @{
+                                                        var highlightedTitle = item.book.BookTitle.Replace("$$", " ").Replace(ViewBag.KeyWord, $"<span style='color:red'>{ViewBag.KeyWord}</span>");
+                                                    }
+                                                    <li class="bookCaption two-lines mb-1" style="font-size:18px">@Html.Raw(highlightedTitle)</li>
+
+                                                    @{
+                                                        var highlightedAuthor = item.author?.AuthorName?.Replace("$$", " ").Replace(ViewBag.KeyWord, $"<span style='color:red'>{ViewBag.KeyWord}</span>");
+                                                    }
+                                                    @if (!string.IsNullOrEmpty(highlightedAuthor))
+                                                    {
+                                                        <li>作者：@Html.Raw(highlightedAuthor)</li>
+                                                    }
+
+                                                    @{
+                                                        var highlightedPainter = item.painter?.PainterName?.Replace("$$", " ").Replace(ViewBag.KeyWord, $"<span style='color:red'>{ViewBag.KeyWord}</span>");
+                                                    }
+                                                    @if (!string.IsNullOrEmpty(highlightedPainter))
+                                                    {
+                                                        <li>繪者：@Html.Raw(highlightedPainter)</li>
+                                                    }
+
+                                                    @{
+                                                        var highlightedTranslator = item.translator?.TranslatorName?.Replace("$$", " ").Replace(ViewBag.KeyWord, $"<span style='color:red'>{ViewBag.KeyWord}</span>");
+                                                    }
+                                                    @if (!string.IsNullOrEmpty(highlightedTranslator))
+                                                    {
+                                                        <li>譯者：@Html.Raw(highlightedTranslator)</li>
+                                                    }
+
                                                     <li>出版日期：@(item.book.PublicationDate.ToString("yyyy/MM/dd"))</li>
                                                     <li>
                                                         定價：
                                                         @(item.book.UnitPrice.ToString("0")) 元，
-                                                        優惠價：<span style="color: #E3007F;">
-                                                            @((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))
-                                                        </span>折
+                                                        優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
                                                         <span style="color: #E3007F;">@((int)Math.Ceiling(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
                                                     </li>
                                                     <li>
-                                                        <button class="btn btn-outline-warning btn-sm my-2" title="尚未建置" onclick="addToCart(@item.book.BookId,@_userInforService.UserId)">
+                                                        <button class="btn btn-outline-warning btn-sm mt-2" title="尚未建置" onclick="addToCart(@item.book.BookId,@_userInforService.UserId)">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
                                                                 <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z" />
                                                             </svg>
                                                             加入購物車
                                                         </button>
                                                     </li>
+                                                    <li class="mt-2">簡介：</li>
+                                                    <li class="bookCaption" style="color:gray">@item.book.ContentIntro</li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -132,6 +160,8 @@
                                 }
                             }
                         </div>
+
+
                     </div>
                 </div>
             </div>

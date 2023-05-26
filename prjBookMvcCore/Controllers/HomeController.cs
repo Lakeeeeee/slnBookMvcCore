@@ -188,6 +188,7 @@ namespace prjBookMvcCore.Controllers
                                           繪者 = b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault(),
                                           譯者 = b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault(),
                                           出版社 = b.Publisher.PublisherName,
+                                          簡介=b.ContentIntro,
                                           定價 = b.UnitPrice,
                                           路徑 = b.CoverPath,
                                           折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
@@ -212,6 +213,7 @@ namespace prjBookMvcCore.Controllers
                                           繪者 = b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault(),
                                           譯者 = b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault(),
                                           出版社 = b.Publisher.PublisherName,
+                                          簡介 = b.ContentIntro,
                                           定價 = b.UnitPrice,
                                           路徑 = b.CoverPath,
                                           折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
@@ -243,6 +245,7 @@ namespace prjBookMvcCore.Controllers
                                           繪者 = b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault(),
                                           譯者 = b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault(),
                                           出版社 = b.Publisher.PublisherName,
+                                          簡介 = b.ContentIntro,
                                           定價 = b.UnitPrice,
                                           路徑 = b.CoverPath,
                                           折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
@@ -257,7 +260,7 @@ namespace prjBookMvcCore.Controllers
                 {
                     count++;
 
-                    Book b = new Book { BookTitle = recommendBook.書名, BookId = recommendBook.書本ID, UnitPrice = recommendBook.定價, CoverPath = recommendBook.路徑, PublicationDate = recommendBook.出版日期 };
+                    Book b = new Book { BookTitle = recommendBook.書名, BookId = recommendBook.書本ID, UnitPrice = recommendBook.定價, CoverPath = recommendBook.路徑, PublicationDate = recommendBook.出版日期, ContentIntro=recommendBook.簡介 };
                     BookDiscount bd = new BookDiscount { BookDiscountAmount = recommendBook.折扣 };
                     Author au = new Author { AuthorName = recommendBook.作者 };
                     Painter pa = new Painter { PainterName = recommendBook.繪者 };
