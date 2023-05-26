@@ -366,6 +366,14 @@ namespace prjBookMvcCore.Controllers
             return Content(isSuccess.ToString());
         }
 
+        public IActionResult addCart()
+        {
+
+
+
+        }
+             
+
         [Authorize]
         public IActionResult myPublisher() //關注的出版社方法
         {
