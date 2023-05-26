@@ -42,7 +42,7 @@
                 <a class="text-decoration-none" href="~/Home/Home" style="color:black">首頁</a>
             </li>
             <li class="breadcrumb-item">
-                <a class="text-decoration-none" href="~/Promotions/Promotions活動總覽圖" style="color:black">活動</a>
+                <a class="text-decoration-none" href="~/Promotions/Promotions活動圖" style="color:black">活動</a>
             </li>
             <li class="breadcrumb-item">
                 <a class="text-decoration-none" href="~/Promotions/Promotions促銷活動" style="color:black">促銷活動</a>
@@ -72,7 +72,7 @@
                         <div class="card-header">推薦文章</div>
                         <ul class="list-group list-group-flush">
                             @{
-                                var Artical = db.Articals.OrderByDescending(a => a.ArticalId).Select(a => new { a.ArticalId, a.ArticalTitle }).Take(8);
+                                var Artical = db.Articals.OrderByDescending(a => a.ArticalId).Select(a => new { a.ArticalId, a.ArticalTitle }).Skip(10).Take(5);
                                 foreach (var g in Artical)
                                 {
                                     <li class="list-group-item"><span><a href="~/Promotions/Promotions活動文章Detail/@g.ArticalId">@g.ArticalTitle</a></span></li>
@@ -100,7 +100,7 @@
                                     <li>優惠截止日：@item.bookDiscountDetail.BookDiscountEndDate.AddDays(-1).ToString("yyyy/MM/dd")</li>
                                 </ul>
                                 <div style="text-align:center">
-                                    <a role="button" class="btn btn-outline-warning btn-sm" title="尚未建置" onclick="addToCart(@item.book.BookId,@_userInforService.UserId)">
+                                    <a role="button" class="btn btn-outline-warning btn-sm"  onclick="addToCart(@item.book.BookId,@_userInforService.UserId)">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
                                             <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z" />
                                         </svg>
