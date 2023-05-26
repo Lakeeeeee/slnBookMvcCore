@@ -132,15 +132,15 @@
                         @{
                             if (_userInforService.UserId != 0)
                             {
-                                <li> Hi! @_userInforService.UserLevelName 會員 @_userInforService.UserName </li>
-                                <li><a href="~/Member/myCoupons"> 優惠劵(@disCount)</a></li>
-                                <li><a href="~/Member/myMessage"> ｜未讀訊息(@mS) 封</a></li>
-                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/LogOut">登出</a></li>
+                                    <li style="display:-ms-inline-flexbox;align-items:flex-end "> Hi!    <img src="~/Image/@(_userInforService.UserLevelName).png" style="width:3%">@_userInforService.UserLevelName 會員 @_userInforService.UserName </li>
+                                    <li><a href="~/Member/myCoupons"> 優惠劵(@disCount)</a></li>
+                                    <li><a href="~/Member/myMessage"> ｜未讀訊息(@mS) 封</a></li>
+                                    <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/LogOut">登出</a></li>
                             }
                             else
                             {
-                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/Login">登入</a></li>
-                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/Signin">註冊</a></li>
+                                    <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/Login">登入</a></li>
+                                    <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/Signin">註冊</a></li>
                             }
                         }
                         <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/MemberCenter">會員中心</a></li>
@@ -150,43 +150,43 @@
                         @{
                             if (_userInforService.UserId == 0)
                             {
-                                <p>尚未登入</p>
+                                    <p>尚未登入</p>
                             }
                             else
                             {
-                                <p>購物車預覽</p>
-                                <div class="row" style="max-height:450px ;overflow:auto;">
-                                    @{
+                                    <p>購物車預覽</p>
+                                    <div class="row" style="max-height:450px ;overflow:auto;">
+                                        @{
                                         var totalprice = 0;
                                         var cart = db.ActionDetials.Where(a => a.MemberId == _userInforService.UserId & a.ActionId == 7).Select(a => new { a.BookId, a.Book.BookTitle, a.Book.CoverPath, a.Book.UnitPrice, a.ActionToBookId }).ToList();
                                         foreach (var g in cart)
                                         {
                                             var dis = db.BookDiscountDetails.Where(d => d.BookId == g.BookId & d.BookDiscountStartDate < DateTime.Now & d.BookDiscountEndDate > DateTime.Now).Select(d => new { d.BookDiscount.BookDiscountAmount }).ToList();
                                             totalprice = totalprice + (int)Math.Ceiling(g.UnitPrice * dis[0].BookDiscountAmount);
-                                            <div class="col-5"><a href="~/Book/BookInformation/@g.BookId"><img src="~/Image/Book/@g.CoverPath" class="d-block w-100 img-with-border" title="@g.BookTitle.Split("$")[0]" /></a></div>
-                                            <div class="col-7">
-                                                <div class="bookCaption"><a id="@g.BookId" href="~/Book/BookInformation/@g.BookId" title="@g.BookTitle.Split("$")[0]">@g.BookTitle.Split("$")[0]</a></div>
-                                                <div>原價：<del style="color:red;font-style:oblique">@((int)g.UnitPrice) </del> 元</div>
-                                                <div>優惠價：<span style="color: #E3007F; ">@((dis[0].BookDiscountAmount * 100).ToString("0"))</span>折<span style="color: #E3007F;font-weight:bold;">@((int)Math.Ceiling(g.UnitPrice * dis[0].BookDiscountAmount))</span>元</div>
-                                                <div style="text-align:right;" class="m-1">
-                                                    <a role="button" onclick="cartDel(@g.ActionToBookId)" class="btn btn-outline-info">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-x-fill" viewBox="0 0 16 16">
-                                                            <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7.354 5.646 8.5 6.793l1.146-1.147a.5.5 0 0 1 .708.708L9.207 7.5l1.147 1.146a.5.5 0 0 1-.708.708L8.5 8.207 7.354 9.354a.5.5 0 1 1-.708-.708L7.793 7.5 6.646 6.354a.5.5 0 1 1 .708-.708z" />
-                                                        </svg>刪除
-                                                    </a>
-                                                </div>
-                                            </div>  <hr />
+                                                    <div class="col-5"><a href="~/Book/BookInformation/@g.BookId"><img src="~/Image/Book/@g.CoverPath" class="d-block w-100 img-with-border" title="@g.BookTitle.Split("$")[0]" /></a></div>
+                                                    <div class="col-7">
+                                                        <div class="bookCaption"><a id="@g.BookId" href="~/Book/BookInformation/@g.BookId" title="@g.BookTitle.Split("$")[0]">@g.BookTitle.Split("$")[0]</a></div>
+                                                        <div>原價：<del style="color:red;font-style:oblique">@((int)g.UnitPrice) </del> 元</div>
+                                                        <div>優惠價：<span style="color: #E3007F; ">@((dis[0].BookDiscountAmount * 100).ToString("0"))</span>折<span style="color: #E3007F;font-weight:bold;">@((int)Math.Ceiling(g.UnitPrice * dis[0].BookDiscountAmount))</span>元</div>
+                                                        <div style="text-align:right;" class="m-1">
+                                                            <a role="button" onclick="cartDel(@g.ActionToBookId)" class="btn btn-outline-info">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-x-fill" viewBox="0 0 16 16">
+                                                                    <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7.354 5.646 8.5 6.793l1.146-1.147a.5.5 0 0 1 .708.708L9.207 7.5l1.147 1.146a.5.5 0 0 1-.708.708L8.5 8.207 7.354 9.354a.5.5 0 1 1-.708-.708L7.793 7.5 6.646 6.354a.5.5 0 1 1 .708-.708z" />
+                                                                </svg>刪除
+                                                            </a>
+                                                        </div>
+                                                    </div>  <hr />
                                         }
-                                    }
-                                </div>
-                                <p style="text-align:center">已選購 @cart.Count 件商品，共<span style="color: #E3007F;font-weight:bold;"> @totalprice </span>元。</p>
-                                <div style="text-align:center">
-                                    <a role="button" class="btn btn-outline-danger" href="~/Order/ShoppingCart">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-check-fill" viewBox="0 0 16 16">
-                                            <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-1.646-7.646-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708z" />
-                                        </svg>結帳
-                                    </a>
-                                </div>
+                                        }
+                                    </div>
+                                    <p style="text-align:center">已選購 @cart.Count 件商品，共<span style="color: #E3007F;font-weight:bold;"> @totalprice </span>元。</p>
+                                    <div style="text-align:center">
+                                        <a role="button" class="btn btn-outline-danger" href="~/Order/ShoppingCart">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-check-fill" viewBox="0 0 16 16">
+                                                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-1.646-7.646-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708z" />
+                                            </svg>結帳
+                                        </a>
+                                    </div>
                             }
                         }
                     </div>
@@ -250,7 +250,7 @@
                                             var bookDiscount = db.BookDiscounts.Select(dis => new { dis.BookDiscountId, dis.BookDiscountAmount, dis.BookDiscountName }).ToList();
                                             foreach (var dis in bookDiscount)
                                             {
-                                                <option value="@dis.BookDiscountAmount">@dis.BookDiscountName</option>
+                                                    <option value="@dis.BookDiscountAmount">@dis.BookDiscountName</option>
                                             }
                                         }
                                     </select>
@@ -260,7 +260,7 @@
                                         @{
                                             foreach (var dis in bookDiscount)
                                             {
-                                                <option value="@dis.BookDiscountAmount">@dis.BookDiscountName</option>
+                                                    <option value="@dis.BookDiscountAmount">@dis.BookDiscountName</option>
                                             }
                                         }
                                     </select>
