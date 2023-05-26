@@ -148,12 +148,12 @@ namespace prjBookMvcCore.Controllers
             foreach (var item in acids)
             {
                 int bookid = _db.ActionDetials.Where(x => x.ActionToBookId == item).Select(x => x.BookId).FirstOrDefault();
-                decimal 折扣 = _db.BookDiscountDetails.Include(x => x.BookDiscount).Where(x => x.BookId == bookid).Select(x => x.BookDiscount).Select(x => x.BookDiscountAmount).FirstOrDefault();
+                decimal 折扣 = _db.BookDiscountDetails.Include(x => x.BookDiscount).Where(x => x.BookId == bookid & x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount).Select(x => x.BookDiscountAmount).FirstOrDefault();
                 decimal bookPrice = _db.Books.Find(bookid).UnitPrice;
                 OrderDetail orderDetail = new OrderDetail();
                 orderDetail.BookId = bookid;
                 orderDetail.OrderId = order.OrderId;
-                orderDetail.UnitPrice = bookPrice * 折扣;
+                orderDetail.UnitPrice = Math.Ceiling(bookPrice * 折扣);
                 list.Add(orderDetail);
             };
 

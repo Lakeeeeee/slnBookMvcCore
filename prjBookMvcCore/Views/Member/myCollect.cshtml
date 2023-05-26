@@ -17,19 +17,15 @@
         <li class="nav-item" role="presentation">
             <button class="btn btn-outline-light " id="pills-3-tab" data-bs-toggle="pill" data-bs-target="#pills-3" type="button" role="tab" aria-controls="pills-3" aria-selected="false">收藏的出版社</button>
         </li>
-@*        <li class="nav-item" role="presentation">
-            <button class="btn btn-outline-light " id="pills-4-tab" data-bs-toggle="pill" data-bs-target="#pills-4" type="button" role="tab" aria-controls="pills-4" aria-selected="false">可購買時通知我</button>
-        </li>
-*@    </ul>
+    </ul>
     <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade show active" id="pills-1" role="tabpanel" aria-labelledby="pills-1-tab">
             <table class="table table-hover">
                 <tr>
                     <th style="width:50px">序號</th>
                     <th style="width:350px">書名</th>
-                    <th>優惠</th>
                     <th>優惠價</th>
-                    <th>出版社</th>
+                    <th>庫存量</th>
                     <th>來去購買</th>
                     <th>取消追蹤</th>
                 </tr>
@@ -38,33 +34,30 @@
                     foreach (var item in Model)
                     {
                         count++;
-                        string 活動 = item.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountName).FirstOrDefault()!;
-                        decimal 折扣 = item.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault();
-                        int 活動價 = Convert.ToInt32(item.UnitPrice * 折扣);
+                        decimal 折扣 = item.BookDiscountDetails.Where(x => x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault();
+                        int 活動價 = (int)Math.Ceiling(item.UnitPrice * 折扣);
                         int adcId = item.ActionDetials.Where(x => x.MemberId == user.UserId && x.BookId == item.BookId).Select(x => x.ActionToBookId).FirstOrDefault();
-                        <tr>
-                            <td>
-                                @count
-                            </td>
-                            <td id="text-@item.BookId">
-                                @item.BookTitle
-                            </td>
-                            <td>
-                                @活動
-                            </td>
-                            <td>
-                                @Html.DisplayFor(item=>活動價) 元
-                            </td>
-                            <td>
-                                @item.Publisher!.PublisherName
-                            </td>
-                            <td>
-                                @Html.ActionLink("來去購買", "BookInformation", "Book", new{id=item.BookId}, new{@class="btn btn-outline-secondary btn-sm"})
-                            </td>
-                            <td>
-                                <button class="btn btn-outline-secondary btn-sm" name="id" value="@adcId" id="followCancle">取消追蹤</button>
-                            </td>
-                        </tr>
+                                        <tr>
+                                            <td>
+                                                @count
+                                            </td>
+                                            <td id="text-@item.BookId">
+                                                @item.BookTitle
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(item=>活動價) 元
+                                            </td>
+                                            <td>
+                                                @item.UnitInStock 本
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink("來去購買", "BookInformation", "Book", new{id=item.BookId}, new{@class="btn btn-outline-secondary btn-sm"})
+                                                <button class="btn btn-outline-secondary" onclick="ActionTo(@item.BookId,@user.UserLevelId)">加入購物車</button>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-outline-secondary btn-sm" name="id" value="@adcId" id="followCancle">取消追蹤</button>
+                                            </td>
+                                        </tr>
                     }
                 }
             </table> @*//暫存清單*@
@@ -85,11 +78,20 @@
     </div>
 </div>
 <script>
+
+    //async function ActionTo(bookid, memid) {
+    //    const response = await fetch(`@Url.Action("ActionTo", "Book")?bookID=${bookid}&memberID=${memid}&actionID=7`);
+    //    const 
+    //}
+
+
+</script>
+<script>
     window.onload = function () {
     @foreach (var item in Model)
     {
         <text>
-                                    var b = document.getElementById('text-@item.BookId');
+            var b = document.getElementById('text-@item.BookId');
             b.innerText = replaceDoubleDollarSign(b.innerText);
         </text>
     };

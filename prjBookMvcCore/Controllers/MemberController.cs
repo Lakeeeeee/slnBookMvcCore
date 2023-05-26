@@ -102,7 +102,9 @@ namespace prjBookMvcCore.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Login(CLoginViewModel vm) //登入方法
         {
-            Member user = _bookShopContext.Members.Include(x => x.Level).Include(x => x.Orders).Include(x => x.MessageMemberDetails).FirstOrDefault(x => x.MemberEmail == vm.Account_P)!;
+            Member user = _bookShopContext.Members.Include(x => x.Level).
+                Include(x => x.Orders).Include(x => x.MessageMemberDetails).
+                FirstOrDefault(x => x.MemberEmail == vm.Account_P)!;
             if (user != null)
             {
                 if (user.MemberPassword == vm.Password_P)
@@ -111,6 +113,7 @@ namespace prjBookMvcCore.Controllers
                     {
                         new Claim("Id", user.MemberId.ToString()),
                         new Claim("UserLevelId", user.LevelId.ToString()),
+                        new Claim("UserLevelName", user.Level.LevelName),
                         new Claim(ClaimTypes.Name, user.MemberName),
                     };
 
@@ -316,8 +319,6 @@ namespace prjBookMvcCore.Controllers
             return Json(q.FirstOrDefault());
         }
 
-
-
         [Authorize]
         public IActionResult myMessage() //通知訊息頁面
         {
@@ -364,6 +365,14 @@ namespace prjBookMvcCore.Controllers
             }
             return Content(isSuccess.ToString());
         }
+
+        public IActionResult addCart()
+        {
+
+
+
+        }
+             
 
         [Authorize]
         public IActionResult myPublisher() //關注的出版社方法
@@ -414,30 +423,14 @@ namespace prjBookMvcCore.Controllers
             return RedirectToAction("myCollect");
         }
 
-
-        [Authorize]
-        public IActionResult myNotice() //可購買時通知我
-        {
-            var q = (from b in _bookShopContext.Books
-                     join ac in _bookShopContext.ActionDetials on b.BookId equals ac.BookId
-                     where ac.MemberId == _userInforService.UserId && ac.ActionId == 1
-                     select new
-                     {
-                         actionDetailId = ac.ActionToBookId,
-                         bookId = b.BookId,
-                         bookStock = (b.UnitInStock > 0) ? "可購買" : "缺貨中",
-                         bookName = b.BookTitle
-                     }).ToJson();
-
-            return Json(q);
-        }
         [Authorize]
         public IActionResult myCollect() //暫存清單頁面
         {
-            var q = from b in _bookShopContext.Books.Include(x => x.BookDiscountDetails).ThenInclude(x => x.BookDiscount).Include(x => x.ActionDetials).Include(x => x.Publisher)
-                    join acd in _bookShopContext.ActionDetials on b.BookId equals acd.BookId
-                    where (acd.MemberId == _userInforService.UserId && acd.ActionId == 4)
-                    select b;
+            var q = _bookShopContext.ActionDetials
+                .Where(x => x.MemberId == _userInforService.UserId && x.ActionId == 4)
+                .Include(x => x.Book.Publisher)
+                .Include(x => x.Book.BookDiscountDetails).ThenInclude(x => x.BookDiscount)
+                .Select(x => x.Book);
 
             return View(q);
         }

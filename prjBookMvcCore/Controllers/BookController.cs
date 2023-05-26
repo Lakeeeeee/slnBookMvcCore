@@ -205,6 +205,7 @@ namespace prjBookMvcCore.Controllers
             {
                 var q = from b in db.Books.Include("AuthorDetails.Author")
                         where b.AuthorDetails.Any(ad => ad.AuthorId == id)
+                        orderby b.PublicationDate
                         select b;
                 ViewData["authorID"] = id;
                 return View(q.ToList());
@@ -217,6 +218,7 @@ namespace prjBookMvcCore.Controllers
             {
                 var q = from b in db.Books.Include("TranslatorDetails.Translator")
                         where b.TranslatorDetails.Any(td => td.TranslatorId == id)
+                        orderby b.PublicationDate
                         select b;
                 ViewData["translatorID"] = id;
                 return View(q.ToList());
@@ -228,6 +230,7 @@ namespace prjBookMvcCore.Controllers
             {
                 var q = from b in db.Books.Include("PainterDetails.Painter")
                         where b.PainterDetails.Any(pd => pd.PainterId == id)
+                        orderby b.PublicationDate
                         select b;
                 ViewData["painterID"] = id;
                 return View(q.ToList());
@@ -239,6 +242,7 @@ namespace prjBookMvcCore.Controllers
             {
                 var q = from b in db.Books.Include("Publisher")
                         where b.PublisherId == id
+                        orderby b.PublicationDate
                         select b;
                 ViewData["publisherID"] = id;
                 return View(q.ToList());
