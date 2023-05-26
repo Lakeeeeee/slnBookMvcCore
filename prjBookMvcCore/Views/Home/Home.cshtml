@@ -123,7 +123,7 @@
                             <li class="text-center mb-3">
                                 <img height="150" src="~/Image/Book/@item?.book?.CoverPath" />
                             </li>
-                            <li class="bookCaption mb-2">@item?.book?.BookTitle.Replace("$$"," ")</li>
+                            <li class="bookCaption mb-2">@item?.book?.BookTitle.Split("$")[0]</li>
                             <li class="Price">原    價：<span>@((int)item.book.UnitPrice)元</span></li>
                             <li class="discPrice">
                                 優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
