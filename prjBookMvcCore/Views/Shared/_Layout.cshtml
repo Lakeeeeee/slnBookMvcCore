@@ -1,7 +1,7 @@
 ﻿@inject UserInforService _userInforService
 @{
     BookShopContext db = new BookShopContext();
-    string disCount = db.OrderDiscountDetails.Where(x => x.MemberId == _userInforService.UserId& x.IsOrderDiscountUse=="N").Count().ToString();
+    string disCount = db.OrderDiscountDetails.Where(x => x.MemberId == _userInforService.UserId & x.IsOrderDiscountUse == "N" & x.OrderDiscountEndDate > DateTime.Now).Count().ToString();
 }
 
 <!DOCTYPE html>
@@ -200,8 +200,8 @@
                     <div class="menu">
                         <ul class="zero">
                             <li><a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" href="~/Promotions/Promotions活動圖">活動專區</a></li>
-                            <li><a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" href="~/Promotions/Promotions活動總覽圖">推薦專文</a></li>
                             <li><a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" href="~/Promotions/Promotions領取當周優惠">領取優惠劵</a></li>
+                            <li><a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" href="~/Promotions/Promotions活動總覽圖">推薦專文</a></li>
                             <li>
                                 <a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="15">人文社科</a>
                             </li>
@@ -379,7 +379,7 @@
     window.addEventListener('DOMContentLoaded', function () {
         saveStartTime();
         resetCountdown(); // 重設計時器
-        // startCountdown();
+         startCountdown();
         //showPopup();
         var close隱藏浮動視窗 = document.querySelector('#close');
         close隱藏浮動視窗.addEventListener('click', function (event) {
@@ -418,7 +418,7 @@
         if (startTime) {
             const currentTime = Math.floor(Date.now() / 1000);
             const elapsedTime = currentTime - startTime;
-            const initialTime = 60 * 60; // 60 minutes
+            const initialTime = 60 * 60*24*100; // 60 minutes
             return Math.max(initialTime - elapsedTime, 0);
         }
         return 0;
