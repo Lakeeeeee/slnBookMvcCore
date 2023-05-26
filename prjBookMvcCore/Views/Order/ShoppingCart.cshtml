@@ -161,9 +161,9 @@
                                         <td>@count</td>
                                         <td>@bookTitle</td>
                                         <td>@item.discountName</td>
-                                        <td>@優惠價</td>
-                                        <td><input name="quantity" id="quantity_@item.ActionDetial.ActionToBookId" type="number" value="@item.Quantity" min="1" max="@item.Book.UnitInStock"></td>
-                                        <td id="subtotal">@小計</td>
+                                        <td>@優惠價 元</td>
+                                        <td><input name="quantity" id="quantity_@item.ActionDetial.ActionToBookId" type="number" value="@item.Quantity" min="1" max="@item.Book.UnitInStock">本</td>
+                                        <td id="subtotal">@小計 元</td>
                                         <td>
                                             <button class="btn btn-outline-secondary" onclick="cancle(@item.ActionDetial.ActionToBookId)">取消</button>
                                         </td>
@@ -285,7 +285,7 @@
                 <div class="row mt-4">
                     <h2>選擇付款方式</h2>
                     @{
-                        foreach (var item in db.Payments.Take(4))
+                        foreach (var item in db.Payments.Take(5))
                         {
                             <div>
                                 <input class="form-check-input" type="radio" name="paymentId" value="@item.PaymentId" checked>
@@ -549,17 +549,17 @@
         document.getElementById('shipAddr').innerText = '地址: ' + shipAddr;
         document.getElementById('paymentId').innerText = '付款方式: ' + paymentName;
         document.getElementById('shipmentId').innerText = '配送方式: ' + shipmentName;
-        document.getElementById('rebateAmount').innerText = '回饋金金額: ' + rebateAmount;
+        document.getElementById('rebateAmount').innerText = '回饋金折抵: ' + rebateAmount;
 
         // 判斷運費
         var freight = 0;
         if (shipmentId == 1) {
             freight = 120;
         } else if (shipmentId == 2) {
-            freight = 80;
+            freight = 60;
         }
         // 顯示
-        document.getElementById('freight').innerText = '運費: ' + freight;
+        document.getElementById('freight').innerText = '運費: ' + freight +'元';
 
         // 計算結帳金額
         var totalAmount = parseFloat(document.getElementById('totalAmount').innerText);
@@ -664,9 +664,9 @@
                                             <td>${index + 1}</td>
                                             <td>${item.book.bookTitle}</td>
                                             <td>${item.discountName}</td>
-                                            <td>${Math.floor(item.book.unitPrice * item.discountAmount)}</td>
+                                            <td>${Math.ceil(item.book.unitPrice * item.discountAmount)}元</td>
                                             <td><input name="quantity" value="${item.quantity}" class="cinput" type="text" readonly /></td>
-                                            <td>${Math.floor(item.quantity * (item.book.unitPrice * item.discountAmount))}</td>
+                                            <td>${Math.ceil(item.quantity * (item.book.unitPrice * item.discountAmount))}元</td>
                                         `;
             table2Body.appendChild(row);
             table2Body.appendChild(input);

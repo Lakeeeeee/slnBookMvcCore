@@ -9,6 +9,7 @@ using prjBookMvcCore.ViewModel;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Diagnostics;
 using System.Net;
+using System.Net.Mail;
 
 namespace prjBookMvcCore.Controllers
 {
