@@ -35,6 +35,14 @@ public class UserInforService
             return varCliams.Where(x => x.Type == ClaimTypes.Name).FirstOrDefault()!.Value;
         }
     }
+    public string UserLevelName
+    {
+        get
+        {
+            var varCliams = _contextAccessor.HttpContext!.User.Claims.ToList();
+            return varCliams.Where(x => x.Type == "UserLevelName").FirstOrDefault()!.Value;
+        }
+    }
 
     
 

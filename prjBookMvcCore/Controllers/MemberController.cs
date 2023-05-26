@@ -85,7 +85,7 @@ namespace prjBookMvcCore.Controllers
                         MemberId = newmember.MemberId
                     };
                     _bookShopContext.MessageSubscribes.Add(subscribe);
-                    writeCouponMessage(newmember, _bookShopContext);
+                   writeCouponMessage(newmember, _bookShopContext);
                 }
                 _bookShopContext.SaveChanges();
                 _cm.write註冊會員禮Letter(newmember, _bookShopContext);
@@ -102,7 +102,9 @@ namespace prjBookMvcCore.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Login(CLoginViewModel vm) //登入方法
         {
-            Member user = _bookShopContext.Members.Include(x => x.Level).Include(x => x.Orders).Include(x => x.MessageMemberDetails).FirstOrDefault(x => x.MemberEmail == vm.Account_P)!;
+            Member user = _bookShopContext.Members.Include(x => x.Level).
+                Include(x => x.Orders).Include(x => x.MessageMemberDetails).
+                FirstOrDefault(x => x.MemberEmail == vm.Account_P)!;
             if (user != null)
             {
                 if (user.MemberPassword == vm.Password_P)
@@ -111,6 +113,7 @@ namespace prjBookMvcCore.Controllers
                     {
                         new Claim("Id", user.MemberId.ToString()),
                         new Claim("UserLevelId", user.LevelId.ToString()),
+                        new Claim("UserLevelName", user.Level.LevelName),
                         new Claim(ClaimTypes.Name, user.MemberName),
                     };
 
@@ -503,7 +506,7 @@ namespace prjBookMvcCore.Controllers
         {
             Models.Message Letter = new Models.Message()
             {
-                MessageTypeId = 1,
+                MessageTypeId = 2,
                 MessageTitle = $"訂閱送好禮!",
                 MessageContent =
                 $"<p>Hi! {receiver.MemberName}!</p>" +

@@ -1,4 +1,6 @@
-﻿@using prjBookMvcCore.Models
+﻿@using System.Web
+@using System.Text
+@using prjBookMvcCore.Models
 @model List<ShoppingcartInformation>
 
 @inject UserInforService _user
@@ -10,9 +12,10 @@
     int points = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.Points).FirstOrDefault();
     string mName = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.MemberName).FirstOrDefault();
     string mPhone = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.Memberphone).FirstOrDefault();
-    int shipmentid = 0;   
-
-
+    int shipmentid = 0;
+    string mAddress = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.MemberAddress).FirstOrDefault();
+    string encodedName = HttpUtility.UrlEncode(Encoding.UTF8.GetBytes(mName));
+    string encodedAddress = HttpUtility.UrlEncode(Encoding.UTF8.GetBytes(mAddress));
 }
 
 <style>
@@ -90,6 +93,9 @@
     }
 
 </style>
+
+
+
 <script>
     function addToList() {
         /*待補，加入暫存的程式碼 */
@@ -146,7 +152,7 @@
                                 decimal totalAmount = 0;
                                 foreach (var item in Model)
                                 {
-                                    int 優惠價 = Convert.ToInt32(item.Book.UnitPrice * item.discountAmount);
+                                    int 優惠價 = (int)Math.Ceiling(item.Book.UnitPrice * item.discountAmount);
                                     string bookTitle = item.Book.BookTitle.Replace("$$", "\n");
                                     decimal 小計 = 優惠價 * item.Quantity;
                                     <input name="acid" value="@item.ActionDetial.ActionToBookId" type="hidden">
@@ -226,13 +232,28 @@
             <h5>為你推薦</h5>
             <div class="row">
                 @{
-                    var q = db.Books.Select(b => b).Skip(20).Take(6);
+                    var q = db.Books.OrderByDescending(b => b.UnitInStock).Skip(20).Take(6).ToList();
                     foreach (var g in q)
                     {
-                        <div class="col-2 mt-3 p-3">
-                            <a href="~/Book/BookInformation/@g.BookId"><img src="~/Image/Book/@g.CoverPath" class="d-block w-100 img-with-border mb-3" />
-                                <p class="bookCaption px-2">@(g.BookTitle.Split("$")[0])</p>
-                            </a>
+                        var dis = db.BookDiscountDetails.Where(d => d.BookId == g.BookId & d.BookDiscountStartDate < DateTime.Now & d.BookDiscountEndDate > DateTime.Now).Select(d => new { d.BookDiscount.BookDiscountAmount }).ToList();
+                        <div class="col-2 mb-3">
+                            <a id="@g.BookId" href="~/Book/BookInformation/@g.BookId"> <img src="~/Image//Book/@g.CoverPath" class="d-block w-100 img-with-border" alt="..." title="@g.BookTitle.Split("$")[0]" /></a>
+                            <ul style="list-style:none; margin:0; padding:0;" class="text-start">
+                                <li><div class="mt-3 bookCaption"><a id="@g.BookId" href="~/Book/BookInformation/@g.BookId" title="@g.BookTitle.Split("$")[0]">@g.BookTitle.Split("$")[0]</a></div></li>
+                                <li>原價：<del style="color:red;font-style:oblique">@((int)Math.Ceiling(g.UnitPrice)) </del> 元</li>
+                                <li>
+                                    優惠價：<span style="color: #E3007F; ">@((dis[0].BookDiscountAmount * 100).ToString("0"))</span>折
+                                    <span style="color: #E3007F;font-weight:bold;">@((int)Math.Ceiling(g.UnitPrice * dis[0].BookDiscountAmount))</span>元
+                                </li>
+                            </ul>
+                            <div style="text-align:center">
+                                <a role="button" class="btn btn-outline-warning btn-sm" title="尚未建置" onclick="addToCart(@g.BookId,@_user.UserId)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+                                        <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z" />
+                                    </svg>
+                                    加入購物車
+                                </a>
+                            </div>
                         </div>
                     }
                 }
@@ -247,6 +268,7 @@
                 <div class="row mt-2">
                     <h4>收件人資訊</h4>
                     <input name="memberId" value="@_user.UserId" type="hidden" />
+                    <div class="form-group"><input type="checkbox" onchange="toggleTextFields(this)" name="same">同訂購人</div>
                     <div class="form-group">
                         <label for="inputName">姓名</label>
                         <input type="text" class="form-control" id="inputName" name="reciverName" placeholder="請輸入收件人姓名">
@@ -381,7 +403,72 @@
     </div>
 </div>
 
+<script>
+    let isLogin = false;
+    window.onload = () => {
+        if (@_user.UserId !== 0) {
+            isLogin = true;
+        };
+        console.log(isLogin);
+    };
 
+    function loginCheck() {
+        if (isLogin === false) {
+            alert('尚未登入');
+            if (confirm('前往登入')) {
+                window.location.href = "../../Member/Login";
+            } else {
+            }
+            return false;
+        }
+        return true;
+    };
+
+    function addToCart(bookID, memberID) {
+        if (loginCheck()) {
+            let self = this;
+            let url = '@Url.Action("memAction", "Action")?bookID=' + bookID + '&memberID=' + memberID + '&actionID=' + 7;
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (result) {
+                    let isSuccess = result;
+                    if (isSuccess === "true") {
+                        alert('加入購物車成功');
+                        window.location.reload();
+                    }
+                    else {
+                        alert('加入購物車失敗，本書已在購物車內');
+                    }
+                },
+            });
+        }
+    };
+</script>
+<script>
+    var mName = decodeURIComponent("@encodedName");
+    var mPhone = "@mPhone";
+    var mAddress = decodeURIComponent("@encodedAddress");
+    function toggleTextFields(checkbox) {
+        var inputName = document.getElementById("inputName");
+        var inputPhone = document.getElementById("inputPhone");
+        var inputAddress = document.getElementById("inputAddress");
+
+        if (checkbox.checked) {
+            inputName.value = mName;
+            inputPhone.value = mPhone;
+            inputAddress.value = mAddress;
+            inputName.disabled = true;
+            inputPhone.disabled = true;
+            inputAddress.disabled = true;
+
+        } else {
+            inputName.disabled = false;
+            inputPhone.disabled = false;
+            inputAddress.disabled = false;
+        }
+    }
+</script>
 
 <script>
     //送出訂單
@@ -524,8 +611,8 @@
             label.setAttribute('for', 'oD');
             label.textContent = item.orderDiscountnName;
             label.classList.add('couponS');
-
             containerCou.appendChild(label);
+
             discountArea.appendChild(containerCou);
         });
     }
@@ -555,14 +642,14 @@
         const table2Header = document.createElement('thead');
         const headerRow = document.createElement('tr');
         headerRow.innerHTML = `
-                                <th><input type="hidden" value="checkbox"></th>
-                                <th style="width:50px;">序號</th>
-                                <th style="width:500px;">書名</th>
-                                <th>優惠</th>
-                                <th>優惠價</th>
-                                <th>數量</th>
-                                <th>小計</th>
-                                `;
+                                        <th><input type="hidden" value="checkbox"></th>
+                                        <th style="width:50px;">序號</th>
+                                        <th style="width:500px;">書名</th>
+                                        <th>優惠</th>
+                                        <th>優惠價</th>
+                                        <th>數量</th>
+                                        <th>小計</th>
+                                        `;
         table2Header.appendChild(headerRow);
         table2.appendChild(table2Header);
         const table2Body = document.createElement('tbody');
@@ -573,14 +660,14 @@
             input.type = "hidden";
             const row = document.createElement('tr');
             row.innerHTML = `
-                                    <td><input type="hidden" value="checkbox"></td>
-                                    <td>${index + 1}</td>
-                                    <td>${item.book.bookTitle}</td>
-                                    <td>${item.discountName}</td>
-                                    <td>${Math.floor(item.book.unitPrice * item.discountAmount)}</td>
-                                    <td><input name="quantity" value="${item.quantity}" class="cinput" type="text" readonly /></td>
-                                    <td>${Math.floor(item.quantity * (item.book.unitPrice * item.discountAmount))}</td>
-                                `;
+                                            <td><input type="hidden" value="checkbox"></td>
+                                            <td>${index + 1}</td>
+                                            <td>${item.book.bookTitle}</td>
+                                            <td>${item.discountName}</td>
+                                            <td>${Math.floor(item.book.unitPrice * item.discountAmount)}</td>
+                                            <td><input name="quantity" value="${item.quantity}" class="cinput" type="text" readonly /></td>
+                                            <td>${Math.floor(item.quantity * (item.book.unitPrice * item.discountAmount))}</td>
+                                        `;
             table2Body.appendChild(row);
             table2Body.appendChild(input);
         });

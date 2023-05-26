@@ -317,8 +317,8 @@
                     <div class="deliver">
                         <p>運送方式：超商取貨、宅配取貨</p>
                         <p>銷售地區：全球</p>
-                        <p v-if="book.unitInStock > 5" style="color:green">{{unitInStockContent}}</p>
-                        <p v-if="book.unitInStock > 0 && book.unitInStock <= 5" style="color:skyblue">{{unitInStockContent}}</p>
+                        <p v-if="book.unitInStock > 5" style="color:green">{{unitInStockContent}}({{book.unitInStock}})</p>
+                        <p v-if="book.unitInStock > 0 && book.unitInStock <= 5" style="color:skyblue">{{unitInStockContent}}({{book.unitInStock}})</p>
                         <p v-if="book.unitInStock == 0" style="color:red">{{unitInStockContent}}</p>
                     </div>
                     <p class="DeliverAndKpst">
@@ -772,14 +772,16 @@
                                     self.$notify({
                                         title: '放入暫存清單成功',
                                         message: '本書已加入暫存清單',
-                                        type: 'success'
+                                        type: 'success',
+                                        offset: 130,
                                     });
                                 }
                                 else {
                                     self.$notify({
                                         title: '放入暫存清單失敗',
                                         message: '本書已加入過暫存清單',
-                                        type: 'warning'
+                                        type: 'warning',
+                                        offset: 130,
                                     });
                                 }
                             },
@@ -794,7 +796,8 @@
                         if (this.book.unitInStock == 0) {
                             this.$notify.error({
                                 title: '錯誤',
-                                message: '暫無庫存，無法銷售！'
+                                message: '暫無庫存，無法銷售！',
+                                offset: 130,
                             });
                         }
                         else{
@@ -809,7 +812,8 @@
                                         self.$notify({
                                             title: '加入購物車成功',
                                             message: '本書已加入購物車',
-                                            type: 'success'
+                                            type: 'success',
+                                            offset: 130,
                                         });
                                         setTimeout(() => {
                                             location.reload()
@@ -819,7 +823,8 @@
                                         self.$notify({
                                             title: '加入購物車失敗',
                                             message: '本書已在購物車內',
-                                            type: 'warning'
+                                            type: 'warning',
+                                            offset: 130,
                                         });
                                     }
                                 },
@@ -867,16 +872,18 @@
                                 if (result) {
                                     self.$message({
                                         message: '評價成功！',
-                                        type: 'success'
+                                        type: 'success',
+                                        offset: 160,
                                     });
                                     setTimeout(() => {
                                         location.reload()
                                     }, 1500);
                                 }
                                 else {
-                                    self.$notify({
-                                        title: '已評價此書',
-                                        type: 'warning'
+                                    self.$message({
+                                        message: '已評價此書',
+                                        type: 'warning',
+                                        offset: 160,
                                     });
                                 }
                             },

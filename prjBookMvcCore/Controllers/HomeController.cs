@@ -9,6 +9,7 @@ using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 using static System.Formats.Asn1.AsnWriter;
 using static System.Reflection.Metadata.BlobBuilder;
 using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
+using System.Security.Cryptography;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -17,37 +18,6 @@ namespace prjBookMvcCore.Controllers
         BookShopContext db = new();
         public IActionResult Home()
         {
-            //從資料庫中取得最小值和最大值
-            decimal minprice = db.Books.Min(b => b.UnitPrice);
-            decimal maxprice = db.Books.Max(b => b.UnitPrice);
-            ViewBag.frontprice = minprice.ToString("0");
-            ViewBag.backprice = maxprice.ToString("0");
-
-            DateTime mindate = DateTime.Now, maxdate = DateTime.Now;
-            int maxtime = 0;
-            int mintime = 100000;
-
-            List<DateTime> d = db.Books.Select(x => x.PublicationDate).ToList();
-
-            foreach (var date in d)
-            {
-                int diff = (DateTime.Now - date).Days;
-                if (diff < mintime)
-                {
-                    mintime = diff;
-                    mindate = date;
-                }
-
-                if (diff > maxtime)
-                {
-                    maxtime = diff;
-                    maxdate = date;
-                }
-            }
-
-            ViewBag.frontdate = mindate.ToString("yyyy-MM-dd");
-            ViewBag.backdate = (maxdate).ToString("yyyy-MM-dd");
-
             List<RecommendInformation> normal = getNormal();
             List<RecommendInformation> publicationDate = getPublicationDate();
             List<RecommendInformation> commentTimeDate = getCommentTimeDate();
@@ -90,7 +60,7 @@ namespace prjBookMvcCore.Controllers
             {
                 var recommendProducts = (from b in db.Books
                                          join c in db.Comments on b.BookId equals c.BookId
-                                         where c.Stars== countStar
+                                         where c.Stars == countStar
                                          select new
                                          {
                                              書本ID = b.BookId,
@@ -124,7 +94,6 @@ namespace prjBookMvcCore.Controllers
             }
         }
 
-
         public IActionResult QA()
         {
             return View();
@@ -132,22 +101,31 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult searchList(string txtKeyword, decimal frontPrice, decimal backPrice, decimal frontdiscount, decimal backdiscount, DateTime frontdate, DateTime backdate)
         {
-            //從資料庫中取得最小值和最大值
-            decimal minprice = db.Books.Min(b => b.UnitPrice);
-            decimal maxprice = db.Books.Max(b => b.UnitPrice);
-            ViewBag.frontprice = minprice.ToString("0");
-            ViewBag.backprice = maxprice.ToString("0");
+            decimal minprice = frontPrice;
+            decimal maxprice = backPrice;
+
+            if (txtKeyword == null)
+            {
+                txtKeyword = string.Empty;
+            }
+
+            if (frontPrice == 0)
+            {
+                minprice = db.Books.Min(b => b.UnitPrice);
+                //ViewBag.frontprice = minprice.ToString("0");
+            }
+
+            if (backPrice == 0)
+            {
+                maxprice = db.Books.Max(b => b.UnitPrice);
+                //ViewBag.backprice = maxprice.ToString("0");
+            }
 
             DateTime mindate = DateTime.Now, maxdate = DateTime.Now;
             int maxtime = 0;
             int mintime = 100000;
 
             List<DateTime> d = db.Books.Select(x => x.PublicationDate).ToList();
-
-
-
-            ViewBag.frontdiscount = frontdiscount;
-            ViewBag.backdiscount = backdiscount;
 
             foreach (var date in d)
             {
@@ -166,9 +144,17 @@ namespace prjBookMvcCore.Controllers
             }
 
             ViewBag.frontdate = mindate.ToString("yyyy-MM-dd");
-            ViewBag.backdate = (maxdate).ToString("yyyy-MM-dd");
+            ViewBag.backdate = maxdate.ToString("yyyy-MM-dd");
 
-            CForHomePage searchresult = GetSearchResult(txtKeyword, frontPrice, backPrice, frontdiscount, backdiscount, frontdate, backdate);
+            ViewBag.KeyWord = txtKeyword;
+            ViewBag.frontprice = minprice.ToString("0");
+            ViewBag.backprice = maxprice.ToString("0");
+            ViewBag.frontdiscount = frontdiscount;
+            ViewBag.backdiscount = backdiscount;
+            //ViewBag.frontdate = frontdate;
+            //ViewBag.backdate = backdate;
+
+            CForHomePage searchresult = GetSearchResult(txtKeyword, minprice, maxprice, frontdiscount, backdiscount, mindate, maxdate);
             return View(searchresult);
         }
 
@@ -202,13 +188,14 @@ namespace prjBookMvcCore.Controllers
                                           繪者 = b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault(),
                                           譯者 = b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault(),
                                           出版社 = b.Publisher.PublisherName,
+                                          簡介=b.ContentIntro,
                                           定價 = b.UnitPrice,
                                           路徑 = b.CoverPath,
                                           折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                                           出版日期 = b.PublicationDate,
                                       }).Distinct();
                 }
-                else if (txtkeyword == null && frontPrice != 0 && backPrice != 0 && frontdiscount != 0 && backdiscount != 0 && frontdate != null && backdate != null)
+                else if (txtkeyword == null)
                 {
                     recommendBooks = (from b in db.Books
                                       where
@@ -226,6 +213,7 @@ namespace prjBookMvcCore.Controllers
                                           繪者 = b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault(),
                                           譯者 = b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault(),
                                           出版社 = b.Publisher.PublisherName,
+                                          簡介 = b.ContentIntro,
                                           定價 = b.UnitPrice,
                                           路徑 = b.CoverPath,
                                           折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
@@ -257,6 +245,7 @@ namespace prjBookMvcCore.Controllers
                                           繪者 = b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault(),
                                           譯者 = b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault(),
                                           出版社 = b.Publisher.PublisherName,
+                                          簡介 = b.ContentIntro,
                                           定價 = b.UnitPrice,
                                           路徑 = b.CoverPath,
                                           折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
@@ -271,7 +260,7 @@ namespace prjBookMvcCore.Controllers
                 {
                     count++;
 
-                    Book b = new Book { BookTitle = recommendBook.書名, BookId = recommendBook.書本ID, UnitPrice = recommendBook.定價, CoverPath = recommendBook.路徑, PublicationDate = recommendBook.出版日期 };
+                    Book b = new Book { BookTitle = recommendBook.書名, BookId = recommendBook.書本ID, UnitPrice = recommendBook.定價, CoverPath = recommendBook.路徑, PublicationDate = recommendBook.出版日期, ContentIntro=recommendBook.簡介 };
                     BookDiscount bd = new BookDiscount { BookDiscountAmount = recommendBook.折扣 };
                     Author au = new Author { AuthorName = recommendBook.作者 };
                     Painter pa = new Painter { PainterName = recommendBook.繪者 };
@@ -433,11 +422,15 @@ namespace prjBookMvcCore.Controllers
 
         public List<RecommendInformation> getNormal()
         {
-            Random random = new Random();
+            RandomNumberGenerator rng = RandomNumberGenerator.Create();
             List<int> randomList = new List<int>();
+
             for (int i = 0; i < 10; i++)
             {
-                int n = random.Next(392);
+                byte[] randomNumber = new byte[4]; // Assuming you want 32-bit integers
+                rng.GetBytes(randomNumber);
+                int n = BitConverter.ToInt32(randomNumber, 0) % 392;
+
                 if (randomList.Contains(n))
                 {
                     i--;
@@ -676,6 +669,4 @@ namespace prjBookMvcCore.Controllers
         }
 
     }
-
-
 }
