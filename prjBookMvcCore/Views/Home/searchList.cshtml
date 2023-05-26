@@ -103,29 +103,44 @@
                                             <div class="col infosmallfontsize">
                                                 <ul style="list-style:none">
                                                     @{
-                                                        var highlightedTitle = item.book.BookTitle.Replace("$$", " ").Replace(ViewBag.KeyWord, $"<span style='color:red'>{ViewBag.KeyWord}</span>");
+                                                        string highlightedTitle = item.book.BookTitle.Replace("$$", " ");
+
+                                                        if (!string.IsNullOrEmpty(ViewBag.KeyWord))
+                                                        {
+                                                            highlightedTitle = highlightedTitle.Replace(ViewBag.KeyWord, $"<span style='color:red'>{ViewBag.KeyWord}</span>");
+                                                        }
+
+                                                        var highlightedAuthor = item.author?.AuthorName?.Replace("$$", " ");
+                                                        if (!string.IsNullOrEmpty(ViewBag.KeyWord))
+                                                        {
+                                                            highlightedAuthor = highlightedAuthor?.Replace(ViewBag.KeyWord, $"<span style='color:red'>{ViewBag.KeyWord}</span>");
+                                                        }
+
+                                                        var highlightedPainter = item.painter?.PainterName?.Replace("$$", " ");
+                                                        if (!string.IsNullOrEmpty(ViewBag.KeyWord))
+                                                        {
+                                                            highlightedPainter = highlightedPainter?.Replace(ViewBag.KeyWord, $"<span style='color:red'>{ViewBag.KeyWord}</span>");
+                                                        }
+
+                                                        var highlightedTranslator = item.translator?.TranslatorName?.Replace("$$", " ");
+                                                        if (!string.IsNullOrEmpty(ViewBag.KeyWord))
+                                                        {
+                                                            highlightedTranslator = highlightedTranslator?.Replace(ViewBag.KeyWord, $"<span style='color:red'>{ViewBag.KeyWord}</span>");
+                                                        }
                                                     }
+
                                                     <li class="bookCaption two-lines mb-1" style="font-size:18px">@Html.Raw(highlightedTitle)</li>
 
-                                                    @{
-                                                        var highlightedAuthor = item.author?.AuthorName?.Replace("$$", " ").Replace(ViewBag.KeyWord, $"<span style='color:red'>{ViewBag.KeyWord}</span>");
-                                                    }
                                                     @if (!string.IsNullOrEmpty(highlightedAuthor))
                                                     {
                                                         <li>作者：@Html.Raw(highlightedAuthor)</li>
                                                     }
 
-                                                    @{
-                                                        var highlightedPainter = item.painter?.PainterName?.Replace("$$", " ").Replace(ViewBag.KeyWord, $"<span style='color:red'>{ViewBag.KeyWord}</span>");
-                                                    }
                                                     @if (!string.IsNullOrEmpty(highlightedPainter))
                                                     {
                                                         <li>繪者：@Html.Raw(highlightedPainter)</li>
                                                     }
 
-                                                    @{
-                                                        var highlightedTranslator = item.translator?.TranslatorName?.Replace("$$", " ").Replace(ViewBag.KeyWord, $"<span style='color:red'>{ViewBag.KeyWord}</span>");
-                                                    }
                                                     @if (!string.IsNullOrEmpty(highlightedTranslator))
                                                     {
                                                         <li>譯者：@Html.Raw(highlightedTranslator)</li>
@@ -149,6 +164,7 @@
                                                     <li class="mt-2">簡介：</li>
                                                     <li class="bookCaption" style="color:gray">@item.book.ContentIntro</li>
                                                 </ul>
+
                                             </div>
                                         </div>
                                         <hr />
