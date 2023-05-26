@@ -267,9 +267,9 @@
                                 </div>
                                 <div class="m-1 p-1 dropdown-item">
                                     <span class="mx-2">出版日期</span>
-                                    <input id="frontdate" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="日期" type="date" maxlength="20" />
+                                    <input id="frontdate" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="日期" type="date" maxlength="20" value="2005-12-02" />
                                     <span class="mx-2">至</span>
-                                    <input id="backdate" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="日期" type="date" maxlength="20" />
+                                    <input id="backdate" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="日期" type="date" maxlength="20" value="2023-03-31" />
                                     <span class="mx-2">之間</span>
                                 </div>
                             </div>
@@ -304,17 +304,17 @@
                                         return;
                                     }
 
-                                    //if (backPrice < frontPrice) {
-                                    //    [backPrice, frontPrice] = [frontPrice, backPrice];
-                                    //}
+                                    if (backPrice < frontPrice) {
+                                        [backPrice, frontPrice] = [frontPrice, backPrice];
+                                    }
 
-                                    //if (backdiscount > frontdiscount) {
-                                    //    [backdiscount, frontdiscount] = [frontdiscount, backdiscount];
-                                    //}
+                                    if (backdiscount > frontdiscount) {
+                                        [backdiscount, frontdiscount] = [frontdiscount, backdiscount];
+                                    }
 
-                                    //if (backdate < frontdate) {
-                                    //    [backdate, frontdate] = [frontdate, backdate]
-                                    //}
+                                    if (backdate < frontdate) {
+                                        [backdate, frontdate] = [frontdate, backdate]
+                                    }
 
                                     var url = '@Url.Action("searchList", "Home")' + '?txtKeyword=' + encodeURIComponent(keyword) + '&frontPrice=' + frontPrice + '&backPrice=' + backPrice + '&frontdiscount=' + frontdiscount + '&backdiscount=' + backdiscount + '&frontdate=' + frontdate + '&backdate=' + backdate;
                                     // 使用 Url.Action 方法动态生成 ActionLink 的 URL，并将关键字和价格范围作为参数传递
