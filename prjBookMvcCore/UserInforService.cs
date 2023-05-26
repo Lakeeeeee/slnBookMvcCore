@@ -43,7 +43,4 @@ public class UserInforService
             return varCliams.Where(x => x.Type == "UserLevelName").FirstOrDefault()!.Value;
         }
     }
-
-    
-
 }

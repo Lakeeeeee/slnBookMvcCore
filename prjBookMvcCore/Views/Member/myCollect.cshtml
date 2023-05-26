@@ -27,9 +27,8 @@
                 <tr>
                     <th style="width:50px">序號</th>
                     <th style="width:350px">書名</th>
-                    <th>優惠</th>
                     <th>優惠價</th>
-                    <th>出版社</th>
+                    <th>庫存</th>
                     <th>來去購買</th>
                     <th>取消追蹤</th>
                 </tr>
@@ -38,9 +37,8 @@
                     foreach (var item in Model)
                     {
                         count++;
-                        string 活動 = item.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountName).FirstOrDefault()!;
-                        decimal 折扣 = item.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault();
-                        int 活動價 = Convert.ToInt32(item.UnitPrice * 折扣);
+                        decimal 折扣 = item.BookDiscountDetails.Where(x => x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault();
+                        int 活動價 = (int)Math.Ceiling(item.UnitPrice * 折扣);
                         int adcId = item.ActionDetials.Where(x => x.MemberId == user.UserId && x.BookId == item.BookId).Select(x => x.ActionToBookId).FirstOrDefault();
                         <tr>
                             <td>
@@ -50,13 +48,10 @@
                                 @item.BookTitle
                             </td>
                             <td>
-                                @活動
-                            </td>
-                            <td>
                                 @Html.DisplayFor(item=>活動價) 元
                             </td>
                             <td>
-                                @item.Publisher!.PublisherName
+                                @item.UnitInStock
                             </td>
                             <td>
                                 @Html.ActionLink("來去購買", "BookInformation", "Book", new{id=item.BookId}, new{@class="btn btn-outline-secondary btn-sm"})
