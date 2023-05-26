@@ -10,6 +10,7 @@
     var q = user._db.MessageMemberDetails.Where(x => x.MemberId == user.UserId && x.ReadStatu == 0).Count();
     var q1 = user._db.OrderDiscountDetails.Where(x => x.MemberId == user.UserId && x.IsOrderDiscountUse =="N").Count();
     var q2 = user._db.Orders.Where(x => x.MemberId == user.UserId).Count();
+    var q3 = user._db.MessageMemberDetails.Where(x => x.MemberId == user.UserId).Count();
 }
 
 <style>
@@ -61,7 +62,7 @@
                             <a class="card-body" style="display:block;width:100%;" href="~/Member/myMessage">
                                 <p class="card-text">
                                     您有
-                                </p><span class="display-6" id="messageCount">@q </span>封訊息未讀
+                                </p><span class="display-6" id="messageCount">@q </span>封訊息未讀 / 共有 @q3 封
                             </a>
                         </div>
                     </div>
@@ -70,7 +71,7 @@
                             <a class="card-body" style="display:block;width:100%;" href="~/Member/myOrders">
                                 <p class="card-text">
                                     您已購買過
-                                </p><span class="display-6" id="orders">@q2  </span>次書籍
+                                </p><span class="display-6" id="orders">@q2  </span>次書籍 / 檢視訂單
                             </a>
                         </div>
                     </div>
@@ -90,7 +91,7 @@
                             <a class="card-body" style="display:block;width:100%;" href="~/Member/myCoupons">
                                 <p class="card-text">
                                     您的Coupon尚有：
-                                </p><span class="display-6" id="coupons">@q1  </span>張
+                                </p><span class="display-6" id="coupons">@q1  </span>張 / 檢視Coupons
                             </a>
                         </div>
                     </div>
