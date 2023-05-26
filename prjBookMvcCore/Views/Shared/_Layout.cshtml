@@ -299,6 +299,11 @@
                                         backdiscount = 1;
                                     }
 
+                                    if (!keyword && !frontPrice && !backPrice && !frontdiscount && !backdiscount && !frontdate && !backdate) {
+                                        alert('請至少輸入一個搜尋條件');
+                                        return;
+                                    }
+
                                     //if (backPrice < frontPrice) {
                                     //    [backPrice, frontPrice] = [frontPrice, backPrice];
                                     //}
