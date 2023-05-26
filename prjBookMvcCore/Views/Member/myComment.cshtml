@@ -6,44 +6,59 @@
     Layout = "~/Views/Shared/_Layout_Member.cshtml";
 }
 
-<h6>我的評論</h6>
+<div class="row">
+    <div class="d-flex justify-content-between align-items-center">
+        <h4 class="mt-2 mb-4">我的評論</h4>
+        <span>評論數量：@Model.Count() 則</span>
+    </div>
+</div>
 
+<hr />
 <div class="container">
-    <table class="table table-hover">
-        <tr>
-            <td style="width:200px"></td>
-            <td></td>
-        </tr>
+    <div class="row">
         @{
+            int countcomment = 0;
             foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        <a class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
-                            <img src="~/Image/Book/@item.Book.CoverPath" alt="@item.Book.BookTitle" style="margin-bottom:15px; width:200px" />
-                            <br />
-                        </a>
-                    </td>
-                    <td class="p-3" style="vertical-align:top; max-height:180px; overflow:hidden">
-                        <a class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
-                            <p style="color:brown; font-weight:bold" id="text-@item.BookId">
-                                @item.Book.BookTitle
-                            </p>
-                        </a>
-                        <p>
-                            給星數：
-                            @for (int x = 0; x < item.Stars; x++)
-                            {
-                                <img style="width:20px; height:auto" src="~/image/icons8-star.gif" />
-                            }
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-4 text-center mb-3">
+                            <a href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
+                                <img height="150" src="~/Image/Book/@item.Book.CoverPath" alt="@item.Book.BookTitle" />
+                            </a>
+                        </div>
+                        <div class="col">
+                            <ul style="list-style:none; margin:0; padding:0;">
+                                <li class="bookCaption mb-2" style="color:brown; font-weight:bold" id="text-@item.BookId">
+                                    <a class="as1" href="@Url.Action("BookInformation", "Book", new { id = item.BookId })">
+                                        @item.Book.BookTitle.Replace("$$"," ")
+                                    </a>
+                                </li>
+                                <li>
+                                    評論等級：
+                                    @for (int x = 0; x < item.Stars; x++)
+                                    {
+                                        <img style="width:20px; height:auto" src="~/image/icons8-star.gif" />
+                                    }
+                                </li>
+                                <li class="mt-2">評論日期：@item.CommentTime.ToLongDateString()</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p class="col" style="color:gray">
+                            @item.CommentText
                         </p>
-                        <p>評論日期：@item.CommentTime</p>
-                        <p>
-                            @(item.CommentText.Length > 200 ? item.CommentText.Substring(0, 200) + "..." : item.CommentText)
-                        </p>
-                    </td>
-                </tr>
-            };
+                    </div>
+                </div>
+                countcomment++;
+                if (countcomment % 2 == 0)
+                {
+                    <div class="row"></div>
+                    <hr />
+                    <br />
+                }
+            }
         }
-    </table>
+    </div>
 </div>

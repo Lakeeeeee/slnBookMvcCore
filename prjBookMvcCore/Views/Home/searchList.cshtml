@@ -25,7 +25,7 @@
             height: 1.3em; /* 行高的兩倍 */
         }
 
-        .three-lines{
+        .three-lines {
             line-height: 1.2em; /* 調整需要的行高 */
             height: 3.6em; /* 行高的兩倍 */
         }
@@ -60,13 +60,13 @@
 <body>
     <h1>搜尋結果</h1>
 
-    <p>
+    @*<p>
         搜尋條件：<br />
         關鍵字： @ViewBag.KeyWord<br />
         價錢範圍：@ViewBag.frontprice ~ @ViewBag.backprice<br />
         折扣範圍：@ViewBag.frontdiscount ~ @ViewBag.backdiscount<br />
         出版日期：@ViewBag.frontdate ~ @ViewBag.backdate
-    </p>
+    </p>*@
 
     @{
         if (Model != null)
@@ -79,7 +79,11 @@
                             <div class="card ">
                                 <div class="card-header">欄位 </div>
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">搜尋結果：(@Model.cSearchBook.Count())</li>
+                                    <li class="list-group-item">搜尋結果：<br />(@Model.cSearchBook.Count())</li>
+                                    <li class="list-group-item">關鍵字：<br />@ViewBag.KeyWord</li>
+                                    <li class="list-group-item">價錢範圍：<br />@ViewBag.frontprice ~ @ViewBag.backprice</li>
+                                    <li class="list-group-item">折扣範圍：<br />@ViewBag.frontdiscount ~ @ViewBag.backdiscount</li>
+                                    <li class="list-group-item">出版日期：<br />@ViewBag.frontdate ~ <br />@ViewBag.backdate</li>
                                 </ul>
                             </div>
                         </div>

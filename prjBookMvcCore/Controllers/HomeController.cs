@@ -163,7 +163,7 @@ namespace prjBookMvcCore.Controllers
             using (var db = new BookShopContext())
             {
                 IQueryable<dynamic> recommendBooks = null;
-                if (txtkeyword != null && frontPrice != 0 && backPrice != 0 && frontdiscount != 0 && backdiscount != 0 && frontdate != null && backdate != null)
+                if (txtkeyword != null && frontPrice != 0 && backPrice != 0 && frontdiscount != 0 && backdiscount != 0)
                 {
                     recommendBooks = (from b in db.Books
                                       where
@@ -191,7 +191,7 @@ namespace prjBookMvcCore.Controllers
                                           簡介=b.ContentIntro,
                                           定價 = b.UnitPrice,
                                           路徑 = b.CoverPath,
-                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                          折扣 = b.BookDiscountDetails.Where(x=>x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                                           出版日期 = b.PublicationDate,
                                       }).Distinct();
                 }
@@ -216,7 +216,7 @@ namespace prjBookMvcCore.Controllers
                                           簡介 = b.ContentIntro,
                                           定價 = b.UnitPrice,
                                           路徑 = b.CoverPath,
-                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                          折扣 = b.BookDiscountDetails.Where(x => x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                                           出版日期 = b.PublicationDate,
                                       }).Distinct();
                 }
@@ -248,9 +248,10 @@ namespace prjBookMvcCore.Controllers
                                           簡介 = b.ContentIntro,
                                           定價 = b.UnitPrice,
                                           路徑 = b.CoverPath,
-                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                          折扣 = b.BookDiscountDetails.Where(x => x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                                           出版日期 = b.PublicationDate,
                                       }).Distinct();
+
                 }
 
                 CForHomePage cForHomePage = new CForHomePage();
@@ -260,7 +261,7 @@ namespace prjBookMvcCore.Controllers
                 {
                     count++;
 
-                    Book b = new Book { BookTitle = recommendBook.書名, BookId = recommendBook.書本ID, UnitPrice = recommendBook.定價, CoverPath = recommendBook.路徑, PublicationDate = recommendBook.出版日期, ContentIntro=recommendBook.簡介 };
+                    Book b = new Book { BookTitle = recommendBook.書名, BookId = recommendBook.書本ID, UnitPrice = recommendBook.定價, CoverPath = recommendBook.路徑, PublicationDate = recommendBook.出版日期, ContentIntro = recommendBook.簡介 };
                     BookDiscount bd = new BookDiscount { BookDiscountAmount = recommendBook.折扣 };
                     Author au = new Author { AuthorName = recommendBook.作者 };
                     Painter pa = new Painter { PainterName = recommendBook.繪者 };

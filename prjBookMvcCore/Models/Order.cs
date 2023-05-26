@@ -22,7 +22,7 @@ namespace prjBookMvcCore.Models
         public decimal? TotalPay { get; set; }
         public string? ReciverName { get; set; }
         public string? ReciverPhone { get; set; }
-        public string ShipAddr { get; set; } = null!;
+        public string? ShipAddr { get; set; } = null!;
         public decimal? FinalPay { get; set; }
 
         public virtual Member Member { get; set; } = null!;
