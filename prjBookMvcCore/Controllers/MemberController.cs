@@ -366,12 +366,12 @@ namespace prjBookMvcCore.Controllers
             return Content(isSuccess.ToString());
         }
 
-        public IActionResult addCart()
-        {
+        //public IActionResult addCart()
+        //{
 
 
 
-        }
+        //}
              
 
         [Authorize]

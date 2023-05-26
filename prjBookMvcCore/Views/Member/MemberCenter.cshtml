@@ -42,11 +42,12 @@
             <div class="col-4">
                 <div class="card" style="height:100%">
                     <a class="card-header small" style="display:block;width:100%;" href="~/Member/alretProflie">
-                        <h5 class="display-6" id="memberLevel">@Model.Level.LevelName</h5>
+                        <h5 class="display-6" id="memberLevel"><img src="~/Image/@(Model.Level.LevelName).png" style="width:50%"/>@Model.Level.LevelName</h5>
                         <p>等級期限 @time 年 8月 31日 止<br />尚差 @ex 元即可升等為 <br />@nextLevel</p>
                     </a>
                     <ul class="list-group list-group-flush">
-                        <a href="~/Home/QA#card2"><li class="liR list-group-item small">了解詳細會員分級 </li></a>
+                        <a href="~/Promotions/Promotions會員">
+                        <li class="liR list-group-item small">了解詳細會員分級 </li></a>
                         <a href="~/Member/alretPassword"><li class="liR list-group-item small"> 修改密碼</li> </a>
                         <a href="~/Member/myCollect" ><li class="liR list-group-item small"> 收藏清單 </li></a>
                         <a href="~/Member/myComment"><li class="liR list-group-item small"> 我的評論 </li></a>

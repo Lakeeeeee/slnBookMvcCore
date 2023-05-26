@@ -191,7 +191,7 @@ namespace prjBookMvcCore.Controllers
                                           簡介=b.ContentIntro,
                                           定價 = b.UnitPrice,
                                           路徑 = b.CoverPath,
-                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                          折扣 = b.BookDiscountDetails.Where(x=>x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                                           出版日期 = b.PublicationDate,
                                       }).Distinct();
                 }
@@ -216,7 +216,7 @@ namespace prjBookMvcCore.Controllers
                                           簡介 = b.ContentIntro,
                                           定價 = b.UnitPrice,
                                           路徑 = b.CoverPath,
-                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                          折扣 = b.BookDiscountDetails.Where(x => x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                                           出版日期 = b.PublicationDate,
                                       }).Distinct();
                 }
@@ -248,7 +248,7 @@ namespace prjBookMvcCore.Controllers
                                           簡介 = b.ContentIntro,
                                           定價 = b.UnitPrice,
                                           路徑 = b.CoverPath,
-                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                          折扣 = b.BookDiscountDetails.Where(x => x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                                           出版日期 = b.PublicationDate,
                                       }).Distinct();
                 }
