@@ -11,6 +11,11 @@
 				.Where(shipment => shipment.ShipmentId == Model.ShipmentId)
 				.Select(shipment => shipment.Freight)
 				.FirstOrDefault();
+	string descrip = db.Orders
+	.Where(o => o.OrderDiscountId == Model.OrderDiscountId && o.OrderId == Model.OrderId)
+	.Select(o => o.OrderDiscount.OrderDiscountDescprtion)
+	.FirstOrDefault();
+
 	}
 
 
@@ -151,7 +156,7 @@ th {
 				<h3>金額明細</h3>
 				<div class="col-md-6">
 					@*<p>總金額：@Model.TotalPay</p>*@
-					@*<p>優惠折扣：</p>*@
+					<p>優惠折扣：@descrip</p>
 					<p>運費：@freight</p>
 					<P>結帳金額：@Model.FinalPay</P>
 				</div>			
