@@ -185,19 +185,19 @@ namespace prjBookMvcCore.Controllers
                         FirstOrDefault();
             if (query != null)
             {
-                string jsonData = JsonConvert.SerializeObject(Json(new { success = false, message = "購物車裡已有此品項" }));
+                string jsonData = JsonConvert.SerializeObject(Json(new { success = false, message = "暫存清單已有此品項" }));
                 return jsonData;
             }
             else
             {
                 var q2 = _db.ActionDetials.
-                            Where(x => x.ActionId == 4 && x.MemberId == memberID && x.BookId == bookID).
+                            Where(x => x.ActionId == 7 && x.MemberId == memberID && x.BookId == bookID).
                             FirstOrDefault();
                 if (_db.Books.Find(bookID).UnitInStock > 0)
                 {
-                    q2.ActionId = 7;
+                    q2.ActionId = 4;
                     _db.SaveChanges();
-                    string jsonData2 = JsonConvert.SerializeObject(Json(new { success = true, message = "成功加入購物車!" }));
+                    string jsonData2 = JsonConvert.SerializeObject(Json(new { success = true, message = "已加入暫存!" }));
                     return jsonData2;
                 }
                 else
