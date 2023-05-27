@@ -10,6 +10,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Mail;
+using System.Text;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -17,10 +18,13 @@ namespace prjBookMvcCore.Controllers
     {
         public UserInforService _user { get; set; }
         BookShopContext _db = new BookShopContext();
-        public OrderController(UserInforService user, BookShopContext db)
+        private readonly IConfiguration _config;
+
+        public OrderController(UserInforService user, IConfiguration config, BookShopContext db)
         {
             _user = user;
             _db = db;
+            _config = config;
         }
         [Authorize]
         public IActionResult ShoppingCart() //開啟頁面的方法
@@ -174,7 +178,7 @@ namespace prjBookMvcCore.Controllers
                 _db.ActionDetials.Remove(tool);
             }
             _db.SaveChanges();
-
+            //writeOrderMs(order, _config, _db);
             return Content(isSuccess.ToString());
         }
 
@@ -243,6 +247,36 @@ namespace prjBookMvcCore.Controllers
                 }
             }
             return Json(discounts);
+        }
+
+        public void writeOrderMs(Order order, IConfiguration config, BookShopContext db)
+        {
+            string mailContent = $"親愛的讀者您好：<br>" +
+                $"感謝您對讀本的支持，您於讀本的訂購已經完成！" +
+                $"為保護您的個資安全，即日起將不在信函中顯示完整訂單 / 出貨明細，<br>" +
+                $"也不提供發送手機簡訊服務，僅以電子郵件進行通知，請務必留意相關訊息！<br>" +
+                $"建議您，可至讀本會員中心 > 訂單查詢，謝謝您! " +
+                $"您本次訂購的商品將由 {order.Shipment.ShipmentName} 運送。" +
+                $"<p>讀本購書平台</p>";
+            string mailSubject = "[讀本] 訂單完成通知信";
+            string SmtpServer = "smtp.gmail.com";
+            string GoogleMailUserID = config["GoogleMailUserID"];
+            string GoogleMailUserPwd = config["GoogleMailUserPwd"];
+            int port = 587;
+            Member a = db.Members.Find(order.MemberId);
+            MailMessage mms = new MailMessage();
+            mms.From = new MailAddress(GoogleMailUserID);
+            mms.Subject = mailSubject;
+            mms.Body = mailContent;
+            mms.IsBodyHtml = true;
+            mms.SubjectEncoding = Encoding.UTF8;
+            mms.To.Add(new MailAddress(a.MemberEmail));
+            using (SmtpClient client = new SmtpClient(SmtpServer, port))
+            {
+                client.EnableSsl = true;
+                client.Credentials = new NetworkCredential(GoogleMailUserID, GoogleMailUserPwd);
+                client.Send(mms);
+            }
         }
 
         //----------------------------------------------------------------
