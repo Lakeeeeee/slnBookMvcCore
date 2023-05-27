@@ -60,7 +60,6 @@ namespace prjBookMvcCore.Controllers
 
             return Json(newCart);
         }
-        int y = 0;
         public IActionResult Action2(IFormCollection form)
         {
             int theorderID = 0;

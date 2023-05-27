@@ -47,13 +47,12 @@
     }
 
 </style>
-
-<div class="contan">
-    <p><h6>會員資料</h6></p>
+<h4>會員資料</h4>
+<div class="container">
     <div class="row">
         <div class="col">
             <p>
-                今年累積消費金額: @Model.CostAmount 元
+                今年累積消費金額: <span style="color:saddlebrown; font-weight:bold">@Model.CostAmount </span>元
             </p>
             <form asp-action="alretProflie" id="form">
                 <table style="width:max-content">
@@ -68,7 +67,7 @@
                         </tr>
                         <tr>
                             <td>會員帳號(Email)：</td>
-                            <td><input asp-for="MemberEmail" class="ips01" readonly /></td>
+                            <td><input asp-for="MemberEmail" class="ips01" readonly data-bs-toggle="tooltip" data-bs-placement="right" title="此欄位不可修改" /></td>
                             <td><span asp-validation-for="MemberEmail" class="text-danger"></span></td>
                         </tr>
                         <tr>
@@ -79,7 +78,7 @@
 
                         <tr>
                             <td>生日：</td>
-                            <td><input asp-for="MemberBrithDate" class="ips01" type="date" readonly /></td>
+                            <td><input asp-for="MemberBrithDate" class="ips01" type="date" readonly data-bs-toggle="tooltip" data-bs-placement="right" title="此欄位不可修改" /></td>
                             <td><span asp-validation-for="MemberBrithDate" class="text-danger"></span></td>
                         </tr>
                         <tr>
@@ -109,7 +108,7 @@
                 </table>
                 <div>
                     <p>
-                        <div class="card" style="">
+                        <div class="card">
                             <input id="check" class="card-body" value="確認修改" type="submit" style="display:block;width:100%;border:none; background-color:transparent">
                         </div>
                     </p>
@@ -128,12 +127,15 @@
         })
 
         const confirm = await response.text();
-        if (confirm) {
-            alert('修改成功');
-            location.reload();
+        if (confirm === "True") {
+            swal("完成", "修改成功", "success").then(()=>{
+                location.reload();
+            });
         }
         else {
-            location.reload();
+            swal("Un-Oh", "修改失敗", "error").then(()=>{
+                location.reload();
+            });
         }
     });
 

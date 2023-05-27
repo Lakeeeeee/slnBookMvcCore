@@ -94,7 +94,6 @@ namespace prjBookMvcCore.Controllers
                 return Content("notexist");
             }
         }
-
         public IActionResult Login() //登入頁面
         {
             return View();
@@ -113,15 +112,15 @@ namespace prjBookMvcCore.Controllers
                     var useClain = new List<Claim>
                     {
                         new Claim("Id", user.MemberId.ToString()),
-                        new Claim("UserLevelId", user.LevelId.ToString()),
-                        new Claim("UserLevelName", user.Level.LevelName),
+                        new Claim("UserLevelId", user.LevelId.ToString()!),
+                        new Claim("UserLevelName", user.Level!.LevelName),
                         new Claim(ClaimTypes.Name, user.MemberName),
                     };
 
                     //建構cookie用戶驗證物件的狀態存取
                     var varClainsIdentity = new ClaimsIdentity(useClain, CookieAuthenticationDefaults.AuthenticationScheme);
                     HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(varClainsIdentity));
-                    return Json(new { success = true, message = "登入成功" });
+                    return Json(new { success = true, message = "系統將自動為您轉向" });
                 }
                 return Json(new { success = false, message = "密碼不正確" });
             }
@@ -496,13 +495,17 @@ namespace prjBookMvcCore.Controllers
             Member memberupdate = _bookShopContext.Members.FirstOrDefault(x => x.MemberId == member.MemberId)!;
             if (memberupdate != null)
             {
-                memberupdate.MemberName = member.MemberName;
-                memberupdate.MemberEmail = member.MemberEmail;
-                memberupdate.MemberBrithDate = member.MemberBrithDate;
-                memberupdate.MemberAddress = member.MemberAddress;
-                memberupdate.PaymentId = member.PaymentId;
-                _bookShopContext.SaveChanges();
-                isExsit = true;
+                try
+                {
+                    memberupdate.MemberName = member.MemberName;
+                    memberupdate.Memberphone = member.Memberphone;
+                    memberupdate.MemberAddress = member.MemberAddress;
+                    memberupdate.PaymentId = member.PaymentId;
+                    _bookShopContext.SaveChanges();
+                    isExsit = true;
+                }catch(Exception ex)
+                {
+                }
             };
             return Content(isExsit.ToString());
         }
