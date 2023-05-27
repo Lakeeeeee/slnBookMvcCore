@@ -128,7 +128,7 @@ th {
 							<tr>
 								<th>@item.Book.BookTitle</th>
 								<th>@item.Quantity</th>
-								<th>@item.UnitPrice</th>
+								<th>@item.UnitPrice.ToString("F0") 元</th>
 							</tr>
 						}					
 					
@@ -157,8 +157,8 @@ th {
 				<div class="col-md-6">
 					@*<p>總金額：@Model.TotalPay</p>*@
 					<p>優惠折扣：@descrip</p>
-					<p>運費：@freight</p>
-					<P>結帳金額：@Model.FinalPay</P>
+					<p>運費：@freight.ToString("F0") 元</p>
+					<P>結帳金額：@Model.FinalPay 元</P>
 				</div>			
 			</div>
 	</div>

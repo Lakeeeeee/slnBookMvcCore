@@ -543,9 +543,20 @@
         successModal.style.display = 'block';
         const confirmButton = document.getElementById('confirmButton');
         confirmButton.addEventListener('click', function () {
+            updatePoint(id);
             toPage4(id); // 在確定按鈕的點擊事件處理程序中呼叫 toPage4() 函數
         });
     };
+
+    function updatePoint(id) {
+        const url = '@Url.Action("updatePoint", "Order")?id=' + id;
+        fetch(url)
+            .catch(error => {
+                // 處理錯誤
+                console.error('更新失敗', error);
+            });
+    }
+
 
     const btnSubmit = document.getElementById('btnSubmit');
     btnSubmit.addEventListener('click', async function () {
@@ -601,9 +612,14 @@
         var paymentName = document.querySelector('input[name="paymentId"]:checked + label').innerText;
         var shipmentId = document.querySelector('input[name="shipmentId"]:checked').value;
         var shipmentName = document.querySelector('input[name="shipmentId"]:checked + label').innerText;
-        var discountdesc = document.querySelector('input[name="oD"]:checked + label').innerText;
         var rebateAmount = document.getElementById('rebateAmountInput').value;
         rebateAmount = rebateAmount !== '' ? rebateAmount : 0;
+        //優惠區，須測試
+        var discountdesc = "";
+        var selectedLabel = document.querySelector('input[name="oD"]:checked + label');
+        if (selectedLabel) {
+            discountdesc = selectedLabel.innerText;
+        }
         console.log(rebateAmount);
         // 更新P3中的內容
         document.getElementById('reciverName').innerText = '姓名: ' + reciverName;
