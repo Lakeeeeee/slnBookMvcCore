@@ -43,7 +43,6 @@ namespace prjBookMvcCore.Controllers
                 cartItems.Add(shoppingcartInformation);
             }
             return View(cartItems);
-
         }
         public IActionResult Action1(IFormCollection form)
         {
@@ -181,6 +180,13 @@ namespace prjBookMvcCore.Controllers
             //writeOrderMs(order, _config, _db);
             return Content(isSuccess.ToString());
         }
+        [Authorize]
+        public IActionResult CollectList(int id) //暫存清單頁面
+        {
+            var q = _db.ActionDetials.Include(x=>x.Book).ThenInclude(x=>x.BookDiscountDetails).ThenInclude(x=>x.BookDiscount).Where(x => x.MemberId == id && x.ActionId == 4);
+            return Json(q);
+        }
+
 
         public string moveToList(int bookID, int memberID, int actionID)
         {
