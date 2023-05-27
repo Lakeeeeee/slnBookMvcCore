@@ -105,7 +105,7 @@
                                         <a id="@book.BookId" href="~/Book/BookInformation/@book.BookId"> <img src="~/Image//Book/@book.CoverPath" class="d-block w-100 img-with-border" alt="..." title="@book.BookTitle.Split("$")[0]" /></a>
                                         <ul style="list-style:none; margin:0; padding:0;" class="text-start">
                                             <li><div class="bookCaption mt-3"><a id="@book.BookId" href="~/Book/BookInformation/@book.BookId" title="@book.BookTitle.Split("$")[0]">@book.BookTitle.Split("$")[0]</a></div></li>
-                                            <li>原價：<del style="color:red;font-style:oblique">@((int)book.UnitPrice) </del> 元</li>
+                                            <li>原價：<del style="font-style:oblique">@((int)book.UnitPrice) </del> 元</li>
                                             <li>優惠價：<span style="color: #E3007F; ">@((g.BookDiscountAmount * 100).ToString("0"))</span>折<span style="color: #E3007F;font-weight:bold;">@((int)Math.Ceiling(book.UnitPrice * g.BookDiscountAmount))</span>元</li>
                                             <li>優惠截止日：@book.BookDiscountEndDate.AddDays(-1).ToString("yyyy/MM/dd")</li>
                                         </ul>

@@ -151,7 +151,7 @@
                                                 <a asp-controller="Book" asp-action="authorInformation" asp-route-id="@aaaaa">@item.author.AuthorName</a>
                                             }
                                         </li>
-                                        <li class="Price">原    價：<span>@((int)item.book.UnitPrice)元</span></li>
+                                        <li class="Price">原價：<del>@((int)item.book.UnitPrice)</del>元</li>
                                         <li class="discPrice">
                                             優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
                                             <span style="color: #E3007F;">@((int)Math.Ceiling(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
