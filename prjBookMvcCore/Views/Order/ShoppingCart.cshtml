@@ -209,6 +209,7 @@
                     </div>
                 </div>
             </form>
+
             <form>
                 <div class="tab-pane fade" id="pills-b" role="tabpanel" aria-labelledby="pills-b-tab">
                     @*暫存*@
@@ -446,6 +447,22 @@
     </div>
 </div>
 
+<script>
+    //處理分頁切換
+    $(document).ready(function () {
+        // 點擊購物車分頁時顯示購物車頁面
+        $("#pills-a-tab").click(function () {
+            $("#pills-b").removeClass("show active");
+            $("#pills-a").addClass("show active");
+        });
+
+        // 點擊暫存清單分頁時顯示暫存清單頁面
+        $("#pills-b-tab").click(function () {
+            $("#pills-a").removeClass("show active");
+            $("#pills-b").addClass("show active");
+        });
+    });
+</script>
 <script>
     let isLogin = false;
     window.onload = () => {
