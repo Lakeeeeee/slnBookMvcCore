@@ -188,10 +188,10 @@ namespace prjBookMvcCore.Controllers
                                           繪者 = b.PainterDetails.Select(x => x.Painter.PainterName).FirstOrDefault(),
                                           譯者 = b.TranslatorDetails.Select(x => x.Translator.TranslatorName).FirstOrDefault(),
                                           出版社 = b.Publisher.PublisherName,
-                                          簡介=b.ContentIntro,
+                                          簡介 = b.ContentIntro,
                                           定價 = b.UnitPrice,
                                           路徑 = b.CoverPath,
-                                          折扣 = b.BookDiscountDetails.Where(x=>x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                          折扣 = b.BookDiscountDetails.Where(x => x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                                           出版日期 = b.PublicationDate,
                                       }).Distinct();
                 }
@@ -423,24 +423,18 @@ namespace prjBookMvcCore.Controllers
 
         public List<RecommendInformation> getNormal()
         {
-            RandomNumberGenerator rng = RandomNumberGenerator.Create();
+            Random random = new Random();
+            List<int> allNumbers = Enumerable.Range(0, 392).ToList();
             List<int> randomList = new List<int>();
 
-            for (int i = 0; i < 10; i++)
+            while (randomList.Count < 10)
             {
-                byte[] randomNumber = new byte[4]; // Assuming you want 32-bit integers
-                rng.GetBytes(randomNumber);
-                int n = BitConverter.ToInt32(randomNumber, 0) % 392;
-
-                if (randomList.Contains(n))
-                {
-                    i--;
-                }
-                else
-                {
-                    randomList.Add(n);
-                }
+                int randomIndex = random.Next(0, allNumbers.Count);
+                int randomNumber = allNumbers[randomIndex];
+                randomList.Add(randomNumber);
+                allNumbers.RemoveAt(randomIndex);
             }
+
             List<RecommendInformation> normal = new List<RecommendInformation>();
 
             var query = from b in db.Books
@@ -454,7 +448,7 @@ namespace prjBookMvcCore.Controllers
                             定價 = b.UnitPrice,
                             路徑 = b.CoverPath,
                             出版日期 = b.PublicationDate,
-                            折扣 = b.BookDiscountDetails.Where(x => x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                            折扣 = b.BookDiscountDetails.Where(x => x.BookDiscountStartDate < DateTime.Now && x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                         };
 
             foreach (var recommendBook in query)
