@@ -18,9 +18,11 @@
         <div>
             <br />
             <p>請重新設定您的密碼，完成後重新登入</p>
-            <p>新的密碼: <input asp-for="MemberPassword"></p>
-            <p>確認密碼: <input></p>
-            <p><button id="check" type="submit" class="btn btn-outline-success btn-sm">確認送出</button></p>
+            <p>新的密碼: <input name="MemberPassword" id="pwd1"></p>
+            <p>確認密碼: <input id="pwd2"></p>
+            <p><button id="check" type="submit" class="btn btn-outline-success btn-sm">確認送出</button>
+                <button id="demo" type="submit" class="btn btn-outline-success btn-sm" style="margin-left:15px">Demo</button>
+            </p>
         </div>
     </form>
 </div>
@@ -44,6 +46,16 @@
         }
     });
 </script>
+<script>
+    const demoBtn = document.getElementById('demo');
+    const pwd1Input = document.getElementById('pwd1');
+    const pwd2Input = document.getElementById('pwd2');
+    const checkBtn = document.getElementById('check');
 
+    demoBtn.addEventListener('click', () => {
+        pwd1Input.value = 'As123456';
+        pwd2Input.value = 'As123456';
+    });
+</script>
 
 

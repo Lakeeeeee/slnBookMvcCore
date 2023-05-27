@@ -120,7 +120,8 @@
 </div>
 <script>
     const form = document.querySelector('#form');
-    form.addEventListener('submit', async () => {
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
         const response = await fetch('@Url.ActionLink("alretProflie")', {
             method: 'Post',
             body: new FormData(form)

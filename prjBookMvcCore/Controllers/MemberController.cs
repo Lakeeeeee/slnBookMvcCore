@@ -85,11 +85,11 @@ namespace prjBookMvcCore.Controllers
                         MemberId = newmember.MemberId
                     };
                     _bookShopContext.MessageSubscribes.Add(subscribe);
+                   writeCouponMessage(newmember, _bookShopContext);
                 }
                 _bookShopContext.SaveChanges();
                 _cm.write註冊會員禮Letter(newmember, _bookShopContext);
                 _cm.writeWelcomeLetter(newmember, _bookShopContext);
-                writeCouponMessage(newmember, _bookShopContext);
                 return Content("notexist");
             }
         }
@@ -503,7 +503,7 @@ namespace prjBookMvcCore.Controllers
         {
             Models.Message Letter = new Models.Message()
             {
-                MessageTypeId = 1,
+                MessageTypeId = 2,
                 MessageTitle = $"訂閱送好禮!",
                 MessageContent =
                 $"<p>Hi! {receiver.MemberName}!</p>" +

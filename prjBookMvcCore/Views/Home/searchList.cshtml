@@ -51,9 +51,25 @@
     </style>
 </head>
 <body>
-    <h1>SearchTest</h1>
+    <h1>搜尋結果</h1>
 
-    <p>Keyword: @ViewBag.KeyWord</p>
+    <p>搜尋條件：</p>
+    <p>關鍵字： @ViewBag.KeyWord</p>
+    <p>
+        價錢範圍：@ViewBag.frontprice ~ @ViewBag.backprice
+    </p>
+    <p>
+        折扣範圍：@ViewBag.frontdiscount ~ @ViewBag.backdiscount
+    </p>
+    <p>
+        出版日期：@ViewBag.frontdate ~ @ViewBag.backdate
+    </p>
+
+
+
+
+
+
     @{
         if (Model != null)
         {
@@ -65,7 +81,7 @@
                             <div class="card ">
                                 <div class="card-header">欄位 </div>
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item"><a href="#書名/ISBN" title="移至 書名/ISBN ">書名/ISBN (@Model.cSearchBook.Count())</a></li>
+                                    <li class="list-group-item">搜尋結果：(@Model.cSearchBook.Count())</li>
                                 </ul>
                             </div>
                         </div>
@@ -99,7 +115,7 @@
                                                         優惠價：<span style="color: #E3007F;">
                                                             @((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))
                                                         </span>折
-                                                        <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
+                                                        <span style="color: #E3007F;">@((int)Math.Ceiling(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
                                                     </li>
                                                     <li>
                                                         <button class="btn btn-outline-warning btn-sm my-2" title="尚未建置" onclick="addToCart(@item.book.BookId,@_userInforService.UserId)">
@@ -109,8 +125,6 @@
                                                             加入購物車
                                                         </button>
                                                     </li>
-                                                    <li class="bookCaption two-lines">@item.book.ContentIntro</li>
-                                                    <li class="bookCaption two-lines">@item.book.TryContent</li>
                                                 </ul>
                                             </div>
                                         </div>

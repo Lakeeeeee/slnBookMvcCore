@@ -70,21 +70,23 @@
                         @for (int i = p * 5; i < (p + 1) * 5; i++)
                         {
                             RecommendInformation item = Model.quantity[i];
-                            <div class="col book-item ms-3" data-publication-date="@item.book.PublicationDate" data-price="@((int)Math.Round(item.bookDiscount.BookDiscountAmount * item.book.UnitPrice))">
-                                <h4>@if (i < 3)
+                            <div class="col book-item ms-3" data-publication-date="@item?.book?.PublicationDate" data-price="@((int)Math.Ceiling(item.bookDiscount.BookDiscountAmount * item.book.UnitPrice))">
+                                <h4>
+                                    @if (i < 3)
                                     {
                                         <img src="~/Image/crown_icon.png" height="25">
-                                    }TOP @(i + 1)</h4>
+                                    }TOP @(i + 1)
+                                </h4>
                                 <div style="position:relative" class=" mb-3">
                                     <a href="~/Book/BookInformation/@item.book.BookId"><img src="~/Image/Book/@item.book.CoverPath" title="@item.book.BookTitle" height="150"></a>
                                 </div>
                                 <div class="caption mb-3">
                                     <ul style="list-style:none; margin:0; padding:0;">
                                         <li><a class="bookCaption mb-2" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle.Replace("$$"," ")</a></li>
-                                        <li class="Price">原價：@((int)Math.Round(item.book.UnitPrice))元</li>
+                                        <li class="Price">原價：@((int)item.book.UnitPrice)元</li>
                                         <li class="discPrice">
                                             優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
-                                            <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
+                                            <span style="color: #E3007F;">@((int)Math.Ceiling(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
                                         </li>
                                     </ul>
                                 </div>
@@ -119,13 +121,13 @@
                         <ul style="list-style:none">
                             <a asp-controller="Book" asp-action="BookInformation" asp-route-id="@item.book.BookId">
                             <li class="text-center mb-3">
-                                <img height="150" src="~/Image/Book/@item.book.CoverPath" />
+                                <img height="150" src="~/Image/Book/@item?.book?.CoverPath" />
                             </li>
-                            <li class="bookCaption mb-2">@item.book.BookTitle.Replace("$$"," ")</li>
-                            <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))元</span></li>
+                            <li class="bookCaption mb-2">@item?.book?.BookTitle.Split("$")[0]</li>
+                            <li class="Price">原    價：<span>@((int)item.book.UnitPrice)元</span></li>
                             <li class="discPrice">
                                 優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
-                                <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
+                                <span style="color: #E3007F;">@((int)Math.Ceiling(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
                             </li>
                             <li>出版日期：@item.book.PublicationDate.ToString("yyyy-MM-dd")</li>
                             </a>
@@ -155,13 +157,13 @@
                         <ul style="list-style:none">
                             <a asp-controller="Book" asp-action="BookInformation" asp-route-id="@item.book.BookId">
                             <li class="text-center mb-3">
-                                <img height="150" src="~/Image/Book/@item.book.CoverPath" />
+                                <img height="150" src="~/Image/Book/@item?.book?.CoverPath" />
                             </li>
-                            <li class="bookCaption mb-2">@item.book.BookTitle.Replace("$$"," ")</li>
-                            <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))元</span></li>
+                            <li class="bookCaption mb-2">@item?.book?.BookTitle.Replace("$$"," ")</li>
+                            <li class="Price">原    價：<span>@((int)item.book.UnitPrice)元</span></li>
                             <li class="discPrice">
                                 優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
-                                <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
+                                <span style="color: #E3007F;">@((int)Math.Ceiling(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
                             </li>
                             <li>出版日期：@item.book.PublicationDate.ToString("yyyy-MM-dd")</li>
                             </a>
@@ -193,24 +195,24 @@
                 foreach (var item in Model.commentTimeDate)
                 {
                     <div class="col">
-                        <ul style="list-style:none">
-                            <a href="/Book/BookInformation/@item.book.BookId#comment">
-                            <li class="text-center mb-3">
-                                <img height="150" src="~/Image/Book/@item.book.CoverPath" />
-                            </li>
-                            <li class="bookCaption mb-2">@item.book.BookTitle.Replace("$$"," ")</li>
-                            <li>
-                                評論等級：<span>
-                                        @for (int x = 0; x < item.comment.Stars; x++)
+                        <a href="/Book/BookInformation/@item?.book?.BookId#comment">
+                            <ul style="list-style:none">
+                                <li class="text-center mb-3">
+                                    <img height="150" src="~/Image/Book/@item?.book?.CoverPath" />
+                                </li>
+                                <li class="bookCaption mb-2">@item?.book?.BookTitle.Replace("$$"," ")</li>
+                                <li>
+                                    評論等級：<span>
+                                        @for (int x = 0; x < item?.comment?.Stars; x++)
                                         {
-                                        <img style="width:20px; height:auto" src="~/image/icons8-star.gif" />
+                                            <img style="width:20px; height:auto" src="~/image/icons8-star.gif" />
                                         }
-                                </span>
-                            </li>
-                            <li>評論日期：@item.comment.CommentTime.ToString("yyyy-MM-dd")</li>
-                            <li class="bookCaption" style="color:grey">@item.comment.CommentText</li>
-                            </a>
-                        </ul>
+                                    </span>
+                                </li>
+                                <li>評論日期：@item?.comment?.CommentTime.ToString("yyyy-MM-dd")</li>
+                                <li class="bookCaption" style="color:grey">@item?.comment?.CommentText</li>
+                            </ul>
+                        </a>
                     </div>
                     <br />
                     countcommentTimeDate++;

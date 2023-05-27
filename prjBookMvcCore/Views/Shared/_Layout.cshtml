@@ -59,8 +59,16 @@
             align-items: center; /* 內容區塊水平置中 */
         }
 
-        .fontsize {
+        .fontsize24 {
+            font-size: 24px;
+        }
+
+        .fontsize20 {
             font-size: 20px;
+        }
+
+        .fontsize18 {
+            font-size: 16px;
         }
 
         a:link, a:visited {
@@ -114,21 +122,21 @@
             <div class="container">
                 @*LOGO開始*@
                 <div class="align-items-start" style="font-weight:900">
-                    @Html.ActionLink("讀本", "Home", "Home", new { area = "" }, new { @class = "fontsize navbar-brand" })  @*須換圖*@
+                    @Html.ActionLink("讀本", "Home", "Home", new { area = "" }, new { @class = "fontsize24 navbar-brand" })  @*須換圖*@
                 </div>
                 @*登入選項開始*@
-                <div class="justify-content-end menu">
+                <div class="fontsize20 justify-content-end menu">
                     <ul class="zero">
                         @{
                             if (_userInforService.UserId != 0)
                             {
-                                                <li> Hi! @_userInforService.UserName </li>
-                                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/LogOut">登出</a></li>
+                                <li> Hi! @_userInforService.UserName </li>
+                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/LogOut">登出</a></li>
                             }
                             else
                             {
-                                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/Login">登入</a></li>
-                                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/Signin">註冊</a></li>
+                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/Login">登入</a></li>
+                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/Signin">註冊</a></li>
                             }
                         }
                         <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/MemberCenter">會員中心</a></li>
@@ -138,29 +146,31 @@
                         @{
                             if (_userInforService.UserId == 0)
                             {
-                                                <p>尚未登入</p>
+                                <p>尚未登入</p>
                             }
                             else
                             {
-                                                <p>購物車預覽</p>
-                                                <table>
-                                                    @{
-                                        var totalprice = 0;
-                                        var cart = db.ActionDetials.Where(a => a.MemberId == _userInforService.UserId & a.ActionId == 7).Select(a => new { a.BookId, a.Book.BookTitle, a.Book.CoverPath, a.Book.UnitPrice, a.ActionToBookId }).ToList();
-                                        foreach (var g in cart)
-                                        {
-                                            var dis = db.BookDiscountDetails.Where(d => d.BookId == g.BookId & d.BookDiscountStartDate < DateTime.Now & d.BookDiscountEndDate > DateTime.Now).Select(d => new { d.BookDiscount.BookDiscountAmount }).ToList();
-                                            <tr><td rowspan="4" class="p-1"><a href="~/Book/BookInformation/@g.BookId"><img src="~/Image/Book/@g.CoverPath" class="d-block w-100 img-with-border" /></a></td><td><a class="bookCaption" href="~/Book/BookInformation/@g.BookId">@(g.BookTitle.Split("$")[0])</a></td></tr>
-                                                                            <tr><td>原價：<del style="color:red;font-style:oblique">@((int)Math.Round(g.UnitPrice)) </del>  元</td></tr>
-                                                                            <tr class="m-1"><td> 優惠價：<span style="color: #E3007F; ">@((dis[0].BookDiscountAmount * 100).ToString("0"))</span> 折 <span style="color: #E3007F;font-weight:bold;"> @((int)Math.Round(g.UnitPrice * dis[0].BookDiscountAmount)) </span>元</td></tr>
-                                            totalprice = totalprice + (int)Math.Round(g.UnitPrice * dis[0].BookDiscountAmount);
-                                                                            <tr><td style="text-align:right"><a role="button" onclick="cartDel(@g.ActionToBookId)" class="btn btn-outline-info">刪除 </a></td></tr>
+                                <p>購物車預覽</p>
+                                <div style="max-height:600px ;overflow:auto">
+                                    <table>
+                                        @{
+                                            var totalprice = 0;
+                                            var cart = db.ActionDetials.Where(a => a.MemberId == _userInforService.UserId & a.ActionId == 7).Select(a => new { a.BookId, a.Book.BookTitle, a.Book.CoverPath, a.Book.UnitPrice, a.ActionToBookId }).ToList();
+                                            foreach (var g in cart)
+                                            {
+                                                var dis = db.BookDiscountDetails.Where(d => d.BookId == g.BookId & d.BookDiscountStartDate < DateTime.Now & d.BookDiscountEndDate > DateTime.Now).Select(d => new { d.BookDiscount.BookDiscountAmount }).ToList();
+                                                <tr><td rowspan="4" class="p-1"><a href="~/Book/BookInformation/@g.BookId"><img src="~/Image/Book/@g.CoverPath" class="d-block w-100 img-with-border" /></a></td><td><a class="bookCaption" href="~/Book/BookInformation/@g.BookId">@(g.BookTitle.Split("$")[0])</a></td></tr>
+                                                <tr><td>原價：<del style="color:red;font-style:oblique">@((int)g.UnitPrice) </del>  元</td></tr>
+                                                <tr class="m-1"><td> 優惠價：<span style="color: #E3007F; ">@((dis[0].BookDiscountAmount * 100).ToString("0"))</span> 折 <span style="color: #E3007F;font-weight:bold;"> @((int)Math.Ceiling(g.UnitPrice * dis[0].BookDiscountAmount)) </span>元</td></tr>
+                                                totalprice = totalprice + (int)Math.Ceiling(g.UnitPrice * dis[0].BookDiscountAmount);
+                                                <tr><td style="text-align:right"><a role="button" onclick="cartDel(@g.ActionToBookId)" class="btn btn-outline-info">刪除 </a></td></tr>
+                                            }
                                         }
-                                                    }
-                                                </table>
-                                                <hr />
-                                                <p style="text-align:center">已選購 @cart.Count 件商品，共<span style="color: #E3007F;font-weight:bold;"> @totalprice </span>元。</p>
-                                                <div style="text-align:center"> <a role="button" class="btn btn-outline-danger" href="~/Order/ShoppingCart"> 結帳</a></div>
+                                    </table>
+                                </div>
+                                <hr />
+                                <p style="text-align:center">已選購 @cart.Count 件商品，共<span style="color: #E3007F;font-weight:bold;"> @totalprice </span>元。</p>
+                                <div style="text-align:center"> <a role="button" class="btn btn-outline-danger" href="~/Order/ShoppingCart"> 結帳</a></div>
                             }
                         }
                     </div>
@@ -169,59 +179,59 @@
         </nav>
         @*導覽結束*@
         @*分類 & 搜尋開始*@
-        <div class="navbar navbar-default navbar-fixed-top" style="">
+        <div class="navbar navbar-default navbar-fixed-top">
             <div class="navbar navbar-light bg-light container" style="border:1px solid #000000; background-color:#ebf8bc">
                 @*分類*@
-                <form class="justify-content-start">
+                <div class="justify-content-start">
                     <div class="menu">
                         <ul class="zero">
-                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Promotions/Promotions活動圖">活動專區</a></li>
-                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Promotions/Promotions活動總覽圖">推薦專文</a></li>
-                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Promotions/Promotions領取當周優惠">領取優惠卷</a></li>
+                            <li><a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" href="~/Promotions/Promotions活動圖">活動專區</a></li>
+                            <li><a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" href="~/Promotions/Promotions活動總覽圖">推薦專文</a></li>
+                            <li><a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" href="~/Promotions/Promotions領取當周優惠">領取優惠劵</a></li>
                             <li>
-                                <a role="button" class="btn btn-sm btn-outline-secondary mx-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="15">人文社科</a>
+                                <a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="23">旅遊</a>
                             </li>
                             <li>
-                                <a role="button" class="btn btn-sm btn-outline-secondary mx-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="16">心理勵志</a>
+                                <a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="16">心理勵志</a>
                             </li>
                             <li>
-                                <a role="button" class="btn btn-sm btn-outline-secondary mx-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="19">生活風格</a>
+                                <a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="24">商業理財</a>
                             </li>
                             <li>
-                                <a role="button" class="btn btn-sm btn-outline-secondary mx-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="21">自然科普</a>
+                                <a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="15">人文社科</a>
                             </li>
                             <li>
-                                <a role="button" class="btn btn-sm btn-outline-secondary mx-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="23">旅遊</a>
+                                <a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="19">生活風格</a>
                             </li>
-                            <li>
-                                <a role="button" class="btn btn-sm btn-outline-secondary mx-1" asp-controller="Category" asp-action="分類頁面" asp-route-id="24">商業理財</a>
-                            </li>
-                            <li><a role="button" class="btn btn-sm btn-outline-secondary mx-1" href="~/Home/Menu">更多書籍</a></li>
+
+                           
+                           
+                            <li><a role="button" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" href="~/Home/Menu">更多書籍</a></li>
                         </ul>
                     </div>
-                </form>
+                </div>
                 @*搜尋*@
-                <form class="justify-content-end">
-                    <div class="input-group navbar navbar-light bg-light menu">
-                        <input id="search_input" style="border-right: #C4C4C4 2px solid;" placeholder="輸入關鍵字" name="keyword" type="text" class="mx-1 form-control inputForSearch ui-autocomplete-input" maxlength="40" value="" autocomplete="off">
+                <div class="justify-content-end">
+                    <div class="input-group bg-light menu">
+                        <input id="search_input" style="border-right: #C4C4C4 2px solid;" placeholder="輸入關鍵字" name="keyword" type="text" class="fontsize18 mx-1 form-control inputForSearch ui-autocomplete-input" maxlength="40" value="" autocomplete="off">
                         <div class="dropdown">
-                            <button class="btn btn-sm btn-outline-secondary mx-1 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button style="width:230px" class="fontsize18 btn btn-outline-secondary mx-1 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                 進階搜尋
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="width:500px">
                                 <li>
                                     <div class="m-1 p-1">
                                         <span class="mx-2">售價</span>
-                                        <input id="frontprice" style="margin-left:2em; border-right: #C4C4C4 2px solid;width:130px" placeholder="金額" type="search" maxlength="20" value="@ViewBag.frontprice" />
+                                        <input id="frontprice" style="margin-left:2em; border-right: #C4C4C4 2px solid;width:130px" placeholder="金額" type="search" maxlength="20" />
                                         <span class="mx-2">至</span>
-                                        <input id="backprice" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="金額" type="search" maxlength="20" value="@ViewBag.backprice" />
+                                        <input id="backprice" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="金額" type="search" maxlength="20" />
                                         <span class="mx-2">之間</span>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="m-1 p-1">
                                         <span class="mx-2">折扣</span>
-                                        <select id="frontdiscount" name="折扣1" style="margin-left:2em; width:130px" value="@ViewBag.frontdiscount">
+                                        <select id="frontdiscount" name="折扣1" style="margin-left:2em; width:130px">
                                             <option value="0" selected>請選擇 </option>
                                             @{
                                                 var bookDiscount = db.BookDiscounts.Select(dis => new { dis.BookDiscountId, dis.BookDiscountAmount, dis.BookDiscountName }).ToList();
@@ -232,7 +242,7 @@
                                             }
                                         </select>
                                         <span class="mx-2">至</span>
-                                        <select id="backdiscount" name="折扣2" style="width:130px" value="@ViewBag.backdiscount">
+                                        <select id="backdiscount" name="折扣2" style="width:130px" >
                                             <option value="0" selected>請選擇 </option>
                                             @{
                                                 foreach (var dis in bookDiscount)
@@ -248,15 +258,15 @@
                                 <li>
                                     <div class="m-1 p-1">
                                         <span class="mx-2">出版日期</span>
-                                        <input id="frontdate" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="日期" type="date" maxlength="20" value="@ViewBag.backdate" />
+                                        <input id="frontdate" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="日期" type="date" maxlength="20" />
                                         <span class="mx-2">至</span>
-                                        <input id="backdate" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="日期" type="date" maxlength="20" value="@ViewBag.frontdate" />
+                                        <input id="backdate" style="border-right: #C4C4C4 2px solid;width:130px" placeholder="日期" type="date" maxlength="20" />
                                         <span class="mx-2">之間</span>
                                     </div>
                                 </li>
                             </ul>
                         </div>
-                        <a href="#" id="search_link" type="submit" class="btn btn-sm btn-outline-secondary mx-1" value="搜尋">搜尋</a>
+                        <a role="button" href="#" id="search_link" type="submit" style="border-radius:5px" class="fontsize18 btn btn-lg btn-outline-secondary px-2 py-1" value="搜尋">搜尋</a>
                         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                         <script>
                             $(document).ready(function () {
@@ -301,7 +311,7 @@
                             });
                         </script>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
         @*分類 & 搜尋結束*@
