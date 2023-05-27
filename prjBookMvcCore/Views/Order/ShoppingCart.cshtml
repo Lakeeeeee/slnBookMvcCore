@@ -178,10 +178,8 @@
                                         <td>
                                             <button class="btn btn-outline-secondary" onclick="cancle(@item.ActionDetial.ActionToBookId)">取消</button>
                                         </td>
-                                        //切暫存功能待修
                                         <td>
-                                            <button class="btn btn-outline-secondary" onclick="temporarilySave(@item.ActionDetial.ActionToBookId)">暫存</button>
-
+                                            <button class="btn btn-outline-secondary" onclick="temSave(@item.bookId,@_user.UserId)">暫存</button>
                                         </td>
                                     </tr>
                                     count++;
@@ -695,37 +693,53 @@
 
 <script>
     // 暫存購物車項目方法
-    async function temporarilySave(bookID, memberID) {
+    async function temSave(BookID, MemberID) {
         if (this.loginCheck()) {
             let self = this;
-            let url = '@Url.Action("ActionTo", "Action")?bookID=' + bookID + '&memberID=' + memberID + '&actionID=' + 4;
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    dataType: 'json'
-                });
-                const result = await response.json();
-                if (result) {
-                    self.$notify({
-                        title: '放入暫存清單成功',
-                        message: '本書已加入暫存清單',
-                        type: 'success',
-                        offset: 130,
+            let url = '@Url.Action("UpdateActionID", "Order")';
+            const confirmed = confirm('確定要暫存嗎?');
+            if (confirmed) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            bookID: bookID,
+                            memberID: memberID,
+                            newActionID: 4
+                        })
                     });
-                } else {
-                    self.$notify({
-                        title: '放入暫存清單失敗',
-                        message: '本書已加入過暫存清單',
-                        type: 'warning',
-                        offset: 130,
-                    });
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result) {
+                            self.$notify({
+                                title: '放入暫存清單成功',
+                                message: '本書已加入暫存清單',
+                                type: 'success',
+                                offset: 130,
+                            });
+                        } else {
+                            self.$notify({
+                                title: '放入暫存清單失敗',
+                                message: '本書已加入過暫存清單',
+                                type: 'warning',
+                                offset: 130,
+                            });
+                        }
+                        window.location.href = window.location.href;
+                    } else {
+                        alert('不明錯誤，請再試試');
+                        console.log('更新 actionID 發生錯誤');
+                    }
+                } catch (error) {
+                    console.log('更新 actionID 發生錯誤：' + error);
                 }
-                window.location.href = window.location.href;
-            } catch (error) {
-                console.log(error);
             }
         }
     };
+
 </script>
 <script>
     //取消購物車項目方法
