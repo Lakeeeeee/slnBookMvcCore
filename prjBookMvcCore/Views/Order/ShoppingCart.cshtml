@@ -830,7 +830,7 @@
             const price = parseInt(priceCell.textContent, 10);
             const subtotal = quantity * price;
 
-            subtotalCell.textContent = subtotal;
+            subtotalCell.textContent = subtotal +'元';
 
             // 同時更新 input 元素的 value 值
             quantityInput.value = quantity;
