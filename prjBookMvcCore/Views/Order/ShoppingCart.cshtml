@@ -133,121 +133,50 @@
     @*頁面*@
     <div class="tab-pane fade show active" id="nav-cart" role="tabpanel" aria-labelledby="nav-cart-tab">
         @*page1*@
-        <div class="nav nav-tabs" id="nav-tab" role="tablist" style="display:none">
+        <nav>
+            @*購物車暫存切換頁籤*@
+        <div class="nav nav-tabs" id="nav-tab2" role="tablist" style="">
             <button class="nav-link active" id="nav-cart2-tab" data-bs-toggle="tab" data-bs-target="#nav-cart2" type="button" role="tab" aria-controls="nav-cart2" aria-selected="true">購物車</button>
             <button class="nav-link" id="nav-cartList-tab" data-bs-toggle="tab" data-bs-target="#nav-cartList" type="button" role="tab" aria-controls="nav-cartList" aria-selected="false">暫存清單</button>
         </div>
-          @*購物車暫存切換頁籤*@
-            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="pills-a-tab" data-bs-toggle="pill" data-bs-target="#pills-a" type="button" role="tab" aria-controls="pills-a" aria-selected="true">購物車</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="pills-b-tab" data-bs-toggle="pill" data-bs-target="#pills-b" type="button" role="tab" aria-controls="pills-b" aria-selected="false">暫存清單</button>
-                </li>
-            </ul>
-        </div>
-        <div class="tab-content" id="pills-tabContent">
-            @*購物車頁面*@
-            <form id="form1">
-                <div class="tab-pane fade show active" id="pills-a" role="tabpanel" aria-labelledby="pills-a-tab">
-                    @*購物車頁面*@
-                    <table class="table table-striped" id="table1">
-                        @*購物車內容*@
-                        <thead>
-                            <tr>
-                                <th style="width:50px;"></th>
-                                <th style="width:50px;">序號</th>
-                                <th style="width:500px;">書名</th>
-                                <th>優惠</th>
-                                <th>優惠價</th>
-                                <th>數量</th>
-                                <th>小計</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{
-                                int count = 1;
-                                decimal totalAmount = 0;
-                                foreach (var item in Model)
-                                {
-                                    int 優惠價 = (int)Math.Ceiling(item.Book.UnitPrice * item.discountAmount);
-                                    string bookTitle = item.Book.BookTitle.Replace("$$", "\n");
-                                    //檢查進位
-                                    decimal 小計 = 優惠價 * item.Quantity;
-                                    <input name="acid" value="@item.ActionDetial.ActionToBookId" type="hidden">
-                                    <tr>
-                                        <td style=""></td>
-                                        <td>@count</td>
-                                        <td>
-                                            <a class="cust3" href="../../Book/BookInformation/@item.bookId">@item.Book.BookTitle.Split("$")[0]</a>
-                                        </td>
-                                        <td>@item.discountName</td>
-                                        <td>@優惠價 元</td>
-                                        <td><input name="quantity" id="quantity_@item.ActionDetial.ActionToBookId" type="number" value="@item.Quantity" min="1" max="@item.Book.UnitInStock"><span class="mx-4">本</span></td>
-                                        <td id="subtotal">@小計 元</td>
-                                        <td>
-                                            <button class="btn btn-outline-secondary" onclick="cancle(@item.ActionDetial.ActionToBookId)">取消</button>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-outline-secondary" onclick="temSave(@item.bookId,@_user.UserId)">暫存</button>
-                                        </td>
-                                    </tr>
-                                    count++;
-                                    totalAmount += 小計;
-                                };
-                            }
-                        </tbody>
-                    </table>
-
-                    <div style="text-align:right;">
-                        @*結帳資訊*@
-                        <div style="font-size:24px; color:#545454;">
-                            <strong>總金額 共 <sapn id="totalAmount">@totalAmount </sapn> 元</strong>
-                        </div>
-                        <div class="mt-3">
-                            <span><button class="btn btn-outline-primary" type="button" id="btnForm1">來去結帳</button></span>
-                        </div>
-                    </div>
-                </div>
-            </form>
-
-            <form>
-                <div class="tab-pane fade" id="pills-b" role="tabpanel" aria-labelledby="pills-b-tab">
-                    @*暫存*@
-                    <table class="table table-striped" id="cList">
-                        <thead>
-                            <tr>
-                                <th style="width:50px;">序號</th>
-                                <th style="width:500px;">書名</th>
-                                <th>優惠</th>
-                                <th>優惠價</th>
-                                <th>數量</th>
-                                <th>小計</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{
-                                int Tcount = 1;
-                                foreach (var item in Model)
-                                {
-                                    int 優惠價 = (int)Math.Ceiling(item.Book.UnitPrice * item.discountAmount);
-                                    string bookTitle = item.Book.BookTitle.Replace("$$", "\n");
-                                    decimal 小計 = 優惠價 * item.Quantity;
-                                    <input name="acid" value="@item.ActionDetial.ActionToBookId" type="hidden">
-                                    if (item.ActionDetial.ActionId == 4)
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-cart2" role="tabpanel" aria-labelledby="nav-cart2-tab">
+                <form id="form1">
+                    <div>
+                    @*<div class="tab-pane fade show active" id="pills-a" role="tabpanel" aria-labelledby="pills-a-tab">*@
+                        @*購物車頁面*@
+                        <table class="table table-striped" id="table1">
+                            @*購物車內容*@
+                            <thead>
+                                <tr>
+                                    <th style="width:50px;"></th>
+                                    <th style="width:50px;">序號</th>
+                                    <th style="width:500px;">書名</th>
+                                    <th>優惠</th>
+                                    <th>優惠價</th>
+                                    <th>數量</th>
+                                    <th>小計</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int count = 1;
+                                    decimal totalAmount = 0;
+                                    foreach (var item in Model)
                                     {
+                                        int 優惠價 = (int)Math.Ceiling(item.Book.UnitPrice * item.discountAmount);
+                                        string bookTitle = item.Book.BookTitle.Replace("$$", "\n");
+                                        //檢查進位
+                                        decimal 小計 = 優惠價 * item.Quantity;
+                                        <input name="acid" value="@item.ActionDetial.ActionToBookId" type="hidden">
                                         <tr>
-                                            <td>@Tcount</td>
+                                            <td style=""></td>
+                                            <td>@count</td>
                                             <td>
-                                                <div class="col float-start me-4">
-                                                    <img height="50px" src="~/Image/Book/@item.Book.CoverPath" />
-                                                </div>
-                                                <div class="col pe-2">@(item.Book.BookTitle.Split("$")[0])</div>
+                                                <a class="cust3" href="../../Book/BookInformation/@item.bookId">@item.Book.BookTitle.Split("$")[0]</a>
                                             </td>
                                             <td>@item.discountName</td>
                                             <td>@優惠價 元</td>
@@ -260,14 +189,86 @@
                                                 <button class="btn btn-outline-secondary" onclick="temSave(@item.bookId,@_user.UserId)">暫存</button>
                                             </td>
                                         </tr>
-                                        Tcount++;
+                                        count++;
+                                        totalAmount += 小計;
+                                    };
+                                }
+                            </tbody>
+                        </table>
+
+                        <div style="text-align:right;">
+                            @*結帳資訊*@
+                            <div style="font-size:24px; color:#545454;">
+                                <strong>總金額 共 <sapn id="totalAmount">@totalAmount </sapn> 元</strong>
+                            </div>
+                            <div class="mt-3">
+                                <span><button class="btn btn-outline-primary" type="button" id="btnForm1">來去結帳</button></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            
+            <div class="tab-pane fade" id="nav-cartList" role="tabpanel" aria-labelledby="nav-cartList-tab">
+                <form>
+                    <div>
+                    @*<div class="tab-pane fade" id="pills-b" role="tabpanel" aria-labelledby="pills-b-tab">*@
+                        @*暫存*@
+                        <table class="table table-striped" id="cList">
+                            <thead>
+                                <tr>
+                                    <th style="width:50px;">序號</th>
+                                    <th style="width:500px;">書名</th>
+                                    <th>優惠</th>
+                                    <th>優惠價</th>
+                                    <th>數量</th>
+                                    <th>小計</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int Tcount = 1;
+                                    foreach (var item in Model)
+                                    {
+                                        int 優惠價 = (int)Math.Ceiling(item.Book.UnitPrice * item.discountAmount);
+                                        string bookTitle = item.Book.BookTitle.Replace("$$", "\n");
+                                        decimal 小計 = 優惠價 * item.Quantity;
+                                        <input name="acid" value="@item.ActionDetial.ActionToBookId" type="hidden">
+                                        if (item.ActionDetial.ActionId == 4)
+                                        {
+                                            <tr>
+                                                <td>@Tcount</td>
+                                                <td>
+                                                    <div class="col float-start me-4">
+                                                        <img height="50px" src="~/Image/Book/@item.Book.CoverPath" />
+                                                    </div>
+                                                    <div class="col pe-2">@(item.Book.BookTitle.Split("$")[0])</div>
+                                                </td>
+                                                <td>@item.discountName</td>
+                                                <td>@優惠價 元</td>
+                                                <td><input name="quantity" id="quantity_@item.ActionDetial.ActionToBookId" type="number" value="@item.Quantity" min="1" max="@item.Book.UnitInStock"><span class="mx-4">本</span></td>
+                                                <td id="subtotal">@小計 元</td>
+                                                <td>
+                                                    <button class="btn btn-outline-secondary" onclick="cancle(@item.ActionDetial.ActionToBookId)">取消</button>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-outline-secondary" onclick="temSave(@item.bookId,@_user.UserId)">暫存</button>
+                                                </td>
+                                            </tr>
+                                            Tcount++;
+                                        }
                                     }
                                 }
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </form>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>                   
+         
         </div>
         <hr />
         <div class="container">
@@ -451,7 +452,7 @@
     </div>
 </div>
 
-<script>
+@*<script>
     //處理分頁切換
     $(document).ready(function () {
         // 點擊購物車分頁時顯示購物車頁面
@@ -466,7 +467,7 @@
             $("#pills-b").addClass("show active");
         });
     });
-</script>
+</script>*@
 <script>
     let isLogin = false;
     window.onload = () => {
@@ -759,7 +760,7 @@
 </script>
 <script>//暫存
     const cList = document.getElementById('cList');
-    const btnChange = document.getElementById('pills-b-tab');
+    const btnChange = document.getElementById('cartList');
     btnChange.addEventListener('click', async () => {
         const response = await fetch('@Url.Action("CollectList", "Order")?id=' + @_user.UserId);
         const datas = await response.json();
