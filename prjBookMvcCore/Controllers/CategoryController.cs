@@ -9,7 +9,6 @@ namespace prjBookMvcCore.Controllers
     public class CategoryController : Controller
     {
         BookShopContext db = new();
-        //TODO:(書玉)分頁controller發法改寫
         public IActionResult 分類頁面(int id, int subid, int page = 1)
         {
             int categoryID = id;

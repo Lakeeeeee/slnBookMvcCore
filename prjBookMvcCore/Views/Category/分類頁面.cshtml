@@ -1,6 +1,8 @@
 @using prjBookMvcCore.Models
 @model MenuInformation
-
+@{
+    BookShopContext db = new BookShopContext();
+}
 
 
 <html>
@@ -78,7 +80,6 @@
                     @*分類選單*@
                     <div class="card-header">
                         @{
-                            BookShopContext db = new BookShopContext();
                             var s = db.Books.Where(c => c.LanguageId == 1).Select(c => c.BookId).ToList();
                             int countAll = s.Count;
                             <div class="row"><span>繁中 (@countAll)</span></div>
