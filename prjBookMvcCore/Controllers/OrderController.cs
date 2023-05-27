@@ -178,7 +178,7 @@ namespace prjBookMvcCore.Controllers
                 _db.ActionDetials.Remove(tool);
             }
             _db.SaveChanges();
-            writeOrderMs(order, _config, _db);
+            //writeOrderMs(order, _config, _db);
             return Content(isSuccess.ToString());
         }
 
