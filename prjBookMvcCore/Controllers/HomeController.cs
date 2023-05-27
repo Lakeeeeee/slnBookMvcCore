@@ -67,7 +67,7 @@ namespace prjBookMvcCore.Controllers
                                              書名 = b.BookTitle,
                                              定價 = b.UnitPrice,
                                              路徑 = b.CoverPath,
-                                             折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                             折扣 = b.BookDiscountDetails.Where(x => x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                                              出版日期 = b.PublicationDate,
                                              評論時間 = c.CommentTime,
                                              最新評論 = c.CommentText,
@@ -328,7 +328,7 @@ namespace prjBookMvcCore.Controllers
                             分類ID = b.CategoryDetails.Select(x => x.SubCategory.CategoryId).FirstOrDefault(),
                             子分類 = b.CategoryDetails.Select(x => x.SubCategory.SubCategoryName).FirstOrDefault(),
                             子分類ID = b.CategoryDetails.Select(x => x.SubCategory.SubCategoryId).FirstOrDefault(),
-                            折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                            折扣 = b.BookDiscountDetails.Where(x => x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                             銷售數量 = b.OrderDetails.Select(x => x.Quantity).FirstOrDefault(),
                             出版日期 = b.PublicationDate,
                         };
@@ -454,7 +454,7 @@ namespace prjBookMvcCore.Controllers
                             定價 = b.UnitPrice,
                             路徑 = b.CoverPath,
                             出版日期 = b.PublicationDate,
-                            折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                            折扣 = b.BookDiscountDetails.Where(x => x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                         };
 
             foreach (var recommendBook in query)
@@ -501,7 +501,7 @@ namespace prjBookMvcCore.Controllers
                                           書名 = b.BookTitle,
                                           定價 = b.UnitPrice,
                                           路徑 = b.CoverPath,
-                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                          折扣 = b.BookDiscountDetails.Where(x => x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                                           出版日期 = b.PublicationDate,
                                           評論時間 = c.CommentTime,
                                           最新評論 = c.CommentText,
@@ -547,7 +547,7 @@ namespace prjBookMvcCore.Controllers
                                           書名 = b.BookTitle,
                                           定價 = b.UnitPrice,
                                           路徑 = b.CoverPath,
-                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                          折扣 = b.BookDiscountDetails.Where(x => x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                                           出版日期 = b.PublicationDate,
                                           評論時間 = c.CommentTime,
                                           最新評論 = c.CommentText,
@@ -590,7 +590,7 @@ namespace prjBookMvcCore.Controllers
                                           書名 = b.BookTitle,
                                           定價 = b.UnitPrice,
                                           路徑 = b.CoverPath,
-                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                          折扣 = b.BookDiscountDetails.Where(x => x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                                           出版日期 = b.PublicationDate,
                                       }).Take(10);
                 List<RecommendInformation> ris = new List<RecommendInformation>();
@@ -641,7 +641,7 @@ namespace prjBookMvcCore.Controllers
                                           書名 = b.BookTitle,
                                           定價 = b.UnitPrice,
                                           路徑 = b.CoverPath,
-                                          折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                          折扣 = b.BookDiscountDetails.Where(x => x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                                           出版日期 = b.PublicationDate,
                                           銷售數量 = b.OrderDetails.Select(x => x.Quantity).FirstOrDefault()
                                       });

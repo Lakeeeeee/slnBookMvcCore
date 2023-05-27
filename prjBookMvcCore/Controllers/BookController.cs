@@ -15,6 +15,12 @@ namespace prjBookMvcCore.Controllers
         public IActionResult BookInformation(int id)
         {
             int bookId = id;
+
+            //莫名其妙的bug，隨便設一個
+            if(bookId == 0)
+            {
+                bookId = 3;
+            }
             var query = from b in db.Books
                         where b.BookId == bookId
                         select new
@@ -178,7 +184,7 @@ namespace prjBookMvcCore.Controllers
                                          書名 = b.BookTitle,
                                          定價 = b.UnitPrice,
                                          路徑 = b.CoverPath,
-                                         折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                         折扣 = b.BookDiscountDetails.Where(x => x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                                          截止日 = b.BookDiscountDetails.Select(x => x.BookDiscountEndDate).FirstOrDefault(),
                                      };
                 List<RecommendInformation> ris = new List<RecommendInformation>();

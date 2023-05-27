@@ -31,13 +31,13 @@
         </ol>
     </nav>
     <div class="row">
-        <div class="col">
+        <div class="col-6">
             <img src="~/Image/Promotions/註冊會員_上.png" class="d-block w-100" alt="page1" width="80%">
         </div>
         <div class="col-6">
             <form asp-action="Create" id="signin_form">
                 <div class="container justify-content-center bg-light" style="border-radius:10px;  padding-block:15px">
-                    <p><label class="">會員註冊</label></p>
+                    <p><h4 style="font-weight:bold">會員註冊</h4></p>
                     <p><input id="email" asp-for="MemberEmail_P" placeholder="輸入您的Email" class="inputS" required /><br /></p>
                     <p>
                         <input asp-for="MemberPassword_P" placeholder="您的密碼" id="pwd" class="inputS" pattern="[a-zA-Z0-9]{7,}" required />
@@ -48,18 +48,22 @@
                     <p><input asp-for="MemberBrithDate_P" value="1995-01-01" type="date" class="inputS" required /></p>
                     <p><input id="phone" asp-for="Memberphone_P" placeholder="電話" class="inputS" required /></p>
                     <p><input id="address" asp-for="MemberAddress_P" placeholder="地址" class="inputS" required /></p>
-                    <div class="form-check">
+                    <div class="row bg-info" style="width:inherit; margin-left:1px">
+                    <div  class="col form-check">
                         <input asp-for="isSubscribe" class="form-check-input" type="checkbox" id="flexCheckChecked">
                         我想接收到電子報
                     </div>
-                    <p>
-                        <button type="button" id="demo" class="btn btn-outline-success">Demo</button>
-                        <button type="button" id="demo2" class="btn btn-outline-success" style="margin-left:15px">Demo2</button>
-                    </p>
-                    <div>
-                        <button class="btn btn-secondary btn-sm" id="liveToastBtn" type="button">會員條款</button>
-                        <label class="form-check-label" for="flexCheckChecked" id="join_policy_check">請閱讀條款</label>
+                    <div class="col-auto">
+                        <button class="btn btn-secondary" id="liveToastBtn" type="button">會員條款</button>
+                        <label class="form-check-label" for="flexCheckChecked" id="join_policy_check" style="margin-left:15px">請閱讀條款</label>
+                        </div>
                     </div>
+                    <div style="text-align:center; margin-top:15px">
+                        <button type="submit" id="checkbtn" class="btn btn-outline-secondary" >確認送出</button>
+                        <button type="button" id="demo" class="btn btn-outline-success">Demo</button>
+                        @*<button type="button" id="demo2" class="btn btn-outline-success" style="margin-left:15px">Demo2</button>*@
+                    </div>
+
                     <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                         <div class="toast-header">
                             <strong class="me-auto">閱讀會員服務使用條款</strong>
@@ -75,35 +79,31 @@
                             </div>
                         </div>
                     </div> @*吐司*@
-                    <p style="margin-top:10px">
-                        <button class="btn btn-outline-secondary btn-sm" type="submit" style="display:none" id="checkbtn">確認送出</button>
-                    </p>
                 </div>
             </form>
         </div>
-        <div class="col"></div>
     </div>
 </div>
 <script>
     const x = document.getElementById('demo');
-    const y = document.getElementById('demo2');
-    x.addEventListener('click', function () {
-        const A = document.getElementById('email');
-        const B = document.getElementById('pwd');
-        const C = document.getElementById('pwdCheck');
-        const D = document.getElementById('name');
-        const E = document.getElementById('phone');
-        const F = document.getElementById('address');
+    //const y = document.getElementById('demo2');
+    //x.addEventListener('click', function () {
+    //    const A = document.getElementById('email');
+    //    const B = document.getElementById('pwd');
+    //    const C = document.getElementById('pwdCheck');
+    //    const D = document.getElementById('name');
+    //    const E = document.getElementById('phone');
+    //    const F = document.getElementById('address');
 
-        A.value = "finnthehuman@gmail.com";
-        B.value = "As123456";
-        C.value = "As123456";
-        D.value = "人類芬";
-        E.value = "0968688688";
-        F.value = "台北市中正區牯嶺街5巷10號";
-    });    
+    //    A.value = "finnthehuman@gmail.com";
+    //    B.value = "As123456";
+    //    C.value = "As123456";
+    //    D.value = "人類芬";
+    //    E.value = "0968688688";
+    //    F.value = "台北市中正區牯嶺街5巷10號";
+    //});    
     
-    y.addEventListener('click', function () {
+    x.addEventListener('click', function () {
         const A = document.getElementById('email');
         const B = document.getElementById('pwd');
         const C = document.getElementById('pwdCheck');
@@ -116,7 +116,7 @@
         C.value = "As123456";
         D.value = "獨書仁";
         E.value = "0968688688";
-        F.value = "臺北市信義區松高路66號";
+        F.value = "台北市中正區牯嶺街5巷10號";
     });
 
 </script>
@@ -139,7 +139,7 @@
             agreed_check = true;
 
             const btn = document.getElementById('checkbtn');
-            btn.style.display = 'block';
+            btn.style.display = 'flex';
 
         });
 
@@ -147,7 +147,6 @@
         disagreeBtn.addEventListener('click', function () {
             label.textContent = '請閱讀會員服務使用條款';
             agreed_check = false;
-
             const btn = document.getElementById('checkbtn');
             btn.style.display = 'none';
         });
