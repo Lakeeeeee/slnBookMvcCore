@@ -172,6 +172,7 @@
                                 {
                                     int 優惠價 = (int)Math.Ceiling(item.Book.UnitPrice * item.discountAmount);
                                     string bookTitle = item.Book.BookTitle.Replace("$$", "\n");
+                                    //檢查進位
                                     decimal 小計 = 優惠價 * item.Quantity;
                                     <input name="acid" value="@item.ActionDetial.ActionToBookId" type="hidden">
                                     <tr>
