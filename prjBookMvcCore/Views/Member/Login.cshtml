@@ -99,6 +99,8 @@
 
     </script>
     <script>
+    </script>
+    <script>
         const form = document.getElementById('demo-form');
         const submitBtn = document.getElementById('submitBtn');
         form.addEventListener('submit', async (event) => {
@@ -107,8 +109,16 @@
             const comfirm = await response.json();
             if (comfirm.success === true) {
             swal("登入成功!", comfirm.message, "success").then(()=>{
-                window.location.href = '../../Home/Home';
-            });
+                    if (window.history.length > 1) {
+                        var previousPageURL = document.referrer;
+                        console.log(previousPageURL);
+                        window.location.href = previousPageURL;
+                        //window.history.back();
+                        //location.reload();
+                    } else {
+                        window.location.href = "../../Home/Home";
+                    }
+                });
             }
             else{
             swal("登入失敗", comfirm.message, "error");

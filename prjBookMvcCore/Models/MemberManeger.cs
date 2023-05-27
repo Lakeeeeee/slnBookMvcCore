@@ -20,9 +20,9 @@ namespace prjBookMvcCore.Models
         {
             Message welcomeLetter = new Message()
             {
-                MessageContent = 
+                MessageContent =
                 $"<p>Hi! {receiver.MemberName}!</p>" +
-                $"<p>歡迎加入我們的網路書店會員！你現在是我們的  <span>{content.MemberLevels.Where(x=>x.LevelId== receiver.LevelId).FirstOrDefault().LevelName}</span>  會員了，相信你將會在這裡找到許多有趣的閱讀體驗。</p>" +
+                $"<p>歡迎加入我們的網路書店會員！你現在是我們的  <span>{content.MemberLevels.Where(x => x.LevelId == receiver.LevelId).FirstOrDefault().LevelName}</span>  會員了，相信你將會在這裡找到許多有趣的閱讀體驗。</p>" +
                 $"<p>作為我們的會員，你將享有一系列的優惠與福利，包括專屬的折扣碼、獨家的促銷活動、以及最新書籍的推薦和試讀機會。</p>" +
                 $"<p>此外，成為我們的會員還可以享有更多的方便和貼心的服務，例如訂閱通知、簡單的購物流程、多種付款方式、快速的物流配送等等。我們期待與你一同分享我們的閱讀愛好，並為你帶來更多的書香體驗。</p>",
                 MessageTypeId = 2,
@@ -32,7 +32,7 @@ namespace prjBookMvcCore.Models
             MessageMemberDetail welcomeNewMember = new MessageMemberDetail()
             {
                 MessageId = welcomeLetter.MessageId,
-                MemberId= receiver.MemberId,
+                MemberId = receiver.MemberId,
                 UpdateTime = DateTime.Now,
                 ReadStatu = 0
             };
@@ -41,7 +41,7 @@ namespace prjBookMvcCore.Models
         public void write註冊會員禮Letter(Member receiver, BookShopContext content)
         {
             Message Letter = new Message()
-            {  
+            {
                 MessageTypeId = 2,
                 MessageTitle = $"註冊會員禮已發送",
                 MessageContent =
@@ -60,7 +60,7 @@ namespace prjBookMvcCore.Models
             };
             content.Add(MemberMessage); content.SaveChanges();
         }
-        
+
         //TODO：有訂電子報的會員，定時發送訊息
         public void write本月優惠Letter(Member receiver, BookShopContext content)
         {
@@ -137,7 +137,7 @@ namespace prjBookMvcCore.Models
             db.SaveChanges();
         }
 
-        public OrderDiscount newCoupon(int typeId, string couponName, string de, int con, decimal amount,  BookShopContext content)
+        public OrderDiscount newCoupon(int typeId, string couponName, string de, int con, decimal amount, BookShopContext content)
         {
             OrderDiscount newCoupon = new OrderDiscount()
             {
@@ -154,20 +154,24 @@ namespace prjBookMvcCore.Models
 
 
 
-        public string Promotions領取特定日優惠(int discountID,Member member, BookShopContext db)
+        public string Promotions領取特定日優惠(int discountID, Member member, BookShopContext db)
         {
             string isSuccess;
-                OrderDiscountDetail newmemberdiscount = new OrderDiscountDetail()
-                {
-                    OrderDiscountId = discountID,
-                    MemberId = member.MemberId,
-                    OrderDiscountStartDate = DateTime.Now,
-                    OrderDiscountEndDate = DateTime.Now.AddDays(30),
-                };
-                db.OrderDiscountDetails.Add(newmemberdiscount);
-                db.SaveChanges();
-                isSuccess = "true";
-                return isSuccess;
-            }
+            OrderDiscountDetail newmemberdiscount = new OrderDiscountDetail()
+            {
+                OrderDiscountId = discountID,
+                MemberId = member.MemberId,
+                OrderDiscountStartDate = DateTime.Now,
+                OrderDiscountEndDate = DateTime.Now.AddDays(30),
+            };
+            db.OrderDiscountDetails.Add(newmemberdiscount);
+            db.SaveChanges();
+            isSuccess = "true";
+            return isSuccess;
         }
+
+
+
+
     }
+}

@@ -369,39 +369,32 @@ namespace prjBookMvcCore.Controllers
 
         public string ActionTo(int bookID, int memberID, int actionID)
         {
-            var query = from ad in _bookShopContext.ActionDetials
-                        where ad.ActionId == actionID && ad.MemberId == memberID && ad.BookId == bookID
-                        select ad;
-
-            if (query.Count() != 0)
+            var query = _bookShopContext.ActionDetials.
+                        Where (x=>x.ActionId == actionID && x.MemberId == memberID && x.BookId == bookID).
+                        FirstOrDefault();
+            if (query != null)
             {
                 string jsonData = JsonConvert.SerializeObject(Json(new { success = false, message = "購物車裡已有此品項" }));
                 return jsonData;
             }
             else
             {
-                if(_bookShopContext.Books.Find(bookID).UnitInStock > 0)
+                var q2 = _bookShopContext.ActionDetials.
+                            Where(x => x.ActionId == 4 && x.MemberId == memberID && x.BookId == bookID).
+                            FirstOrDefault();
+                if (_bookShopContext.Books.Find(bookID).UnitInStock > 0)
                 {
-                    ActionDetial newAd = new ActionDetial
-                    {
-                        ActionId = actionID,
-                        BookId = bookID,
-                        MemberId = memberID,
-                    };
-                    _bookShopContext.ActionDetials.Add(newAd);
+                    q2.ActionId = 7;
                     _bookShopContext.SaveChanges();
-                    var q = _bookShopContext.ActionDetials.Where(x => x.MemberId == memberID & x.BookId == bookID & x.ActionId == 4).FirstOrDefault();
-                    if (q != null)
-                    {
-                        _bookShopContext.ActionDetials.Remove(q);
-                        _bookShopContext.SaveChanges();
-                    }
                     string jsonData2 = JsonConvert.SerializeObject(Json(new { success = true, message = "成功加入購物車!" }));
                     return jsonData2;
                 }
+                else
+                {
+                string jsonData3 = JsonConvert.SerializeObject(Json(new { success = false, message = "這本書暫時沒有庫存了, 敬請期待" }));
+                return jsonData3;
+                }
             }
-            string jsonData3 = JsonConvert.SerializeObject(Json(new { success = false, message = "這本書暫時沒有庫存了, 敬請期待" }));
-            return jsonData3;
         }
         [Authorize]
         public IActionResult myPublisher() //關注的出版社方法

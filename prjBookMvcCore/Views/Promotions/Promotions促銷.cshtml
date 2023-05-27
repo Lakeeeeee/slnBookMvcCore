@@ -9,7 +9,11 @@
 <head>
     <meta charset="utf-8" />
     <style>
-        a {
+        a:link, a:visited {
+            text-decoration: none;
+            color: inherit;
+        }
+     /*   a {
             color: black;
             font-weight: bold;
             text-decoration: none;
@@ -27,7 +31,7 @@
 
             .img-with-border:hover {
                 border: 2px ridge rgb(150, 200, 100);
-            }
+            }*/
 
         .sticky1 {
             position: sticky;
@@ -92,7 +96,7 @@
                                 <a id="@item.book.BookId" href="~/Book/BookInformation/@item.book.BookId"> <img src="~/Image//Book/@item.book.CoverPath" class="d-block w-100 img-with-border " alt="..." title="@(item.book.BookTitle.Split("$")[0])" /></a>
                                 <ul style="list-style:none; margin:0; padding:0;" class="text-start">
                                     <li><div class="bookCaption mt-3"><a id="@item.book.BookId" href="~/Book/BookInformation/@item.book.BookId" title="@item.book.BookTitle.Split("$")[0]">@item.book.BookTitle.Split("$")[0]</a></div></li>
-                                    <li>原價：<del style="color:red;font-style:oblique">@((int)Math.Ceiling(item.book.UnitPrice)) </del> 元</li>
+                                    <li>原價：<del style="font-style:oblique">@((int)Math.Ceiling(item.book.UnitPrice)) </del> 元</li>
                                     <li>
                                         優惠價：<span style="color: #E3007F; ">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
                                         <span style="color: #E3007F;font-weight:bold;">@((int)Math.Ceiling(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元

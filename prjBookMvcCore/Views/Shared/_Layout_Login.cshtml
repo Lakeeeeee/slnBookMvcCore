@@ -20,14 +20,20 @@
         #menu ul li { /*li水平顯示*/
             display: inline;
         }
+
+        a:link, a:visited {
+            text-decoration: none;
+            color: inherit;
+        }
     </style>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container">
-            <div class="align-items-start">
-                @Html.ActionLink("讀本", "Home", "Home", new { area = "" }, new { @class = "navbar-brand" })  @*須換圖*@
+            <div class="align-items-start" style="font-weight:900;font-size:2em;">
+                <a href="~/Home/Home"><img src="~/Image/讀本logo.png" style="border-radius:5px; width:30px;" />讀本</a>
+                @* @Html.ActionLink("讀本", "Home", "Home", new { area = "" }, new { @class = "fontsize24 navbar-brand" }) *@ @*須換圖*@
             </div>
         </div>
     </nav>
@@ -46,16 +52,13 @@
         <div class="container">
             <div class="row">
                 <div class="col" style="text-align:center">
-                    <img src="~/Image/AD.png" alt="活動or優惠or廣告" width="100%" />
-                    廣告招商中
+                    <a href="https://www.openbook.org.tw/2022openbookaward"><img src="~/Image/AD1.png" alt="活動or優惠or廣告" width="100%" style="border-radius:10px;"/> </a>
                 </div>
                 <div class="col" style="text-align:center">
-                    <img src="~/Image/AD.png" alt="活動or優惠or廣告" width="100%" />
-                    廣告招商中
+                    <a href="https://www.kingstone.com.tw/activity/speshow/a2208153?actid=1960x600a2304254_2"><img src="~/Image/AD2.png" alt="活動or優惠or廣告" width="100%" style="border-radius:10px;" /> </a>
                 </div>
                 <div class="col" style="text-align:center">
-                    <img src="~/Image/AD.png" alt="活動or優惠or廣告" width="100%" />
-                    廣告招商中
+                    <a href="https://activity.taaze.tw/static_act/202106/needs/index.htm?_gl=1*9t2aaw*_ga*MTg1MTU5NDUxNy4xNjgzMzU1NzYz*_ga_CK2C80VFK8*MTY4NTE2NTE4Ny4xNi4wLjE2ODUxNjUxODcuNjAuMC4w"><img src="~/Image/AD3.png" alt="活動or優惠or廣告" width="100%" style="border-radius:10px;" /> </a>
                 </div>
             </div>
         </div>
