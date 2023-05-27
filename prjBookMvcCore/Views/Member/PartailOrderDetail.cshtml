@@ -37,7 +37,7 @@
                         @count
                     </td>
                     <td>
-                        @Html.DisplayFor(modelitem=> item.Book.BookTitle)
+                        @item.Book.BookTitle.Split("$")[0]
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Quantity)

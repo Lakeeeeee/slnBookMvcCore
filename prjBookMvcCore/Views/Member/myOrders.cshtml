@@ -10,9 +10,8 @@
         Discount = db.OrderDiscounts.Where(x => x.OrderDiscountId == item.OrderDiscountId).Select(x => x.OrderDiscountDescprtion).FirstOrDefault();
     }
 }
-
-<div class="container-sp" style="margin-top:15px">
-    <p> <h6>訂單</h6></p>
+    <h4>歷史訂單</h4>
+    <div class="container-sp" style="margin-top:15px">
     <table class="table table-hover">
         <tr>
             <th>序號</th>
