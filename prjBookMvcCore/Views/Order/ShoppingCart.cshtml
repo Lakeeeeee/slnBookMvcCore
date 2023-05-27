@@ -696,7 +696,7 @@
     async function temSave(BookID, MemberID) {
         if (this.loginCheck()) {
             let self = this;
-            let url = '@Url.Action("UpdateActionID", "Order")';
+            let url = '@Url.Action("moveToList", "Order")';
             const confirmed = confirm('確定要暫存嗎?');
             if (confirmed) {
                 try {
@@ -710,29 +710,7 @@
                             memberID: memberID,
                             newActionID: 4
                         })
-                    });
-                    if (response.ok) {
-                        const result = await response.json();
-                        if (result) {
-                            self.$notify({
-                                title: '放入暫存清單成功',
-                                message: '本書已加入暫存清單',
-                                type: 'success',
-                                offset: 130,
-                            });
-                        } else {
-                            self.$notify({
-                                title: '放入暫存清單失敗',
-                                message: '本書已加入過暫存清單',
-                                type: 'warning',
-                                offset: 130,
-                            });
-                        }
-                        window.location.href = window.location.href;
-                    } else {
-                        alert('不明錯誤，請再試試');
-                        console.log('更新 actionID 發生錯誤');
-                    }
+                    });                    
                 } catch (error) {
                     console.log('更新 actionID 發生錯誤：' + error);
                 }

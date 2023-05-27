@@ -186,7 +186,7 @@ namespace prjBookMvcCore.Controllers
 
             if (query.Count() != 0)
             {
-                string jsonData = JsonConvert.SerializeObject(Json(new { success = false, message = "購物車裡已有此品項" }));
+                string jsonData = JsonConvert.SerializeObject(Json(new { success = false, message = "暫存裡已有此品項" }));
                 return jsonData;
             }
             else
@@ -207,13 +207,14 @@ namespace prjBookMvcCore.Controllers
                         _db.ActionDetials.Remove(q);
                         _db.SaveChanges();
                     }
-                    string jsonData2 = JsonConvert.SerializeObject(Json(new { success = true, message = "成功加入購物車!" }));
+                    string jsonData2 = JsonConvert.SerializeObject(Json(new { success = true, message = "成功加入暫存!" }));
                     return jsonData2;
                 }
             }
             string jsonData3 = JsonConvert.SerializeObject(Json(new { success = false, message = "這本書暫時沒有庫存了, 敬請期待" }));
             return jsonData3;
         }
+
         public IActionResult itemDelete(int id) //刪除購物車項目
         {
             bool isSuccesse = false;
