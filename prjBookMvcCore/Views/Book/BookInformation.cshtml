@@ -613,7 +613,6 @@
             };
             authorsJS.push(a);
         }
-        console.log(authorsJS)
 
 
         let commentInformations = @Html.Raw(Json.Serialize(Model.commentInformations));
@@ -757,7 +756,7 @@
                     }
                 },
                 getDiscountPrice(item) {
-                    return Math.floor(item.unitPrice * item.discount / 100);
+                    return Math.ceil(item.unitPrice * item.discount / 100);
                 },
                 storeTempList(bookID,memberID) {
                     if (this.loginCheck()) {

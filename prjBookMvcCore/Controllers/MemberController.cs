@@ -94,7 +94,6 @@ namespace prjBookMvcCore.Controllers
                 return Content("notexist");
             }
         }
-
         public IActionResult Login() //登入頁面
         {
             return View();
@@ -113,15 +112,15 @@ namespace prjBookMvcCore.Controllers
                     var useClain = new List<Claim>
                     {
                         new Claim("Id", user.MemberId.ToString()),
-                        new Claim("UserLevelId", user.LevelId.ToString()),
-                        new Claim("UserLevelName", user.Level.LevelName),
+                        new Claim("UserLevelId", user.LevelId.ToString()!),
+                        new Claim("UserLevelName", user.Level!.LevelName),
                         new Claim(ClaimTypes.Name, user.MemberName),
                     };
 
                     //建構cookie用戶驗證物件的狀態存取
                     var varClainsIdentity = new ClaimsIdentity(useClain, CookieAuthenticationDefaults.AuthenticationScheme);
                     HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(varClainsIdentity));
-                    return Json(new { success = true, message = "登入成功" });
+                    return Json(new { success = true, message = "系統將自動為您轉向" });
                 }
                 return Json(new { success = false, message = "密碼不正確" });
             }
@@ -245,7 +244,7 @@ namespace prjBookMvcCore.Controllers
                 _bookShopContext.SaveChanges();
                 return Json(new
                 {
-                    success = "true",
+                    success = true,
                     message = "密碼重新設定成功"
                 });
             }
@@ -253,7 +252,7 @@ namespace prjBookMvcCore.Controllers
             {
                 return Json(new
                 {
-                    success = "false",
+                    success = false,
                     message = "密碼重新設定失敗"
                 });
             }
@@ -370,37 +369,39 @@ namespace prjBookMvcCore.Controllers
 
         public string ActionTo(int bookID, int memberID, int actionID)
         {
-            bool isSuccess = true;
-
-
             var query = from ad in _bookShopContext.ActionDetials
                         where ad.ActionId == actionID && ad.MemberId == memberID && ad.BookId == bookID
                         select ad;
+
             if (query.Count() != 0)
             {
-                isSuccess = false;
+                string jsonData = JsonConvert.SerializeObject(Json(new { success = false, message = "購物車裡已有此品項" }));
+                return jsonData;
             }
             else
             {
-                ActionDetial newAd = new ActionDetial
+                if(_bookShopContext.Books.Find(bookID).UnitInStock > 0)
                 {
-                    ActionId = actionID,
-                    BookId = bookID,
-                    MemberId = memberID,
-                };
-                _bookShopContext.ActionDetials.Add(newAd);
-                _bookShopContext.SaveChanges();
-
-
-                var q = _bookShopContext.ActionDetials.Where(x => x.MemberId == memberID & x.BookId == bookID & x.ActionId == 4).FirstOrDefault();
-                if(q != null)
-                {
-                    _bookShopContext.ActionDetials.Remove(q);
+                    ActionDetial newAd = new ActionDetial
+                    {
+                        ActionId = actionID,
+                        BookId = bookID,
+                        MemberId = memberID,
+                    };
+                    _bookShopContext.ActionDetials.Add(newAd);
                     _bookShopContext.SaveChanges();
+                    var q = _bookShopContext.ActionDetials.Where(x => x.MemberId == memberID & x.BookId == bookID & x.ActionId == 4).FirstOrDefault();
+                    if (q != null)
+                    {
+                        _bookShopContext.ActionDetials.Remove(q);
+                        _bookShopContext.SaveChanges();
+                    }
+                    string jsonData2 = JsonConvert.SerializeObject(Json(new { success = true, message = "成功加入購物車!" }));
+                    return jsonData2;
                 }
             }
-            string jsonData = JsonConvert.SerializeObject(isSuccess);
-            return jsonData;
+            string jsonData3 = JsonConvert.SerializeObject(Json(new { success = false, message = "這本書暫時沒有庫存了, 敬請期待" }));
+            return jsonData3;
         }
         [Authorize]
         public IActionResult myPublisher() //關注的出版社方法
@@ -496,13 +497,17 @@ namespace prjBookMvcCore.Controllers
             Member memberupdate = _bookShopContext.Members.FirstOrDefault(x => x.MemberId == member.MemberId)!;
             if (memberupdate != null)
             {
-                memberupdate.MemberName = member.MemberName;
-                memberupdate.MemberEmail = member.MemberEmail;
-                memberupdate.MemberBrithDate = member.MemberBrithDate;
-                memberupdate.MemberAddress = member.MemberAddress;
-                memberupdate.PaymentId = member.PaymentId;
-                _bookShopContext.SaveChanges();
-                isExsit = true;
+                try
+                {
+                    memberupdate.MemberName = member.MemberName;
+                    memberupdate.Memberphone = member.Memberphone;
+                    memberupdate.MemberAddress = member.MemberAddress;
+                    memberupdate.PaymentId = member.PaymentId;
+                    _bookShopContext.SaveChanges();
+                    isExsit = true;
+                }catch(Exception ex)
+                {
+                }
             };
             return Content(isExsit.ToString());
         }

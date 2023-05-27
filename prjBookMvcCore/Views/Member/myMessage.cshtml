@@ -8,55 +8,54 @@
 
 }
 
-    <style>
-        div {
-            border: none
+<style>
+    div {
+        border: none
+    }
+
+    a {
+        color: black;
+        text-decoration: none;
+    }
+
+        a:hover {
+            color: rgb(125, 175, 75);
+            text-decoration: underline;
         }
-
-        a {
-            color: black;
-            text-decoration: none;
-        }
-
-            a:hover {
-                color: rgb(125, 175, 75);
-                text-decoration: underline;
-            }
-    </style>
-
-    <div class="container-fluid" style="margin-top:15px">
-        <p> <h6>訊息通知</h6></p>
-        <div class="row">
-            <div class="col-3">
-                <div class="list-group">
-                    <button type="button" class="list-group-item list-group-item-action" aria-current="true" style="background-color:lightgray">
-                        訊息列表 (@Model.Count())封
+</style>
+<h4>訊息通知</h4>
+<div class="container-fluid" style="margin-top:15px">
+    <div class="row">
+        <div class="col-3">
+            <div class="list-group">
+                <button type="button" class="list-group-item list-group-item-action" aria-current="true" style="background-color:lightgray">
+                    訊息列表 (@Model.Count())封
+                </button>
+            </div>
+        </div>
+        <div class="col-9">
+            <div class="row">
+                <div class="col-auto">
+                    <span id="messagetype" class="btn btn-outline-secondary "> 系統訊息</span>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-outline-secondary disabled" aria-current="true">
+                        訊息發送時間:
+                    </button>
+                    <span id="createtime" class="btn btn-outline-secondary "> 發送時間</span>
+                </div>
+                <div class="col-auto">
+                    <button name="deletebtn" id="delete" class="btn btn-outline-secondary" onclick="">
+                        刪除訊息
                     </button>
                 </div>
             </div>
-            <div class="col-9">
-                <div class="row">
-                    <div class="col-auto">
-                        <span id="messagetype" class="btn btn-outline-secondary "> 系統訊息</span>
-                    </div>
-                    <div class="col-auto">
-                        <button type="button" class="btn btn-outline-secondary disabled" aria-current="true">
-                            訊息發送時間:
-                        </button>
-                        <span id="createtime" class="btn btn-outline-secondary "> 發送時間</span>
-                    </div>
-                    <div class="col-auto">
-                        <button name="deletebtn" id="delete" class="btn btn-outline-secondary" onclick="">
-                            刪除訊息
-                        </button>
-                    </div>
-                </div>
-            </div>
         </div>
-        <div class="row">
-            <div class="col-3">
-                <div class="list-group">
-                    @{
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <div class="list-group">
+                @{
                     foreach (var item in Model)
                     {
                         <button id="@item.MessageMemberDetailId" value="@item.MessageMemberDetailId" type="button" class="list-group-item list-group-item-action" aria-current="true" onclick="getMessage(@item.MessageMemberDetailId)">
@@ -100,14 +99,24 @@
 </script>
 <script>
     async function deleteMs(id) {
-        console.log(id);
-        const response = await fetch('@Url.Content("~/Member/deleteMs")?id=' + id);
-        const comfirm = await response.text();
-        if (comfirm === "True") {
-            alert('已經刪除訊息')
-        } else {
-            alert('不明錯誤')
-        };
-        window.location.reload();
+        swal({
+            title: "確定要刪除訊息嗎?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: false
+        }).then(async (value) => {
+            if(value === true){
+            console.log(id);
+            const response = await fetch('@Url.Content("~/Member/deleteMs")?id=' + id);
+            const comfirm = await response.text();
+            if (comfirm === "True") {
+                swal("完成", "已經刪除訊息", "success").then(() => {
+                    location.reload();
+                });
+            } else {
+                swal("Un-Oh, 刪除失敗", "請回報錯誤給我們的客服人員，謝謝您", "error");
+                }
+            }
+        });
     }
 </script>

@@ -26,7 +26,7 @@
                 <li class="breadcrumb-item active" aria-current="page">登入</li>
             </ol>
         </nav>
-        <div class="row">
+        <div class="row justify-content-center">
             <div class="col-8">
                 <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
                     @* 活動輪播圖 *@
@@ -56,24 +56,23 @@
                     </button>
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-auto">
                 <div class="container justify-content-center bg-light" style="border-radius:10px; padding-block:15px">
-                    <p><label class="">會員登入</label></p>
+                    <p><h5 style="font-weight:600">會員登入</h5></p>
                     <form asp-action="Login" id="demo-form">
-                        <p><input type="text" placeholder="讀本Email" name="Account_P" id="account" /></p>
+                        <p><input type="text" placeholder="讀本帳號" name="Account_P" id="account" data-bs-toggle="tooltip" data-bs-placement="right" title="帳號即為您註冊時的Email"/></p>
                         <p><input type="password" placeholder="讀本密碼" name="Password_P" id="password" /></p>
                         <p>
                             <div style="block-size:inherit;" id="html_element"></div>
-                            <br>
-                            <button id="submitBtn" type="submit" class="btn btn-outline-success">讀本會員登入</button>
-                            <a class="linkaFormat small" href="~/Member/Signin">註冊</a>｜
-                            <a class="linkaFormat small" href="~/Member/Find_password">忘記帳密</a>
+                            <button id="submitBtn" type="submit" class="btn btn-outline-secondary">讀本會員登入</button>
+                            <a class="linkaFormat small" href="~/Member/Signin" style="margin-left:15px">註冊</a>｜
+                            <a class="linkaFormat small" href="~/Member/Find_password">忘記密碼</a>
                         </p>
                     </form>
                     <p>
-                        <button type="button" id="demo" class="btn btn-outline-success">Demo1</button>
-                        <button type="button" id="demo2" class="btn btn-outline-success" style="margin-left:15px">Demo2</button>
-                        <button type="button" id="demo3" class="btn btn-outline-success" style="margin-left:15px">Demo3</button>
+                        <button type="button" id="demo" class="btn btn-outline-secondary">Demo1</button>
+                    <button type="button" id="demo2" class="btn btn-outline-secondary" style="margin-left:15px">Demo2</button>
+                    <button type="button" id="demo3" class="btn btn-outline-secondary" style="margin-left:15px">Demo3</button>
                     </p>
                 </div>
             </div>
@@ -107,12 +106,12 @@
             const response = await fetch('@Url.Action("Login", "Member")', { method: 'POST', body: new FormData(form) });
             const comfirm = await response.json();
             if (comfirm.success === true) {
-                alert(comfirm.message);
+            swal("登入成功!", comfirm.message, "success").then(()=>{
                 window.location.href = '../../Home/Home';
+            });
             }
             else{
-            alert(comfirm.message);
-            window.location.reload();
+            swal("登入失敗", comfirm.message, "error");
             }
         });
     </script>

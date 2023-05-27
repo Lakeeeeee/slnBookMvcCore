@@ -1,34 +1,27 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml"; 
 }
-
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - 讀本｜會員中心</title>
-@*    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/prjBookMvcCore.styles.css" asp-append-version="true" />
-*@    
 <style>
         a:link, a:visited {
             text-decoration: none;
             color: inherit;
         }
-
         .font14px {
             font-size: 14px
         }
-
         .fontClean {
             text-decoration: none;
             color: inherit;
         }
     </style>
     <script src="~/Scripts/modernizr-2.8.3.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 <body>
     <div class="container-fluid" style="width:70%">
@@ -44,10 +37,14 @@
             @RenderBody()
         </div>
     </div>
-@*    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-*@    
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+</script>

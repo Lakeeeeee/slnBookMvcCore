@@ -12,7 +12,7 @@
             </ol>
         </nav>
     </div>
-    <p><h6>讀本｜重設密碼</h6></p>
+    <p><h4>讀本｜重設密碼</h4></p>
     <form asp-action="doResetPwd" id="reset_form">
         <input asp-for="MemberId" type="hidden" value="@Model.MemberId" />
         <div>
@@ -20,7 +20,8 @@
             <p>請重新設定您的密碼，完成後重新登入</p>
             <p>新的密碼: <input name="MemberPassword" id="pwd1"></p>
             <p>確認密碼: <input id="pwd2"></p>
-            <p><button id="check" type="submit" class="btn btn-outline-success btn-sm">確認送出</button>
+            <p>
+                <button id="check" type="submit" class="btn btn-outline-success btn-sm">確認送出</button>
                 <button id="demo" type="submit" class="btn btn-outline-success btn-sm" style="margin-left:15px">Demo</button>
             </p>
         </div>
@@ -30,19 +31,20 @@
     const form = document.querySelector('#reset_form');
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
-        const response = await fetch('@Url.ActionLink("doResetPwd")', {
+        const response = await fetch('@Url.Action("doResetPwd", "Member")', {
             method: 'POST',
             body: new FormData(form)
         });
 
         const datas = await response.json();
-        if (datas.success === "true") {
-            alert(datas.message);
-            window.location.href = '@Url.ActionLink("Login", "Member")';
-        }
-        if (datas.success === "false") {
-            alert(datas.message);
-            window.close();
+        if (datas.success === true) {
+            swal("完成", datas.message, "success").then(() => {
+                window.location.href = '@Url.Action("Login", "Member")';
+            });
+        } else {
+            swal("失敗", datas.message, "error").then(() => {
+                window.close();
+            });
         }
     });
 </script>
