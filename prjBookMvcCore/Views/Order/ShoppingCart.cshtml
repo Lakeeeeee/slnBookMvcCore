@@ -693,29 +693,17 @@
 
 <script>
     // 暫存購物車項目方法
-    async function temSave(BookID, MemberID) {
-        if (this.loginCheck()) {
-            let self = this;
-            let url = '@Url.Action("moveToList", "Order")';
-            const confirmed = confirm('確定要暫存嗎?');
-            if (confirmed) {
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            bookID: bookID,
-                            memberID: memberID,
-                            newActionID: 4
-                        })
-                    });                    
-                } catch (error) {
-                    console.log('更新 actionID 發生錯誤：' + error);
-                }
-            }
-        }
+    async function temSave(bookid, memid) {
+        const response = await fetch('@Url.Action("moveToList", "Order")?bookID=' + bookid + '&memberID=' + memid + '&actionID=' + 7);
+        const confirm = await response.json();
+        console.log(confirm);
+        if (confirm.Value.success === true) {
+            swal(confirm.Value.message, "感謝您的支持!", "success").then(() => {
+                window.location.reload();
+            });
+        } else {
+            swal(confirm.Value.message, "加入購物車失敗", "warning");
+        };
     };
 
 </script>
