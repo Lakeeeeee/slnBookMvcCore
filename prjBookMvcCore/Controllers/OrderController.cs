@@ -127,10 +127,10 @@ namespace prjBookMvcCore.Controllers
             return Content(theorderID.ToString());
         }
 
-        public IActionResult updatePoint(IFormCollection form)
+        public IActionResult updatePoint(int id)
         {
             
-            var MemberId = form["memberId"];
+            var MemberId = id;
             var order = _db.Orders.FirstOrDefault(o => o.MemberId == Convert.ToInt32(MemberId));
 
             if (order != null)
@@ -140,13 +140,13 @@ namespace prjBookMvcCore.Controllers
                 switch (member.LevelId)
                 {
                     case 3:
-                        member.Points += (int)(order.TotalPay * 0.01m);
+                        member.Points = (int)((member.Points) + Convert.ToInt32(order.TotalPay) * 0.01);
                         break;
                     case 4:
-                        member.Points += (int)(order.TotalPay * 0.05m);
+                        member.Points = (int)((member.Points) + Convert.ToInt32(order.TotalPay) * 0.05);
                         break;
                     case 5:
-                        member.Points += (int)(order.TotalPay * 0.05m);
+                        member.Points = (int)((member.Points) + Convert.ToInt32(order.TotalPay) * 0.05);
                         break;
                 };
 
