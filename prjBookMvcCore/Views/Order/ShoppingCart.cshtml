@@ -128,6 +128,17 @@
     @*頁面*@
     <div class="tab-pane fade show active" id="nav-cart" role="tabpanel" aria-labelledby="nav-cart-tab">
         @*page1*@
+        <div id="cart_tab">
+            @*購物車暫存切換頁籤*@
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-a-tab" data-bs-toggle="pill" data-bs-target="#pills-a" type="button" role="tab" aria-controls="pills-a" aria-selected="true">購物車</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-b-tab" data-bs-toggle="pill" data-bs-target="#pills-b" type="button" role="tab" aria-controls="pills-b" aria-selected="false">暫存清單</button>
+                </li>
+            </ul>
+        </div>
         <div class="tab-content" id="pills-tabContent">
             @*購物車暫存內頁面*@
             <form id="form1">
@@ -171,6 +182,9 @@
                                         <td id="subtotal">@小計 元</td>
                                         <td>
                                             <button class="btn btn-outline-secondary" onclick="cancle(@item.ActionDetial.ActionToBookId)">取消</button>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-outline-secondary" onclick="temSave(@item.bookId,@_user.UserId)">暫存</button>
                                         </td>
                                     </tr>
                                     count++;
@@ -687,6 +701,34 @@
     });
 </script>
 
+<script>
+    // 暫存購物車項目方法
+    async function temSave(BookID, MemberID) {
+        if (this.loginCheck()) {
+            let self = this;
+            let url = '@Url.Action("moveToList", "Order")';
+            const confirmed = confirm('確定要暫存嗎?');
+            if (confirmed) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            bookID: bookID,
+                            memberID: memberID,
+                            newActionID: 4
+                        })
+                    });                    
+                } catch (error) {
+                    console.log('更新 actionID 發生錯誤：' + error);
+                }
+            }
+        }
+    };
+
+</script>
 <script>
     //取消購物車項目方法
     async function cancle(id) {

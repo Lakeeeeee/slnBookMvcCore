@@ -177,6 +177,44 @@ namespace prjBookMvcCore.Controllers
 
             return Content(isSuccess.ToString());
         }
+
+        public string moveToList(int bookID, int memberID, int actionID)
+        {
+            var query = from ad in _db.ActionDetials
+                        where ad.ActionId == actionID && ad.MemberId == memberID && ad.BookId == bookID
+                        select ad;
+
+            if (query.Count() != 0)
+            {
+                string jsonData = JsonConvert.SerializeObject(Json(new { success = false, message = "暫存裡已有此品項" }));
+                return jsonData;
+            }
+            else
+            {
+                if (_db.Books.Find(bookID).UnitInStock > 0)
+                {
+                    ActionDetial newAd = new ActionDetial
+                    {
+                        ActionId = actionID,
+                        BookId = bookID,
+                        MemberId = memberID,
+                    };
+                    _db.ActionDetials.Add(newAd);
+                    _db.SaveChanges();
+                    var q = _db.ActionDetials.Where(x => x.MemberId == memberID & x.BookId == bookID & x.ActionId == 4).FirstOrDefault();
+                    if (q != null)
+                    {
+                        _db.ActionDetials.Remove(q);
+                        _db.SaveChanges();
+                    }
+                    string jsonData2 = JsonConvert.SerializeObject(Json(new { success = true, message = "成功加入暫存!" }));
+                    return jsonData2;
+                }
+            }
+            string jsonData3 = JsonConvert.SerializeObject(Json(new { success = false, message = "這本書暫時沒有庫存了, 敬請期待" }));
+            return jsonData3;
+        }
+
         public IActionResult itemDelete(int id) //刪除購物車項目
         {
             bool isSuccesse = false;
