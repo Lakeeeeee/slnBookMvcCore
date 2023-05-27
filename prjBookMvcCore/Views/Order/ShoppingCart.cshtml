@@ -142,7 +142,7 @@
             </ul>
         </div>
         <div class="tab-content" id="pills-tabContent">
-            @*購物車暫存內頁面*@
+            @*購物車頁面*@
             <form id="form1">
                 <div class="tab-pane fade show active" id="pills-a" role="tabpanel" aria-labelledby="pills-a-tab">
                     @*購物車頁面*@
@@ -206,18 +206,20 @@
                     </div>
                 </div>
             </form>
+            <form>
             <div class="tab-pane fade" id="pills-b" role="tabpanel" aria-labelledby="pills-b-tab">
                 @*暫存*@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th style="width:50px;"><input type="checkbox"></th>
                             <th style="width:50px;">序號</th>
                             <th style="width:500px;">書名</th>
                             <th>優惠</th>
                             <th>優惠價</th>
-                            <th>出版社</th>
-                            <th>庫存</th>
+                            <th>數量</th>
+                            <th>小計</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -225,26 +227,40 @@
                             int Tcount = 1;
                             foreach (var item in Model)
                             {
+                               
+                                    int 優惠價 = (int)Math.Ceiling(item.Book.UnitPrice * item.discountAmount);
+                                    string bookTitle = item.Book.BookTitle.Replace("$$", "\n");
+                                    decimal 小計 = 優惠價 * item.Quantity;
+                                    <input name="acid" value="@item.ActionDetial.ActionToBookId" type="hidden">
                                 if (item.ActionDetial.ActionId == 4)
-                                {
-                                    //Decimal discount = Math.Floor(@item.CInformation.book.UnitPrice * @item.CInformation.bookDiscount.BookDiscountAmount);
-                                    //string bookTitle = item.CInformation.book.BookTitle.Replace("$$", "\n");
-                                    //<tr>
-                                    //    <td><input type="checkbox"></td>
-                                    //    <td>@Tcount</td>
-                                    //    <td>@bookTitle</td>
-                                    //    <td>@item.CInformation.bookDiscount.BookDiscountName</td>
-                                    //    <td>@discount</td>
-                                    //    <td>@item.CInformation.publisher.PublisherName</td>
-                                    //    <td>@item.CInformation.book.UnitInStock</td>
-                                    //</tr>
-                                    //Tcount++;
+                                {                                   
+                                    <tr>
+                                        <td>@Tcount</td>
+                                        <td>
+                                            <div class="col float-start me-4">
+                                                <img height="50px" src="~/Image/Book/@item.Book.CoverPath" />
+                                            </div>
+                                            <div class="col pe-2">@(item.Book.BookTitle.Split("$")[0])</div>
+                                        </td>
+                                        <td>@item.discountName</td>
+                                        <td>@優惠價 元</td>
+                                        <td><input name="quantity" id="quantity_@item.ActionDetial.ActionToBookId" type="number" value="@item.Quantity" min="1" max="@item.Book.UnitInStock"><span class="mx-4">本</span></td>
+                                        <td id="subtotal">@小計 元</td>
+                                        <td>
+                                            <button class="btn btn-outline-secondary" onclick="cancle(@item.ActionDetial.ActionToBookId)">取消</button>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-outline-secondary" onclick="temSave(@item.bookId,@_user.UserId)">暫存</button>
+                                        </td>
+                                    </tr>                                  
+                                    Tcount++;
                                 }
                             }
                         }
                     </tbody>
                 </table>
             </div>
+            </form>
         </div>
         <hr />
         <div class="container">
@@ -705,15 +721,15 @@
 <script>
     // 暫存購物車項目方法
     async function temSave(bookid, memid) {
-        const response = await fetch('@Url.Action("moveToList", "Order")?bookID=' + bookid + '&memberID=' + memid + '&actionID=' + 7);
+        const response = await fetch('@Url.Action("moveToList", "Order")?bookID=' + bookid + '&memberID=' + memid + '&actionID=' + 4);
         const confirm = await response.json();
         console.log(confirm);
         if (confirm.Value.success === true) {
-            swal(confirm.Value.message, "感謝您的支持!", "success").then(() => {
+            swal(confirm.Value.message, "已加入暫存清單", "success").then(() => {
                 window.location.reload();
             });
         } else {
-            swal(confirm.Value.message, "加入購物車失敗", "warning");
+            swal(confirm.Value.message, "加入失敗~請確認", "warning");
         };
     };
 
