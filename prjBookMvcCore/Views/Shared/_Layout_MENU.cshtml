@@ -60,8 +60,23 @@
     <div class="container-fluid justify-content-center2" style="margin-top: 20px">
         <div class="row">
             @* 左邊功能欄 *@
-            <div class="col-2" style="position: relative;">
-                <div class="card" style="position: sticky; top: 20%;">
+            <div class="col-2">
+                <div class="card">
+                    @* 注目專區 *@
+                    <div class="card-header">
+                        推薦文章
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        @{
+                            foreach (var g in Model.articals.Take(8))
+                            {
+                                        <li class="list-group-item"><span><a href="~/Promotions/Promotions活動文章Detail/@g.ArticalId">@g.ArticalTitle</a></span></li>
+                            }
+                        }
+                    </ul>
+                </div>
+                <br />
+                <div class="card">
                     @* 中文書分類 *@
                     <div class="card-header">
                         @{
@@ -69,19 +84,19 @@
                             var s = db.Books.Where(c => c.LanguageId == 1).Select(c => c.BookId).ToList();
                             int countAll = s.Count;
                             <a asp-controller="Category" asp-action="分類頁面" asp-route-id="0">繁中(@countAll)</a>
-                        }
+                          }
                     </div>
                     @foreach (var category in Model.categories)
-                    {
-                        @if (category.CategoryId > 14)
                         {
+                            @if (category.CategoryId > 14)
+                            {
                             var q = db.CategoryDetails.Where(c => c.SubCategory.CategoryId == category.CategoryId).Select(c => c).ToList();
                             int count = q.Count;
-                            <div class="row card-body border-1">
-                                <a asp-controller="Category" asp-action="分類頁面" asp-route-id="@category.CategoryId">@category.CategoryName (@count)</a>
-                            </div>
+                                <div class="row card-body border-1">
+                                        <a asp-controller="Category" asp-action="分類頁面" asp-route-id="@category.CategoryId">@category.CategoryName (@count)</a>
+                                </div>
+                            }
                         }
-                    }
                 </div>
             </div>
             @* Body *@

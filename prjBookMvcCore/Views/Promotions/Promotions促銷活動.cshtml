@@ -1,9 +1,10 @@
 ﻿@{
-    ViewData["Title"] = "促銷活動";
+    ViewData["Title"] = "讀本促銷活動";
     BookShopContext db = new BookShopContext();
 }
 @inject UserInforService _userInforService
 <!DOCTYPE html>
+
 <html>
 <head>
     <meta charset="utf-8" />
@@ -18,6 +19,19 @@
                 color: rgb(125, 175, 75);
                 text-decoration: underline;
             }
+
+        .two-lines {
+            line-height: 1.2em; /* 調整需要的行高 */
+            height: 2.5em; /* 行高的兩倍 */
+        }
+
+        .clamp {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
         .img-with-border {
             border: 1px dashed rgb(200, 150, 250);
@@ -94,31 +108,31 @@
                         </div>
                         <div class="row">
                             @{
-                                var bookDiscountDetail = db.BookDiscountDetails.Where(d => d.BookDiscountId == g.BookDiscountId & d.BookDiscountStartDate < DateTime.Now & d.BookDiscountEndDate > DateTime.Now).OrderByDescending(d => d.Book.UnitInStock).Select(d => new { d.Book.BookTitle, d.Book.UnitPrice, d.Book.CoverPath, d.Book.BookId, d.Book.PublicationDate, d.BookDiscountEndDate }).Take(8).ToList();
+                                var bookDiscountDetail = db.BookDiscountDetails.Where(d => d.BookDiscountId == g.BookDiscountId & d.BookDiscountStartDate < DateTime.Now & d.BookDiscountEndDate > DateTime.Now).Select(d => new { d.Book.BookTitle, d.Book.UnitPrice, d.Book.CoverPath, d.Book.BookId, d.Book.PublicationDate, d.BookDiscountEndDate }).Take(8).ToList();
                                 foreach (var book in bookDiscountDetail)
                                 {
+                                    string title中 = book.BookTitle.Split("$")[0];
+                                    var 優惠截止日 = book.BookDiscountEndDate.AddDays(-1).ToString("yyyy/MM/dd");
                                     <div class="col-3 mb-3">
-                                        <a id="@book.BookId" href="~/Book/BookInformation/@book.BookId"> <img src="~/Image//Book/@book.CoverPath" class="d-block w-100 img-with-border" alt="..." title="@book.BookTitle.Split("$")[0]" /></a>
+                                        <a id="@book.BookId" href="~/Book/BookInformation/@book.BookId"> <img src="~/Image//Book/@book.CoverPath" class="d-block w-100 img-with-border" alt="..." title="@title中" /></a>
                                         <ul style="list-style:none; margin:0; padding:0;" class="text-start">
-                                            <li><div class="bookCaption mt-3"><a id="@book.BookId" href="~/Book/BookInformation/@book.BookId" title="@book.BookTitle.Split("$")[0]">@book.BookTitle.Split("$")[0]</a></div></li>
-                                            <li>原價：<del style="color:red;font-style:oblique">@((int)book.UnitPrice) </del> 元</li>
-                                            <li>優惠價：<span style="color: #E3007F; ">@((g.BookDiscountAmount * 100).ToString("0"))</span>折<span style="color: #E3007F;font-weight:bold;">@((int)Math.Ceiling(book.UnitPrice * g.BookDiscountAmount))</span>元</li>
-                                            <li>優惠截止日：@book.BookDiscountEndDate.AddDays(-1).ToString("yyyy/MM/dd")</li>
+                                            <li><div class="clamp two-lines mt-3"><a id="@book.BookId" href="~/Book/BookInformation/@book.BookId" title="@title中">@title中</a></div></li>
+                                            <li>原價：<del style="color:red;font-style:oblique">@((int)Math.Round(book.UnitPrice)) </del> 元</li>
+                                            <li>優惠價：<span style="color: #E3007F; ">@((g.BookDiscountAmount * 100).ToString("0"))</span>折<span style="color: #E3007F;font-weight:bold;">@((int)Math.Round(book.UnitPrice * g.BookDiscountAmount))</span>元</li>
+                                            <li>優惠截止日：@優惠截止日</li>
                                         </ul>
-                                        <div style="text-align:center">
-                                            <a role="button" class="btn btn-outline-warning btn-sm" title="尚未建置" onclick="addToCart(@book.BookId,@_userInforService.UserId)">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
-                                                    <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z" />
-                                                </svg>
-                                                加入購物車
-                                            </a>
-                                        </div>
+                                        <button class="btn btn-outline-warning mx-5 btn-sm m-2" title="尚未建置" onclick="addToCart(@book.BookId,@_userInforService.UserId)">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+                                                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z" />
+                                            </svg>
+                                            加入購物車
+                                        </button>
                                     </div>
                                 }
                             }
                         </div>
-                        <hr />
                     }
+                    <hr />
                 }
             </div>
         </div>

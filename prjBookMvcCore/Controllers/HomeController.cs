@@ -9,7 +9,6 @@ using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 using static System.Formats.Asn1.AsnWriter;
 using static System.Reflection.Metadata.BlobBuilder;
 using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
-using System.Security.Cryptography;
 
 namespace prjBookMvcCore.Controllers
 {
@@ -91,7 +90,7 @@ namespace prjBookMvcCore.Controllers
             {
                 var recommendProducts = (from b in db.Books
                                          join c in db.Comments on b.BookId equals c.BookId
-                                         where c.Stars == countStar
+                                         where c.Stars== countStar
                                          select new
                                          {
                                              書本ID = b.BookId,
@@ -133,14 +132,6 @@ namespace prjBookMvcCore.Controllers
 
         public IActionResult searchList(string txtKeyword, decimal frontPrice, decimal backPrice, decimal frontdiscount, decimal backdiscount, DateTime frontdate, DateTime backdate)
         {
-            ViewBag.KeyWord = txtKeyword;
-            ViewBag.frontprice = frontPrice;
-            ViewBag.backprice = backPrice;
-            ViewBag.frontdiscount = frontdiscount;
-            ViewBag.backdiscount = backdiscount;
-            ViewBag.frontdate = frontdate;
-            ViewBag.backdate = backdate;
-
             //從資料庫中取得最小值和最大值
             decimal minprice = db.Books.Min(b => b.UnitPrice);
             decimal maxprice = db.Books.Max(b => b.UnitPrice);
@@ -442,15 +433,11 @@ namespace prjBookMvcCore.Controllers
 
         public List<RecommendInformation> getNormal()
         {
-            RandomNumberGenerator rng = RandomNumberGenerator.Create();
+            Random random = new Random();
             List<int> randomList = new List<int>();
-
             for (int i = 0; i < 10; i++)
             {
-                byte[] randomNumber = new byte[4]; // Assuming you want 32-bit integers
-                rng.GetBytes(randomNumber);
-                int n = BitConverter.ToInt32(randomNumber, 0) % 392;
-
+                int n = random.Next(392);
                 if (randomList.Contains(n))
                 {
                     i--;

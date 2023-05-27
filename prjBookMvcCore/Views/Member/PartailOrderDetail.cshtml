@@ -21,7 +21,7 @@
             <th>序號</th>
             <th>品項</th>
             <th>數量</th>
-            <th>小計</th>
+            <th>單價</th>
             <th>書籍折扣</th>
             <th>折扣價</th>
         </tr>
@@ -31,7 +31,7 @@
             {
                 count++;
                 var bookDiscount = item.Book.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountName).FirstOrDefault();
-                var price = item.UnitPrice * (item.Book.BookDiscountDetails.Where(x=>x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault());
+                var price = item.UnitPrice * (item.Book.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault()) ;
                 <tr>
                     <td>
                         @count
@@ -43,13 +43,13 @@
                         @Html.DisplayFor(modelItem => item.Quantity)
                     </td>
                     <td>
-                        @Convert.ToInt32(@item.Book.UnitPrice)
+                        @Convert.ToInt32(@item.UnitPrice)
                     </td>
                     <td>
                         @bookDiscount
                     </td>
                     <td>
-                        @Convert.ToInt32(@item.UnitPrice)
+                        @Convert.ToInt32(@price)
                     </td>
                 </tr>
             }

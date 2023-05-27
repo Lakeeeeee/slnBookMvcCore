@@ -38,24 +38,21 @@
             <form asp-action="Create" id="signin_form">
                 <div class="container justify-content-center bg-light" style="border-radius:10px;  padding-block:15px">
                     <p><label class="">會員註冊</label></p>
-                    <p><input id="email" asp-for="MemberEmail_P" placeholder="輸入您的Email" class="inputS" required /><br /></p>
+                    <p><input asp-for="MemberEmail_P" placeholder="輸入您的Email" class="inputS" required /><br /></p>
                     <p>
                         <input asp-for="MemberPassword_P" placeholder="您的密碼" id="pwd" class="inputS" pattern="[a-zA-Z0-9]{7,}" required />
                         <br /><label id="passwordError" style="font-size:xx-small">請設定8-10位英數字密碼，須包含至少一個大寫字母</label>
                     </p>
                     <p><input id="pwdCheck" placeholder="確認輸入密碼" class="inputS" required /><label id="passwordError2" style="font-size:xx-small"></label></p>
-                    <p><input id="name" asp-for="MemberName_P" placeholder="姓名" class="inputS" required /></p>
+                    <p><input asp-for="MemberName_P" placeholder="姓名" class="inputS" required /></p>
                     <p><input asp-for="MemberBrithDate_P" value="1995-01-01" type="date" class="inputS" required /></p>
-                    <p><input id="phone" asp-for="Memberphone_P" placeholder="電話" class="inputS" required /></p>
-                    <p><input id="address" asp-for="MemberAddress_P" placeholder="地址" class="inputS" required /></p>
+                    <p><input asp-for="Memberphone_P" placeholder="電話" class="inputS" required /></p>
+                    <p><input asp-for="MemberAddress_P" placeholder="地址" class="inputS" required /></p>
+                    <p><input type="text" placeholder="驗證碼" class="inputS" /></p>
                     <div class="form-check">
                         <input asp-for="isSubscribe" class="form-check-input" type="checkbox" id="flexCheckChecked">
                         我想接收到電子報
                     </div>
-                    <p>
-                        <button type="button" id="demo" class="btn btn-outline-success">Demo</button>
-                        <button type="button" id="demo2" class="btn btn-outline-success" style="margin-left:15px">Demo2</button>
-                    </p>
                     <div>
                         <button class="btn btn-secondary btn-sm" id="liveToastBtn" type="button">會員條款</button>
                         <label class="form-check-label" for="flexCheckChecked" id="join_policy_check">請閱讀條款</label>
@@ -84,42 +81,6 @@
         <div class="col"></div>
     </div>
 </div>
-<script>
-    const x = document.getElementById('demo');
-    const y = document.getElementById('demo2');
-    x.addEventListener('click', function () {
-        const A = document.getElementById('email');
-        const B = document.getElementById('pwd');
-        const C = document.getElementById('pwdCheck');
-        const D = document.getElementById('name');
-        const E = document.getElementById('phone');
-        const F = document.getElementById('address');
-
-        A.value = "finnthehuman@gmail.com";
-        B.value = "As123456";
-        C.value = "As123456";
-        D.value = "人類芬";
-        E.value = "0968688688";
-        F.value = "台北市中正區牯嶺街5巷10號";
-    });    
-    
-    y.addEventListener('click', function () {
-        const A = document.getElementById('email');
-        const B = document.getElementById('pwd');
-        const C = document.getElementById('pwdCheck');
-        const D = document.getElementById('name');
-        const E = document.getElementById('phone');
-        const F = document.getElementById('address');
-
-        A.value = "greenLake092@gmail.com";
-        B.value = "As123456";
-        C.value = "As123456";
-        D.value = "獨書仁";
-        E.value = "0968688688";
-        F.value = "臺北市信義區松高路66號";
-    });
-
-</script>
 <script>
     var toastTrigger = document.getElementById('liveToastBtn')
     var toastLiveExample = document.getElementById('liveToast')

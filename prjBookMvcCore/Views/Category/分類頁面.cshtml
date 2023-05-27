@@ -5,7 +5,7 @@
 
 <html>
 <head>
-    @if (Model.subcategoryId > 0 && !string.IsNullOrEmpty(Model?.subCategories?.FirstOrDefault(c => c.SubCategoryId == Model.subcategoryId)?.SubCategoryName))
+    @if (Model.subcategoryId > 0 && !string.IsNullOrEmpty(Model.subCategories.FirstOrDefault(c => c.SubCategoryId == Model.subcategoryId)?.SubCategoryName))
     {
         var subcategoryName = Model.subCategories.FirstOrDefault(c => c.SubCategoryId == Model.subcategoryId)?.SubCategoryName;
         if (!string.IsNullOrEmpty(subcategoryName))
@@ -13,9 +13,9 @@
             ViewData["Title"] = $"{ViewData["Title"]}   {subcategoryName}";
         }
     }
-    else if (Model?.categoryId > 0)
+    else if (Model.categoryId > 0)
     {
-        var categoryName = Model?.categories?.FirstOrDefault(c => c.CategoryId == Model.categoryId)?.CategoryName;
+        var categoryName = Model.categories.FirstOrDefault(c => c.CategoryId == Model.categoryId)?.CategoryName;
         if (!string.IsNullOrEmpty(categoryName))
         {
             ViewData["Title"] = $"{ViewData["Title"]}   {categoryName}";
@@ -60,13 +60,18 @@
             <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Home">首頁</a></li>
             <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Menu">書籍</a></li>
             <li class="breadcrumb-item"><a class="linkaFormat" href="@Url.Action("分類頁面", new { id = 0 })">繁中</a></li>
-            @if (Model?.categoryId > 0)
+            @if (Model.categoryId > 0)
             {
-                <li class="breadcrumb-item" aria-current=""><a class="linkaFormat" href="@Url.Action("分類頁面", new { id = Model.categoryId })">@Model?.categories?.FirstOrDefault(c => c.CategoryId == Model.categoryId)?.CategoryName</a></li>
+                <li class="breadcrumb-item" aria-current=""><a class="linkaFormat" href="@Url.Action("分類頁面", new { id = Model.categoryId })">@Model.categories.FirstOrDefault(c => c.CategoryId == Model.categoryId)?.CategoryName</a></li>
             }
-            @if (Model?.subcategoryId > 0 && !string.IsNullOrEmpty(Model?.subCategories?.FirstOrDefault(c => c.SubCategoryId == Model.subcategoryId)?.SubCategoryName))
+            @if (Model.subcategoryId > 0 && !string.IsNullOrEmpty(Model.subCategories.FirstOrDefault(c => c.SubCategoryId == Model.subcategoryId)?.SubCategoryName))
             {
                 <li class="breadcrumb-item active" aria-current="page"><a class="linkaFormat" href="@Url.Action("分類頁面", new { subid = Model.subcategoryId })">@Model.subCategories.FirstOrDefault(c => c.SubCategoryId == Model.subcategoryId)?.SubCategoryName</a></li>
+                <script>
+                    // Add the 'show' class to the corresponding card-body element
+                    const cardBody = document.getElementById("card-@Model.subcategoryId");
+                    if (cardBody) { cardBody.classList.add("show"); }
+                </script>
             }
         </ol>
     </nav>
@@ -136,13 +141,13 @@
                     @{
                         foreach (var item in Model.menuItems)
                         {
-                            <div class="col-3 card book-item border-0" data-publication-date="@item.book.PublicationDate.ToString("yyyy/MM/dd")" data-price="@((int)Math.Ceiling(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))">
+                            <div class="col-3 card book-item border-0" data-publication-date="@item.book.PublicationDate.ToString("yyyy/MM/dd")" data-price="@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))">
                                 <div class="headshot">
                                     <a href="~/Book/BookInformation/@item.book.BookId"><img class="bookimg" src="~/Image/Book/@item.book.CoverPath" title="@item.book.BookTitle"></a>
                                 </div>
                                 <div class="card-body">
                                     <ul style="list-style:none; ">
-                                        <li> <a class="bookCaption mb-2" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle.Split("$")[0]</a></li>
+                                        <li> <a class="bookCaption mb-2" href="~/Book/BookInformation/@item.book.BookId">@item.book.BookTitle.Replace("$$"," ")</a></li>
                                         <li class="prod_author authorCaption">
                                             作者：
                                             @if (item.author != null)
@@ -151,10 +156,10 @@
                                                 <a asp-controller="Book" asp-action="authorInformation" asp-route-id="@aaaaa">@item.author.AuthorName</a>
                                             }
                                         </li>
-                                        <li class="Price">原    價：<span>@((int)item.book.UnitPrice)元</span></li>
+                                        <li class="Price">原    價：<span>@((int)Math.Round(item.book.UnitPrice))元</span></li>
                                         <li class="discPrice">
                                             優惠價：<span style="color: #E3007F;">@((item.bookDiscount.BookDiscountAmount * 100).ToString("0"))</span>折
-                                            <span style="color: #E3007F;">@((int)Math.Ceiling(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
+                                            <span style="color: #E3007F;">@((int)Math.Round(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))</span>元
                                         </li>
                                         <li class="publicationDate">
                                             出版日期：<span>@item.book.PublicationDate.ToString("yyyy/MM/dd")</span>
@@ -173,7 +178,7 @@
                                 @if (Model.CurrentPage > 1)
                                 {
                                     <li class="page-item">
-                                        <a class="page-link" href="@Url.Action("分類頁面", new { id = Model.categoryId, subid = Model.subcategoryId, page = Model.CurrentPage - 1 })" aria-label="Previous">
+                                        <a class="page-link" href="@Url.Action("分類頁面", new { id = Model.categoryId, page = Model.CurrentPage - 1 })" aria-label="Previous">
                                             <span aria-hidden="true">&laquo;</span>
                                             <span class="sr-only">前一頁</span>
                                         </a>
@@ -182,13 +187,13 @@
                                 @for (int i = 1; i <= Model.TotalPages; i++)
                                 {
                                     <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                                        <a class="page-link" href="@Url.Action("分類頁面", new { id = Model.categoryId, subid = Model.subcategoryId, page = i })">@i</a>
+                                        <a class="page-link" href="@Url.Action("分類頁面", new { id = Model.categoryId, page = i })">@i</a>
                                     </li>
                                 }
                                 @if (Model.CurrentPage < Model.TotalPages)
                                 {
                                     <li class="page-item">
-                                        <a class="page-link" href="@Url.Action("分類頁面", new { id = Model.categoryId, subid = Model.subcategoryId, page = Model.CurrentPage + 1 })" aria-label="Next">
+                                        <a class="page-link" href="@Url.Action("分類頁面", new { id = Model.categoryId, page = Model.CurrentPage + 1 })" aria-label="Next">
                                             <span aria-hidden="true">&raquo;</span>
                                             <span class="sr-only">下一頁</span>
                                         </a>
@@ -205,10 +210,6 @@
 </html>
 
 <script>
-    // Add the 'show' class to the corresponding card-body element
-    const cardBody = document.getElementById("card-@Model.subcategoryId");
-    if (cardBody) { cardBody.classList.add("show"); }
-
     // 排序判斷動作
     function booksview() {
         var sortBy = document.getElementById("sort-Select").value;

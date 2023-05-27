@@ -449,8 +449,6 @@ namespace prjBookMvcCore.Models
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
-                entity.Property(e => e.CostAmount).HasDefaultValueSql("((0))");
-
                 entity.Property(e => e.LevelId)
                     .HasColumnName("LevelID")
                     .HasDefaultValueSql("((1))");
@@ -474,6 +472,7 @@ namespace prjBookMvcCore.Models
                 entity.HasOne(d => d.Level)
                     .WithMany(p => p.Members)
                     .HasForeignKey(d => d.LevelId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Member_MemberLevel");
 
                 entity.HasOne(d => d.Payment)
@@ -582,9 +581,7 @@ namespace prjBookMvcCore.Models
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
-                entity.Property(e => e.FinalPay)
-                    .HasColumnType("money")
-                    .HasDefaultValueSql("((0))");
+                entity.Property(e => e.FinalPay).HasColumnType("money");
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
@@ -612,9 +609,7 @@ namespace prjBookMvcCore.Models
                     .HasColumnName("ShippingStatusID")
                     .HasDefaultValueSql("((1))");
 
-                entity.Property(e => e.TotalPay)
-                    .HasColumnType("money")
-                    .HasDefaultValueSql("((0))");
+                entity.Property(e => e.TotalPay).HasColumnType("money");
 
                 entity.HasOne(d => d.Member)
                     .WithMany(p => p.Orders)

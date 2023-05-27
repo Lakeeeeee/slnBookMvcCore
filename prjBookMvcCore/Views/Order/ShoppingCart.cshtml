@@ -10,7 +10,8 @@
     int points = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.Points).FirstOrDefault();
     string mName = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.MemberName).FirstOrDefault();
     string mPhone = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.Memberphone).FirstOrDefault();
-    int shipmentid = 0;   
+    int shipmentid = 0;
+    decimal freight = db.Shipments.Where(x => x.ShipmentId == shipmentid).Select(x => x.Freight).FirstOrDefault();
 
 
 }
@@ -238,26 +239,13 @@
             <h5>為你推薦</h5>
             <div class="row">
                 @{
-                    var q = db.Books.OrderByDescending(b=>b.UnitInStock).Skip(20).Take(6).ToList();
+                    var q = db.Books.Select(b => b).Skip(20).Take(6);
                     foreach (var g in q)
                     {
-                        var dis = db.BookDiscountDetails.Where(d => d.BookId == g.BookId & d.BookDiscountStartDate < DateTime.Now & d.BookDiscountEndDate > DateTime.Now).Select(d => new { d.BookDiscount.BookDiscountAmount }).ToList();
-                        <div class="col-2 mb-3">
-                            <a id="@g.BookId" href="~/Book/BookInformation/@g.BookId"> <img src="~/Image//Book/@g.CoverPath" class="d-block w-100 img-with-border" alt="..." title="@g.BookTitle.Split("$")[0]" /></a>
-                            <ul style="list-style:none; margin:0; padding:0;" class="text-start">
-                                <li><div class="mt-3 bookCaption"><a id="@g.BookId" href="~/Book/BookInformation/@g.BookId" title="@g.BookTitle.Split("$")[0]">@g.BookTitle.Split("$")[0]</a></div></li>
-                                <li>原價：<del style="color:red;font-style:oblique">@((int)Math.Ceiling(g.UnitPrice)) </del> 元</li>
-                                <li>
-                                    優惠價：<span style="color: #E3007F; ">@((dis[0].BookDiscountAmount * 100).ToString("0"))</span>折
-                                    <span style="color: #E3007F;font-weight:bold;">@((int)Math.Ceiling(g.UnitPrice * dis[0].BookDiscountAmount))</span>元
-                                </li>
-                            </ul>
-                            <div style="text-align:center"><a role="button" class="btn btn-outline-warning btn-sm" title="尚未建置" onclick="addToCart(@g.BookId,@_user.UserId)">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
-                                    <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z" />
-                                </svg>
-                                加入購物車
-                            </a></div>
+                        <div class="col-2 mt-3 p-3">
+                            <a href="~/Book/BookInformation/@g.BookId"><img src="~/Image/Book/@g.CoverPath" class="d-block w-100 img-with-border mb-3" />
+                                <p class="bookCaption px-2">@(g.BookTitle.Split("$")[0])</p>
+                            </a>
                         </div>
                     }
                 }
@@ -377,8 +365,8 @@
             <p>總金額：<span id="seconTotal"> </span></p>
             <p id="discountId"></p>
             <p id="rebateAmount"></p>
-            <p id="freight"></p>
-            <p>結帳金額：<span id="checkoutAmount"></span></p>
+            <p>運費：100</p>
+            <p>結帳金額：</p>
         </div>
         <div style="text-align:right;">
             <button class=" btn btn-primary col-4 me-md-2" onclick="btnClick('nav-checkOutInfo-tab')">返回修改</button>
@@ -406,48 +394,7 @@
     </div>
 </div>
 
-<script>
-    let isLogin = false;
-    window.onload = () => {
-        if (@_user.UserId !== 0) {
-            isLogin = true;
-        };
-        console.log(isLogin);
-    };
 
-    function loginCheck() {
-        if (isLogin === false) {
-            alert('尚未登入');
-            if (confirm('前往登入')) {
-                window.location.href = "../../Member/Login";
-            } else {
-            }
-            return false;
-        }
-        return true;
-    };
-
-    function addToCart(bookID, memberID) {
-        if (loginCheck()) {
-            let self = this;
-            let url = '@Url.Action("memAction", "Action")?bookID=' + bookID + '&memberID=' + memberID + '&actionID=' + 7;
-            $.ajax({
-                url: url,
-                type: 'POST',
-                success: function (result) {
-                    let isSuccess = result;
-                    if (isSuccess === "true") {
-                        alert('加入購物車成功');
-                        window.location.reload();
-                    }
-                    else {
-                        alert('加入購物車失敗，本書已在購物車內');
-                    }
-                },
-            });
-        }
-    };
-</script>
 
 <script>
     //送出訂單
@@ -530,22 +477,6 @@
         document.getElementById('shipmentId').innerText = '配送方式: ' + shipmentName;
         document.getElementById('rebateAmount').innerText = '回饋金金額: ' + rebateAmount;
 
-        // 判斷運費
-        var freight = 0;
-        if (shipmentId == 1) {
-            freight = 120;
-        } else if (shipmentId == 2) {
-            freight = 80;
-        }
-        // 顯示
-        document.getElementById('freight').innerText = '運費: ' + freight;
-
-        // 計算結帳金額
-        var totalAmount = parseFloat(document.getElementById('totalAmount').innerText);
-        var checkoutAmount = totalAmount - parseFloat(rebateAmount) + parseFloat(freight);
-        // 顯示結帳金額
-        document.getElementById('checkoutAmount').innerText = checkoutAmount + ' 元';
-
         setFinalTotal();
         document.getElementById(tabId).click();
     }
@@ -621,7 +552,7 @@
         const table2Header = document.createElement('thead');
         const headerRow = document.createElement('tr');
         headerRow.innerHTML = `
-                                <th><input type="hidden" value="checkbox"></th>
+                                <th style="width:50px;"><input type="checkbox"></th>
                                 <th style="width:50px;">序號</th>
                                 <th style="width:500px;">書名</th>
                                 <th>優惠</th>
@@ -639,7 +570,7 @@
             input.type = "hidden";
             const row = document.createElement('tr');
             row.innerHTML = `
-                                    <td><input type="hidden" value="checkbox"></td>
+                                    <td><input type="checkbox"></td>
                                     <td>${index + 1}</td>
                                     <td>${item.book.bookTitle}</td>
                                     <td>${item.discountName}</td>

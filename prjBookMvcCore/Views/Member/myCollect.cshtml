@@ -122,7 +122,7 @@
             row.insertCell().innerText = data.name;
             const btnHtml = `<button type="submit" name="id" value="${data.id}" class="btn btn-outline-secondary" onclick="redirectToAuthor(${data.id})">最近的書目</button>`;
             row.insertCell().innerHTML = btnHtml;
-            const btnHtml2 = `<button type="submit" name="id" value="${data.id}" class="btn btn-outline-secondary" onclick="cancleA(${data.id})">取消追蹤</button>`;
+            const btnHtml2 = `<button type="submit" name="id" value="${data.id}" class="btn btn-outline-secondary" onclick="cancle(${data.id})">取消追蹤</button>`;
             row.insertCell().innerHTML = btnHtml2;
         });
         table.appendChild(thead, tbody);
@@ -131,7 +131,7 @@
         const url = '@Url.Action("authorInformation", "Book")' + "?id=" + id;
         window.location.href = url
     };
-    function cancleA(id) {
+    function cancle(id) {
         confirm('確定要取消追蹤嗎');
         const url = '@Url.Action("cancleAuthor", "Member")' + "?id=" + id;
         window.location.href = url
@@ -160,7 +160,7 @@
             row.insertCell().innerText = data.name;
             const btnHtml = `<button type="submit" name="id" value="${data.id}" class="btn btn-outline-secondary" onclick="redirectToPublisher(${data.id})">最近的書目</button>`;
             row.insertCell().innerHTML = btnHtml;
-            const btnHtml2 = `<button type="submit" name="id" value="${data.id}" class="btn btn-outline-secondary" onclick="cancleP(${data.id})">取消追蹤</button>`;
+            const btnHtml2 = `<button type="submit" name="id" value="${data.id}" class="btn btn-outline-secondary" onclick="cancle(${data.id})">取消追蹤</button>`;
             row.insertCell().innerHTML = btnHtml2;
         });
         table.appendChild(thead, tbody);
@@ -169,7 +169,7 @@
         const url = '@Url.Action("publisherInformation", "Book")' + "?id=" + id;
         window.location.href = url
     };
-    function cancleP(id) {
+    function cancle(id) {
         confirm('確定要取消追蹤嗎');
         const url = '@Url.Action("canclePublisher", "Member")' + "?id=" + id;
         window.location.href = url

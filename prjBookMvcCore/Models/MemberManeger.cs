@@ -100,7 +100,7 @@ namespace prjBookMvcCore.Models
             mms.From = new MailAddress(GoogleMailUserID);
             mms.Subject = mailSubject;
             mms.Body = mailContent;
-            mms.IsBodyHtml = true;
+            mms.IsBodyHtml = false;
             mms.SubjectEncoding = Encoding.UTF8;
             mms.To.Add(new MailAddress(complaint.Email));
             using (SmtpClient client = new SmtpClient(SmtpServer, port))

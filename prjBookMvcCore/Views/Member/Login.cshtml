@@ -71,9 +71,7 @@
                         </p>
                     </form>
                     <p>
-                        <button type="button" id="demo" class="btn btn-outline-success">Demo1</button>
-                        <button type="button" id="demo2" class="btn btn-outline-success" style="margin-left:15px">Demo2</button>
-                        <button type="button" id="demo3" class="btn btn-outline-success" style="margin-left:15px">Demo3</button>
+                        <button type="button" id="demo" class="btn btn-outline-success">Demo</button>
                     </p>
                 </div>
             </div>
@@ -84,35 +82,21 @@
         const A = document.getElementById('account');
         const P = document.getElementById('password');
         x.addEventListener('click', function () {
-        A.value = "finnthehuman@gmail.com";
-            P.value = "As123456";
-        });
-    const y = document.getElementById('demo2');
-    y.addEventListener('click', function () {
-        A.value = "greenLake092@gmail.com";
-        P.value = "As123456";
-    });
-    const z = document.getElementById('demo3');
-    z.addEventListener('click', function () {
-        A.value = "sw123@gmail.com";
-        P.value = "As123456";
-    });
-
+            A.value = "greenLake092@gmail.com";
+            P.value = "Bs123456";
+        })
     </script>
     <script>
         const form = document.getElementById('demo-form');
-        const submitBtn = document.getElementById('submitBtn');
-        form.addEventListener('submit', async (event) => {
-        event.preventDefault();
+        form.addEventListener('submit', async () => {
             const response = await fetch('@Url.Action("Login", "Member")', { method: 'POST', body: new FormData(form) });
             const comfirm = await response.json();
             if (comfirm.success === true) {
                 alert(comfirm.message);
-                window.location.href = '../../Home/Home';
+                window.location.href = '/Home/Home';
+                return;
             }
-            else{
             alert(comfirm.message);
             window.location.reload();
-            }
         });
     </script>
