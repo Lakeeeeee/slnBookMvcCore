@@ -184,7 +184,7 @@ namespace prjBookMvcCore.Controllers
                                          書名 = b.BookTitle,
                                          定價 = b.UnitPrice,
                                          路徑 = b.CoverPath,
-                                         折扣 = b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                                         折扣 = b.BookDiscountDetails.Where(x => x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
                                          截止日 = b.BookDiscountDetails.Select(x => x.BookDiscountEndDate).FirstOrDefault(),
                                      };
                 List<RecommendInformation> ris = new List<RecommendInformation>();
