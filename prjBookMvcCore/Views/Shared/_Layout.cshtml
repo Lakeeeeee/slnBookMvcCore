@@ -169,7 +169,7 @@
                                             <div class="col-5"><a href="~/Book/BookInformation/@g.BookId"><img src="~/Image/Book/@g.CoverPath" class="d-block w-100 img-with-border" title="@g.BookTitle.Split("$")[0]" /></a></div>
                                             <div class="col-7">
                                                 <div class="bookCaption"><a id="@g.BookId" href="~/Book/BookInformation/@g.BookId" title="@g.BookTitle.Split("$")[0]">@g.BookTitle.Split("$")[0]</a></div>
-                                                <div>原價：<del style="font-style:oblique">@((int)g.UnitPrice) </del> 元</div>
+                                                <div>原價：<del>@((int)g.UnitPrice) </del> 元</div>
                                                 <div>優惠價：<span style="color: #E3007F; ">@((dis[0].BookDiscountAmount * 100).ToString("0"))</span>折<span style="color: #E3007F;font-weight:bold;">@((int)Math.Ceiling(g.UnitPrice * dis[0].BookDiscountAmount))</span>元</div>
                                                 <div style="text-align:right;" class="m-1">
                                                     <a role="button" onclick="cartDel(@g.ActionToBookId)" class="btn btn-outline-info">
