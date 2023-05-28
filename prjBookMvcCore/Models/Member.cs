@@ -26,11 +26,11 @@ namespace prjBookMvcCore.Models
         public string Memberphone { get; set; } = null!;
         public string MemberAddress { get; set; } = null!;
         public int PaymentId { get; set; }
-        public int? LevelId { get; set; }
-        public int? CostAmount { get; set; }
+        public int LevelId { get; set; }
+        public int CostAmount { get; set; }
         public int Points { get; set; }
 
-        public virtual MemberLevel? Level { get; set; }
+        public virtual MemberLevel Level { get; set; } = null!;
         public virtual Payment Payment { get; set; } = null!;
         public virtual ICollection<ActionDetial> ActionDetials { get; set; }
         public virtual ICollection<CollectedAuthor> CollectedAuthors { get; set; }
