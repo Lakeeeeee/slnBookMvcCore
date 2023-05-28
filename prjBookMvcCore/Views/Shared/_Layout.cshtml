@@ -132,7 +132,10 @@
                         @{
                             if (_userInforService.UserId != 0)
                             {
-                                            <li style="display:-ms-inline-flexbox;align-items:flex-end "> Hi!    <img src="~/Image/@(_userInforService.UserLevelName).png" style="width:25px">@_userInforService.UserLevelName 會員 @_userInforService.UserName </li>
+                                    int levelId = (int)db.Members.Where(x=>x.MemberId == _userInforService.UserId).Select(x=>x.LevelId).FirstOrDefault();
+                                    string levelName = db.MemberLevels.Find(levelId).LevelName;
+            
+                                <li style="display:-ms-inline-flexbox;align-items:flex-end "> Hi!    <img src="~/Image/@(levelName).png" style="width:25px">@levelName 會員 @_userInforService.UserName </li>
                                             <li><a href="~/Member/myCoupons"> 優惠劵(@disCount) </a></li>
                                             <li><a href="~/Member/myMessage"> ｜未讀訊息(@mS) 封 </a></li>
                                             <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/LogOut">登出</a></li>

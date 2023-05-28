@@ -127,9 +127,12 @@ namespace prjBookMvcCore.Controllers
             return Content(theorderID.ToString());
         }
 
-        public bool updatePoint(Order order, Member member)
+        public bool updatePoint(int memberid)
         {
             bool isSuccess = false;
+
+            Order order = _db.Orders.OrderByDescending(o => o.OrderId).FirstOrDefault(x => x.MemberId == memberid);
+            Member member = _db.Members.Find(memberid);
             if (order != null)
             {
                 member.Points = (int)(member.Points - order.PointAmount);
@@ -189,19 +192,26 @@ namespace prjBookMvcCore.Controllers
             //writeOrderMs(order, _config, _db); 寫訂單的信
 
             Member member = _db.Members.Find(order.MemberId);
-            if(updatePoint(order, member))
-            {
-                _db.SaveChanges();
-                isSuccess = true;
-            }
-
+            _db.SaveChanges();
+            isSuccess = true;
             return Content(isSuccess.ToString());
         }
-        [Authorize]
+        
+        [HttpGet]
         public IActionResult CollectList(int id) //暫存清單頁面
         {
-            var q = _db.ActionDetials.Include(x=>x.Book).ThenInclude(x=>x.BookDiscountDetails).ThenInclude(x=>x.BookDiscount).Where(x => x.MemberId == id && x.ActionId == 4);
-            return Json(q);
+            var q2 = from ad in _db.ActionDetials
+                     join bk in _db.Books on ad.BookId equals bk.BookId
+                     join bde in _db.BookDiscountDetails on bk.BookId equals bde.BookId
+                     join bd in _db.BookDiscounts on bde.BookDiscountId equals bd.BookDiscountId 
+                     where ad.MemberId == id && ad.ActionId == 4 && bde.BookDiscountStartDate < DateTime.Now & bde.BookDiscountEndDate > DateTime.Now
+                     select new
+                     {
+                         acid = ad.ActionToBookId,
+                         book = bk,
+                         Dprice = Math.Ceiling(bk.UnitPrice * bd.BookDiscountAmount),
+                     };
+            return Json(q2);
         }
 
 
