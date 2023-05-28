@@ -12,5 +12,6 @@
         public int categoryId { get; set; }
         public int bookDiscountId { get; set; }
         public int subcategoryId { get; set; }
+        public string SortBy { get; set; }
     }
 }

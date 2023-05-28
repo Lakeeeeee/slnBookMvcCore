@@ -2,12 +2,16 @@
 @model MenuInformation
 @{
     BookShopContext db = new BookShopContext();
+    var selectedFilter = "PublicationDate";
 }
-
 
 <html>
 <head>
-    @if (Model.subcategoryId > 0 && !string.IsNullOrEmpty(Model?.subCategories?.FirstOrDefault(c => c.SubCategoryId == Model.subcategoryId)?.SubCategoryName))
+    @if (Model?.categoryId == 0 && Model.subcategoryId == 0)
+    {
+        ViewData["Title"] = $"{ViewData["Title"]}   {"繁中"}";
+    }
+    else if (Model.subcategoryId > 0 && !string.IsNullOrEmpty(Model?.subCategories?.FirstOrDefault(c => c.SubCategoryId == Model.subcategoryId)?.SubCategoryName))
     {
         var subcategoryName = Model.subCategories.FirstOrDefault(c => c.SubCategoryId == Model.subcategoryId)?.SubCategoryName;
         if (!string.IsNullOrEmpty(subcategoryName))
@@ -23,6 +27,7 @@
             ViewData["Title"] = $"{ViewData["Title"]}   {categoryName}";
         }
     }
+
 
     <style>
         a:link, a:visited {
@@ -49,7 +54,7 @@
             text-overflow: ellipsis;
         }
 
-         .bookimg {
+        .bookimg {
             width: 85%;
             margin-left: 25px;
         }
@@ -82,7 +87,7 @@
                         @{
                             var s = db.Books.Where(c => c.LanguageId == 1).Select(c => c.BookId).ToList();
                             int countAll = s.Count;
-                            <div class="row"><span>繁中 (@countAll)</span></div>
+                            <div class="row"><a href="@Url.Action("分類頁面", new { id = 0 })">繁中 (@countAll)</a></div>
                         }
                     </div>
                     @foreach (var category in Model.categories)
@@ -92,7 +97,7 @@
                             var q = db.CategoryDetails.Where(c => c.SubCategory.CategoryId == category.CategoryId).Select(c => c).ToList();
                             int count = q.Count;
                             <div class="row">
-                                <div role="button" class="card-body btn-outline-secondary" data-bs-toggle="collapse" href="#card-@category.CategoryId" role="button" aria-expanded="false" aria-controls="card-@category.CategoryId" onclick="changePath(@category.CategoryId)">
+                                <div class="card-body btn-outline-secondary" data-bs-toggle="collapse" href="#card-@category.CategoryId" role="button" aria-expanded="false" aria-controls="card-@category.CategoryId" onclick="changePath(@category.CategoryId)">
                                     <a asp-controller="Category" asp-action="分類頁面" asp-route-id="@category.CategoryId">@category.CategoryName (@count)</a>
                                 </div>
                             </div>
@@ -123,9 +128,9 @@
                             <span>排序方式</span>
                             <div class="btn-group">
                                 <select id="sort-Select" class="form-select" aria-label="Default select example" onchange="booksview()">
-                                    <option value="PublicationDate" selected>出版日期排序</option>
-                                    <option value="discountedPrice">優惠價格排序</option>
-                                    <!-- <option value="topsell">暢銷排行榜</option> -->
+                                    <option value="PublicationDate" select="@((Model.SortBy == "PublicationDate").ToString().ToLower())">出版日期排序</option>
+                                    <option value="Price" select="@((Model.SortBy == "Price").ToString().ToLower())">優惠價排序</option>
+                                    <!-- Add more options for other sorting options, if needed -->
                                 </select>
                             </div>
                         </div>
@@ -163,8 +168,10 @@
                                     </ul>
                                 </div>
                             </div>
+                            
                         }
                     }
+
                 </div>
                 <!-- 分頁欄頁面控制 -->
                 <div class="row">
@@ -174,7 +181,7 @@
                                 @if (Model.CurrentPage > 1)
                                 {
                                     <li class="page-item">
-                                        <a class="page-link" href="@Url.Action("分類頁面", new { id = Model.categoryId, subid = Model.subcategoryId, page = Model.CurrentPage - 1 })" aria-label="Previous">
+                                        <a class="page-link" href="@Url.Action("分類頁面", new { id = Model.categoryId, subid = Model.subcategoryId, page = Model.CurrentPage - 1, sort = Model.SortBy })" aria-label="Previous">
                                             <span aria-hidden="true">&laquo;</span>
                                             <span class="sr-only">前一頁</span>
                                         </a>
@@ -189,7 +196,7 @@
                                 @if (Model.CurrentPage < Model.TotalPages)
                                 {
                                     <li class="page-item">
-                                        <a class="page-link" href="@Url.Action("分類頁面", new { id = Model.categoryId, subid = Model.subcategoryId, page = Model.CurrentPage + 1 })" aria-label="Next">
+                                        <a class="page-link" href="@Url.Action("分類頁面", new { id = Model.categoryId, subid = Model.subcategoryId, page = Model.CurrentPage + 1, sort = Model.SortBy })" aria-label="Next">
                                             <span aria-hidden="true">&raquo;</span>
                                             <span class="sr-only">下一頁</span>
                                         </a>
@@ -205,46 +212,21 @@
 </body>
 </html>
 
-<script>
-    // Add the 'show' class to the corresponding card-body element
-    const cardBody = document.getElementById("card-@Model.subcategoryId");
-    if (cardBody) { cardBody.classList.add("show"); }
 
+<script>
     // 排序判斷動作
     function booksview() {
         var sortBy = document.getElementById("sort-Select").value;
-        // Get the book list container element
-        var bookList = document.getElementById("booksview");
-        // Get all the book items inside the book list
-        var bookItems = bookList.getElementsByClassName("book-item");
-        // Convert the book items into an array
-        var bookItemsArray = Array.from(bookItems);
-        // Sort the book items based on the selected sorting method
-        if (sortBy === "PublicationDate") {
-            bookItemsArray.sort(function (a, b) {
-                var dateA = new Date(a.getAttribute("data-publication-date"));
-                var dateB = new Date(b.getAttribute("data-publication-date"));
-                return dateB - dateA; // Sort by descending publication date (from most recent to oldest)
-            });
-        } else if (sortBy === "discountedPrice") {
-            bookItemsArray.sort(function (a, b) {
-                var priceA = parseInt(a.getAttribute("data-price"));
-                var priceB = parseInt(b.getAttribute("data-price"));
-                return priceA - priceB; // Sort by ascending price (from lowest to highest)
-            });
-        }
-        // Clear the book list
-        bookList.innerHTML = "";
-        // Append the sorted book items back to the book list
-        bookItemsArray.forEach(function (item) {
-            bookList.appendChild(item);
-        });
+        var categoryId = '@Model.categoryId';
+        var subcategoryId = '@Model.subcategoryId';
+        var currentPage = '@Model.CurrentPage';
+        window.location.href = '@Url.Action("分類頁面")' + '?id=' + categoryId + '&subid=' + subcategoryId + '&page=' + currentPage + '&sort=' + sortBy;
     }
 
     // 分類欄位 click 事件
     function changePath(inputid) {
         const path = '@Url.Action("分類頁面", new { id = "" })' + '/' + inputid;
-        window.location.href = path;
+        window.location.href = path + '?sort=' + document.getElementById("sort-Select").value;
 
         // Add the 'show' class to the corresponding card-body element
         const cardBody = document.getElementById("card-" + inputid);

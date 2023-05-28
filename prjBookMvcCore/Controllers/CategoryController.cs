@@ -9,7 +9,8 @@ namespace prjBookMvcCore.Controllers
     public class CategoryController : Controller
     {
         BookShopContext db = new();
-        public IActionResult 分類頁面(int id, int subid, int page = 1)
+
+        public IActionResult 分類頁面(int id, int subid, int page = 1, string sort = "PublicationDate")
         {
             int categoryID = id;
             int subcategoryID = subid;
@@ -44,11 +45,22 @@ namespace prjBookMvcCore.Controllers
             {
                 query = query.Where(sc => sc.子分類ID == subcategoryID);
             }
+            //篩選條件
+            switch (sort)
+            {
+                case "PublicationDate":
+                    query = query.OrderByDescending(b => b.出版日期);
+                    break;
+                case "Price":
+                    query = query.OrderBy(b => b.定價 * b.折扣);
+                    break;
+            }
             //頁面顯示控制
             int totalItems = query.Count();
             int totalPages = (int)Math.Ceiling((double)totalItems / itemsPerPage);
             int offset = (page - 1) * itemsPerPage;
             var books = query.Skip(offset).Take(itemsPerPage);
+            var pagedBooks = query.Skip(offset).Take(itemsPerPage).ToList();
 
             List<MenuItem> menuItems = new List<MenuItem>();
             foreach (var item in books)
@@ -61,6 +73,7 @@ namespace prjBookMvcCore.Controllers
                     CoverPath = item.路徑,
                     PublicationDate = item.出版日期,
                 };
+
                 BookDiscount bd = new BookDiscount { BookDiscountAmount = item.折扣 };
                 Author a = new Author { AuthorName = item.作者 , AuthorId = item.作者ID};
                 Category c = new Category { CategoryName = item.分類, CategoryId = item.分類ID };
@@ -84,8 +97,9 @@ namespace prjBookMvcCore.Controllers
                 menuItems = menuItems,
                 CurrentPage = page,
                 TotalPages = totalPages,
-                categoryId = categoryID, // Add this line to pass the category ID to the view
-                subcategoryId= subcategoryID// Add this line to pass the subcategory ID to the view
+                categoryId = categoryID, 
+                subcategoryId= subcategoryID,
+                SortBy = sort
             };
             return View(menuInformation);
         }
