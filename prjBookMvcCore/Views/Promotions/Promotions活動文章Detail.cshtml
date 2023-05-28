@@ -104,7 +104,7 @@
                     <p>出版日期：@g.PublicationDate.ToString("yyyy/MM/dd")</p>
                     <p>出版社：<a href="~/Book/publisherInformation/@g.PublisherId">@g.PublisherName </a></p>
                     <p>ISBN：@g.Isbn</p>
-                    <p>原價：<del >@((int)g.UnitPrice) </del>  元</p>
+                    <p>原價：<del>@((int)g.UnitPrice) </del>  元</p>
                     <p>優惠價：<span style="color: #E3007F; "> @((bookDiscountDetail[0].BookDiscountAmount * 100).ToString("0"))</span>折 <span style="color: #E3007F;font-weight:bold;">@((int)Math.Ceiling(g.UnitPrice * bookDiscountDetail[0].BookDiscountAmount))</span>元</p>
                 </div>
                 <div class="col-6">
