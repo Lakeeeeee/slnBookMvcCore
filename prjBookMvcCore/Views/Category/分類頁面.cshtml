@@ -92,8 +92,8 @@
                             var q = db.CategoryDetails.Where(c => c.SubCategory.CategoryId == category.CategoryId).Select(c => c).ToList();
                             int count = q.Count;
                             <div class="row">
-                                <div class="card-body" data-bs-toggle="collapse" href="#card-@category.CategoryId" role="button" aria-expanded="false" aria-controls="card-@category.CategoryId" onclick="changePath(@category.CategoryId)">
-                                    <span asp-controller="Category" asp-action="分類頁面" asp-route-id="@category.CategoryId">@category.CategoryName (@count)</span>
+                                <div role="button" class="card-body btn-outline-secondary" data-bs-toggle="collapse" href="#card-@category.CategoryId" role="button" aria-expanded="false" aria-controls="card-@category.CategoryId" onclick="changePath(@category.CategoryId)">
+                                    <a asp-controller="Category" asp-action="分類頁面" asp-route-id="@category.CategoryId">@category.CategoryName (@count)</a>
                                 </div>
                             </div>
                             <div class="collapse @(Model.categoryId == category.CategoryId ? "show" : "")" id="card-@category.CategoryId">
@@ -104,7 +104,7 @@
                                         var subcategoryName = subcategory.SubCategoryName;
                                         var su = db.CategoryDetails.Where(s => s.SubCategory.SubCategoryId == subcategory.SubCategoryId).Select(s => new { s.Book }).ToList();
                                         int subcount = su.Count;
-                                        <div class="card card-body @(string.IsNullOrEmpty(subcategoryName) ? "d-none" : "")" onclick="changePath(@subcategory.SubCategoryId)">
+                                        <div class="card card-body @(string.IsNullOrEmpty(subcategoryName) ? "d-none" : "") btn-outline-secondary" onclick="changePath(@subcategory.SubCategoryId)">
                                             <a asp-controller="Category" asp-action="分類頁面" asp-route-subid="@subcategory.SubCategoryId">@subcategoryName (@subcount)</a>
                                         </div>
                                     }
