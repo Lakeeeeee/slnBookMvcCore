@@ -132,8 +132,7 @@ namespace prjBookMvcCore.Controllers
             bool isSuccess = false;
             if (order != null)
             {
-                //member.Points = member.Points - order.PointAmount;
-
+                member.Points = (int)(member.Points - order.PointAmount);
                 switch (member.LevelId)
                 {
                     case 3:
@@ -147,9 +146,6 @@ namespace prjBookMvcCore.Controllers
                         break;
                 };
                 _db.SaveChanges();
-
-
-
                 isSuccess = true;
             }
             return isSuccess;
@@ -174,10 +170,6 @@ namespace prjBookMvcCore.Controllers
                 orderDetail.UnitPrice = Math.Ceiling(bookPrice * 折扣);
                 list.Add(orderDetail);
             };
-			Member member = _db.Members.Find(order.MemberId);
-
-            updatePoint(order, member);
-            _db.SaveChanges();
 
 			for (int n = 0; n < list.Count(); n++)
             {
@@ -186,8 +178,6 @@ namespace prjBookMvcCore.Controllers
                 thebook.UnitInStock = thebook.UnitInStock - quantity[n];
             };
             _db.OrderDetails.AddRange(list);
-            _db.SaveChanges();
-            isSuccess = true;
 
             //刪除購物車
             foreach (int item in acids)
@@ -195,8 +185,15 @@ namespace prjBookMvcCore.Controllers
                 ActionDetial tool = _db.ActionDetials.Find(item);
                 _db.ActionDetials.Remove(tool);
             }
-            _db.SaveChanges();
-            //writeOrderMs(order, _config, _db);
+            //writeOrderMs(order, _config, _db); 寫訂單的信
+
+            Member member = _db.Members.Find(order.MemberId);
+            if(updatePoint(order, member))
+            {
+                _db.SaveChanges();
+                isSuccess = true;
+            }
+
             return Content(isSuccess.ToString());
         }
         [Authorize]

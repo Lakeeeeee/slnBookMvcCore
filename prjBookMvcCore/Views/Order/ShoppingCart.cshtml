@@ -131,10 +131,8 @@
 
 <div class="tab-content" id="nav-tabContent">
     @*頁面*@
-    <div class="tab-pane fade show active" id="nav-cart" role="tabpanel" aria-labelledby="nav-cart-tab">
-        @*page1*@
-        <nav>
-            @*購物車暫存切換頁籤*@
+    <div class="tab-pane fade show active" id="nav-cart" role="tabpanel" aria-labelledby="nav-cart-tab"> @*page1*@
+        <nav> @*購物車暫存切換頁籤*@
         <div class="nav nav-tabs" id="nav-tab2" role="tablist" style="">
             <button class="nav-link active" id="nav-cart2-tab" data-bs-toggle="tab" data-bs-target="#nav-cart2" type="button" role="tab" aria-controls="nav-cart2" aria-selected="true">購物車</button>
             <button class="nav-link" id="nav-cartList-tab" data-bs-toggle="tab" data-bs-target="#nav-cartList" type="button" role="tab" aria-controls="nav-cartList" aria-selected="false">暫存清單</button>
@@ -143,11 +141,8 @@
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-cart2" role="tabpanel" aria-labelledby="nav-cart2-tab">
                 <form id="form1">
-                    <div>
-                    @*<div class="tab-pane fade show active" id="pills-a" role="tabpanel" aria-labelledby="pills-a-tab">*@
-                        @*購物車頁面*@
-                        <table class="table table-striped" id="table1">
-                            @*購物車內容*@
+                    <div> @*購物車頁面*@
+                        <table class="table table-striped" id="table1"> @*購物車內容*@
                             <thead>
                                 <tr>
                                     <th style="width:50px;"></th>
@@ -195,7 +190,6 @@
                                 }
                             </tbody>
                         </table>
-
                         <div style="text-align:right;">
                             @*結帳資訊*@
                             <div style="font-size:24px; color:#545454;">
@@ -207,72 +201,30 @@
                         </div>
                     </div>
                 </form>
-
             </div>
-            
             <div class="tab-pane fade" id="nav-cartList" role="tabpanel" aria-labelledby="nav-cartList-tab">
-                <form>
-                    <div>
-                    @*<div class="tab-pane fade" id="pills-b" role="tabpanel" aria-labelledby="pills-b-tab">*@
-                        @*暫存*@
-                        <table class="table table-striped" id="cList">
-                            <thead>
-                                <tr>
-                                    <th style="width:50px;">序號</th>
-                                    <th style="width:500px;">書名</th>
-                                    <th>優惠</th>
-                                    <th>優惠價</th>
-                                    <th>數量</th>
-                                    <th>小計</th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{
-                                    int Tcount = 1;
-                                    foreach (var item in Model)
-                                    {
-                                        int 優惠價 = (int)Math.Ceiling(item.Book.UnitPrice * item.discountAmount);
-                                        string bookTitle = item.Book.BookTitle.Replace("$$", "\n");
-                                        decimal 小計 = 優惠價 * item.Quantity;
-                                            <input name="acid" value="@item.ActionDetial.ActionToBookId" type="hidden">
-                                        if (item.ActionDetial.ActionId == 4)
-                                        {
-                                                <tr>
-                                                    <td>@Tcount</td>
-                                                    <td>
-                                                        <div class="col float-start me-4">
-                                                            <img height="50px" src="~/Image/Book/@item.Book.CoverPath" />
-                                                        </div>
-                                                        <div class="col pe-2">@(item.Book.BookTitle.Split("$")[0])</div>
-                                                    </td>
-                                                    <td>@item.discountName</td>
-                                                    <td>@優惠價 元</td>
-                                                    <td><input name="quantity" id="quantity_@item.ActionDetial.ActionToBookId" type="number" value="@item.Quantity" min="1" max="@item.Book.UnitInStock"><span class="mx-4">本</span></td>
-                                                    <td id="subtotal">@小計 元</td>
-                                                    <td>
-                                                        <button class="btn btn-outline-secondary" onclick="cancle(@item.ActionDetial.ActionToBookId)">取消</button>
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-outline-secondary" onclick="temSave(@item.bookId,@_user.UserId)">暫存</button>
-                                                    </td>
-                                                </tr>
-                                            Tcount++;
-                                        }
-                                    }
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </form>
+                <div> @*暫存*@
+                    <table class="table table-striped" id="cList">
+                        <thead>
+                           <tr>
+                             <th style="width:50px;">序號</th>
+                             <th style="width:500px;">書名</th>
+                             <th>優惠</th>
+                             <th>優惠價</th>
+                             <th>數量</th>
+                             <th>小計</th>
+                             <th></th>
+                             <th></th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>                   
-         
-        </div>
         <hr />
-        <div class="container">
-            @*為你推薦*@
+        <div class="container"> @*為你推薦*@
             <h5>為你推薦</h5>
             <div class="row">
                 @{
@@ -304,7 +256,6 @@
             </div>
         </div>
     </div>
-
     @*page2*@
     <div class="tab-pane fade" id="nav-checkOutInfo" role="tabpanel" aria-labelledby="nav-checkOutInfo-tab">
         <div class="container-sp">
@@ -451,23 +402,50 @@
 
     </div>
 </div>
-
-@*<script>
-    //處理分頁切換
-    $(document).ready(function () {
-        // 點擊購物車分頁時顯示購物車頁面
-        $("#pills-a-tab").click(function () {
-            $("#pills-b").removeClass("show active");
-            $("#pills-a").addClass("show active");
+<script> //暫存
+    const cList = document.getElementById('cList');
+    const btnChange = document.getElementById('nav-cartList-tab');
+    btnChange.addEventListener('click', async () => {
+        const response = await fetch('@Url.Content("~/Order/CollectList")?id=' + @_user.UserId);
+        const datas = await response.json();
+        console.log(datas);
+        cList.innerHTML = '';
+        const cListHeader = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        headerRow.innerHTML = `
+                 <th><input type="hidden" value="checkbox"></th>
+                 <th style="width:50px;">序號</th>
+                 <th style="width:500px;">書名</th>
+                 <th>優惠</th>
+                 <th>優惠價</th>
+                 <th>數量</th>
+                 <th>小計</th>
+                 `;
+        cListHeader.appendChild(headerRow);
+        cList.appendChild(cListHeader);
+        const cListBody = document.createElement('tbody');
+        datas.forEach((item, index) => {
+            const input = document.createElement('input');
+            input.name = "acid";
+            input.value = item.actionDetial.actionToBookId;
+            input.type = "hidden";
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                     <td><input type="hidden" value="checkbox"></td>
+                     <td>${index + 1}</td>
+                         <td>${item.book.bookTitle.split("$")[0]}</td>
+                     <td>${item.discountName}</td>
+                     <td>${Math.ceil(item.book.unitPrice * item.discountAmount)}元</td>
+                     <td><input name="quantity" value="${item.quantity}" class="cinput" type="text" readonly /></td>
+                     <td>${Math.ceil(item.quantity * (item.book.unitPrice * item.discountAmount))}元</td>
+                 `;
+            cListBody.appendChild(row);
+            cListBody.appendChild(input);
         });
-
-        // 點擊暫存清單分頁時顯示暫存清單頁面
-        $("#pills-b-tab").click(function () {
-            $("#pills-a").removeClass("show active");
-            $("#pills-b").addClass("show active");
-        });
+        cList.appendChild(cListBody);
     });
-</script>*@
+</script>
+
 <script>
     let isLogin = false;
     window.onload = () => {
@@ -534,7 +512,6 @@
         }
     }
 </script>
-
 <script>
     //送出訂單
     function toPage4(id) {
@@ -547,21 +524,19 @@
         successModal.style.display = 'block';
         const confirmButton = document.getElementById('confirmButton');
         confirmButton.addEventListener('click', function () {
-            updatePoint(id);
+            //updatePoint(id);
             toPage4(id); // 在確定按鈕的點擊事件處理程序中呼叫 toPage4() 函數
         });
     };
 
-    function updatePoint(id) {
-        const url = '@Url.Action("updatePoint", "Order")?id=' + id;
-        fetch(url)
-            .catch(error => {
-                // 處理錯誤
-                console.error('更新失敗', error);
-            });
-    };
-
-
+    //function updatePoint(id) {
+    //    const url = 'Url.Action("updatePoint", "Order")?id=' + id;
+    //    fetch(url)
+    //        .catch(error => {
+    //            // 處理錯誤
+    //            console.error('更新失敗', error);
+    //        });
+    //};
     const btnSubmit = document.getElementById('btnSubmit');
     btnSubmit.addEventListener('click', async function () {
         const orderSubmitResult = await orderSubmit();
@@ -574,7 +549,6 @@
             }
         }
     });
-
     /*送出訂單*/
     async function orderSubmit() {
         const formForOrder = document.getElementById('formForOrder');
@@ -586,7 +560,6 @@
         const confirm = parseInt(confirmText, 10); // 將 confirmText 轉換為整數
         return confirm;
     };
-
     async function orderDetailsSubmit() {
         const formForOrderDetails = document.getElementById('formForOrderDetails');
         const formdata = new FormData(formForOrderDetails);
@@ -758,51 +731,7 @@
         btnClick('nav-checkOutInfo-tab');
     });
 </script>
-<script>//暫存
-    const cList = document.getElementById('cList');
-    const btnChange = document.getElementById('cartList');
-    btnChange.addEventListener('click', async () => {
-        const response = await fetch('@Url.Action("CollectList", "Order")?id=' + @_user.UserId);
-        const datas = await response.json();
-        console.log(datas);
-        cList.innerHTML = '';
-        const cListHeader = document.createElement('thead');
-        const headerRow = document.createElement('tr');
-        headerRow.innerHTML = `
-             <th><input type="hidden" value="checkbox"></th>
-             <th style="width:50px;">序號</th>
-             <th style="width:500px;">書名</th>
-             <th>優惠</th>
-             <th>優惠價</th>
-             <th>數量</th>
-             <th>小計</th>
-             `;
-        cListHeader.appendChild(headerRow);
-        cList.appendChild(cListHeader);
-        const cListBody = document.createElement('tbody');
-        datas.forEach((item, index) => {
-            const input = document.createElement('input');
-            input.name = "acid";
-            input.value = item.actionDetial.actionToBookId;
-            input.type = "hidden";
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                 <td><input type="hidden" value="checkbox"></td>
-                 <td>${index + 1}</td>
-                     <td>${item.book.bookTitle.split("$")[0]}</td>
-                 <td>${item.discountName}</td>
-                 <td>${Math.ceil(item.book.unitPrice * item.discountAmount)}元</td>
-                 <td><input name="quantity" value="${item.quantity}" class="cinput" type="text" readonly /></td>
-                 <td>${Math.ceil(item.quantity * (item.book.unitPrice * item.discountAmount))}元</td>
-             `;
-            cListBody.appendChild(row);
-            cListBody.appendChild(input);
-        });
-        cList.appendChild(cListBody);
-    });
-</script>
-<script>
-    // 暫存購物車項目方法
+<script> // 暫存購物車項目方法
     async function temSave(bookid, memid) {
         const response = await fetch('@Url.Action("moveToList", "Order")?bookID=' + bookid + '&memberID=' + memid + '&actionID=' + 4);
         const confirm = await response.json();

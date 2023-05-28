@@ -465,7 +465,9 @@ namespace prjBookMvcCore.Models
 
                 entity.Property(e => e.MemberPassword).HasMaxLength(10);
 
-                entity.Property(e => e.Memberphone).HasMaxLength(10);
+                entity.Property(e => e.Memberphone)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.PaymentId)
                     .HasColumnName("PaymentID")
@@ -583,7 +585,7 @@ namespace prjBookMvcCore.Models
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
                 entity.Property(e => e.FinalPay)
-                    .HasColumnType("money")
+                    .HasColumnType("decimal(10, 0)")
                     .HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
@@ -597,8 +599,6 @@ namespace prjBookMvcCore.Models
                     .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
-
-                entity.Property(e => e.PointAmount).HasColumnType("money");
 
                 entity.Property(e => e.ReciverName).HasMaxLength(50);
 
