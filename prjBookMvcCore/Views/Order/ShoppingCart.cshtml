@@ -364,13 +364,13 @@
                 <p id="shipmentId">配送方式</p>
             </div>
             <div class="col">
-                <h3 class="mb-2">結帳金額</h3>
-                <p>總金額：<span id="seconTotal"> </span></p>
+                <h3 class="mb-2">確認金額</h3>
+                <p>購物金額：<span id="seconTotal"> </span></p>
                 <p id="discountId"></p>
                 <p id="rebateAmount"></p>
-                <p id="freight"></p>
+@*                <p id="freight"></p>
                 <p style="font-size:20px"><strong>結帳金額：<span id="checkoutAmount"></span></strong></p>
-            </div>
+*@            </div>
         </div>
 
         <div class="mt-5" style="text-align:right;">
@@ -577,14 +577,14 @@
         } else if (shipmentId == 2) {
             freight = 60;
         }
-        // 顯示
-        document.getElementById('freight').innerText = '運費: ' + freight + '元';
+        //// 顯示
+        //document.getElementById('freight').innerText = '運費: ' + freight + '元';
 
-        // 計算結帳金額
-        var totalAmount = parseFloat(document.getElementById('totalAmount').innerText);
-        var checkoutAmount = totalAmount - parseFloat(rebateAmount) + parseFloat(freight);
-        // 顯示結帳金額
-        document.getElementById('checkoutAmount').innerText = checkoutAmount + ' 元';
+        //// 計算結帳金額
+        //var totalAmount = parseFloat(document.getElementById('totalAmount').innerText);
+        //var checkoutAmount = totalAmount - parseFloat(rebateAmount) + parseFloat(freight);
+        //// 顯示結帳金額
+        //document.getElementById('checkoutAmount').innerText = checkoutAmount + ' 元';
 
         setFinalTotal();
         document.getElementById(tabId).click();
