@@ -127,34 +127,33 @@ namespace prjBookMvcCore.Controllers
             return Content(theorderID.ToString());
         }
 
-        public IActionResult updatePoint(int id)
+        public bool updatePoint(Order order, Member member)
         {
-            
-            var MemberId = id;
-            var order = _db.Orders.FirstOrDefault(o => o.MemberId == Convert.ToInt32(MemberId));
-
+            bool isSuccess = false;
             if (order != null)
             {
-                var member = _db.Members.Find(order.MemberId);
+                //member.Points = member.Points - order.PointAmount;
 
                 switch (member.LevelId)
                 {
                     case 3:
-                        member.Points = (int)((member.Points) + Convert.ToInt32(order.TotalPay) * 0.01);
+                        member.Points = (int)((member.Points) + (int)Math.Ceiling((double)order.FinalPay) * 0.01);
                         break;
                     case 4:
-                        member.Points = (int)((member.Points) + Convert.ToInt32(order.TotalPay) * 0.05);
+                        member.Points = (int)((member.Points) + (int)Math.Ceiling((double)order.FinalPay) * 0.05);
                         break;
                     case 5:
-                        member.Points = (int)((member.Points) + Convert.ToInt32(order.TotalPay) * 0.05);
+                        member.Points = (int)((member.Points) + (int)Math.Ceiling((double)order.FinalPay) * 0.05);
                         break;
                 };
-
                 _db.SaveChanges();
-                return Ok("更新成功");
-            }
 
-            return NotFound(); // 如果找不到符合條件的訂單，回傳 NotFound
+
+
+                isSuccess = true;
+            }
+            return isSuccess;
+
         }
         public IActionResult Action3(IFormCollection formData) //createOrderdetails
         {
@@ -177,19 +176,8 @@ namespace prjBookMvcCore.Controllers
             };
 			Member member = _db.Members.Find(order.MemberId);
 
-			switch (member.LevelId)
-			{
-				case 3:
-					member.Points = (int)((member.Points) + (Convert.ToInt32(order.FinalPay) * 0.01));
-					break;
-				case 4:
-					member.Points = (int)((member.Points) + (Convert.ToInt32(order.FinalPay) * 0.05));
-					break;
-				case 5:
-					member.Points = (int)((member.Points) + (Convert.ToInt32(order.FinalPay) * 0.05));
-					break;
-			};
-			_db.SaveChanges();
+            updatePoint(order, member);
+            _db.SaveChanges();
 
 			for (int n = 0; n < list.Count(); n++)
             {

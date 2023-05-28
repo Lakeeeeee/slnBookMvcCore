@@ -171,24 +171,24 @@
                                         string bookTitle = item.Book.BookTitle.Replace("$$", "\n");
                                         //檢查進位
                                         decimal 小計 = 優惠價 * item.Quantity;
-                                        <input name="acid" value="@item.ActionDetial.ActionToBookId" type="hidden">
-                                        <tr>
-                                            <td style=""></td>
-                                            <td>@count</td>
-                                            <td>
-                                                <a class="cust3" href="../../Book/BookInformation/@item.bookId">@item.Book.BookTitle.Split("$")[0]</a>
-                                            </td>
-                                            <td>@item.discountName</td>
-                                            <td>@優惠價 元</td>
-                                            <td><input name="quantity" id="quantity_@item.ActionDetial.ActionToBookId" type="number" value="@item.Quantity" min="1" max="@item.Book.UnitInStock"><span class="mx-4">本</span></td>
-                                            <td id="subtotal">@小計 元</td>
-                                            <td>
-                                                <button class="btn btn-outline-secondary" onclick="cancle(@item.ActionDetial.ActionToBookId)">取消</button>
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-outline-secondary" onclick="temSave(@item.bookId,@_user.UserId)">暫存</button>
-                                            </td>
-                                        </tr>
+                                            <input name="acid" value="@item.ActionDetial.ActionToBookId" type="hidden">
+                                            <tr>
+                                                <td style=""></td>
+                                                <td>@count</td>
+                                                <td>
+                                                    <a class="cust3" href="../../Book/BookInformation/@item.bookId">@item.Book.BookTitle.Split("$")[0]</a>
+                                                </td>
+                                                <td>@item.discountName</td>
+                                                <td>@優惠價 元</td>
+                                                <td><input name="quantity" id="quantity_@item.ActionDetial.ActionToBookId" type="number" value="@item.Quantity" min="1" max="@item.Book.UnitInStock"><span class="mx-4">本</span></td>
+                                                <td id="subtotal">@小計 元</td>
+                                                <td>
+                                                    <button class="btn btn-outline-secondary" onclick="cancle(@item.ActionDetial.ActionToBookId)">取消</button>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-outline-secondary" onclick="temSave(@item.bookId,@_user.UserId)">暫存</button>
+                                                </td>
+                                            </tr>
                                         count++;
                                         totalAmount += 小計;
                                     };
@@ -236,28 +236,28 @@
                                         int 優惠價 = (int)Math.Ceiling(item.Book.UnitPrice * item.discountAmount);
                                         string bookTitle = item.Book.BookTitle.Replace("$$", "\n");
                                         decimal 小計 = 優惠價 * item.Quantity;
-                                        <input name="acid" value="@item.ActionDetial.ActionToBookId" type="hidden">
+                                            <input name="acid" value="@item.ActionDetial.ActionToBookId" type="hidden">
                                         if (item.ActionDetial.ActionId == 4)
                                         {
-                                            <tr>
-                                                <td>@Tcount</td>
-                                                <td>
-                                                    <div class="col float-start me-4">
-                                                        <img height="50px" src="~/Image/Book/@item.Book.CoverPath" />
-                                                    </div>
-                                                    <div class="col pe-2">@(item.Book.BookTitle.Split("$")[0])</div>
-                                                </td>
-                                                <td>@item.discountName</td>
-                                                <td>@優惠價 元</td>
-                                                <td><input name="quantity" id="quantity_@item.ActionDetial.ActionToBookId" type="number" value="@item.Quantity" min="1" max="@item.Book.UnitInStock"><span class="mx-4">本</span></td>
-                                                <td id="subtotal">@小計 元</td>
-                                                <td>
-                                                    <button class="btn btn-outline-secondary" onclick="cancle(@item.ActionDetial.ActionToBookId)">取消</button>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-outline-secondary" onclick="temSave(@item.bookId,@_user.UserId)">暫存</button>
-                                                </td>
-                                            </tr>
+                                                <tr>
+                                                    <td>@Tcount</td>
+                                                    <td>
+                                                        <div class="col float-start me-4">
+                                                            <img height="50px" src="~/Image/Book/@item.Book.CoverPath" />
+                                                        </div>
+                                                        <div class="col pe-2">@(item.Book.BookTitle.Split("$")[0])</div>
+                                                    </td>
+                                                    <td>@item.discountName</td>
+                                                    <td>@優惠價 元</td>
+                                                    <td><input name="quantity" id="quantity_@item.ActionDetial.ActionToBookId" type="number" value="@item.Quantity" min="1" max="@item.Book.UnitInStock"><span class="mx-4">本</span></td>
+                                                    <td id="subtotal">@小計 元</td>
+                                                    <td>
+                                                        <button class="btn btn-outline-secondary" onclick="cancle(@item.ActionDetial.ActionToBookId)">取消</button>
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-outline-secondary" onclick="temSave(@item.bookId,@_user.UserId)">暫存</button>
+                                                    </td>
+                                                </tr>
                                             Tcount++;
                                         }
                                     }
@@ -280,25 +280,25 @@
                     foreach (var g in q)
                     {
                         var dis = db.BookDiscountDetails.Where(d => d.BookId == g.BookId & d.BookDiscountStartDate < DateTime.Now & d.BookDiscountEndDate > DateTime.Now).Select(d => new { d.BookDiscount.BookDiscountAmount }).ToList();
-                        <div class="col-2 mb-3">
-                            <a id="@g.BookId" href="~/Book/BookInformation/@g.BookId"> <img src="~/Image//Book/@g.CoverPath" class="d-block w-100 img-with-border" alt="..." title="@g.BookTitle.Split("$")[0]" /></a>
-                            <ul style="list-style:none; margin:0; padding:0;" class="text-start">
-                                <li><div class="mt-3 bookCaption"><a id="@g.BookId" href="~/Book/BookInformation/@g.BookId" title="@g.BookTitle.Split("$")[0]">@g.BookTitle.Split("$")[0]</a></div></li>
-                                <li>原價：<del style="color:red;font-style:oblique">@((int)Math.Ceiling(g.UnitPrice)) </del> 元</li>
-                                <li>
-                                    優惠價：<span style="color: #E3007F; ">@((dis[0].BookDiscountAmount * 100).ToString("0"))</span>折
-                                    <span style="color: #E3007F;font-weight:bold;">@((int)Math.Ceiling(g.UnitPrice * dis[0].BookDiscountAmount))</span>元
-                                </li>
-                            </ul>
-                            <div style="text-align:center" class="m-2">
-                                <a role="button" class="btn btn-outline-warning btn-sm" onclick="addToCart(@g.BookId,@_user.UserId)">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
-                                        <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z" />
-                                    </svg>
-                                    加入購物車
-                                </a>
+                            <div class="col-2 mb-3">
+                                <a id="@g.BookId" href="~/Book/BookInformation/@g.BookId"> <img src="~/Image//Book/@g.CoverPath" class="d-block w-100 img-with-border" alt="..." title="@g.BookTitle.Split("$")[0]" /></a>
+                                <ul style="list-style:none; margin:0; padding:0;" class="text-start">
+                                    <li><div class="mt-3 bookCaption"><a id="@g.BookId" href="~/Book/BookInformation/@g.BookId" title="@g.BookTitle.Split("$")[0]">@g.BookTitle.Split("$")[0]</a></div></li>
+                                    <li>原價：<del style="color:red;font-style:oblique">@((int)Math.Ceiling(g.UnitPrice)) </del> 元</li>
+                                    <li>
+                                        優惠價：<span style="color: #E3007F; ">@((dis[0].BookDiscountAmount * 100).ToString("0"))</span>折
+                                        <span style="color: #E3007F;font-weight:bold;">@((int)Math.Ceiling(g.UnitPrice * dis[0].BookDiscountAmount))</span>元
+                                    </li>
+                                </ul>
+                                <div style="text-align:center" class="m-2">
+                                    <a role="button" class="btn btn-outline-warning btn-sm" onclick="addToCart(@g.BookId,@_user.UserId)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+                                            <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z" />
+                                        </svg>
+                                        加入購物車
+                                    </a>
+                                </div>
                             </div>
-                        </div>
                     }
                 }
             </div>
@@ -332,12 +332,12 @@
                         @{
                             foreach (var item in db.Payments.Take(5))
                             {
-                                <div>
-                                    <input class="form-check-input me-2" type="radio" name="paymentId" value="@item.PaymentId" checked>
-                                    <label class="form-check-label mb-2" for="paymentId">
-                                        @item.PaymentName
-                                    </label>
-                                </div>
+                                    <div>
+                                        <input class="form-check-input me-2" type="radio" name="paymentId" value="@item.PaymentId" checked>
+                                        <label class="form-check-label mb-2" for="paymentId">
+                                            @item.PaymentName
+                                        </label>
+                                    </div>
                             };
                         }
                     </div>
@@ -346,12 +346,12 @@
                         @{
                             foreach (var item in db.Shipments)
                             {
-                                <div>
-                                    <input class="form-check-input me-2" type="radio" name="shipmentId" id="text-@item.ShipmentId" value="@item.ShipmentId" checked>
-                                    <label class="form-check-label mb-2" for="shipmentId">
-                                        @item.ShipmentName
-                                    </label>
-                                </div>
+                                    <div>
+                                        <input class="form-check-input me-2" type="radio" name="shipmentId" id="text-@item.ShipmentId" value="@item.ShipmentId" checked>
+                                        <label class="form-check-label mb-2" for="shipmentId">
+                                            @item.ShipmentName
+                                        </label>
+                                    </div>
                             };
                         }
                     </div>
@@ -559,7 +559,7 @@
                 // 處理錯誤
                 console.error('更新失敗', error);
             });
-    }
+    };
 
 
     const btnSubmit = document.getElementById('btnSubmit');
@@ -817,8 +817,7 @@
     };
 
 </script>
-<script>
-    //取消購物車項目方法
+<script> //取消購物車項目方法
     async function cancle(id) {
         const confirmed = confirm('確定要取消嗎?');
         if (confirmed) {
@@ -833,8 +832,7 @@
         }
     };
 </script>
-<script>
-    //page1調整數量同時更新總金額以及value
+<script> //page1調整數量同時更新總金額以及value
     const table1 = document.getElementById('table1');
     const totalAmountElement = document.querySelector('#totalAmount');
     // 初始化 totalAmount 的值
