@@ -121,23 +121,8 @@ namespace prjBookMvcCore.Controllers
                 // 在此處理相應的邏輯
                 order.OrderDiscountId = 7;
             }
-
-            Member member = _db.Members.Find(order.MemberId);
-
-            switch (member.LevelId)
-            {
-                case 3:
-                    member.Points = (int)((member.Points) + Convert.ToInt32(order.TotalPay) * 0.01);
-                    break;
-                case 4:
-                    member.Points = (int)((member.Points) + Convert.ToInt32(order.TotalPay) * 0.05);
-                    break;
-                case 5:
-                    member.Points = (int)((member.Points) + Convert.ToInt32(order.TotalPay) * 0.05);
-                    break;
-            };
-            _db.SaveChanges();
-            theorderID = order.OrderId;
+			_db.SaveChanges();
+			theorderID = order.OrderId;
             return Content(theorderID.ToString());
         }
         public IActionResult Action3(IFormCollection formData) //createOrderdetails
@@ -159,8 +144,23 @@ namespace prjBookMvcCore.Controllers
                 orderDetail.UnitPrice = Math.Ceiling(bookPrice * 折扣);
                 list.Add(orderDetail);
             };
+			Member member = _db.Members.Find(order.MemberId);
 
-            for (int n = 0; n < list.Count(); n++)
+			switch (member.LevelId)
+			{
+				case 3:
+					member.Points = (int)((member.Points) + (Convert.ToInt32(order.FinalPay) * 0.01));
+					break;
+				case 4:
+					member.Points = (int)((member.Points) + (Convert.ToInt32(order.FinalPay) * 0.05));
+					break;
+				case 5:
+					member.Points = (int)((member.Points) + (Convert.ToInt32(order.FinalPay) * 0.05));
+					break;
+			};
+			_db.SaveChanges();
+
+			for (int n = 0; n < list.Count(); n++)
             {
                 list[n].Quantity = quantity[n];
                 var thebook = _db.Books.Where(x => x.BookId == list[n].BookId).FirstOrDefault();
