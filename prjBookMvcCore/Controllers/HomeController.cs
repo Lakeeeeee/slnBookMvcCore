@@ -625,23 +625,56 @@ namespace prjBookMvcCore.Controllers
         {
             using (var db = new BookShopContext())
             {
-                var recommendBooks = (from b in db.Books
-                                      join od in db.OrderDetails
-                                      on b.BookId equals od.BookId
-                                      orderby od.Quantity descending
-                                      select new
-                                      {
-                                          書本ID = b.BookId,
-                                          書名 = b.BookTitle,
-                                          定價 = b.UnitPrice,
-                                          路徑 = b.CoverPath,
-                                          折扣 = b.BookDiscountDetails.Where(x => x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
-                                          出版日期 = b.PublicationDate,
-                                          銷售數量 = b.OrderDetails.Select(x => x.Quantity).FirstOrDefault()
-                                      });
+                var bestSellingBooks = db.OrderDetails
+                    .GroupBy(od => od.BookId)
+                    .Select(g => new
+                    {
+                        BookID = g.Key,
+                        TotalQuantity = g.Sum(od => od.Quantity)
+                    })
+                    .AsEnumerable() // 在此处将查询转换为内存中的LINQ to Objects
+                    .OrderByDescending(g => g.TotalQuantity)
+                    .Take(20)
+                    .ToList();
+                List<Book> books = new List<Book>();
+                foreach (var book in bestSellingBooks)
+                {
+                    Book x = db.Books.Find(book.BookID);
+                    books.Add(x);
+                };
+
+                var q2 = (from b in books
+                         join bdDetail in db.BookDiscountDetails on b.BookId equals bdDetail.BookId
+                        join bd in db.BookDiscounts on bdDetail.BookDiscountId equals bd.BookDiscountId
+                         select new
+                         {
+                             書本ID = b.BookId,
+                             書名 = b.BookTitle,
+                             定價 = b.UnitPrice,
+                             路徑 = b.CoverPath,
+                             折扣 = b.BookDiscountDetails.Where(x => x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                             出版日期 = b.PublicationDate,
+                             銷售數量 = b.OrderDetails.Select(x => x.Quantity).FirstOrDefault()
+                         }).Distinct();
+
+                //var recommendBooks = (from b in db.Books
+                //                      join od in db.OrderDetails
+                //                      on b.BookId equals od.BookId
+                //                      orderby od.Quantity descending
+                //                      select new
+                //                      {
+                //                          書本ID = b.BookId,
+                //                          書名 = b.BookTitle,
+                //                          定價 = b.UnitPrice,
+                //                          路徑 = b.CoverPath,
+                //                          折扣 = b.BookDiscountDetails.Where(x => x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault(),
+                //                          出版日期 = b.PublicationDate,
+                //                          銷售數量 = b.OrderDetails.Select(x => x.Quantity).FirstOrDefault()
+                //                      });
+
                 List<RecommendInformation> ris = new List<RecommendInformation>();
 
-                foreach (var recommendBook in recommendBooks)
+                foreach (var recommendBook in q2)
                 {
                     Book b = new Book { BookTitle = recommendBook.書名, BookId = recommendBook.書本ID, UnitPrice = recommendBook.定價, CoverPath = recommendBook.路徑, PublicationDate = recommendBook.出版日期 };
                     BookDiscount bd = new BookDiscount { BookDiscountAmount = recommendBook.折扣 };
