@@ -288,6 +288,11 @@ namespace prjBookMvcCore.Models
 
                 entity.Property(e => e.AuthorId).HasColumnName("AuthorID");
 
+                entity.Property(e => e.Catime)
+                    .HasColumnType("date")
+                    .HasColumnName("CATime")
+                    .HasDefaultValueSql("(getdate())");
+
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
                 entity.HasOne(d => d.Author)
@@ -308,6 +313,11 @@ namespace prjBookMvcCore.Models
                 entity.ToTable("CollectedPublisher");
 
                 entity.Property(e => e.CollectedPublisherId).HasColumnName("CollectedPublisherID");
+
+                entity.Property(e => e.Cptime)
+                    .HasColumnType("date")
+                    .HasColumnName("CPTime")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 

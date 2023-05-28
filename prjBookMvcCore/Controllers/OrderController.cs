@@ -262,9 +262,11 @@ namespace prjBookMvcCore.Controllers
         public IActionResult searchDiscount(int total)  //page2抓會員跟酷碰方法
         {
             List<OrderDiscount> discounts = new List<OrderDiscount>();
+            int levelId = (int)_db.Members.Find(_user.UserId).LevelId;
+            
             if (total > 1000)
             {
-                int index = (int)_db.MemberLevels.Where(x => x.LevelId == _user.UserLevelId).Select(x => x.OrderDiscountId).FirstOrDefault();
+                int index = (int)_db.MemberLevels.Where(x => x.LevelId == levelId).Select(x => x.OrderDiscountId).FirstOrDefault();
                 OrderDiscount memberDiscount = _db.OrderDiscounts.Find(index);
                 discounts.Add(memberDiscount);
             };

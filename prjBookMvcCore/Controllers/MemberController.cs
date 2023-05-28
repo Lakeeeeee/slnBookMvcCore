@@ -406,8 +406,10 @@ namespace prjBookMvcCore.Controllers
                      {
                          publisherId = p.PublisherId,
                          publisherName = p.PublisherName,
-                     }).ToJson();
-            return Json(q);
+                         publisherTime = cp.Cptime.Value.ToString()
+                     }).ToList();
+            var q2 = q.ToJson();
+            return Json(q2);
         }
         [Authorize]
         public IActionResult myAuthor() //關注的作者方法
@@ -419,6 +421,7 @@ namespace prjBookMvcCore.Controllers
                      {
                          authorId = a.AuthorId,
                          authorName = a.AuthorName,
+                         authorTime = ca.Catime
                      }).ToJson();
             return Json(q);
         }
