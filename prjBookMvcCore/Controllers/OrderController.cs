@@ -122,23 +122,37 @@ namespace prjBookMvcCore.Controllers
                 order.OrderDiscountId = 7;
             }
 
-            Member member = _db.Members.Find(order.MemberId);
-
-            switch (member.LevelId)
-            {
-                case 3:
-                    member.Points = (int)((member.Points) + Convert.ToInt32(order.TotalPay) * 0.01);
-                    break;
-                case 4:
-                    member.Points = (int)((member.Points) + Convert.ToInt32(order.TotalPay) * 0.05);
-                    break;
-                case 5:
-                    member.Points = (int)((member.Points) + Convert.ToInt32(order.TotalPay) * 0.05);
-                    break;
-            };
             _db.SaveChanges();
             theorderID = order.OrderId;
             return Content(theorderID.ToString());
+        }
+
+        public bool updatePoint(int memberid)
+        {
+            bool isSuccess = false;
+
+            Order order = _db.Orders.OrderByDescending(o => o.OrderId).FirstOrDefault(x => x.MemberId == memberid);
+            Member member = _db.Members.Find(memberid);
+            if (order != null)
+            {
+                member.Points = (int)(member.Points - order.PointAmount);
+                switch (member.LevelId)
+                {
+                    case 3:
+                        member.Points = (int)((member.Points) + (int)Math.Ceiling((double)order.FinalPay) * 0.01);
+                        break;
+                    case 4:
+                        member.Points = (int)((member.Points) + (int)Math.Ceiling((double)order.FinalPay) * 0.05);
+                        break;
+                    case 5:
+                        member.Points = (int)((member.Points) + (int)Math.Ceiling((double)order.FinalPay) * 0.05);
+                        break;
+                };
+                _db.SaveChanges();
+                isSuccess = true;
+            }
+            return isSuccess;
+
         }
         public IActionResult Action3(IFormCollection formData) //createOrderdetails
         {
@@ -160,15 +174,13 @@ namespace prjBookMvcCore.Controllers
                 list.Add(orderDetail);
             };
 
-            for (int n = 0; n < list.Count(); n++)
+			for (int n = 0; n < list.Count(); n++)
             {
                 list[n].Quantity = quantity[n];
                 var thebook = _db.Books.Where(x => x.BookId == list[n].BookId).FirstOrDefault();
                 thebook.UnitInStock = thebook.UnitInStock - quantity[n];
             };
             _db.OrderDetails.AddRange(list);
-            _db.SaveChanges();
-            isSuccess = true;
 
             //刪除購物車
             foreach (int item in acids)
@@ -177,14 +189,29 @@ namespace prjBookMvcCore.Controllers
                 _db.ActionDetials.Remove(tool);
             }
             _db.SaveChanges();
-            //writeOrderMs(order, _config, _db);
+            //writeOrderMs(order, _config, _db); 寫訂單的信
+
+            Member member = _db.Members.Find(order.MemberId);
+            _db.SaveChanges();
+            isSuccess = true;
             return Content(isSuccess.ToString());
         }
-        [Authorize]
+        
+        [HttpGet]
         public IActionResult CollectList(int id) //暫存清單頁面
         {
-            var q = _db.ActionDetials.Include(x=>x.Book).ThenInclude(x=>x.BookDiscountDetails).ThenInclude(x=>x.BookDiscount).Where(x => x.MemberId == id && x.ActionId == 4);
-            return Json(q);
+            var q2 = from ad in _db.ActionDetials
+                     join bk in _db.Books on ad.BookId equals bk.BookId
+                     join bde in _db.BookDiscountDetails on bk.BookId equals bde.BookId
+                     join bd in _db.BookDiscounts on bde.BookDiscountId equals bd.BookDiscountId 
+                     where ad.MemberId == id && ad.ActionId == 4 && bde.BookDiscountStartDate < DateTime.Now & bde.BookDiscountEndDate > DateTime.Now
+                     select new
+                     {
+                         acid = ad.ActionToBookId,
+                         book = bk,
+                         Dprice = Math.Ceiling(bk.UnitPrice * bd.BookDiscountAmount),
+                     };
+            return Json(q2);
         }
 
 

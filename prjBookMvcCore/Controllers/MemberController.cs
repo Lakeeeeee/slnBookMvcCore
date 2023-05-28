@@ -349,7 +349,7 @@ namespace prjBookMvcCore.Controllers
         [Authorize]
         public IActionResult myCoupons() //coupons頁面
         {
-            IEnumerable<OrderDiscountDetail> q = _bookShopContext.OrderDiscountDetails.Where(x => x.MemberId == _userInforService.UserId).Include(x => x.OrderDiscount);
+            IEnumerable<OrderDiscountDetail> q = _bookShopContext.OrderDiscountDetails.Where(x => x.MemberId == _userInforService.UserId & x.IsOrderDiscountUse == "N" & x.OrderDiscountEndDate > DateTime.Now).Include(x => x.OrderDiscount);
             return View(q);
         }
         [Authorize]

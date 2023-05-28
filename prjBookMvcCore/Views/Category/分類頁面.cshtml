@@ -5,7 +5,6 @@
     var selectedFilter = "PublicationDate";
 }
 
-
 <html>
 <head>
     @if (Model?.categoryId == 0 && Model.subcategoryId == 0)
@@ -86,7 +85,6 @@
                     @*分類選單*@
                     <div class="card-header">
                         @{
-                            BookShopContext db = new BookShopContext();
                             var s = db.Books.Where(c => c.LanguageId == 1).Select(c => c.BookId).ToList();
                             int countAll = s.Count;
                             <div class="row"><a href="@Url.Action("分類頁面", new { id = 0 })">繁中 (@countAll)</a></div>

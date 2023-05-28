@@ -9,6 +9,7 @@ namespace prjBookMvcCore.Controllers
     public class CategoryController : Controller
     {
         BookShopContext db = new();
+
         public IActionResult 分類頁面(int id, int subid, int page = 1, string sort = "PublicationDate")
         {
             int categoryID = id;

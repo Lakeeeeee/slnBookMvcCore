@@ -11,7 +11,11 @@
 				.Where(shipment => shipment.ShipmentId == Model.ShipmentId)
 				.Select(shipment => shipment.Freight)
 				.FirstOrDefault();
-	}
+	string descrip = db.Orders
+	.Where(o => o.OrderDiscountId == Model.OrderDiscountId && o.OrderId == Model.OrderId)
+	.Select(o => o.OrderDiscount.OrderDiscountDescprtion)
+	.FirstOrDefault();
+}
 
 
 <head>
@@ -119,12 +123,11 @@ th {
 					@{
 						foreach(var item in Model.OrderDetails)
 						{
-							//decimal totalPrice = item.Book.UnitPrice * 
-							<tr>
-								<th>@item.Book.BookTitle</th>
-								<th>@item.Quantity</th>
-								<th>@item.UnitPrice</th>
-							</tr>
+									<tr>
+										<th>@item.Book.BookTitle.Split("$")[0]</th>
+										<th>@item.Quantity</th>
+										<th>@item.UnitPrice.ToString("F0") 元</th>
+									</tr>
 						}					
 					
 					}			
@@ -150,10 +153,22 @@ th {
 			<div class="checkout-section">
 				<h3>金額明細</h3>
 				<div class="col-md-6">
-					@*<p>總金額：@Model.TotalPay</p>*@
-					@*<p>優惠折扣：</p>*@
-					<p>運費：@freight</p>
-					<P>結帳金額：@Model.FinalPay</P>
+					<p>購物金額：@Math.Ceiling((decimal)Model.TotalPay) 元</p>
+					<p>使用折扣：@descrip </p>
+					@{
+						decimal 折扣價 = 0;
+						OrderDiscount discount = db.OrderDiscounts.Where(x => x.OrderDiscountId == Model.OrderDiscountId).FirstOrDefault();
+						if (discount.DiscountTypeId == 1) {
+							折扣價 = Math.Ceiling((decimal)Model.TotalPay * discount.OrderDiscountAmount);
+						}
+						else if (discount.DiscountTypeId == 2)
+						{
+							折扣價 = Math.Ceiling((decimal)Model.TotalPay - discount.OrderDiscountAmount);
+						}
+					}
+					<p>折扣後金額：@折扣價 元</p>
+					<p>運費：@freight.ToString("F0") 元</p>
+					<P>結帳金額：@Model.FinalPay 元</P>
 				</div>			
 			</div>
 	</div>
