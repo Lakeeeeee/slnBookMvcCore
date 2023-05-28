@@ -127,9 +127,12 @@ namespace prjBookMvcCore.Controllers
             return Content(theorderID.ToString());
         }
 
-        public bool updatePoint(Order order, Member member)
+        public bool updatePoint(int memberid)
         {
             bool isSuccess = false;
+
+            Order order = _db.Orders.OrderByDescending(o => o.OrderId).FirstOrDefault(x => x.MemberId == memberid);
+            Member member = _db.Members.Find(memberid);
             if (order != null)
             {
                 member.Points = (int)(member.Points - order.PointAmount);
@@ -188,12 +191,8 @@ namespace prjBookMvcCore.Controllers
             //writeOrderMs(order, _config, _db); 寫訂單的信
 
             Member member = _db.Members.Find(order.MemberId);
-            if(updatePoint(order, member))
-            {
-                _db.SaveChanges();
-                isSuccess = true;
-            }
-
+            _db.SaveChanges();
+            isSuccess = true;
             return Content(isSuccess.ToString());
         }
         

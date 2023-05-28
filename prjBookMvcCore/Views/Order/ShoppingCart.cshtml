@@ -478,19 +478,29 @@
         successModal.style.display = 'block';
         const confirmButton = document.getElementById('confirmButton');
         confirmButton.addEventListener('click', function () {
-            //updatePoint(id);
+            updatePoint(@_user.UserId);
             toPage4(id); // 在確定按鈕的點擊事件處理程序中呼叫 toPage4() 函數
         });
     };
 
-    //function updatePoint(id) {
-    //    const url = 'Url.Action("updatePoint", "Order")?id=' + id;
-    //    fetch(url)
-    //        .catch(error => {
-    //            // 處理錯誤
-    //            console.error('更新失敗', error);
-    //        });
-    //};
+    function updatePoint(id) {
+        const url = '/Order/updatePoint?memberid=' + id;
+         fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      // 处理返回的布尔值
+      if (data === true) {
+        console.log('更新成功');
+      } else {
+        console.log('更新失敗');
+      }
+    })
+    .catch(error => {
+      // 处理错误
+      console.error('更新失敗', error);
+    });
+};
+
     const btnSubmit = document.getElementById('btnSubmit');
     btnSubmit.addEventListener('click', async function () {
         const orderSubmitResult = await orderSubmit();
@@ -758,8 +768,7 @@
 
     };
 </script>
-<script>
-    //按按鈕
+<script> //按按鈕
     function btnClick(inputId) {
         const btn = document.getElementById(inputId);
         btn.click();
