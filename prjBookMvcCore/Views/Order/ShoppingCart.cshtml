@@ -529,14 +529,14 @@
         });
     };
 
-    //function updatePoint(id) {
-    //    const url = 'Url.Action("updatePoint", "Order")?id=' + id;
-    //    fetch(url)
-    //        .catch(error => {
-    //            // 處理錯誤
-    //            console.error('更新失敗', error);
-    //        });
-    //};
+    function updatepoint(id) {
+        const url = 'url.action("updatepoint", "order")?id=' + id;
+        fetch(url)
+            .catch(error => {
+                // 處理錯誤
+                console.error('更新失敗', error);
+            });
+    };
     const btnSubmit = document.getElementById('btnSubmit');
     btnSubmit.addEventListener('click', async function () {
         const orderSubmitResult = await orderSubmit();

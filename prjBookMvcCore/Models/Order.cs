@@ -18,7 +18,7 @@ namespace prjBookMvcCore.Models
         public int PayStatusId { get; set; }
         public int ShippingStatusId { get; set; }
         public int? OrderDiscountId { get; set; }
-        public int? PointAmount { get; set; }
+        public decimal? PointAmount { get; set; }
         public decimal? TotalPay { get; set; }
         public string? ReciverName { get; set; }
         public string? ReciverPhone { get; set; }

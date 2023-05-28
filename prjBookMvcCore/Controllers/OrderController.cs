@@ -185,6 +185,7 @@ namespace prjBookMvcCore.Controllers
                 ActionDetial tool = _db.ActionDetials.Find(item);
                 _db.ActionDetials.Remove(tool);
             }
+            _db.SaveChanges();
             //writeOrderMs(order, _config, _db); 寫訂單的信
 
             Member member = _db.Members.Find(order.MemberId);
