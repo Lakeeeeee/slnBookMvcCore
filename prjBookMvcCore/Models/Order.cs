@@ -18,11 +18,11 @@ namespace prjBookMvcCore.Models
         public int PayStatusId { get; set; }
         public int ShippingStatusId { get; set; }
         public int? OrderDiscountId { get; set; }
-        public decimal? PointAmount { get; set; }
+        public int? PointAmount { get; set; }
         public decimal? TotalPay { get; set; }
         public string? ReciverName { get; set; }
         public string? ReciverPhone { get; set; }
-        public string? ShipAddr { get; set; } = null!;
+        public string ShipAddr { get; set; } = null!;
         public decimal? FinalPay { get; set; }
 
         public virtual Member Member { get; set; } = null!;
