@@ -2,6 +2,10 @@
 @{
     ViewData["Title"] = "讀本當周優惠";
     BookShopContext db = new BookShopContext();
+    DateTime today = DateTime.Today;
+    DayOfWeek currentDayOfWeek = today.DayOfWeek;
+    DateTime wednesday = today.AddDays(DayOfWeek.Wednesday - currentDayOfWeek);
+    DateTime saturday = today.AddDays(DayOfWeek.Saturday - currentDayOfWeek);
 }
 <!DOCTYPE html>
 <html>
@@ -31,16 +35,6 @@
 </head>
 <body>
     <h1>本周優惠劵</h1>
-    @{
-        DateTime today = DateTime.Today;
-        DayOfWeek currentDayOfWeek = today.DayOfWeek;
-        // 获取本周三的日期
-        DateTime wednesday = today.AddDays(DayOfWeek.Wednesday - currentDayOfWeek);
-        // 获取本周六和本周日的日期
-        DateTime saturday = today.AddDays(DayOfWeek.Saturday - currentDayOfWeek);
-        DateTime sunday = today.AddDays(DayOfWeek.Sunday - currentDayOfWeek);
-    }
-
     <p id="wednesday">週三 @wednesday.ToString("MM/dd") (三)</p>
     <div class="row" style="text-align:center;">
         <div class="col-1"></div>
@@ -98,7 +92,7 @@
         </div>
     </div>
     <hr />
-    <p id="weekend">週末 @saturday.ToString("MM/dd") (六)、@sunday.ToString("MM/dd") (日)</p>
+    <p id="weekend">週末 @saturday.ToString("MM/dd") (六)、@saturday.AddDays(1).ToString("MM/dd") (日)</p>
     <div class="row">
         <div class="col-1"></div>
         <div class="col-5 couponback" style="background-image: url('/Image/Promotions/週末.png'); ">

@@ -165,6 +165,7 @@ th {
 						}
 					}
 					<p>折扣後金額：@折扣價 元</p>
+					<p>使用回饋金：@Model.PointAmount 元</p>
 					<p>運費：@freight.ToString("F0") 元</p>
 					<P>結帳金額：@Model.FinalPay 元</P>
 				</div>			
@@ -173,10 +174,12 @@ th {
 	<div class="checkout-info">
 		<div class="checkout-section">
 			<h3>訂單狀態</h3>
+				<div style="font-size:24px; color:#545454;">
 				@{
 					string x = db.PayStatuses.Find(Model.PayStatusId).PayStatusName;
 				}
 				<p id="PayStatus">@x</p>
+				</div>
 				<br>
             <div><p>立即付款：</p><div id="payment-button"></div></div>
 						

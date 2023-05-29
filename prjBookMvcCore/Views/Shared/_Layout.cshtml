@@ -124,7 +124,6 @@
                 @*LOGO開始*@
                 <div class="align-items-start" style="font-weight:900;font-size:2em;">
                     <a href="~/Home/Home"><img src="~/Image/讀本logo.png" style=" width:35px;padding-bottom:5px" />讀本</a>
-                    @* @Html.ActionLink("讀本", "Home", "Home", new { area = "" }, new { @class = "fontsize24 navbar-brand" }) *@ @*須換圖*@
                 </div>
                 @*登入選項開始*@
                 <div class="fontsize20 justify-content-end menu">
@@ -132,13 +131,13 @@
                         @{
                             if (_userInforService.UserId != 0)
                             {
-                                    int levelId = (int)db.Members.Where(x=>x.MemberId == _userInforService.UserId).Select(x=>x.LevelId).FirstOrDefault();
-                                    string levelName = db.MemberLevels.Find(levelId).LevelName;
-            
+                                int levelId = (int)db.Members.Where(x => x.MemberId == _userInforService.UserId).Select(x => x.LevelId).FirstOrDefault();
+                                string levelName = db.MemberLevels.Find(levelId).LevelName;
+
                                 <li style="display:-ms-inline-flexbox;align-items:flex-end "> Hi!    <img src="~/Image/@(levelName).png" style="width:25px">@levelName 會員 @_userInforService.UserName </li>
-                                            <li><a href="~/Member/myCoupons"> 優惠劵(@disCount) </a></li>
-                                            <li><a href="~/Member/myMessage"> ｜未讀訊息(@mS) 封 </a></li>
-                                            <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/LogOut">登出</a></li>
+                                <li><a href="~/Member/myCoupons"> 優惠劵(@disCount) </a></li>
+                                <li><a href="~/Member/myMessage"> ｜未讀訊息(@mS) 封 </a></li>
+                                <li><a role="button" class="btn-outline-secondary mx-3" href="~/Member/LogOut">登出</a></li>
                             }
                             else
                             {

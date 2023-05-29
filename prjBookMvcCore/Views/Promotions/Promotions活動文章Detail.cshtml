@@ -6,10 +6,6 @@
 <html>
 <head>
     <style>
-        /*    a:link, a:visited {
-                    text-decoration: none;
-                    color: inherit;
-                }*/
         .box a {
             color: black;
             font-weight: bold;
@@ -18,7 +14,6 @@
 
             .box a:hover {
                 color: rgb(125, 175, 75);
-              /*  text-decoration: underline;*/
             }
 
         .imgT {
@@ -34,7 +29,6 @@
         .date {
             color: gray;
             font-style: oblique;
-            font-size: 60%;
             text-align: right;
         }
 
@@ -44,7 +38,7 @@
         }
 
         h1 {
-            color: #28004D;
+            color: brown;
             text-align: center;
             font-weight: 900;
         }
@@ -64,7 +58,6 @@
             display: flex;
             align-items: center;
         }
-
     </style>
 </head>
 <body>
@@ -76,7 +69,7 @@
         {
             string path = g.ArticalTitle + ".jpg";
             <h1 style="text-align:center">@g.ArticalTitle</h1>
-            <p class="date">更新日期：@g.ArticalDate</p>
+            <p class="date">更新日期：@g.ArticalDate.ToString("yyyy/MM/dd")</p>
             <div style="text-align:center"><img src="~/Image/ArticalPicture/@path" class="imgT" title="@g.ArticalTitle" /></div>
             <p style="font-size:larger;">@g.ArticalDescription</p>
         }
