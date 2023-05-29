@@ -12,80 +12,80 @@
         };
     </script>
 }
-    <style>
-        .linkaFormat {
-            text-decoration: none;
-            color: inherit
-        }
-    </style>
+<style>
+    .linkaFormat {
+        text-decoration: none;
+        color: inherit
+    }
+</style>
 
-    <div class="container" style="margin-top:15px">
-        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Home">回首頁</a></li>
-                <li class="breadcrumb-item active" aria-current="page">登入</li>
-            </ol>
-        </nav>
-        <div class="row justify-content-center">
-            <div class="col-8">
-                <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
-                    @* 活動輪播圖 *@
-                    <div class="carousel-indicators">
-                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                    </div>
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <a href="~/Promotions/Promotions註冊會員禮"><img src="~/Image/Promotions/註冊會員.png" class="d-block w-100" alt="page1" height="300"></a>
-                        </div>
-                        <div class="carousel-item">
-                            <a href="~/Promotions/Promotions會員"><img src="~/Image/Promotions/會員等級優惠及升等方式.png" class="d-block w-100" alt="page2" height="300"></a>
-                        </div>
-                        <div class="carousel-item">
-                            <a href="~/Promotions/Promotions促銷活動"><img src="~/Image/Promotions/書目特惠.png" class="d-block w-100" alt="page2" height="300"></a>
-                        </div>
-                    </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
+<div class="container" style="margin-top:15px">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a class="linkaFormat" href="~/Home/Home">回首頁</a></li>
+            <li class="breadcrumb-item active" aria-current="page">登入</li>
+        </ol>
+    </nav>
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+                @* 活動輪播圖 *@
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
                 </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <a href="~/Promotions/Promotions註冊會員禮"><img src="~/Image/Promotions/註冊會員.png" class="d-block w-100" alt="page1" height="300"></a>
+                    </div>
+                    <div class="carousel-item">
+                        <a href="~/Promotions/Promotions會員"><img src="~/Image/Promotions/會員等級優惠及升等方式.png" class="d-block w-100" alt="page2" height="300"></a>
+                    </div>
+                    <div class="carousel-item">
+                        <a href="~/Promotions/Promotions促銷活動"><img src="~/Image/Promotions/書目特惠.png" class="d-block w-100" alt="page2" height="300"></a>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
-            <div class="col-auto">
-                <div class="container justify-content-center bg-light" style="border-radius:10px; padding-block:15px">
-                    <p><h5 style="font-weight:600">會員登入</h5></p>
-                    <form asp-action="Login" id="demo-form">
-                        <p><input type="text" placeholder="讀本帳號" name="Account_P" id="account" data-bs-toggle="tooltip" data-bs-placement="right" title="帳號即為您註冊時的Email"/></p>
-                        <p><input type="password" placeholder="讀本密碼" name="Password_P" id="password" /></p>
-                        <p>
-                            <div style="block-size:inherit;" id="html_element"></div>
-                            <button id="submitBtn" type="submit" class="btn btn-outline-secondary">讀本會員登入</button>
-                            <a class="linkaFormat small" href="~/Member/Signin" style="margin-left:15px">註冊</a>｜
-                            <a class="linkaFormat small" href="~/Member/Find_password">忘記密碼</a>
-                        </p>
-                    </form>
+        </div>
+        <div class="col-auto">
+            <div class="container justify-content-center bg-light" style="border-radius:10px; padding-block:15px">
+                <p><h5 style="font-weight:600">會員登入</h5></p>
+                <form asp-action="Login" id="demo-form">
+                    <p><input type="text" placeholder="讀本帳號" name="Account_P" id="account" data-bs-toggle="tooltip" data-bs-placement="right" title="帳號即為您註冊時的Email" /></p>
+                    <p><input type="password" placeholder="讀本密碼" name="Password_P" id="password" /></p>
                     <p>
-                        <button type="button" id="demo" class="btn btn-outline-secondary">Demo1</button>
+                        <div style="block-size:inherit;" id="html_element"></div>
+                        <button id="submitBtn" type="submit" class="btn btn-outline-secondary">讀本會員登入</button>
+                        <a class="linkaFormat small" href="~/Member/Signin" style="margin-left:15px">註冊</a>｜
+                        <a class="linkaFormat small" href="~/Member/Find_password">忘記密碼</a>
+                    </p>
+                </form>
+                <p>
+                    <button type="button" id="demo" class="btn btn-outline-secondary">Demo1</button>
                     <button type="button" id="demo2" class="btn btn-outline-secondary" style="margin-left:15px">Demo2</button>
                     <button type="button" id="demo3" class="btn btn-outline-secondary" style="margin-left:15px">Demo3</button>
-                    </p>
-                </div>
+                </p>
             </div>
         </div>
     </div>
-    <script>
-        const x = document.getElementById('demo');
-        const A = document.getElementById('account');
-        const P = document.getElementById('password');
-        x.addEventListener('click', function () {
+</div>
+<script>
+    const x = document.getElementById('demo');
+    const A = document.getElementById('account');
+    const P = document.getElementById('password');
+    x.addEventListener('click', function () {
         A.value = "finnthehuman@gmail.com";
-            P.value = "As123456";
-        });
+        P.value = "As123456";
+    });
     const y = document.getElementById('demo2');
     y.addEventListener('click', function () {
         A.value = "greenLake092@gmail.com";
@@ -97,31 +97,30 @@
         P.value = "As123456";
     });
 
-    </script>
-    <script>
-    </script>
-    <script>
-        const form = document.getElementById('demo-form');
-        const submitBtn = document.getElementById('submitBtn');
-        form.addEventListener('submit', async (event) => {
+</script>
+<script>
+</script>
+<script>
+    const form = document.getElementById('demo-form');
+    const submitBtn = document.getElementById('submitBtn');
+    form.addEventListener('submit', async (event) => {
         event.preventDefault();
-            const response = await fetch('@Url.Action("Login", "Member")', { method: 'POST', body: new FormData(form) });
-            const comfirm = await response.json();
-            if (comfirm.success === true) {
-            swal("登入成功!", comfirm.message, "success").then(()=>{
-                    if (window.history.length > 1) {
-                        var previousPageURL = document.referrer;
-                        console.log(previousPageURL);
+        const response = await fetch('@Url.Action("Login", "Member")', { method: 'POST', body: new FormData(form) });
+        const comfirm = await response.json();
+        if (comfirm.success === true) {
+            swal("登入成功!", comfirm.message, "success").then(() => {
+                if (window.history.length > 1) {
+                    var previousPageURL = document.referrer;
+                    var signInPageURL = '@Url.Action("Signin", "Member")';
+                    console.log(previousPageURL);
+                    console.log(signInPageURL);
+                    if (previousPageURL !== signInPageURL) {
                         window.location.href = previousPageURL;
-                        //window.history.back();
-                        //location.reload();
                     } else {
                         window.location.href = "../../Home/Home";
                     }
-                });
-            }
-            else{
-            swal("登入失敗", comfirm.message, "error");
-            }
-        });
-    </script>
+                }
+            });
+        }
+    });
+</script>

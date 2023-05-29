@@ -33,22 +33,23 @@
                     </div>
                     <p>
                         <h6>您的問題主旨</h6>
-                        <input name="subtitle" class="form-control w-100" type="text" />
+                        <input id="subtitle" name="subtitle" class="form-control w-100" type="text" />
                     </p>
                     <p>
                         <h6>請具體描述您的問題</h6>
-                        <textarea name="mainContent" class="form-control w-100"></textarea>
+                        <textarea id="mainContent" name="mainContent" class="form-control w-100"></textarea>
                     </p>
                     <p>另以Email通知我
                     <div class="input-group mb-3">
                         <div class="input-group-text">
                             <input name="isMailCheck" class="form-check-input mt-0" type="checkbox" aria-label="Checkbox for following text input">
                         </div>
-                        <input name="Mail" type="email" class="form-control" aria-label="Text input with checkbox" placeholder="請輸入您的Email">
+                        <input id="mail" name="Mail" type="email" class="form-control" aria-label="Text input with checkbox" placeholder="請輸入您的Email">
                         </div>
                     </p>
                 </div>
                 <button class="btn btn-outline-secondary" type="submit">確認送出</button>
+                <button id="demo" style="margin-left:15px" class="btn btn-outline-secondary" type="button">Demo</button>
             </form>
         </div>
     </div>
@@ -101,7 +102,19 @@
                 }
             }
             return true;
-        }
+        };
+
+        const demoBtn = document.getElementById('demo');
+        const subtitle = document.getElementById('subtitle');
+        const mainContent = document.getElementById('mainContent');
+        const mail = document.getElementById('mail');
+
+        demoBtn.addEventListener('click', () => {
+            subtitle.value = '送來的書書況不好';
+            mainContent.value = '我訂的書原子習慣側邊有一點點髒，可以換書嗎？';
+            mail.value = 'greenLake092@gmail.com';
+        });
+
     </script>
 
 }

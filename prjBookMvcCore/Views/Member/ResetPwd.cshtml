@@ -22,7 +22,7 @@
             <p>確認密碼: <input id="pwd2"></p>
             <p>
                 <button id="check" type="submit" class="btn btn-outline-success btn-sm">確認送出</button>
-                <button id="demo" type="submit" class="btn btn-outline-success btn-sm" style="margin-left:15px">Demo</button>
+                <button id="demo" type="button" class="btn btn-outline-success btn-sm" style="margin-left:15px">Demo</button>
             </p>
         </div>
     </form>
@@ -35,8 +35,7 @@
             method: 'POST',
             body: new FormData(form)
         });
-
-        const datas = await response.json();
+    const datas = await response.json();
         if (datas.success === true) {
             swal("完成", datas.message, "success").then(() => {
                 window.location.href = '@Url.Action("Login", "Member")';
@@ -52,11 +51,11 @@
     const demoBtn = document.getElementById('demo');
     const pwd1Input = document.getElementById('pwd1');
     const pwd2Input = document.getElementById('pwd2');
-    const checkBtn = document.getElementById('check');
+   // const checkBtn = document.getElementById('check');
 
     demoBtn.addEventListener('click', () => {
-        pwd1Input.value = 'As123456';
-        pwd2Input.value = 'As123456';
+        pwd1Input.value = 'Bs123456';
+        pwd2Input.value = 'Bs123456';
     });
 </script>
 
