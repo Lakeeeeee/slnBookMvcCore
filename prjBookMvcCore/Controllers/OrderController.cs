@@ -312,6 +312,21 @@ namespace prjBookMvcCore.Controllers
             }
         }
 
+        public string editPayment(int id)
+        {
+            bool isSuccess = false;
+            var order = _db.Orders.Find(id);
+            if(order != null)
+            {
+				order.PayStatusId = 5;
+				_db.SaveChanges();
+                isSuccess = true;
+			}
+            return isSuccess.ToString();
+
+        }
+
+
         //----------------------------------------------------------------
         public IActionResult checkOutConfirm()
         {
@@ -329,6 +344,13 @@ namespace prjBookMvcCore.Controllers
             Order order = _db.Orders.Include(x => x.Member).Include(x => x.OrderDetails).ThenInclude(x => x.Book).Where(x => x.OrderId == id).FirstOrDefault();
             return View(order);
         }
-    }
+
+		public IActionResult FFPage(int id)
+		{
+			Order order = _db.Orders.Include(x => x.Member).Include(x => x.OrderDetails).ThenInclude(x => x.Book).Where(x => x.OrderId == id).FirstOrDefault();
+			return View(order);
+		}
+
+	}
 }
 

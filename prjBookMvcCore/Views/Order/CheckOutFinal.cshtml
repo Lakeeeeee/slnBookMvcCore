@@ -29,12 +29,6 @@
             margin-bottom: 15px;
         }
 
-		/*.container {
-	max-width: 
-	margin: 10 auto;
-	padding: 20px;*/
-/*}*/
-
 table {
 	border-collapse: collapse;
 	width: 100%;
@@ -91,25 +85,21 @@ th {
 					}]
 				});
 			},
-			
 			onApprove: function (data, actions) {
-				return actions.order.capture().then(function (details) {
+				return actions.order.capture().then(async function (details) {
 					console.log(details);
-					// 更新付款狀態
-					document.getElementById("PayStatus").innerText = "付款完成";
-					// 隱藏付款按鈕
-					document.getElementById("payment-button").style.display = "none";
-					// 返回按鈕所在的 CheckOutFinal 頁面
-					window.location.href = "~/CheckOutFinal?OrderId="+ @Model.OrderId;
+					const response = await fetch('@Url.Action("editPayment","Order")?id=' + @Model.OrderId);
+					const confirm = await response.text();
+					if (confirm === "True"){
+						window.location.href = "../Order/FFPage?id=" + @Model.OrderId;
+					}
+					else{
+						alert('失敗');
+					}
 				});
 			},
-			// 付款取消後重導向
-			//onCancel: function (data) {
-			//	window.location.replace("~/Home/Home");
-			//}
 		}).render('#payment-button');
 	</script>
-	
 </head>
 
 <body>
@@ -183,8 +173,11 @@ th {
 	<div class="checkout-info">
 		<div class="checkout-section">
 			<h3>訂單狀態</h3>
-				<spin id="PayStatus">未付款</spin>
-			<br>
+				@{
+					string x = db.PayStatuses.Find(Model.PayStatusId).PayStatusName;
+				}
+				<p id="PayStatus">@x</p>
+				<br>
             <div><p>立即付款：</p><div id="payment-button"></div></div>
 						
 		</div>
