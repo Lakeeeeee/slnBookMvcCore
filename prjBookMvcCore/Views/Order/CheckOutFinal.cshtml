@@ -173,10 +173,12 @@ th {
 	<div class="checkout-info">
 		<div class="checkout-section">
 			<h3>訂單狀態</h3>
+				<div style="font-size:24px; color:#545454;">
 				@{
 					string x = db.PayStatuses.Find(Model.PayStatusId).PayStatusName;
 				}
 				<p id="PayStatus">@x</p>
+				</div>
 				<br>
             <div><p>立即付款：</p><div id="payment-button"></div></div>
 						
