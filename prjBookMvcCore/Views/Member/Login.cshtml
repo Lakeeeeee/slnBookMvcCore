@@ -106,13 +106,15 @@
                 if (window.history.length > 1) {
                     var previousPageURL = document.referrer;
                     console.log(previousPageURL);
-                    if (!previousPageURL.endsWith("Signin")) {
+                    if (!previousPageURL.endsWith("Signin") || !previousPageURL.endsWith("Login")) {
                         window.location.href = previousPageURL;
                     } else {
                         window.location.href = "../../Home/Home";
                     }
                 }
             });
+        }else{
+            swal("登入失敗!", comfirm.message, "error");
         }
     });
 </script>
