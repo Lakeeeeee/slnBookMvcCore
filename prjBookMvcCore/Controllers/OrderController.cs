@@ -133,7 +133,7 @@ namespace prjBookMvcCore.Controllers
 
             Order order = _db.Orders.OrderByDescending(o => o.OrderId).FirstOrDefault(x => x.MemberId == memberid);
             Member member = _db.Members.Find(memberid);
-            if (order != null)
+            if (order != null && order.FinalPay>1000)
             {
                 member.Points = (int)(member.Points - order.PointAmount);
                 switch (member.LevelId)
@@ -152,7 +152,6 @@ namespace prjBookMvcCore.Controllers
                 isSuccess = true;
             }
             return isSuccess;
-
         }
         public IActionResult Action3(IFormCollection formData) //createOrderdetails
         {
