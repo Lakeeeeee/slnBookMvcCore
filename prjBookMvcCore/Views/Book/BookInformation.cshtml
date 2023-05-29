@@ -357,7 +357,7 @@
                                 <div class="recommendTable">
                                     <div v-for="(item, i) in recommend.slice(index * 5, (index + 1) * 5)" style="margin-right: 30px; margin-left: 40px">
                                         <a :href="bookUrl(item.bookID)">
-                                            <el-image :src="item.coverPath" style="width: 180px;">
+                                            <el-image :src="item.coverPath" style="width: 180px;" data-bs-toggle="tooltip" data-bs-placement="top" :title="item.bookTitleSplit">
                                                 <div slot="placeholder" class="image-slot">
                                                     加載中<span class="dot">...</span>
                                                 </div>
@@ -642,6 +642,7 @@
                 coverPath: '../../Image/Book/' + recommendBooks[i].book.coverPath,
                 unitPrice: recommendBooks[i].book.unitPrice,
                 discount: recommendBooks[i].bookDiscount.bookDiscountAmount * 100,
+                bookTitleSplit: replaceDoubleDollarSign(recommendBooks[i].book.bookTitle).split(/[\s$]/)[0],
             };
             recommendBooksJS.push(recommend);
         }

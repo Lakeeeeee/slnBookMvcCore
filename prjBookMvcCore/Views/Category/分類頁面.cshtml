@@ -144,7 +144,7 @@
                         {
                             <div class="col-3 card book-item border-0" data-publication-date="@item.book.PublicationDate.ToString("yyyy/MM/dd")" data-price="@((int)Math.Ceiling(item.book.UnitPrice * item.bookDiscount.BookDiscountAmount))">
                                 <div class="headshot">
-                                    <a href="~/Book/BookInformation/@item.book.BookId"><img class="bookimg" src="~/Image/Book/@item.book.CoverPath" title="@item.book.BookTitle"></a>
+                                    <a href="~/Book/BookInformation/@item.book.BookId"><img class="bookimg" src="~/Image/Book/@item.book.CoverPath" data-bs-toggle="tooltip" data-bs-placement="top" title="@item.book.BookTitle.Split("$")[0]"/></a>
                                 </div>
                                 <div class="card-body">
                                     <ul style="list-style:none; ">
