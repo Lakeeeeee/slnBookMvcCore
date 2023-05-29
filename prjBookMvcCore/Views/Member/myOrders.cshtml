@@ -31,7 +31,6 @@
             foreach (var item in Model)
             {
                 count++;
-
                 <tr>
                     <td>
                         @count
@@ -61,7 +60,7 @@
                     </td>
 
                     <td>
-                        @Convert.ToInt32(item.TotalPay) 元
+                        @Convert.ToInt32(item.FinalPay) 元
                     </td>
                     <td>
                         <button onclick="viewDetails(@item.OrderId)" class="btn btn-outline-secondary btn-sm">檢視詳細</button>
