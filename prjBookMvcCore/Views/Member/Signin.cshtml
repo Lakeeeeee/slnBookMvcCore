@@ -60,7 +60,7 @@
                     <div style="text-align:center; margin-top:15px">
                         <button type="submit" id="checkbtn" class="btn btn-outline-secondary">確認送出</button>
                         <button type="button" id="demo" class="btn btn-outline-success">Demo</button>
-                        @*<button type="button" id="demo2" class="btn btn-outline-success" style="margin-left:15px">Demo2</button>*@
+                        <button type="button" id="demo2" class="btn btn-outline-success" style="margin-left:15px">Demo2</button>
                     </div>
 
                     <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -84,24 +84,8 @@
     </div>
 </div>
 <script>
-    const x = document.getElementById('demo');
-    //const y = document.getElementById('demo2');
-    //x.addEventListener('click', function () {
-    //    const A = document.getElementById('email');
-    //    const B = document.getElementById('pwd');
-    //    const C = document.getElementById('pwdCheck');
-    //    const D = document.getElementById('name');
-    //    const E = document.getElementById('phone');
-    //    const F = document.getElementById('address');
 
-    //    A.value = "finnthehuman@gmail.com";
-    //    B.value = "As123456";
-    //    C.value = "As123456";
-    //    D.value = "人類芬";
-    //    E.value = "0968688688";
-    //    F.value = "台北市中正區牯嶺街5巷10號";
-    //});    
-    
+    const x = document.getElementById('demo');
     x.addEventListener('click', function () {
         const A = document.getElementById('email');
         const B = document.getElementById('pwd');
@@ -117,10 +101,24 @@
         E.value = "0968688688";
         F.value = "台北市中正區牯嶺街5巷10號";
     });
+    const y = document.getElementById('demo2');
+    y.addEventListener('click', function () {
+        const A = document.getElementById('email');
+        const B = document.getElementById('pwd');
+        const C = document.getElementById('pwdCheck');
+        const D = document.getElementById('name');
+        const E = document.getElementById('phone');
+        const F = document.getElementById('address');
 
+        A.value = "sw123@gmail.com";
+        B.value = "As123456";
+        C.value = "As123456";
+        D.value = "人類芬";
+        E.value = "0968688688";
+        F.value = "台北市中正區牯嶺街5巷10號";
+    });
 </script>
 <script>
-    console.log(URL);
     var toastTrigger = document.getElementById('liveToastBtn')
     var toastLiveExample = document.getElementById('liveToast')
     if (toastTrigger) {

@@ -70,29 +70,23 @@
                     </p>
                 </form>
                 <p>
-                    <button type="button" id="demo" class="btn btn-outline-secondary">Demo1</button>
+                    <button type="button" id="demo1" class="btn btn-outline-secondary" style="margin-left:15px">Demo1</button>
                     <button type="button" id="demo2" class="btn btn-outline-secondary" style="margin-left:15px">Demo2</button>
-                    <button type="button" id="demo3" class="btn btn-outline-secondary" style="margin-left:15px">Demo3</button>
                 </p>
             </div>
         </div>
     </div>
 </div>
 <script>
-    const x = document.getElementById('demo');
     const A = document.getElementById('account');
     const P = document.getElementById('password');
+    const x = document.getElementById('demo1');
     x.addEventListener('click', function () {
-        A.value = "finnthehuman@gmail.com";
+        A.value = "greenLake092@gmail.com";
         P.value = "As123456";
     });
     const y = document.getElementById('demo2');
     y.addEventListener('click', function () {
-        A.value = "greenLake092@gmail.com";
-        P.value = "As123456";
-    });
-    const z = document.getElementById('demo3');
-    z.addEventListener('click', function () {
         A.value = "sw123@gmail.com";
         P.value = "As123456";
     });
