@@ -19,7 +19,7 @@ namespace prjBookMvcCore.Controllers
         {
             if (id != 0)
             {
-                ViewBag.Discount = db.BookDiscounts.Where(d => d.BookDiscountId == id).Select(d=>d.BookDiscountName).FirstOrDefault();
+                ViewBag.Discount = db.BookDiscounts.Where(d => d.BookDiscountId == id).Select(d => d.BookDiscountName).FirstOrDefault();
                 int itemsPerPage = 28;//每頁只顯示28個                   
                 var bookDiscountDetail = db.BookDiscountDetails.Where(d => d.BookDiscountId == id & d.BookDiscountStartDate < DateTime.Now & d.BookDiscountEndDate > DateTime.Now).Select(d => new { d.BookDiscount.BookDiscountName, d.BookDiscount.BookDiscountAmount, d.Book.BookTitle, d.Book.UnitPrice, d.Book.CoverPath, d.Book.BookId, d.BookDiscountEndDate });
 
@@ -138,12 +138,12 @@ namespace prjBookMvcCore.Controllers
             }
         }
         //TODO：會員等級
-        public IActionResult Promotions領取月優惠(int? month)
-        {
-            if (month == null || month < DateTime.Now.Month) { return RedirectToAction("Promotions活動已結束"); }
-            else if (month > DateTime.Now.AddMonths(2).Month) { return RedirectToAction("Index"); }
-            else { ViewBag.month = month; return View(); }
-        }
+        //public IActionResult Promotions領取月優惠(int? month)
+        //{
+        //    if (month == null || month < DateTime.Now.Month) { return RedirectToAction("Promotions活動已結束"); }
+        //    else if (month > DateTime.Now.AddMonths(2).Month) { return RedirectToAction("Index"); }
+        //    else { ViewBag.month = month; return View(); }
+        //}
 
         public IActionResult SearchTest(string? txtKeyword)
         {
