@@ -365,9 +365,12 @@
             </div>
             <div class="col">
                 <h3 class="mb-2">確認金額</h3>
-                <p>購物金額：<span id="seconTotal"> </span></p>
+                <div style="font-size:24px; color:#545454;">
+                    <p>購物金額：<span id="seconTotal"> </span></p>
+                </div>
                 <p id="discountId"></p>
-                <p id="rebateAmount"></p>
+                <p id="rebateAmount"></p> 
+               
 @*                <p id="freight"></p>
                 <p style="font-size:20px"><strong>結帳金額：<span id="checkoutAmount"></span></strong></p>
 *@            </div>
@@ -568,7 +571,7 @@
         document.getElementById('shipAddr').innerText = '地址: ' + shipAddr;
         document.getElementById('paymentId').innerText = '付款方式: ' + paymentName;
         document.getElementById('shipmentId').innerText = '配送方式: ' + shipmentName;
-        document.getElementById('rebateAmount').innerText = '回饋金折抵: ' + rebateAmount;
+        document.getElementById('rebateAmount').innerText = '回饋金折抵: ' + rebateAmount +'元';
         document.getElementById('discountId').innerText = '使用優惠: ' + discountdesc;
         // 判斷運費
         var freight = 0;

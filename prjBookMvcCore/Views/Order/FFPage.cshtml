@@ -136,6 +136,7 @@
                         }
                     }
                     <p>折扣後金額：@折扣價 元</p>
+                    <p>使用回饋金：@Model.PointAmount 元</p>
                     <p>運費：@freight.ToString("F0") 元</p>
                     <P>結帳金額：@Model.FinalPay 元</P>
                 </div>
@@ -147,7 +148,9 @@
                 @{
                     string x = db.PayStatuses.Find(Model.PayStatusId).PayStatusName;
                 }
-                <p id="PayStatus">@x</p>
+                <div style="font-size:24px; color:#545454;">
+                    <p id="PayStatus">@x</p>
+                    </div>
                 <br>
             </div>
         </div>
