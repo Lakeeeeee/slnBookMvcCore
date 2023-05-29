@@ -13,6 +13,7 @@
             text-decoration: none;
             color: inherit;
         }
+
         .sticky1 {
             position: sticky;
             top: 20%;
@@ -73,7 +74,9 @@
                         foreach (var item in Model.menuItems)
                         {
                             <div class="col-3 mb-3">
-                                <a id="@item.book.BookId" href="~/Book/BookInformation/@item.book.BookId"> <img src="~/Image//Book/@item.book.CoverPath" class="d-block w-100 img-with-border " alt="..." title="@(item.book.BookTitle.Split("$")[0])" /></a>
+                                <a id="@item.book.BookId" href="~/Book/BookInformation/@item.book.BookId">
+                                    <img src="~/Image//Book/@item.book.CoverPath" class="d-block w-100 img-with-border " alt="..." data-bs-toggle="tooltip" data-bs-placement="top" title="@(item.book.BookTitle.Split("$")[0])" />
+                                </a>
                                 <ul style="list-style:none; margin:0; padding:0;" class="text-start">
                                     <li><div class="bookCaption mt-3"><a id="@item.book.BookId" href="~/Book/BookInformation/@item.book.BookId" title="@item.book.BookTitle.Split("$")[0]">@item.book.BookTitle.Split("$")[0]</a></div></li>
                                     <li>原價：<del>@((int)Math.Ceiling(item.book.UnitPrice)) </del> 元</li>

@@ -142,7 +142,9 @@
                                     MenuItem item = Model.menuItems[i];
                                     <div class="col book-item" data-publication-date="@item?.book?.PublicationDate" data-price="@((int)Math.Ceiling(item.bookDiscount.BookDiscountAmount * item.book.UnitPrice))">
                                         <div style="position:relative" class=" mb-3">
-                                            <a href="~/Book/BookInformation/@item.book.BookId"><img src="~/Image/Book/@item.book.CoverPath" title="@item.book.BookTitle" height="300px"></a>
+                                            <a href="~/Book/BookInformation/@item.book.BookId">
+                                                <img src="~/Image/Book/@item.book.CoverPath" data-bs-toggle="tooltip" data-bs-placement="top" title="@item.book.BookTitle.Split("$")[0]" height="300px">
+                                            </a>
                                         </div>
                                         <div class="caption mb-3">
                                             <ul style="list-style:none; margin:0; padding:0;">
