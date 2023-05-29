@@ -107,7 +107,7 @@
         row.insertAdjacentHTML('beforeend', '<th style="width:350px">作者</th>');
         row.insertAdjacentHTML('beforeend', '<th>最近的書目</th>');
         row.insertAdjacentHTML('beforeend', '<th>取消追蹤</th>');
-        row.insertAdjacentHTML('beforeend', '<th>更新時間</th>');
+        //row.insertAdjacentHTML('beforeend', '<th>更新時間</th>');
         const tbody = table.createTBody();
         authors.forEach(data => {
             count = count + 1;
@@ -118,7 +118,7 @@
             row.insertCell().innerHTML = btnHtml;
             const btnHtml2 = `<button type="submit" name="id" value="${data.id}" class="btn btn-outline-secondary" onclick="cancleA(${data.id})">取消追蹤</button>`;
             row.insertCell().innerHTML = btnHtml2;
-            row.insertCell().innerText = data.time;
+            //row.insertCell().innerText = data.time;
         });
         table.appendChild(thead, tbody);
     })
@@ -155,7 +155,7 @@
         row.insertAdjacentHTML('beforeend', '<th style="width:350px">出版社</th>');
         row.insertAdjacentHTML('beforeend', '<th>最近的書目</th>');
         row.insertAdjacentHTML('beforeend', '<th>取消追蹤</th>');
-        row.insertAdjacentHTML('beforeend', '<th>更新時間</th>');
+        //row.insertAdjacentHTML('beforeend', '<th>更新時間</th>');
         const tbody = table.createTBody();
         console.log(authors);
         authors.forEach(data => {
@@ -167,7 +167,7 @@
             row.insertCell().innerHTML = btnHtml;
             const btnHtml2 = `<button type="submit" name="id" value="${data.id}" class="btn btn-outline-secondary" onclick="cancleP(${data.id})">取消追蹤</button>`;
             row.insertCell().innerHTML = btnHtml2;
-            row.insertCell().innerText = data.time;
+            //row.insertCell().innerText = data.time;
 
         });
         table.appendChild(thead, tbody);
