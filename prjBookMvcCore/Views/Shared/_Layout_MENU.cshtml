@@ -49,7 +49,7 @@
                         {
                             var q = db.CategoryDetails.Where(c => c.SubCategory.CategoryId == category.CategoryId).Select(c => c).ToList();
                             int count = q.Count;
-                            <div class="row card-body border-1">
+                            <div class="row card-body border-1 btn-outline-secondary">
                                 <a asp-controller="Category" asp-action="分類頁面" asp-route-id="@category.CategoryId">@category.CategoryName (@count)</a>
                             </div>
                         }
