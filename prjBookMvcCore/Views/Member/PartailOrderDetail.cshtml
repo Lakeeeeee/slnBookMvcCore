@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<OrderDetail>
 @{
     ViewData["Title"] = "訂單詳細清單";
+    BookShopContext db = new BookShopContext();
 }
 <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -21,7 +22,7 @@
             <th>序號</th>
             <th>品項</th>
             <th>數量</th>
-            <th>小計</th>
+            <th>單價</th>
             <th>書籍折扣</th>
             <th>折扣價</th>
         </tr>
@@ -30,7 +31,9 @@
             foreach (var item in Model)
             {
                 count++;
-                var bookDiscount = item.Book.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountName).FirstOrDefault();
+                var orderDate = db.Orders.Find(item.OrderId).OrderDate;
+                var bookDiscount = item.Book.BookDiscountDetails.Where(x => x.BookDiscountStartDate < orderDate & x.BookDiscountEndDate > orderDate).Select(x => x.BookDiscount.BookDiscountName).FirstOrDefault();
+                var x = !String.IsNullOrEmpty(bookDiscount)?bookDiscount:"無折扣";
                 var price = item.UnitPrice * (item.Book.BookDiscountDetails.Where(x=>x.BookDiscountStartDate < DateTime.Now & x.BookDiscountEndDate > DateTime.Now).Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault());
                 <tr>
                     <td>
@@ -40,16 +43,16 @@
                         @item.Book.BookTitle.Split("$")[0]
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Quantity)
+                        @Html.DisplayFor(modelItem => item.Quantity) 本
                     </td>
                     <td>
-                        @Convert.ToInt32(@item.Book.UnitPrice)
+                        @Convert.ToInt32(@item.Book.UnitPrice) 元
                     </td>
                     <td>
-                        @bookDiscount
+                        @x
                     </td>
                     <td>
-                        @Convert.ToInt32(@item.UnitPrice)
+                        @Convert.ToInt32(@item.UnitPrice*item.Quantity)  元
                     </td>
                 </tr>
             }
