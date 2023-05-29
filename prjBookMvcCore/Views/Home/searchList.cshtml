@@ -100,7 +100,7 @@
                                         count++;
                                         <div class="row">
                                             <div class="col-2 clamp">
-                                                <a id="@item.book.BookId" href="~/Book/BookInformation/@item.book.BookId" title="@item.book.BookTitle">
+                                                <a id="@item.book.BookId" href="~/Book/BookInformation/@item.book.BookId" title="@item.book.BookTitle.Split("$")[0]">
                                                     <img width="150" src="/Image/Book/@item.book.CoverPath" />
                                                 </a>
                                             </div>

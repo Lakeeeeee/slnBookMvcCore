@@ -235,7 +235,7 @@ namespace prjBookMvcCore.Controllers
                                       frontdiscount >= b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault() &&
                                       backdiscount <= b.BookDiscountDetails.Select(x => x.BookDiscount.BookDiscountAmount).FirstOrDefault() &&
 
-                         frontdate <= b.PublicationDate && backdate >= b.PublicationDate
+                                      frontdate <= b.PublicationDate && backdate >= b.PublicationDate
 
                                       select new
                                       {

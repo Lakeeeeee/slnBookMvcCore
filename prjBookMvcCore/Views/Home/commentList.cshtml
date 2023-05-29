@@ -20,7 +20,7 @@
                         <div class="row">
                             <div class="col-4 text-center mb-3">
                                 <a href="/Book/BookInformation/@item.book.BookId#comment">
-                                    <img height="150" src="~/Image/Book/@item.book.CoverPath" />
+                                    <img height="150" src="~/Image/Book/@item.book.CoverPath" data-bs-toggle="tooltip" data-bs-placement="top" title="@item.book.BookTitle.Split("$")[0]" />
                                 </a>
                             </div>
                             <div class="col">
