@@ -29,12 +29,6 @@
             margin-bottom: 15px;
         }
 
-		/*.container {
-	max-width: 
-	margin: 10 auto;
-	padding: 20px;*/
-/*}*/
-
 table {
 	border-collapse: collapse;
 	width: 100%;
@@ -82,24 +76,28 @@ th {
 	<script>
 		// Render the PayPal button into #paypal-button-container
 		paypal.Buttons({
-			// Set up the transaction
 			createOrder: function (data, actions) {
 				return actions.order.create({
 					purchase_units: [{
 						amount: {
-							value: '88.44'
+							value: '@Model.FinalPay'
 						}
 					}]
 				});
 			},
-
-			// Finalize the transaction
 			onApprove: function (data, actions) {
-				return actions.order.capture().then(function (orderData) {
-					console.log('Capture result', orderData,
-						JSON.stringify(orderData, null, 2));
+				return actions.order.capture().then(async function (details) {
+					console.log(details);
+					const response = await fetch('@Url.Action("editPayment","Order")?id=' + @Model.OrderId);
+					const confirm = await response.text();
+					if (confirm === "True"){
+						window.location.href = "../Order/FFPage?id=" + @Model.OrderId;
+					}
+					else{
+						alert('失敗');
+					}
 				});
-			}
+			},
 		}).render('#payment-button');
 	</script>
 </head>
@@ -175,8 +173,11 @@ th {
 	<div class="checkout-info">
 		<div class="checkout-section">
 			<h3>訂單狀態</h3>
-				<spin id="PayStatus">未付款</spin>
-			<br>
+				@{
+					string x = db.PayStatuses.Find(Model.PayStatusId).PayStatusName;
+				}
+				<p id="PayStatus">@x</p>
+				<br>
             <div><p>立即付款：</p><div id="payment-button"></div></div>
 						
 		</div>

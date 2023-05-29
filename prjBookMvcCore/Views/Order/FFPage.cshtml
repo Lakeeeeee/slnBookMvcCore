@@ -1,0 +1,159 @@
+﻿@using prjBookMvcCore.Models
+@model Order
+@inject UserInforService _user
+@{
+    ViewBag.Title = "付款完成";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    BookShopContext db = new BookShopContext();
+    string mName = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.MemberName).FirstOrDefault();
+    string mPhone = db.Members.Where(x => x.MemberId == _user.UserId).Select(x => x.Memberphone).FirstOrDefault();
+    decimal freight = db.Shipments
+                .Where(shipment => shipment.ShipmentId == Model.ShipmentId)
+                .Select(shipment => shipment.Freight)
+                .FirstOrDefault();
+    string descrip = db.Orders
+    .Where(o => o.OrderDiscountId == Model.OrderDiscountId && o.OrderId == Model.OrderId)
+    .Select(o => o.OrderDiscount.OrderDiscountDescprtion)
+    .FirstOrDefault();
+}
+
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>完成訂購</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        .container-sp {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #eee;
+        }
+
+        .checkout-info {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .checkout-section {
+            flex: 1 1 50%;
+            margin-bottom: 20px;
+        }
+
+            .checkout-section h3 {
+                margin-bottom: 10px;
+            }
+
+            .checkout-section p {
+                margin: 0;
+            }
+
+        #payment-button {
+            width: 300px;
+            height: 50px;
+        }
+
+        #PayStatus {
+            font-size: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>以下是您的訂單內容</h1>
+        <h2>書籍清單</h2>
+        <div class="table">
+            <h4>書籍清單</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>書籍名稱</th>
+                        <th>訂購數量</th>
+                        <th>金額</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var item in Model.OrderDetails)
+                        {
+                            <tr>
+                                <th>@item.Book.BookTitle.Split("$")[0]</th>
+                                <th>@item.Quantity</th>
+                                <th>@item.UnitPrice.ToString("F0") 元</th>
+                            </tr>
+                        }
+
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <h2>結帳資訊</h2>
+        <div class="checkout-info">
+            <div class="checkout-section">
+                <h3>訂購人</h3>
+                <div class="col-md-6">
+                    <p>姓名：@Model.Member.MemberName</p>
+                    <p>電話：@Model.Member.Memberphone</p>
+                </div>
+                <h3>收件人</h3>
+                <div class="col-md-6">
+                    <p>姓名：@Model.ReciverName</p>
+                    <p>電話：@Model.ReciverPhone</p>
+                    <p>地址：@Model.ShipAddr</p>
+                </div>
+            </div>
+            <div class="checkout-section">
+                <h3>金額明細</h3>
+                <div class="col-md-6">
+                    <p>購物金額：@Math.Ceiling((decimal)Model.TotalPay) 元</p>
+                    <p>使用折扣：@descrip </p>
+                    @{
+                        decimal 折扣價 = 0;
+                        OrderDiscount discount = db.OrderDiscounts.Where(x => x.OrderDiscountId == Model.OrderDiscountId).FirstOrDefault();
+                        if (discount.DiscountTypeId == 1)
+                        {
+                            折扣價 = Math.Ceiling((decimal)Model.TotalPay * discount.OrderDiscountAmount);
+                        }
+                        else if (discount.DiscountTypeId == 2)
+                        {
+                            折扣價 = Math.Ceiling((decimal)Model.TotalPay - discount.OrderDiscountAmount);
+                        }
+                    }
+                    <p>折扣後金額：@折扣價 元</p>
+                    <p>運費：@freight.ToString("F0") 元</p>
+                    <P>結帳金額：@Model.FinalPay 元</P>
+                </div>
+            </div>
+        </div>
+        <div class="checkout-info">
+            <div class="checkout-section">
+                <h3>訂單狀態</h3>
+                @{
+                    string x = db.PayStatuses.Find(Model.PayStatusId).PayStatusName;
+                }
+                <p id="PayStatus">@x</p>
+                <br>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-grid gap-2 c d-md-flex justify-content-md-end">
+        <a href="~/Home/Home" class=" btn btn-primary col-4 me-md-2" type="button">返回首頁</a>
+    </div>
+</body>
