@@ -96,10 +96,10 @@
                         {
                             var q = db.CategoryDetails.Where(c => c.SubCategory.CategoryId == category.CategoryId).Select(c => c).ToList();
                             int count = q.Count;
-                            <div class="row">
-                                <div class="card-body btn-outline-secondary" data-bs-toggle="collapse" href="#card-@category.CategoryId" role="button" aria-expanded="false" aria-controls="card-@category.CategoryId" onclick="changePath(@category.CategoryId)">
+                            <div class="row card-body border-1 btn-outline-secondary" data-bs-toggle="collapse" href="#card-@category.CategoryId" role="button" aria-expanded="false" aria-controls="card-@category.CategoryId" onclick="changePath(@category.CategoryId)">
+
                                     <a asp-controller="Category" asp-action="分類頁面" asp-route-id="@category.CategoryId">@category.CategoryName (@count)</a>
-                                </div>
+
                             </div>
                             <div class="collapse @(Model.categoryId == category.CategoryId ? "show" : "")" id="card-@category.CategoryId">
                                 @{
