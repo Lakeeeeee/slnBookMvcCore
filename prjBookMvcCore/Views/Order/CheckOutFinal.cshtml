@@ -82,26 +82,34 @@ th {
 	<script>
 		// Render the PayPal button into #paypal-button-container
 		paypal.Buttons({
-			// Set up the transaction
 			createOrder: function (data, actions) {
 				return actions.order.create({
 					purchase_units: [{
 						amount: {
-							value: '88.44'
+							value: '@Model.FinalPay'
 						}
 					}]
 				});
 			},
-
-			// Finalize the transaction
+			
 			onApprove: function (data, actions) {
-				return actions.order.capture().then(function (orderData) {
-					console.log('Capture result', orderData,
-						JSON.stringify(orderData, null, 2));
+				return actions.order.capture().then(function (details) {
+					console.log(details);
+					// 更新付款狀態
+					document.getElementById("PayStatus").innerText = "付款完成";
+					// 隱藏付款按鈕
+					document.getElementById("payment-button").style.display = "none";
+					// 返回按鈕所在的 CheckOutFinal 頁面
+					window.location.href = "~/CheckOutFinal?OrderId="+ @Model.OrderId;
 				});
-			}
+			},
+			// 付款取消後重導向
+			//onCancel: function (data) {
+			//	window.location.replace("~/Home/Home");
+			//}
 		}).render('#payment-button');
 	</script>
+	
 </head>
 
 <body>
