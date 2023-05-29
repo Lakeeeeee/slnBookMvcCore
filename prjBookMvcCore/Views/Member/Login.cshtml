@@ -111,10 +111,8 @@
             swal("登入成功!", comfirm.message, "success").then(() => {
                 if (window.history.length > 1) {
                     var previousPageURL = document.referrer;
-                    var signInPageURL = '@Url.Action("Signin", "Member")';
                     console.log(previousPageURL);
-                    console.log(signInPageURL);
-                    if (previousPageURL !== signInPageURL) {
+                    if (!previousPageURL.endsWith("Signin")) {
                         window.location.href = previousPageURL;
                     } else {
                         window.location.href = "../../Home/Home";
