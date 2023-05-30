@@ -58,15 +58,15 @@
                 @{
                     foreach (var item in Model)
                     {
-                        <button id="@item.MessageMemberDetailId" value="@item.MessageMemberDetailId" type="button" class="list-group-item list-group-item-action" aria-current="true" onclick="getMessage(@item.MessageMemberDetailId)">
-                            @Html.DisplayFor(x=>item.Message!.MessageTitle)
-                            <span class="badge bg-primary rounded-pill" id="isRead-@item.MessageMemberDetailId">
-                                @{
+                            <button id="@item.MessageMemberDetailId" value="@item.MessageMemberDetailId" type="button" class="list-group-item list-group-item-action" aria-current="true" onclick="getMessage(@item.MessageMemberDetailId)">
+                                @Html.DisplayFor(x=>item.Message!.MessageTitle)
+                                <span class="badge bg-primary rounded-pill" id="isRead-@item.MessageMemberDetailId">
+                                    @{
                                     string readstatu = (item.ReadStatu == 0) ? "未讀" : "已讀";
-                                    @readstatu
-                                }
-                            </span>
-                        </button>
+                                            @readstatu
+                                    }
+                                </span>
+                            </button>
                     }
                 }
             </div>
@@ -94,6 +94,7 @@
         isRead.innerHTML = `${data.read_a}`;
         dBtn.id = `delete-${data.mMDID}`;
         dBtn.setAttribute('onclick', `deleteMs(${data.mMDID})`);
+        location.reload();
         console.log(dBtn.id);
     };
 </script>
