@@ -688,7 +688,7 @@
              <td>${item.discountName}</td>
              <td>${Math.ceil(item.book.unitPrice * item.discountAmount)}元</td>
              <td><input name="quantity" value="${item.quantity}" class="cinput" type="text" readonly /></td>
-             <td>${Math.ceil(item.quantity * (item.book.unitPrice * item.discountAmount))}元</td>
+                 <td>${Math.ceil(item.quantity * Math.ceil(item.book.unitPrice * item.discountAmount))}元</td>
          `;
             table2Body.appendChild(row);
             table2Body.appendChild(input);
@@ -721,10 +721,12 @@
             var confirmText = await response.text();
             if (confirmText === "True") {
                 alert('已取消');
+                window.location.reload();
             } else {
-                alert('不明錯誤, 你再試試');
+                //alert('不明錯誤, 你再試試');
+                window.location.reload();
             };
-            window.location.href = window.location.href;
+            window.location.reload();
         }
     };
 </script>
