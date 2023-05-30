@@ -106,7 +106,7 @@
                 if (window.history.length > 1) {
                     var previousPageURL = document.referrer;
                     console.log(previousPageURL);
-                    if (!previousPageURL.endsWith("Signin") && !previousPageURL.endsWith("Login") && !previousPageURL.endsWith("Find_password")) {
+                    if (!previousPageURL.endsWith("Signin") && !previousPageURL.endsWith("Login") && !previousPageURL.endsWith("Find_password") && !previousPageURL.includes("ResetPwd")) {
                         window.location.href = previousPageURL;
                     } else {
                         window.location.href = "../../Home/Home";
